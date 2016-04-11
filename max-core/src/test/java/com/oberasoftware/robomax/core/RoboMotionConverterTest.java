@@ -20,8 +20,7 @@ public class RoboMotionConverterTest {
     @Test
     public void testConvert() {
         List<Motion> motions = new RoboPlusMotionConverter().loadMotions("/bio_prm_kingspider_en.mtn");
-        assertThat(motions.size(), is(17));
-
+        assertThat(motions.size(), is(252));
 
         Map<String, Motion> motionMap = motions.stream().collect(Collectors.toMap(Motion::getName, m -> m));
         Set<String> motionNames = motionMap.keySet();
