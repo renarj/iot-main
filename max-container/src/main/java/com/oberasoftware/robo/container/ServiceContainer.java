@@ -16,24 +16,21 @@
 package com.oberasoftware.robo.container;
 
 import com.google.common.collect.ImmutableMap;
+import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.GenericRobotEventHandler;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.events.DistanceSensorEvent;
-import com.oberasoftware.robo.api.sensors.EventSource;
+import com.oberasoftware.robo.cloud.RemoteCloudDriver;
+import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
-import com.oberasoftware.robo.core.sensors.AnalogToDistanceConverter;
-import com.oberasoftware.robo.core.sensors.AnalogToPercentageConverter;
-import com.oberasoftware.robo.core.sensors.DistanceSensor;
-import com.oberasoftware.robo.core.sensors.GyroSensor;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
-import com.oberasoftware.robo.pi4j.ADS1115Driver;
 import com.oberasoftware.robo.service.MotionFunction;
 import com.oberasoftware.robo.service.PositionFunction;
 import com.oberasoftware.robo.service.ServiceConfiguration;
 import com.oberasoftware.robo.service.model.MotionModel;
 import com.oberasoftware.robo.service.model.ServoModel;
+import com.oberasoftware.robomax.core.MaxCoreConfiguration;
 import com.oberasoftware.robomax.core.RoboPlusClassPathResource;
 import com.oberasoftware.robomax.core.RoboPlusMotionEngine;
 import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
@@ -59,9 +56,11 @@ import static com.google.common.collect.Lists.newArrayList;
 @EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class, DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class })
 @Import({
-        ODataServiceConfiguration.class,
         DynamixelConfiguration.class,
-        ServiceConfiguration.class
+        ServiceConfiguration.class,
+        MaxCoreConfiguration.class,
+        RemoteConfiguration.class,
+        ODataServiceConfiguration.class
 })
 @ComponentScan
 public class ServiceContainer {
@@ -71,24 +70,23 @@ public class ServiceContainer {
         LOG.info("Starting Robot Service Application container");
 
         SpringApplication springApplication = new SpringApplication(ServiceContainer.class);
-        springApplication.setShowBanner(false);
         ConfigurableApplicationContext context = springApplication.run(args);
 
         ODataEdmRegistry registry = context.getBean(ODataEdmRegistry.class);
         registry.registerClasses(newArrayList(MotionModel.class, ServoModel.class, MotionFunction.class, PositionFunction.class));
 
-
-        ADS1115Driver adsDriver = new ADS1115Driver();
-        adsDriver.init();
-        Robot robot = new SpringAwareRobotBuilder(context)
+        Robot robot = new SpringAwareRobotBuilder("max", context)
                 .motionEngine(RoboPlusMotionEngine.class, new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn"))
                 .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
-                .sensor(new DistanceSensor("distance", adsDriver.getPort("A0"), new AnalogToDistanceConverter()))
-                .sensor(new GyroSensor("gyro", adsDriver.getPort("A2"), adsDriver.getPort("A3"), new AnalogToPercentageConverter()))
-//                .remote("http:://192.168.99.100", "user", "password")
+//                .sensor(new DistanceSensor("distance", adsDriver.getPort("A0"), new AnalogToDistanceConverter()))
+//                .sensor(new DistanceSensor("distance", "A0"), ADS1115Driver.class)
+//                .sensor(new GyroSensor("gyro", adsDriver.getPort("A2"), adsDriver.getPort("A3"), new AnalogToPercentageConverter()))
+                .remote(RemoteCloudDriver.class)
                 .build();
         RobotEventHandler eventHandler = new RobotEventHandler(robot);
         robot.listen(eventHandler);
+
+//        robot.getMotionEngine().prepareWalk();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");
@@ -96,7 +94,7 @@ public class ServiceContainer {
         }));
     }
 
-    public static class RobotEventHandler implements GenericRobotEventHandler {
+    public static class RobotEventHandler implements EventHandler {
         private Robot robot;
 
         public RobotEventHandler(Robot robot) {
@@ -104,7 +102,6 @@ public class ServiceContainer {
         }
 
         @EventSubscribe
-        @EventSource("distance")
         public void receive(DistanceSensorEvent event) {
             LOG.info("Received a distance event: {}", event);
 

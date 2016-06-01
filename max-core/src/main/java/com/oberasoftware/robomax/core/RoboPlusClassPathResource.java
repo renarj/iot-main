@@ -1,6 +1,7 @@
 package com.oberasoftware.robomax.core;
 
-import com.oberasoftware.robo.api.MotionResource;
+
+import com.oberasoftware.robo.api.motion.MotionResource;
 
 /**
  * @author Renze de Vries

@@ -1,5 +1,6 @@
 package com.oberasoftware.robo.pi4j;
 
+import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.exceptions.RoboException;
 import com.oberasoftware.robo.api.sensors.AnalogPort;
 import com.oberasoftware.robo.api.sensors.SensorDriver;
@@ -13,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,12 +29,14 @@ public class ADS1115Driver implements SensorDriver<AnalogPort> {
 
     private Map<String, ADSAnalogPort> inputs = new HashMap<>();
 
-    @PostConstruct
-    public void init() {
+    private ADS1115GpioProvider gpioProvider;
+
+    @Override
+    public void activate(Robot robot, Map<String, String> properties) {
         try {
             LOG.info("Initializing ADS 1115 Driver");
             final GpioController gpio = GpioFactory.getInstance();
-            final ADS1115GpioProvider gpioProvider = new ADS1115GpioProvider(I2CBus.BUS_1, ADS1115GpioProvider.ADS1115_ADDRESS_0x48);
+            gpioProvider = new ADS1115GpioProvider(I2CBus.BUS_1, ADS1115GpioProvider.ADS1115_ADDRESS_0x48);
 
             inputs.put("A0", new ADSAnalogPort(gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A0, "MyAnalogInput-A0")));
             inputs.put("A1", new ADSAnalogPort(gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A1, "MyAnalogInput-A1")));
@@ -49,6 +51,12 @@ public class ADS1115Driver implements SensorDriver<AnalogPort> {
             LOG.error("Could not load ADS1115", e);
             throw new RoboException("Could not open ADS1115 GPIO port", e);
         }
+    }
+
+    @Override
+    public void shutdown() {
+        LOG.info("Shutting down GPio");
+        gpioProvider.shutdown();
     }
 
     @Override

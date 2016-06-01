@@ -3,9 +3,9 @@ package com.oberasoftware.robomax.core;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.oberasoftware.robo.api.MotionConverter;
 import com.oberasoftware.robo.api.motion.KeyFrame;
 import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.robo.api.motion.MotionConverter;
 import com.oberasoftware.robo.core.ConverterUtil;
 import com.oberasoftware.robo.core.motion.MotionImpl;
 import com.oberasoftware.robo.core.motion.StepBuilder;
@@ -38,7 +38,7 @@ import static java.util.Collections.emptyList;
  */
 @Component
 public class RoboPlusMotionConverter implements MotionConverter {
-    private static final Logger LOG = LoggerFactory.getLogger(com.oberasoftware.robo.core.robomotion.RoboPlusMotionConverter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RoboPlusMotionConverter.class);
 
     private static final String NAME = "name";
     private static final String STEP = "step";

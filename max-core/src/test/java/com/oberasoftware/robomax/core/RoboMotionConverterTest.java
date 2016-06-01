@@ -1,7 +1,6 @@
 package com.oberasoftware.robomax.core;
 
 import com.oberasoftware.robo.api.motion.Motion;
-import com.oberasoftware.robo.core.robomotion.RoboPlusMotionConverter;
 import org.junit.Test;
 
 import java.util.List;

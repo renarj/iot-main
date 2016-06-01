@@ -1,24 +1,23 @@
 package com.oberasoftware.robomax.core;
 
 import com.oberasoftware.robo.api.MotionEngine;
-import com.oberasoftware.robo.api.MotionManager;
-import com.oberasoftware.robo.api.MotionResource;
 import com.oberasoftware.robo.api.MotionTask;
-import com.oberasoftware.robo.api.motion.Motion;
-import com.oberasoftware.robo.api.motion.MotionExecutor;
-import com.oberasoftware.robo.core.robomotion.RoboPlusMotionConverter;
+import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.robo.api.motion.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -31,6 +30,7 @@ public class RoboPlusMotionEngine implements MotionEngine {
 
     private static final String WALK_MOTION = "F_S_L";
     private static final String PREPARE_WALK = "Stand up";
+    private static final String SIT_DOWN = "Sit down";
 
     @Autowired
     private RoboPlusMotionConverter motionConverter;
@@ -48,6 +48,11 @@ public class RoboPlusMotionEngine implements MotionEngine {
     private Lock lock = new ReentrantLock();
 
     @Override
+    public void activate(Robot robot, Map<String, String> properties) {
+
+    }
+
+    @Override
     public void loadResource(MotionResource resource) {
         if(resource instanceof RoboPlusClassPathResource) {
             List<Motion> motions = motionConverter.loadMotions(((RoboPlusClassPathResource) resource).getPath());
@@ -61,11 +66,26 @@ public class RoboPlusMotionEngine implements MotionEngine {
     }
 
     @Override
-    public MotionTask walk() {
+    public boolean rest() {
+        return executeMotion(SIT_DOWN, true) != null;
+    }
+
+    @Override
+    public MotionTask walkForward() {
+        return walk(WalkDirection.FORWARD);
+    }
+
+    @Override
+    public MotionTask walk(WalkDirection direction) {
         MotionTask walkingTask = executeMotion(WALK_MOTION, false);
         this.walkingTask.set(walkingTask);
 
         return walkingTask;
+    }
+
+    @Override
+    public void shutdown() {
+        stopAllTasks();
     }
 
     @Override
@@ -90,6 +110,13 @@ public class RoboPlusMotionEngine implements MotionEngine {
     @Override
     public List<MotionTask> getActiveTasks() {
         return newArrayList(runningTasks.values());
+    }
+
+    @Override
+    public List<String> getMotions() {
+        return motionManager.findMotions().stream()
+                .map(Motion::getId)
+                .collect(Collectors.toList());
     }
 
     @Override
