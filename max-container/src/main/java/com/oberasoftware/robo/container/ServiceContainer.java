@@ -27,6 +27,7 @@ import com.oberasoftware.robo.core.sensors.DistanceSensor;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.pi4j.ADS1115Driver;
+import com.oberasoftware.robo.pi4j.SensorConfiguration;
 import com.oberasoftware.robo.service.MotionFunction;
 import com.oberasoftware.robo.service.PositionFunction;
 import com.oberasoftware.robo.service.ServiceConfiguration;
@@ -62,7 +63,8 @@ import static com.google.common.collect.Lists.newArrayList;
         ServiceConfiguration.class,
         MaxCoreConfiguration.class,
         RemoteConfiguration.class,
-        ODataServiceConfiguration.class
+        ODataServiceConfiguration.class,
+        SensorConfiguration.class
 })
 @ComponentScan
 public class ServiceContainer {
