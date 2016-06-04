@@ -23,8 +23,10 @@ import com.oberasoftware.robo.api.events.DistanceSensorEvent;
 import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.sensors.DistanceSensor;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
+import com.oberasoftware.robo.pi4j.ADS1115Driver;
 import com.oberasoftware.robo.service.MotionFunction;
 import com.oberasoftware.robo.service.PositionFunction;
 import com.oberasoftware.robo.service.ServiceConfiguration;
@@ -78,8 +80,7 @@ public class ServiceContainer {
         Robot robot = new SpringAwareRobotBuilder("max", context)
                 .motionEngine(RoboPlusMotionEngine.class, new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn"))
                 .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
-//                .sensor(new DistanceSensor("distance", adsDriver.getPort("A0"), new AnalogToDistanceConverter()))
-//                .sensor(new DistanceSensor("distance", "A0"), ADS1115Driver.class)
+                .sensor(new DistanceSensor("distance", "A0"), ADS1115Driver.class)
 //                .sensor(new GyroSensor("gyro", adsDriver.getPort("A2"), adsDriver.getPort("A3"), new AnalogToPercentageConverter()))
                 .remote(RemoteCloudDriver.class)
                 .build();
