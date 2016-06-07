@@ -81,7 +81,7 @@ public class ServiceContainer {
 
         Robot robot = new SpringAwareRobotBuilder("max", context)
                 .motionEngine(RoboPlusMotionEngine.class, new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn"))
-                .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
+                .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/ttyACM0").build())
                 .sensor(new DistanceSensor("distance", "A0"), ADS1115Driver.class)
 //                .sensor(new GyroSensor("gyro", adsDriver.getPort("A2"), adsDriver.getPort("A3"), new AnalogToPercentageConverter()))
                 .remote(RemoteCloudDriver.class)
