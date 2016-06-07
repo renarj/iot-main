@@ -89,8 +89,6 @@ public class ServiceContainer {
         RobotEventHandler eventHandler = new RobotEventHandler(robot);
         robot.listen(eventHandler);
 
-//        robot.getMotionEngine().prepareWalk();
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");
             robot.shutdown();
@@ -107,11 +105,6 @@ public class ServiceContainer {
         @EventSubscribe
         public void receive(DistanceSensorEvent event) {
             LOG.info("Received a distance event: {}", event);
-
-            if(event.getDistance() < 20) {
-                LOG.info("Killing all tasks");
-                robot.getMotionEngine().stopAllTasks();
-            }
         }
     }
 }
