@@ -45,7 +45,7 @@ public class ADS1115Driver implements SensorDriver<AnalogPort> {
 
             gpioProvider.setProgrammableGainAmplifier(ADS1x15GpioProvider.ProgrammableGainAmplifierValue.PGA_4_096V, ADS1115Pin.ALL);
             gpioProvider.setEventThreshold(500, ADS1115Pin.ALL);
-            gpioProvider.setMonitorInterval(100);
+            gpioProvider.setMonitorInterval(1000);
             LOG.info("Initialisation finished of ADS 1115 Driver");
         } catch(IOException e) {
             LOG.error("Could not load ADS1115", e);
