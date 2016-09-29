@@ -48,7 +48,6 @@ import org.springframework.context.annotation.Import;
         DataSourceTransactionManagerAutoConfiguration.class })
 @Import({
         DynamixelConfiguration.class,
-//        ServiceConfiguration.class,
         MaxCoreConfiguration.class,
         RemoteConfiguration.class,
         SensorConfiguration.class,
@@ -64,9 +63,6 @@ public class ServiceContainer {
         SpringApplication springApplication = new SpringApplication(ServiceContainer.class);
         ConfigurableApplicationContext context = springApplication.run(args);
 
-//        ODataEdmRegistry registry = context.getBean(ODataEdmRegistry.class);
-//        registry.registerClasses(newArrayList(MotionModel.class, ServoModel.class, MotionFunction.class, PositionFunction.class));
-
         Robot robot = new SpringAwareRobotBuilder("max", context)
                 .motionEngine(RoboPlusMotionEngine.class, new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn"))
                 .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
@@ -75,11 +71,6 @@ public class ServiceContainer {
 //                .sensor(new GyroSensor("gyro", adsDriver.getPort("A2"), adsDriver.getPort("A3"), new AnalogToPercentageConverter()))
                 .remote(RemoteCloudDriver.class)
                 .build();
-
-//        ServoDriver servoDriver = robot.getServoDriver();
-//        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), 130));
-
-
 
         RobotEventHandler eventHandler = new RobotEventHandler(robot);
         robot.listen(eventHandler);
