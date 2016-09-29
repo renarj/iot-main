@@ -84,8 +84,6 @@ public class ServiceContainer {
         RobotEventHandler eventHandler = new RobotEventHandler(robot);
         robot.listen(eventHandler);
 
-//        robot.getMotionEngine().prepareWalk();
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");
             robot.shutdown();
