@@ -4,6 +4,12 @@ import com.oberasoftware.robo.api.MotionEngine;
 import com.oberasoftware.robo.api.MotionTask;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.motion.*;
+import com.oberasoftware.robo.api.motion.controller.MotionController;
+import com.oberasoftware.robo.api.servo.ServoData;
+import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.robo.api.servo.ServoProperty;
+import com.oberasoftware.robo.core.motion.KeyFrameImpl;
+import com.oberasoftware.robo.core.motion.ServoStepImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Optional.empty;
 
 /**
  * @author Renze de Vries
@@ -33,13 +40,16 @@ public class RoboPlusMotionEngine implements MotionEngine {
     private static final String SIT_DOWN = "Sit down";
 
     @Autowired
-    private RoboPlusMotionConverter motionConverter;
+    private RoboPlusMotionConverter roboPlusMotionConverter;
 
     @Autowired
     private MotionManager motionManager;
 
     @Autowired
     private MotionExecutor motionExecutor;
+
+    @Autowired
+    private ServoDriver servoDriver;
 
     private ConcurrentMap<String, MotionTask> runningTasks = new ConcurrentHashMap<>();
 
@@ -55,8 +65,8 @@ public class RoboPlusMotionEngine implements MotionEngine {
     @Override
     public void loadResource(MotionResource resource) {
         if(resource instanceof RoboPlusClassPathResource) {
-            List<Motion> motions = motionConverter.loadMotions(((RoboPlusClassPathResource) resource).getPath());
-            motions.stream().forEach(motionManager::storeMotion);
+            List<Motion> motions = roboPlusMotionConverter.loadMotions(((RoboPlusClassPathResource) resource).getPath());
+            motions.forEach(motionManager::storeMotion);
         }
     }
 
@@ -76,11 +86,38 @@ public class RoboPlusMotionEngine implements MotionEngine {
     }
 
     @Override
+    public MotionTask walk(WalkDirection direction, float meters) {
+        return null;
+    }
+
+    @Override
+    public MotionTask goToPosture(String posture) {
+        return null;
+    }
+
+    @Override
+    public <T extends MotionController> Optional<T> getMotionController(String controllerName) {
+        return empty();
+    }
+
+    @Override
     public MotionTask walk(WalkDirection direction) {
         MotionTask walkingTask = executeMotion(WALK_MOTION, false);
         this.walkingTask.set(walkingTask);
 
         return walkingTask;
+    }
+
+    @Override
+    public KeyFrame getCurrentPositionAsKeyFrame() {
+        KeyFrameImpl keyFrame = new KeyFrameImpl(Long.toString(System.currentTimeMillis()), 0);
+        servoDriver.getServos().forEach(s -> {
+            ServoData servoData = s.getData();
+            keyFrame.addServoStep(new ServoStepImpl(s.getId(), servoData.getValue(ServoProperty.POSITION),
+                    servoData.getValue(ServoProperty.SPEED)));
+        });
+
+        return keyFrame;
     }
 
     @Override

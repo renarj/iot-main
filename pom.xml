@@ -25,6 +25,7 @@
         <module>max-container</module>
         <module>max-core</module>
         <module>max-pi4j</module>
+        <module>max-web</module>
     </modules>
 
     <licenses>

@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-cloud</artifactId>
+            <artifactId>max-web</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

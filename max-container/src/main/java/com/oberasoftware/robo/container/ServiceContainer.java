@@ -23,21 +23,11 @@ import com.oberasoftware.robo.api.events.DistanceSensorEvent;
 import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
-import com.oberasoftware.robo.core.sensors.DistanceSensor;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
-import com.oberasoftware.robo.pi4j.ADS1115Driver;
 import com.oberasoftware.robo.pi4j.SensorConfiguration;
-import com.oberasoftware.robo.service.MotionFunction;
-import com.oberasoftware.robo.service.PositionFunction;
-import com.oberasoftware.robo.service.ServiceConfiguration;
-import com.oberasoftware.robo.service.model.MotionModel;
-import com.oberasoftware.robo.service.model.ServoModel;
-import com.oberasoftware.robomax.core.MaxCoreConfiguration;
-import com.oberasoftware.robomax.core.RoboPlusClassPathResource;
-import com.oberasoftware.robomax.core.RoboPlusMotionEngine;
-import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
-import com.sdl.odata.service.ODataServiceConfiguration;
+import com.oberasoftware.robomax.core.*;
+import com.oberasoftware.robomax.web.WebConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -50,8 +40,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 /**
  * @author rdevries
  */
@@ -60,11 +48,11 @@ import static com.google.common.collect.Lists.newArrayList;
         DataSourceTransactionManagerAutoConfiguration.class })
 @Import({
         DynamixelConfiguration.class,
-        ServiceConfiguration.class,
+//        ServiceConfiguration.class,
         MaxCoreConfiguration.class,
         RemoteConfiguration.class,
-        ODataServiceConfiguration.class,
-        SensorConfiguration.class
+        SensorConfiguration.class,
+        WebConfiguration.class
 })
 @ComponentScan
 public class ServiceContainer {
@@ -76,16 +64,23 @@ public class ServiceContainer {
         SpringApplication springApplication = new SpringApplication(ServiceContainer.class);
         ConfigurableApplicationContext context = springApplication.run(args);
 
-        ODataEdmRegistry registry = context.getBean(ODataEdmRegistry.class);
-        registry.registerClasses(newArrayList(MotionModel.class, ServoModel.class, MotionFunction.class, PositionFunction.class));
+//        ODataEdmRegistry registry = context.getBean(ODataEdmRegistry.class);
+//        registry.registerClasses(newArrayList(MotionModel.class, ServoModel.class, MotionFunction.class, PositionFunction.class));
 
         Robot robot = new SpringAwareRobotBuilder("max", context)
                 .motionEngine(RoboPlusMotionEngine.class, new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn"))
                 .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
-                .sensor(new DistanceSensor("distance", "A0"), ADS1115Driver.class)
+                .sensor(new ServoSensor("Hand", "5"), ServoSensorDriver.class)
+//                .sensor(new DistanceSensor("distance", "A0"), ADS1115Driver.class)
 //                .sensor(new GyroSensor("gyro", adsDriver.getPort("A2"), adsDriver.getPort("A3"), new AnalogToPercentageConverter()))
                 .remote(RemoteCloudDriver.class)
                 .build();
+
+//        ServoDriver servoDriver = robot.getServoDriver();
+//        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), 130));
+
+
+
         RobotEventHandler eventHandler = new RobotEventHandler(robot);
         robot.listen(eventHandler);
 
