@@ -48,7 +48,6 @@ public class RoboPlusMotionEngine implements MotionEngine {
     @Autowired
     private MotionExecutor motionExecutor;
 
-    @Autowired
     private ServoDriver servoDriver;
 
     private ConcurrentMap<String, MotionTask> runningTasks = new ConcurrentHashMap<>();
@@ -59,7 +58,7 @@ public class RoboPlusMotionEngine implements MotionEngine {
 
     @Override
     public void activate(Robot robot, Map<String, String> properties) {
-
+        this.servoDriver = robot.getServoDriver();
     }
 
     @Override

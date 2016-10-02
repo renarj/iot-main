@@ -31,7 +31,6 @@ import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterrup
 public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>>, EventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ServoSensorDriver.class);
 
-    @Autowired
     private ServoDriver servoDriver;
 
     @Autowired
@@ -56,6 +55,7 @@ public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>
     @Override
     public void activate(Robot robot, Map<String, String> properties) {
         LOG.info("Activating servo driver");
+        servoDriver = robot.getServoDriver();
         servoDriver.getServos().forEach(s -> {
             LOG.info("Activating servo port: {}", s.getId());
             ports.put(s.getId(), new ServoPort());

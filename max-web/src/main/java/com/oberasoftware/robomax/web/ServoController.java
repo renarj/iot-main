@@ -27,9 +27,6 @@ public class ServoController {
     @Autowired
     private RobotRegistry robotRegistry;
 
-    @Autowired
-    private ServoDriver servoDriver;
-
     @RequestMapping
     public List<SimpleServo> getServos() {
         List<Robot> robots = robotRegistry.getRobots();
@@ -42,57 +39,57 @@ public class ServoController {
             consumes = "application/json", produces = "application/json")
     public SimpleServo setServoPosition(@PathVariable  String servoId, @PathVariable int position) {
         LOG.info("Setting servo: {} to position: {}", servoId, position);
-        servoDriver.setTargetPosition(servoId, position);
+        getServoDriver().setTargetPosition(servoId, position);
 
-        return new SimpleServo(servoDriver.getServo(servoId));
+        return new SimpleServo(getServoDriver().getServo(servoId));
     }
 
     @RequestMapping(value = "/set/{servoId}/speed/{speed}", method = RequestMethod.POST,
             consumes = "application/json", produces = "application/json")
     public SimpleServo setServoSpeed(@PathVariable  String servoId, @PathVariable int speed) {
         LOG.info("Setting servo: {} speed: {}", servoId, speed);
-        servoDriver.setServoSpeed(servoId, speed);
+        getServoDriver().setServoSpeed(servoId, speed);
 
-        return new SimpleServo(servoDriver.getServo(servoId));
+        return new SimpleServo(getServoDriver().getServo(servoId));
     }
 
     @RequestMapping(value = "/set/{servoId}/torgue/{torgue}", method = RequestMethod.POST,
             consumes = "application/json", produces = "application/json")
     public SimpleServo setServoTorgue(@PathVariable  String servoId, @PathVariable int torgue) {
         LOG.info("Setting servo: {} Torgue: {}", servoId, torgue);
-        servoDriver.setTorgue(servoId, torgue);
+        getServoDriver().setTorgue(servoId, torgue);
 
-        return new SimpleServo(servoDriver.getServo(servoId));
+        return new SimpleServo(getServoDriver().getServo(servoId));
     }
 
     @RequestMapping(value = "/enable/{servoId}/torgue", method = RequestMethod.POST,
             consumes = "application/json", produces = "application/json")
     public SimpleServo enableTorgue(@PathVariable  String servoId) {
-        servoDriver.setTorgue(servoId, true);
+        getServoDriver().setTorgue(servoId, true);
 
-        return new SimpleServo(servoDriver.getServo(servoId));
+        return new SimpleServo(getServoDriver().getServo(servoId));
     }
 
     @RequestMapping(value = "/disable/{servoId}/torgue", method = RequestMethod.POST,
             consumes = "application/json", produces = "application/json")
     public SimpleServo disableTorgue(@PathVariable  String servoId) {
-        servoDriver.setTorgue(servoId, false);
+        getServoDriver().setTorgue(servoId, false);
 
-        return new SimpleServo(servoDriver.getServo(servoId));
+        return new SimpleServo(getServoDriver().getServo(servoId));
     }
 
     @RequestMapping(value = "/enable/torgue", method = RequestMethod.POST,
             consumes = "application/json", produces = "application/json")
     public void enableTorgue() {
         LOG.info("Enabling torgue on all servos");
-        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
+        getServoDriver().getServos().forEach(s -> getServoDriver().setTorgue(s.getId(), true));
     }
 
     @RequestMapping(value = "/disable/torgue", method = RequestMethod.POST,
             consumes = "application/json", produces = "application/json")
     public void disableTorgue() {
         LOG.info("Disabling torgue on all servos");
-        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
+        getServoDriver().getServos().forEach(s -> getServoDriver().setTorgue(s.getId(), false));
     }
 
     @RequestMapping(value = "/keyframe", method = RequestMethod.POST,
@@ -101,5 +98,13 @@ public class ServoController {
         LOG.info("Retrieving current servo positions as keyframe");
         Robot robot = robotRegistry.getRobots().get(0);
         return robot.getMotionEngine().getCurrentPositionAsKeyFrame();
+    }
+
+    private Robot getDefaultRobot() {
+        return robotRegistry.getRobots().get(0);
+    }
+
+    private ServoDriver getServoDriver() {
+        return getDefaultRobot().getServoDriver();
     }
 }
