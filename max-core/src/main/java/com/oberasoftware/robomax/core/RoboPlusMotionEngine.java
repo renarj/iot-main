@@ -10,6 +10,8 @@ import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.api.servo.ServoProperty;
 import com.oberasoftware.robo.core.motion.KeyFrameImpl;
 import com.oberasoftware.robo.core.motion.ServoStepImpl;
+import com.oberasoftware.robomax.core.motion.JsonMotionLoader;
+import com.oberasoftware.robomax.core.motion.JsonMotionResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class RoboPlusMotionEngine implements MotionEngine {
     private RoboPlusMotionConverter roboPlusMotionConverter;
 
     @Autowired
+    private JsonMotionLoader jsonMotionLoader;
+
+    @Autowired
     private MotionManager motionManager;
 
     @Autowired
@@ -65,6 +70,9 @@ public class RoboPlusMotionEngine implements MotionEngine {
     public void loadResource(MotionResource resource) {
         if(resource instanceof RoboPlusClassPathResource) {
             List<Motion> motions = roboPlusMotionConverter.loadMotions(((RoboPlusClassPathResource) resource).getPath());
+            motions.forEach(motionManager::storeMotion);
+        } else if(resource instanceof JsonMotionResource) {
+            List<Motion> motions = jsonMotionLoader.loadMotions(((JsonMotionResource)resource).getPath());
             motions.forEach(motionManager::storeMotion);
         }
     }

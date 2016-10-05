@@ -26,7 +26,11 @@ import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.pi4j.SensorConfiguration;
-import com.oberasoftware.robomax.core.*;
+import com.oberasoftware.robomax.core.MaxCoreConfiguration;
+import com.oberasoftware.robomax.core.RoboPlusMotionEngine;
+import com.oberasoftware.robomax.core.ServoSensor;
+import com.oberasoftware.robomax.core.ServoSensorDriver;
+import com.oberasoftware.robomax.core.motion.JsonMotionResource;
 import com.oberasoftware.robomax.web.WebConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +68,10 @@ public class ServiceContainer {
         ConfigurableApplicationContext context = springApplication.run(args);
 
         Robot robot = new SpringAwareRobotBuilder("max", context)
-                .motionEngine(RoboPlusMotionEngine.class, new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn"))
+                .motionEngine(RoboPlusMotionEngine.class,
+//                        new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn")
+                        new JsonMotionResource("/basic-animations.json")
+                )
                 .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
                 .sensor(new ServoSensor("Hand", "5"), ServoSensorDriver.class)
                 .sensor(new ServoSensor("HandYaw", "2"), ServoSensorDriver.class)
@@ -77,6 +84,8 @@ public class ServiceContainer {
 
         RobotEventHandler eventHandler = new RobotEventHandler(robot);
         robot.listen(eventHandler);
+
+//        robot.getMotionEngine().runMotion("ArmInit");
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");

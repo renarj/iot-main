@@ -1,472 +1,948 @@
 {
-  "name": "Turn right",
-  "id": "6",
-  "keyFrames": [
+  "motions": [
     {
-      "servoSteps": [
+      "name": "Motion1",
+      "id": "61",
+      "keyFrames": [
         {
-          "servoId": "1",
-          "targetPosition": 372,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 610,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 267,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 268,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 536,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 256,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 510,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 291,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 364,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 739,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 513,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 735,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 523,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 695,
+          "keyFrameId": "1"
         },
         {
-          "servoId": "2",
-          "targetPosition": 610,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 734,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 267,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 268,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 611,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 536,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 256,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 510,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 291,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 405,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 739,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 513,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 735,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 523,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 338,
+          "keyFrameId": "2"
         },
         {
-          "servoId": "3",
-          "targetPosition": 267,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 734,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 494,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 750,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 733,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 611,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 764,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 763,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 483,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 405,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 517,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 253,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 522,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 259,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 720,
+          "keyFrameId": "3"
         },
         {
-          "servoId": "4",
-          "targetPosition": 512,
-          "speed": 50
-        },
-        {
-          "servoId": "5",
-          "targetPosition": 268,
-          "speed": 50
-        },
-        {
-          "servoId": "6",
-          "targetPosition": 512,
-          "speed": 50
-        },
-        {
-          "servoId": "7",
-          "targetPosition": 512,
-          "speed": 50
-        },
-        {
-          "servoId": "8",
-          "targetPosition": 509,
-          "speed": 50
-        },
-        {
-          "servoId": "9",
-          "targetPosition": 536,
-          "speed": 50
-        },
-        {
-          "servoId": "10",
-          "targetPosition": 256,
-          "speed": 50
-        },
-        {
-          "servoId": "11",
-          "targetPosition": 510,
-          "speed": 50
-        },
-        {
-          "servoId": "12",
-          "targetPosition": 291,
-          "speed": 50
-        },
-        {
-          "servoId": "13",
-          "targetPosition": 650,
-          "speed": 50
-        },
-        {
-          "servoId": "14",
-          "targetPosition": 364,
-          "speed": 50
-        },
-        {
-          "servoId": "15",
-          "targetPosition": 739,
-          "speed": 50
-        },
-        {
-          "servoId": "16",
-          "targetPosition": 513,
-          "speed": 50
-        },
-        {
-          "servoId": "17",
-          "targetPosition": 735,
-          "speed": 50
-        },
-        {
-          "servoId": "18",
-          "targetPosition": 523,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 655,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 494,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 750,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 733,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 519,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 764,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 763,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 483,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 329,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 517,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 253,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 522,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 259,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 246,
+          "keyFrameId": "4"
         }
       ],
-      "servoIds": [
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10"
-      ],
-      "timeInMs": 695,
-      "keyFrameId": "1"
+      "nextMotion": "0",
+      "exitMotion": "0"
     },
     {
-      "servoSteps": [
+      "name": "Turn right",
+      "id": "6",
+      "keyFrames": [
         {
-          "servoId": "1",
-          "targetPosition": 372,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 610,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 267,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 268,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 536,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 256,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 510,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 291,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 364,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 739,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 513,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 735,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 523,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 695,
+          "keyFrameId": "1"
         },
         {
-          "servoId": "2",
-          "targetPosition": 734,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 734,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 267,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 268,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 512,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 611,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 536,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 256,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 510,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 291,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 405,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 739,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 513,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 735,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 523,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 338,
+          "keyFrameId": "2"
         },
         {
-          "servoId": "3",
-          "targetPosition": 267,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 734,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 494,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 750,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 733,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 611,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 764,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 763,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 483,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 405,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 517,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 253,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 522,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 259,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 720,
+          "keyFrameId": "3"
         },
         {
-          "servoId": "4",
-          "targetPosition": 512,
-          "speed": 50
-        },
-        {
-          "servoId": "5",
-          "targetPosition": 268,
-          "speed": 50
-        },
-        {
-          "servoId": "6",
-          "targetPosition": 512,
-          "speed": 50
-        },
-        {
-          "servoId": "7",
-          "targetPosition": 611,
-          "speed": 50
-        },
-        {
-          "servoId": "8",
-          "targetPosition": 509,
-          "speed": 50
-        },
-        {
-          "servoId": "9",
-          "targetPosition": 536,
-          "speed": 50
-        },
-        {
-          "servoId": "10",
-          "targetPosition": 256,
-          "speed": 50
-        },
-        {
-          "servoId": "11",
-          "targetPosition": 510,
-          "speed": 50
-        },
-        {
-          "servoId": "12",
-          "targetPosition": 291,
-          "speed": 50
-        },
-        {
-          "servoId": "13",
-          "targetPosition": 650,
-          "speed": 50
-        },
-        {
-          "servoId": "14",
-          "targetPosition": 405,
-          "speed": 50
-        },
-        {
-          "servoId": "15",
-          "targetPosition": 739,
-          "speed": 50
-        },
-        {
-          "servoId": "16",
-          "targetPosition": 513,
-          "speed": 50
-        },
-        {
-          "servoId": "17",
-          "targetPosition": 735,
-          "speed": 50
-        },
-        {
-          "servoId": "18",
-          "targetPosition": 523,
-          "speed": 50
+          "servoSteps": [
+            {
+              "servoId": "1",
+              "targetPosition": 372,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 655,
+              "speed": 50
+            },
+            {
+              "servoId": "3",
+              "targetPosition": 494,
+              "speed": 50
+            },
+            {
+              "servoId": "4",
+              "targetPosition": 750,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "6",
+              "targetPosition": 733,
+              "speed": 50
+            },
+            {
+              "servoId": "7",
+              "targetPosition": 519,
+              "speed": 50
+            },
+            {
+              "servoId": "8",
+              "targetPosition": 509,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 764,
+              "speed": 50
+            },
+            {
+              "servoId": "10",
+              "targetPosition": 495,
+              "speed": 50
+            },
+            {
+              "servoId": "11",
+              "targetPosition": 763,
+              "speed": 50
+            },
+            {
+              "servoId": "12",
+              "targetPosition": 483,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 650,
+              "speed": 50
+            },
+            {
+              "servoId": "14",
+              "targetPosition": 329,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 517,
+              "speed": 50
+            },
+            {
+              "servoId": "16",
+              "targetPosition": 253,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 522,
+              "speed": 50
+            },
+            {
+              "servoId": "18",
+              "targetPosition": 259,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "timeInMs": 246,
+          "keyFrameId": "4"
         }
       ],
-      "servoIds": [
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10"
-      ],
-      "timeInMs": 338,
-      "keyFrameId": "2"
-    },
-    {
-      "servoSteps": [
-        {
-          "servoId": "1",
-          "targetPosition": 372,
-          "speed": 50
-        },
-        {
-          "servoId": "2",
-          "targetPosition": 734,
-          "speed": 50
-        },
-        {
-          "servoId": "3",
-          "targetPosition": 494,
-          "speed": 50
-        },
-        {
-          "servoId": "4",
-          "targetPosition": 750,
-          "speed": 50
-        },
-        {
-          "servoId": "5",
-          "targetPosition": 495,
-          "speed": 50
-        },
-        {
-          "servoId": "6",
-          "targetPosition": 733,
-          "speed": 50
-        },
-        {
-          "servoId": "7",
-          "targetPosition": 611,
-          "speed": 50
-        },
-        {
-          "servoId": "8",
-          "targetPosition": 509,
-          "speed": 50
-        },
-        {
-          "servoId": "9",
-          "targetPosition": 764,
-          "speed": 50
-        },
-        {
-          "servoId": "10",
-          "targetPosition": 495,
-          "speed": 50
-        },
-        {
-          "servoId": "11",
-          "targetPosition": 763,
-          "speed": 50
-        },
-        {
-          "servoId": "12",
-          "targetPosition": 483,
-          "speed": 50
-        },
-        {
-          "servoId": "13",
-          "targetPosition": 650,
-          "speed": 50
-        },
-        {
-          "servoId": "14",
-          "targetPosition": 405,
-          "speed": 50
-        },
-        {
-          "servoId": "15",
-          "targetPosition": 517,
-          "speed": 50
-        },
-        {
-          "servoId": "16",
-          "targetPosition": 253,
-          "speed": 50
-        },
-        {
-          "servoId": "17",
-          "targetPosition": 522,
-          "speed": 50
-        },
-        {
-          "servoId": "18",
-          "targetPosition": 259,
-          "speed": 50
-        }
-      ],
-      "servoIds": [
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10"
-      ],
-      "timeInMs": 720,
-      "keyFrameId": "3"
-    },
-    {
-      "servoSteps": [
-        {
-          "servoId": "1",
-          "targetPosition": 372,
-          "speed": 50
-        },
-        {
-          "servoId": "2",
-          "targetPosition": 655,
-          "speed": 50
-        },
-        {
-          "servoId": "3",
-          "targetPosition": 494,
-          "speed": 50
-        },
-        {
-          "servoId": "4",
-          "targetPosition": 750,
-          "speed": 50
-        },
-        {
-          "servoId": "5",
-          "targetPosition": 495,
-          "speed": 50
-        },
-        {
-          "servoId": "6",
-          "targetPosition": 733,
-          "speed": 50
-        },
-        {
-          "servoId": "7",
-          "targetPosition": 519,
-          "speed": 50
-        },
-        {
-          "servoId": "8",
-          "targetPosition": 509,
-          "speed": 50
-        },
-        {
-          "servoId": "9",
-          "targetPosition": 764,
-          "speed": 50
-        },
-        {
-          "servoId": "10",
-          "targetPosition": 495,
-          "speed": 50
-        },
-        {
-          "servoId": "11",
-          "targetPosition": 763,
-          "speed": 50
-        },
-        {
-          "servoId": "12",
-          "targetPosition": 483,
-          "speed": 50
-        },
-        {
-          "servoId": "13",
-          "targetPosition": 650,
-          "speed": 50
-        },
-        {
-          "servoId": "14",
-          "targetPosition": 329,
-          "speed": 50
-        },
-        {
-          "servoId": "15",
-          "targetPosition": 517,
-          "speed": 50
-        },
-        {
-          "servoId": "16",
-          "targetPosition": 253,
-          "speed": 50
-        },
-        {
-          "servoId": "17",
-          "targetPosition": 522,
-          "speed": 50
-        },
-        {
-          "servoId": "18",
-          "targetPosition": 259,
-          "speed": 50
-        }
-      ],
-      "servoIds": [
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17",
-        "18",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10"
-      ],
-      "timeInMs": 246,
-      "keyFrameId": "4"
+      "nextMotion": "0",
+      "exitMotion": "0"
     }
-  ],
-  "nextMotion": "0",
-  "exitMotion": "0"
+  ]
 }

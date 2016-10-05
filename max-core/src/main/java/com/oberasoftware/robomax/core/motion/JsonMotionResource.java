@@ -1,4 +1,4 @@
-package com.oberasoftware.robomax.core;
+package com.oberasoftware.robomax.core.motion;
 
 import com.oberasoftware.robo.api.motion.MotionResource;
 

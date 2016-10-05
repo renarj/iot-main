@@ -1,0 +1,121 @@
+{
+  "motions": [
+    {
+      "name": "ArmInit",
+      "id": "ArmInit",
+      "keyFrames": [
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 621,
+              "speed": 50
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 497,
+              "speed": 50
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 498,
+              "speed": 50
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 363,
+              "speed": 50
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 500,
+              "speed": 50
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 500,
+              "speed": 50
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 500,
+              "speed": 50
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1475437379622"
+        }
+      ],
+      "nextMotion": "0",
+      "exitMotion": "0"
+    },
+    {
+      "name": "ArmControl",
+      "id": "ArmControl",
+      "keyFrames": [
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 773,
+              "speed": 200
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 500,
+              "speed": 200
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 500,
+              "speed": 200
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 811,
+              "speed": 200
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 500,
+              "speed": 200
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 243,
+              "speed": 200
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 500,
+              "speed": 200
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1475437379622"
+        }
+      ],
+      "nextMotion": "0",
+      "exitMotion": "0"
+    }
+  ]
+}
+

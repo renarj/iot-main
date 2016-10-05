@@ -2,7 +2,6 @@ package com.oberasoftware.robomax.web;
 
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
-import com.oberasoftware.robo.api.motion.KeyFrame;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,13 +91,6 @@ public class ServoController {
         getServoDriver().getServos().forEach(s -> getServoDriver().setTorgue(s.getId(), false));
     }
 
-    @RequestMapping(value = "/keyframe", method = RequestMethod.POST,
-            consumes = "application/json", produces = "application/json")
-    public KeyFrame getKeyFrame() {
-        LOG.info("Retrieving current servo positions as keyframe");
-        Robot robot = robotRegistry.getRobots().get(0);
-        return robot.getMotionEngine().getCurrentPositionAsKeyFrame();
-    }
 
     private Robot getDefaultRobot() {
         return robotRegistry.getRobots().get(0);

@@ -105,12 +105,22 @@ function loadHandlers() {
 
     $("button.saveKeyFrame").click(function (e) {
         e.preventDefault();
-        $.ajax({url: "/servos/keyframe", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+        $.ajax({url: "/motions/keyframe", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
             // console.log("Received keyframe: " + JSON.stringify(data));
 
             var ms = $('#motionscript');
             var current = ms.val();
             ms.val(current + JSON.stringify(data));
+        }});
+    });
+
+    $("button.executeMotion").click(function (e) {
+        e.preventDefault();
+
+        var motionId = $("#motion").val();
+
+        $.ajax({url: "/motions/run/" + motionId, type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+            console.log("Motion execution: " + motionId + " was triggered");
         }});
     });
 }

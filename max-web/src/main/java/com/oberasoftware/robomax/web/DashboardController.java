@@ -28,8 +28,12 @@ public class DashboardController {
     public String getIndex(Model model) {
         LOG.info("Index was requested");
         List<Robot> robots = robotRegistry.getRobots();
+
+        List<String> motionIds = robots.stream().map(r -> r.getMotionEngine().getMotions()).flatMap(Collection::stream)
+                .collect(Collectors.toList());
         List<Servo> servos = robots.stream().map(r -> r.getServoDriver().getServos())
                 .flatMap(Collection::stream).collect(Collectors.toList());
+        model.addAttribute("motions", motionIds);
         model.addAttribute("servos", servos.stream()
                 .map(SimpleServo::new)
                 .collect(Collectors.toList()));
