@@ -103,26 +103,87 @@ function loadHandlers() {
         }});
     });
 
-    $("button.saveKeyFrame").click(function (e) {
-        e.preventDefault();
-        $.ajax({url: "/motions/keyframe", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            // console.log("Received keyframe: " + JSON.stringify(data));
-
-            var ms = $('#motionscript');
-            var current = ms.val();
-            ms.val(current + JSON.stringify(data));
-        }});
-    });
-
     $("button.executeMotion").click(function (e) {
         e.preventDefault();
 
-        var motionId = $("#motion").val();
+        var motionId = $("#motions").val();
 
         $.ajax({url: "/motions/run/" + motionId, type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
             console.log("Motion execution: " + motionId + " was triggered");
         }});
     });
+
+    $("button.loadMotion").click(function (e) {
+        e.preventDefault();
+
+        var motionId = $("#motions").val();
+        if(!isEmpty(motionId)) {
+            $.ajax({url: "/motions/load/" + motionId, type: "GET", contentType: "application/json; charset=utf-8", success: function(data) {
+                console.log("Motion: " + motionId + " was loaded");
+                $("#keyframes").empty();
+
+                $.each(data.keyFrames, function (i, frame) {
+                    addKeyFrame(frame);
+                })
+            }});
+        }
+    });
+
+    $("button.takeKeyFrame").click(function (e) {
+        e.preventDefault();
+        $.ajax({url: "/motions/keyframe", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+            addKeyFrame(data);
+        }});
+    });
+
+    $("button.setKeyFrame").click(function (e) {
+        e.preventDefault();
+
+        var json = $("#keyframes").find(":selected").val();
+        console.log("Keyframe selected: " + json);
+
+        $.ajax({url: "/motions/run/keyframe", type: "POST", data: json, contentType: "application/json; charset=utf-8", success: function(data) {
+            console.log("KeyFrame succesfully set");
+        }});
+    });
+
+    $("button.runKeyFrames").click(function (e) {
+        e.preventDefault();
+
+        var keyFrames = [];
+        $("#keyframes").find("option").each(function() {
+            console.log("Keyframe: " + $(this).val());
+
+            var json = $(this).val();
+            var keyframe = JSON.parse(json);
+            keyFrames.push(keyframe);
+        });
+
+        var data = {
+            "name":"test",
+            "id":"test",
+            "keyFrames":keyFrames,
+            "nextMotion":"0",
+            "exitMotion":"0"
+        };
+        var postData = JSON.stringify(data);
+        console.log("Posting data: " + postData);
+
+        $.ajax({url: "/motions/run/keyframes", type: "POST", data: postData, contentType: "application/json; charset=utf-8", success: function(data) {
+            addKeyFrame(data);
+        }});
+    });
+
+}
+
+function addKeyFrame(keyFrameData) {
+    var keyFrameList = $('#keyframes');
+    var json = JSON.stringify(keyFrameData);
+    var keyFrameId = keyFrameData.keyFrameId;
+
+    keyFrameList.append($("<option></option>")
+        .attr("value", json)
+        .text(keyFrameId));
 }
 
 // function handleSlideEvent(slideEvt) {
@@ -157,5 +218,9 @@ function setServoProperty(servoId, property, value) {
 
 $(document).ready(function() {
     loadHandlers();
-    // connect();
+    connect();
 });
+
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}

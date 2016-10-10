@@ -137,18 +137,32 @@ public class RoboPlusMotionEngine implements MotionEngine {
         return executeMotion(motionName, false);
     }
 
+    @Override
+    public MotionTask runMotion(Motion motion) {
+        return executeMotion(motion, false);
+    }
+
+    @Override
+    public MotionTask runMotion(KeyFrame keyFrame) {
+        return motionExecutor.execute(keyFrame);
+    }
+
     private MotionTask executeMotion(String motionName, boolean await) {
         Optional<Motion> motion = motionManager.findMotionByName(motionName);
         if(motion.isPresent()) {
-            MotionTask task = motionExecutor.execute(motion.get());
-            runningTasks.putIfAbsent(task.getTaskId(), task);
-
-            if(await) {
-                task.awaitCompletion();
-            }
-            return task;
+            executeMotion(motion.get(), await);
         }
         return null;
+    }
+
+    private MotionTask executeMotion(Motion motion, boolean await) {
+        MotionTask task = motionExecutor.execute(motion);
+        runningTasks.putIfAbsent(task.getTaskId(), task);
+
+        if(await) {
+            task.awaitCompletion();
+        }
+        return task;
     }
 
     @Override

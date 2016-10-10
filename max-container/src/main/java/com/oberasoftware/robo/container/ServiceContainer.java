@@ -72,6 +72,7 @@ public class ServiceContainer {
 //                        new RoboPlusClassPathResource("/bio_prm_humanoidtypea_en.mtn")
                         new JsonMotionResource("/basic-animations.json")
                 )
+                ///dev/ttyACM0
                 .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
                 .sensor(new ServoSensor("Hand", "5"), ServoSensorDriver.class)
                 .sensor(new ServoSensor("HandYaw", "2"), ServoSensorDriver.class)

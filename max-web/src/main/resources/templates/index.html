@@ -77,40 +77,56 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-primary enableAllTorgue">Enable Torgue</button>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">General Controls</h3>
+                </div>
 
-                </div>
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-primary disableAllTorgue">Disable Torgue</button>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-primary saveKeyFrame">Take keyframe</button>
+                <div class="panel-body">
+                        <button type="button" class="btn btn-primary enableAllTorgue">Enable Torgue</button>
+
+                        <button type="button" class="btn btn-primary disableAllTorgue">Disable Torgue</button>
                 </div>
             </div>
-            <div class="row voffset1">
-                <div class="form-group">
-                    <label class="col-md-2" for="motionscript">Motion:</label>
-                    <div class="col-md-10">
-                        <textarea name="motionScript" id="motionscript" rows="20" cols="60"></textarea>
-                    </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Motions</h3>
                 </div>
-            </div>
-            <div class="row voffset1">
-                <div class="col-md-9">
+                <div class="panel-body">
                     <div class="form-group">
-                        <label class="col-md-3" for="motionscript">Motions:</label>
-                        <div class="col-md-9">
-                            <select class="form-control" id="motion" size="10">
+                        <label class="col-md-2" for="motions">Motions:</label>
+                        <div class="col-md-10">
+                            <select class="form-control" id="motions" size="10">
                                 <option value="none" th:each="motion: ${motions}" th:text="${motion}" th:value="${motion}">MotionId</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="panel-footer">
                     <button type="button" class="btn btn-primary loadMotion">Load Motion</button>
-                    <button type="button" class="btn btn-primary executeMotion voffset1">Run Motion</button>
+                    <button type="button" class="btn btn-primary executeMotion">Run Motion</button>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Keyframes</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-md-2" for="keyframes">Frames:</label>
+                        <div class="col-md-10">
+                            <!--<textarea name="motionScript" id="motionscript" rows="20" cols="60"></textarea>-->
+                            <select class="form-control" id="keyframes" size="10">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-primary setKeyFrame">Set Keyframe</button>
+                    <button type="button" class="btn btn-primary runKeyFrames">Run Keyframes</button>
+                    <button type="button" class="btn btn-primary takeKeyFrame">Capture keyframe</button>
                 </div>
             </div>
 
