@@ -34,11 +34,11 @@ function loadHandlers() {
     //     $(this).slider();
     //     $(this).on("slide", handleSlideEvent);
     // });
-    positionSliders.each(function(index){
+    positionSliders.each(function (index) {
         $(this).slider();
         $(this).on("slideStart", handleSlideStart);
     });
-    positionSliders.each(function(index){
+    positionSliders.each(function (index) {
         $(this).slider();
         $(this).on("slideStop", handleSlideStop);
     });
@@ -47,9 +47,14 @@ function loadHandlers() {
         e.preventDefault();
 
         var servoId = this.getAttribute('servoId');
-        $.ajax({url: "/servos/enable/" + servoId + "/torgue", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("Enable torgue for servo successfully");
-        }});
+        $.ajax({
+            url: "/servos/enable/" + servoId + "/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Enable torgue for servo successfully");
+            }
+        });
 
     });
 
@@ -57,9 +62,14 @@ function loadHandlers() {
         e.preventDefault();
 
         var servoId = this.getAttribute('servoId');
-        $.ajax({url: "/servos/disable/" + servoId + "/torgue", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("Disable torgue for servo successfully");
-        }});
+        $.ajax({
+            url: "/servos/disable/" + servoId + "/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Disable torgue for servo successfully");
+            }
+        });
     });
 
     $("button.setSpeed").click(function (e) {
@@ -91,16 +101,20 @@ function loadHandlers() {
 
     $("button.enableAllTorgue").click(function (e) {
         e.preventDefault();
-        $.ajax({url: "/servos/enable/torgue", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("Enabled torgue for servos successfully");
-        }});
+        $.ajax({
+            url: "/servos/enable/torgue", type: "POST", contentType: "application/json; charset=utf-8", success: function (data) {
+                console.log("Enabled torgue for servos successfully");
+            }
+        });
     });
 
     $("button.disableAllTorgue").click(function (e) {
         e.preventDefault();
-        $.ajax({url: "/servos/disable/torgue", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("Disabled torgue for servos successfully");
-        }});
+        $.ajax({
+            url: "/servos/disable/torgue", type: "POST", contentType: "application/json; charset=utf-8", success: function (data) {
+                console.log("Disabled torgue for servos successfully");
+            }
+        });
     });
 
     $("button.executeMotion").click(function (e) {
@@ -108,32 +122,41 @@ function loadHandlers() {
 
         var motionId = $("#motions").val();
 
-        $.ajax({url: "/motions/run/" + motionId, type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("Motion execution: " + motionId + " was triggered");
-        }});
+        $.ajax({
+            url: "/motions/run/" + motionId, type: "POST", contentType: "application/json; charset=utf-8", success: function (data) {
+                console.log("Motion execution: " + motionId + " was triggered");
+            }
+        });
     });
 
     $("button.loadMotion").click(function (e) {
         e.preventDefault();
 
         var motionId = $("#motions").val();
-        if(!isEmpty(motionId)) {
-            $.ajax({url: "/motions/load/" + motionId, type: "GET", contentType: "application/json; charset=utf-8", success: function(data) {
-                console.log("Motion: " + motionId + " was loaded");
-                $("#keyframes").empty();
+        if (!isEmpty(motionId)) {
+            $.ajax({
+                url: "/motions/load/" + motionId, type: "GET", contentType: "application/json; charset=utf-8", success: function (data) {
+                    console.log("Motion: " + motionId + " was loaded");
+                    var kf = $("#keyframes");
+                    kf.empty();
+                    kf.attr("motionId", motionId);
+                    $("#kfMotionName").text(motionId);
 
-                $.each(data.keyFrames, function (i, frame) {
-                    addKeyFrame(frame);
-                })
-            }});
+                    $.each(data.keyFrames, function (i, frame) {
+                        addKeyFrame(frame);
+                    })
+                }
+            });
         }
     });
 
     $("button.takeKeyFrame").click(function (e) {
         e.preventDefault();
-        $.ajax({url: "/motions/keyframe", type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            addKeyFrame(data);
-        }});
+        $.ajax({
+            url: "/motions/keyframe", type: "POST", contentType: "application/json; charset=utf-8", success: function (data) {
+                addKeyFrame(data);
+            }
+        });
     });
 
     $("button.setKeyFrame").click(function (e) {
@@ -142,38 +165,143 @@ function loadHandlers() {
         var json = $("#keyframes").find(":selected").val();
         console.log("Keyframe selected: " + json);
 
-        $.ajax({url: "/motions/run/keyframe", type: "POST", data: json, contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("KeyFrame succesfully set");
-        }});
+        $.ajax({
+            url: "/motions/run/keyframe",
+            type: "POST",
+            data: json,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("KeyFrame succesfully set");
+            }
+        });
     });
 
     $("button.runKeyFrames").click(function (e) {
         e.preventDefault();
 
-        var keyFrames = [];
-        $("#keyframes").find("option").each(function() {
-            console.log("Keyframe: " + $(this).val());
-
-            var json = $(this).val();
-            var keyframe = JSON.parse(json);
-            keyFrames.push(keyframe);
-        });
-
-        var data = {
-            "name":"test",
-            "id":"test",
-            "keyFrames":keyFrames,
-            "nextMotion":"0",
-            "exitMotion":"0"
-        };
+        var data = getMotionJson();
         var postData = JSON.stringify(data);
         console.log("Posting data: " + postData);
 
-        $.ajax({url: "/motions/run/keyframes", type: "POST", data: postData, contentType: "application/json; charset=utf-8", success: function(data) {
-            addKeyFrame(data);
-        }});
+        $.ajax({
+            url: "/motions/run/keyframes",
+            type: "POST",
+            data: postData,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+            }
+        });
     });
 
+    $("#keyframes").on('change', function () {
+        var selectedFrame = $("#keyframes").find('option:selected');
+
+        var t = selectedFrame.attr("time");
+        var name = selectedFrame.text().trim();
+
+        $("#frameName").val(name);
+        $("#frameTime").val(t);
+    });
+
+    $("button.frameSave").click(function (e) {
+        e.preventDefault();
+
+        var fName = $("#frameName").val();
+        var fTime = $("#frameTime").val();
+
+        var selectedFrame = $("#keyframes").find('option:selected');
+        var jsonText = selectedFrame.val();
+        var json = JSON.parse(jsonText);
+        json.keyFrameId = fName;
+        json.timeInMs = fTime;
+        selectedFrame.attr("val", JSON.stringify(json));
+        selectedFrame.attr("time", fTime);
+        selectedFrame.text(fName);
+    });
+
+    $("button.saveKeyFrames").click(function (e) {
+        e.preventDefault();
+
+        if(isEmpty($("#keyframes").attr("motionId"))) {
+            $('#saveMotionModal').modal();
+        } else {
+            saveMotion();
+        }
+    });
+
+    $("#saveMotionBtn").click(function (e) {
+        var motionId = $("#motionName").val();
+        var kf = $("#keyframes");
+        kf.attr("motionId", motionId);
+        $("#kfMotionName").text(motionId);
+
+        saveMotion();
+    });
+
+    $("button.frameDelete").click(function (e) {
+        e.preventDefault();
+
+        var selectedFrame = $("#keyframes").find('option:selected');
+        selectedFrame.remove();
+    });
+
+    $("button.getJson").click(function (e) {
+        e.preventDefault();
+
+        var json = getMotionJson();
+        $("#motionData").val(JSON.stringify(json));
+        $("#motionJson").modal();
+    });
+
+    $("button.clearEditor").click(function (e) {
+        e.preventDefault();
+
+        var kf = $("#keyframes");
+        kf.empty();
+        kf.attr("motionId", "");
+
+        $("#frameName").val("");
+        $("#frameTime").val("");
+        $("#kfMotionName").text("");
+    });
+}
+
+function saveMotion() {
+    var data = getMotionJson();
+    var postData = JSON.stringify(data);
+    console.log("Posting data: " + postData);
+
+    $.ajax({
+        url: "/motions/store",
+        type: "POST",
+        data: postData,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            console.log("Motion saved");
+        }
+    });
+}
+
+function getMotionJson() {
+    var kf = $("#keyframes");
+    var keyFrames = [];
+    kf.find("option").each(function () {
+        console.log("Keyframe: " + $(this).val());
+
+        var json = $(this).val();
+        var keyframe = JSON.parse(json);
+        keyFrames.push(keyframe);
+    });
+    var motionId = kf.attr("motionId");
+
+    return {
+        "name": motionId,
+        "id": motionId,
+        "keyFrames": keyFrames,
+        "nextMotion": "0",
+        "exitMotion": "0"
+    };
 }
 
 function addKeyFrame(keyFrameData) {
@@ -183,6 +311,7 @@ function addKeyFrame(keyFrameData) {
 
     keyFrameList.append($("<option></option>")
         .attr("value", json)
+        .attr("time", 0)
         .text(keyFrameId));
 }
 

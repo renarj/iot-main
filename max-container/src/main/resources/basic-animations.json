@@ -28,17 +28,17 @@
             },
             {
               "servoId": "5",
-              "targetPosition": 500,
+              "targetPosition": 2000,
               "speed": 50
             },
             {
               "servoId": "17",
-              "targetPosition": 500,
+              "targetPosition": 2000,
               "speed": 50
             },
             {
               "servoId": "9",
-              "targetPosition": 500,
+              "targetPosition": 2000,
               "speed": 50
             }
           ],
@@ -71,12 +71,12 @@
             },
             {
               "servoId": "2",
-              "targetPosition": 500,
+              "targetPosition": 2000,
               "speed": 200
             },
             {
               "servoId": "13",
-              "targetPosition": 500,
+              "targetPosition": 2000,
               "speed": 200
             },
             {
@@ -86,7 +86,7 @@
             },
             {
               "servoId": "5",
-              "targetPosition": 500,
+              "targetPosition": 2000,
               "speed": 200
             },
             {
@@ -96,7 +96,7 @@
             },
             {
               "servoId": "9",
-              "targetPosition": 500,
+              "targetPosition": 2000,
               "speed": 200
             }
           ],
@@ -114,6 +114,414 @@
         }
       ],
       "nextMotion": "0",
+      "exitMotion": "0"
+    },
+    {
+      "name": "Anim1",
+      "id": "Anim1",
+      "keyFrames": [
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 774,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 498,
+              "speed": 0
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 500,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 654,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 469,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 242,
+              "speed": 0
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 508,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388419508"
+        },
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 774,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 498,
+              "speed": 0
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 583,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 654,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 470,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 242,
+              "speed": 0
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 509,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388424965"
+        },
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 775,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 498,
+              "speed": 0
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 426,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 653,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 470,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 226,
+              "speed": 0
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 498,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388429403"
+        },
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 774,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 393,
+              "speed": 0
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 530,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 530,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 470,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 225,
+              "speed": 0
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 506,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388436622"
+        },
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 775,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 613,
+              "speed": 0
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 462,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 606,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 470,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 209,
+              "speed": 4
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 494,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388442057"
+        },
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 773,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 547,
+              "speed": 4
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 464,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 652,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 568,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 187,
+              "speed": 0
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 537,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388446664"
+        },
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 773,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 376,
+              "speed": 0
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 508,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 447,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 568,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 210,
+              "speed": 0
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 550,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388452717"
+        },
+        {
+          "servoSteps": [
+            {
+              "servoId": "11",
+              "targetPosition": 774,
+              "speed": 0
+            },
+            {
+              "servoId": "2",
+              "targetPosition": 482,
+              "speed": 0
+            },
+            {
+              "servoId": "13",
+              "targetPosition": 506,
+              "speed": 0
+            },
+            {
+              "servoId": "15",
+              "targetPosition": 606,
+              "speed": 0
+            },
+            {
+              "servoId": "5",
+              "targetPosition": 479,
+              "speed": 0
+            },
+            {
+              "servoId": "17",
+              "targetPosition": 242,
+              "speed": 0
+            },
+            {
+              "servoId": "9",
+              "targetPosition": 549,
+              "speed": 0
+            }
+          ],
+          "servoIds": [
+            "11",
+            "2",
+            "13",
+            "15",
+            "5",
+            "17",
+            "9"
+          ],
+          "timeInMs": 2000,
+          "keyFrameId": "1476388458557"
+        }
+      ],
+      "nextMotion": "Anim1",
       "exitMotion": "0"
     }
   ]

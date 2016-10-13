@@ -48,6 +48,13 @@ public class MotionController {
         getDefaultRobot().getMotionEngine().runMotion(motionName);
     }
 
+    @RequestMapping(value = "/store/motion", method = RequestMethod.POST)
+    public Motion storeMotion(@RequestBody MotionImpl motion) {
+        motionManager.storeMotion(motion);
+
+        return motion;
+    }
+
     @RequestMapping(value = "/run/keyframes", method = RequestMethod.POST)
     public Motion runKeyFrames(@RequestBody MotionImpl motion) {
         getDefaultRobot().getMotionEngine().runMotion(motion);
