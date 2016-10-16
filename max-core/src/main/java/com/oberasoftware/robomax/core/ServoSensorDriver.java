@@ -73,7 +73,7 @@ public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>
 
     @EventSubscribe
     public void receive(ServoUpdateEvent servoUpdate) {
-        LOG.info("Received servo update: {}", servoUpdate);
+        LOG.debug("Received servo update: {}", servoUpdate);
         ports.get(servoUpdate.getServoId()).notify(servoUpdate);
     }
 

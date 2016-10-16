@@ -2,7 +2,7 @@ package com.oberasoftware.robomax.core;
 
 import com.oberasoftware.home.api.converters.Converter;
 import com.oberasoftware.home.api.converters.TypeConverter;
-import com.oberasoftware.home.api.impl.types.ValueImpl;
+import com.oberasoftware.home.api.model.ValueImpl;
 import com.oberasoftware.home.api.types.VALUE_TYPE;
 import com.oberasoftware.home.api.types.Value;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
@@ -20,7 +20,7 @@ public class ServoPositionEventConverter implements Converter {
 
     @TypeConverter
     public MQTTMessage converter(ServoPositionEvent event) {
-        LOG.info("Converterting event: {} to mqtt", event);
+        LOG.debug("Converterting event: {} to mqtt", event);
 
         Value value = new ValueImpl(VALUE_TYPE.NUMBER, event.getValue().getRaw());
 
@@ -30,7 +30,7 @@ public class ServoPositionEventConverter implements Converter {
                 .label(event.getLabel())
                 .build();
 
-        LOG.info("Sending Servo position MQTT message: {}", value, message);
+        LOG.debug("Sending Servo position MQTT message: {}", value, message);
         return message;
     }
 }

@@ -194,6 +194,16 @@ function loadHandlers() {
         });
     });
 
+    $("button.stopMotion").click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/motions/stop", type: "POST", contentType: "application/json; charset=utf-8", success: function (data) {
+                console.log("Motion execution stopped");
+            }
+        });
+    });
+
     $("#keyframes").on('change', function () {
         var selectedFrame = $("#keyframes").find('option:selected');
 
@@ -215,7 +225,7 @@ function loadHandlers() {
         var json = JSON.parse(jsonText);
         json.keyFrameId = fName;
         json.timeInMs = fTime;
-        selectedFrame.attr("val", JSON.stringify(json));
+        selectedFrame.attr("value", JSON.stringify(json));
         selectedFrame.attr("time", fTime);
         selectedFrame.text(fName);
     });
@@ -250,7 +260,7 @@ function loadHandlers() {
         e.preventDefault();
 
         var json = getMotionJson();
-        $("#motionData").val(JSON.stringify(json));
+        $("#motionData").val(JSON.stringify(json, null, 4));
         $("#motionJson").modal();
     });
 
@@ -311,7 +321,7 @@ function addKeyFrame(keyFrameData) {
 
     keyFrameList.append($("<option></option>")
         .attr("value", json)
-        .attr("time", 0)
+        .attr("time", keyFrameData.timeInMs)
         .text(keyFrameId));
 }
 

@@ -12,6 +12,7 @@
     <logger name="com.oberasoftware" level="info"/>
     <!--<logger name="com.oberasoftware.robo.dynamixel.DynamixelServoDataManager" level="debug"/>-->
     <logger name="org.springframework" level="info"/>
+    <!--<logger name="com.oberasoftware.robo.dynamixel.DynamixelMotionExecutor" level="debug"/>-->
 
     <root level="OFF">
         <appender-ref ref="STDOUT"/>

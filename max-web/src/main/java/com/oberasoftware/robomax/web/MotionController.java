@@ -48,6 +48,12 @@ public class MotionController {
         getDefaultRobot().getMotionEngine().runMotion(motionName);
     }
 
+    @RequestMapping(value = "/stop", method = RequestMethod.POST)
+    public void runMotion() {
+        LOG.info("Triggering stop motions");
+        getDefaultRobot().getMotionEngine().stopAllTasks();
+    }
+
     @RequestMapping(value = "/store/motion", method = RequestMethod.POST)
     public Motion storeMotion(@RequestBody MotionImpl motion) {
         motionManager.storeMotion(motion);
