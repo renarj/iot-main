@@ -10,6 +10,7 @@ import com.oberasoftware.robo.api.sensors.SensorDriver;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.api.servo.events.ServoUpdateEvent;
 import com.oberasoftware.robo.core.commands.ReadPositionAndSpeedCommand;
+import com.oberasoftware.robo.core.commands.ReadTemperatureCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterrup
  * @author Renze de Vries
  */
 @Component
-public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>>, EventHandler {
+public class    ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>>, EventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ServoSensorDriver.class);
 
     private ServoDriver servoDriver;
@@ -40,7 +41,9 @@ public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>
 
     private static final int SERVO_CHECK_INTERVAL = 100;
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private static final int TEMP_CHECK_INTERVAL = 5000;
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     @Override
     public List<DirectPort<PositionValue>> getPorts() {
@@ -66,6 +69,16 @@ public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>
                 servoDriver.getServos().forEach(s -> {
                     localEventBus.publish(new ReadPositionAndSpeedCommand(s.getId()));
                     sleepUninterruptibly(SERVO_CHECK_INTERVAL, TimeUnit.MILLISECONDS);
+                });
+            }
+        });
+
+        executorService.submit(() -> {
+            while(!Thread.currentThread().isInterrupted()) {
+                servoDriver.getServos().forEach(s -> {
+                    LOG.info("Requesting servo temps: {}", s.getId());
+                    localEventBus.publish(new ReadTemperatureCommand(s.getId()));
+                    sleepUninterruptibly(TEMP_CHECK_INTERVAL, TimeUnit.MILLISECONDS);
                 });
             }
         });

@@ -40,7 +40,11 @@ public class ServoSensor extends AbstractSensor<PositionValue> {
         if(sensorDriver instanceof ServoSensorDriver) {
             LOG.debug("Activating servo port: {}", portName);
             DirectPort<PositionValue> port = ((ServoSensorDriver) sensorDriver).getPort(portName);
-            port.listen(e -> notifyListeners(new ServoPositionEvent(robot.getName(), name, e.getServoId(), e)));
+            if(port != null) {
+                port.listen(e -> notifyListeners(new ServoPositionEvent(robot.getName(), name, e.getServoId(), e)));
+            } else {
+                LOG.warn("Could not activate servo senso, no port: {} was found", portName);
+            }
         }
     }
 }

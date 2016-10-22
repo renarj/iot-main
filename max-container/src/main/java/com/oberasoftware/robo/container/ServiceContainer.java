@@ -74,7 +74,8 @@ public class ServiceContainer {
                 )
                 //"/dev/ttyACM0
                 //"/dev/tty.usbmodem1411
-                .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1411").build())
+                .servoDriver(DynamixelServoDriver.class, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem1431").build())
+                .sensor(new ServoSensor("Test", "6"), ServoSensorDriver.class)
                 .sensor(new ServoSensor("Hand", "5"), ServoSensorDriver.class)
                 .sensor(new ServoSensor("HandYaw", "2"), ServoSensorDriver.class)
                 .sensor(new ServoSensor("Walk", "17"), ServoSensorDriver.class)
