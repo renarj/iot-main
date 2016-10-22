@@ -76,7 +76,7 @@ public class    ServoSensorDriver implements SensorDriver<DirectPort<PositionVal
         executorService.submit(() -> {
             while(!Thread.currentThread().isInterrupted()) {
                 servoDriver.getServos().forEach(s -> {
-                    LOG.info("Requesting servo temps: {}", s.getId());
+                    LOG.debug("Requesting servo temps: {}", s.getId());
                     localEventBus.publish(new ReadTemperatureCommand(s.getId()));
                     sleepUninterruptibly(TEMP_CHECK_INTERVAL, TimeUnit.MILLISECONDS);
                 });
