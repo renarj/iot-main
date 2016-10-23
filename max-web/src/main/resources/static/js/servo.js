@@ -16,6 +16,16 @@ function connect() {
 function handleStateUpdate(state) {
     var positionSlider = $("#position" + state.servoId);
     var positionText = $("#textposition" + state.servoId);
+
+    var temp = $("#temp" + state.servoId);
+    var volt = $("#volt" + state.servoId);
+    if(state.temperature > 0) {
+        temp.val(state.temperature);
+    }
+    if(state.voltage > 0) {
+        volt.val(state.voltage);
+    }
+
     if(positionSlider.length) {
         if(positionSlider[0].getAttribute("changing") != "true") {
             var position = positionSlider.slider('getValue');

@@ -26,7 +26,7 @@ public class ServoStateController implements EventHandler {
         LOG.debug("Received servo update event: {}", stateUpdateEvent);
         ServoData data = stateUpdateEvent.getServoData();
         Integer tValue = data.getValue(ServoProperty.TEMPERATURE);
-        Integer cValue = data.getValue(ServoProperty.VOLTAGE);
+        Double cValue = data.getValue(ServoProperty.VOLTAGE);
 
         int temp = tValue != null ? tValue : 0;
         double voltage = cValue != null ? cValue : 0.0;

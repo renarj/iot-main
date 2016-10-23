@@ -14,13 +14,13 @@ public class SimpleServo {
     private final int temperature;
     private final double voltage;
 
-    public SimpleServo(String servoId, int speed, int position, int torgue, int temperature, double voltage) {
+    public SimpleServo(String servoId, Integer speed, Integer position, Integer torgue, Integer temperature, Double voltage) {
         this.servoId = servoId;
-        this.speed = speed;
-        this.position = position;
-        this.torgue = torgue;
-        this.temperature = temperature;
-        this.voltage = voltage;
+        this.speed = speed != null ? speed : 0;
+        this.position = position != null ? position : 0;
+        this.torgue = torgue != null ? torgue : 0;
+        this.temperature = temperature != null ? temperature : 0;
+        this.voltage = voltage != null ? voltage : 0.0;
     }
 
     public SimpleServo(Servo servo) {
