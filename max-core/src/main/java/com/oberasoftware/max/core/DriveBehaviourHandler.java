@@ -36,25 +36,25 @@ public class DriveBehaviourHandler implements EventHandler {
     }
 
     @EventSubscribe
-    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "forward")
+    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "backward")
     public void back(MQTTMessage mqttMessage) {
         doAction(mqttMessage, DriveBehaviour::backward);
     }
 
     @EventSubscribe
-    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "forward")
+    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "left")
     public void left(MQTTMessage mqttMessage) {
         doAction(mqttMessage, DriveBehaviour::left);
     }
 
     @EventSubscribe
-    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "forward")
+    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "right")
     public void right(MQTTMessage mqttMessage) {
         doAction(mqttMessage, DriveBehaviour::right);
     }
 
     @EventSubscribe
-    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "forward")
+    @MQTTPath(group = MessageGroup.COMMANDS, device = "wheels", label = "stop")
     public void stop(MQTTMessage mqttMessage) {
         doAction(mqttMessage, (d, s) -> d.stop());
     }
