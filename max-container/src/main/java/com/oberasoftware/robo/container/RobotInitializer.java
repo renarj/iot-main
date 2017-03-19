@@ -42,7 +42,7 @@ public class RobotInitializer {
     @Autowired
     private BehaviouralRobotRegistry behaviouralRobotRegistry;
 
-    @Value("dynamixelPort:")
+    @Value("{dynamixelPort:}")
     private String dynamixelPort;
 
     public void initialize() {
