@@ -12,6 +12,7 @@ import com.oberasoftware.max.core.behaviours.wheels.impl.WheelAction;
 import com.oberasoftware.max.core.behaviours.wheels.impl.WheelImpl;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
+import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
@@ -53,6 +54,7 @@ public class RobotInitializer {
                 .servoDriver(DynamixelServoDriver.class,
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort).build())
+                .remote(RemoteCloudDriver.class)
                 .build();
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
