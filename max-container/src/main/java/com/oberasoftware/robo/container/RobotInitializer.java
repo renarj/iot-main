@@ -15,6 +15,7 @@ import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
+import com.oberasoftware.robo.dynamixel.commands.DynamixelAngleLimitCommand;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
 import com.oberasoftware.robo.dynamixel.motion.RoboPlusMotionEngine;
 import org.slf4j.Logger;
@@ -56,6 +57,11 @@ public class RobotInitializer {
                                 .put(DynamixelServoDriver.PORT, dynamixelPort).build())
                 .remote(RemoteCloudDriver.class)
                 .build();
+        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("5", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("11", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("2", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("16", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
 

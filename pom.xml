@@ -71,13 +71,11 @@
                 <artifactId>robo-service</artifactId>
                 <version>${robo.sdk.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.oberasoftware</groupId>
-                <artifactId>dynamixel</artifactId>
+                <artifactId>dynamixel-core</artifactId>
                 <version>${dynamixel.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
