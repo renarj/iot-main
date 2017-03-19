@@ -15,6 +15,7 @@
  */
 package com.oberasoftware.robo.container;
 
+import com.oberasoftware.max.core.CoreConfiguration;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.pi4j.SensorConfiguration;
@@ -39,7 +40,8 @@ import org.springframework.context.annotation.Import;
 @Import({
         DynamixelConfiguration.class,
         RemoteConfiguration.class,
-        SensorConfiguration.class
+        SensorConfiguration.class,
+        CoreConfiguration.class
 })
 @ComponentScan
 public class ServiceContainer {
