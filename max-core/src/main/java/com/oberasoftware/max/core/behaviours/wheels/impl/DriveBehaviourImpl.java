@@ -1,8 +1,14 @@
 package com.oberasoftware.max.core.behaviours.wheels.impl;
 
-import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
 import com.oberasoftware.max.core.behaviours.wheels.DriveTrain;
+import com.oberasoftware.max.core.behaviours.wheels.Wheel;
+import com.oberasoftware.robo.api.Robot;
+
+import java.util.List;
+
+import static com.google.common.collect.Iterables.concat;
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author renarj
@@ -42,6 +48,24 @@ public class DriveBehaviourImpl implements DriveBehaviour {
     }
 
     @Override
+    public void drive(int speed, DIRECTION direction) {
+        switch(direction) {
+            case LEFT:
+                left(speed);
+                break;
+            case RIGHT:
+                right(speed);
+                break;
+            case FORWARD:
+                forward(speed);
+                break;
+            case BACKWARD:
+                backward(speed);
+                break;
+        }
+    }
+
+    @Override
     public void right(int speed) {
         left.backward(speed);
         right.forward(speed);
@@ -51,5 +75,10 @@ public class DriveBehaviourImpl implements DriveBehaviour {
     public void stop() {
         left.stop();
         right.stop();
+    }
+
+    @Override
+    public List<Wheel> getWheels() {
+        return newArrayList(concat(left.getWheels(), right.getWheels()));
     }
 }

@@ -1,5 +1,6 @@
 package com.oberasoftware.max.core;
 
+import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.max.core.behaviours.Behaviour;
 import com.oberasoftware.max.core.behaviours.gripper.GripperBuilder;
@@ -35,6 +36,12 @@ public class BehaviouralRobotBuilder {
         behaviours.add(new DriveBehaviourImpl(left, right));
         return this;
     }
+
+    public BehaviouralRobotBuilder wheels(DriveBehaviour behaviour) {
+        behaviours.add(behaviour);
+        return this;
+    }
+
 
     public BehaviouralRobot build() {
         BehaviouralRobotImpl behaviouralRobot = new BehaviouralRobotImpl(robot, behaviours);

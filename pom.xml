@@ -15,9 +15,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <odata.version>2.0.4</odata.version>
-        <robo.sdk.version>1.0-SNAPSHOT</robo.sdk.version>
-        <dynamixel.version>1.0-SNAPSHOT</dynamixel.version>
+        <robo.sdk.version>2.0-SNAPSHOT</robo.sdk.version>
+        <jasdb.version>2.0-SNAPSHOT</jasdb.version>
     </properties>
 
     <modules>
@@ -74,8 +73,19 @@
             <dependency>
                 <groupId>com.oberasoftware</groupId>
                 <artifactId>dynamixel-core</artifactId>
-                <version>${dynamixel.version}</version>
+                <version>${robo.sdk.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
+                <artifactId>robo-client</artifactId>
+                <version>${robo.sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
+                <artifactId>jasdb-service</artifactId>
+                <version>2.0-SNAPSHOT</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

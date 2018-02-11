@@ -1,0 +1,46 @@
+<!-- Modal for data insertion -->
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="addUiItemLabel" aria-hidden="true"
+     th:fragment="widgetForm" xmlns:th="http://www.w3.org/1999/xhtml">
+    <form role="form" id="createUIItemForm" action="#" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="addUiItemLabel">Add a Widget</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="itemName">Name</label>
+                                <input class="form-control" id="itemName" type="text"/>
+                            </div>
+                            <div class="form-group" id="robot">
+                                <label for="robotControllerId">Robot</label>
+                                <input class="form-control" id="robotControllerId" type="text"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="widgetList">Widget Type</label>
+                                <select class="form-control" id="widgetList">
+                                    <option value="drive">Drive Joystick</option>
+                                    <option value="wheel">Wheel control</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="wheel">
+                                <label for="wheelId">Wheel Id</label>
+                                <input class="form-control" id="wheelId" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="" id="containerId"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

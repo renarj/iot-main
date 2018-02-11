@@ -33,6 +33,11 @@ public class SimpleDriveTrainImpl implements DriveTrain {
 
     @Override
     public void stop() {
-        wheels.forEach(w -> w.stop());
+        wheels.forEach(Wheel::stop);
+    }
+
+    @Override
+    public List<Wheel> getWheels() {
+        return wheels;
     }
 }

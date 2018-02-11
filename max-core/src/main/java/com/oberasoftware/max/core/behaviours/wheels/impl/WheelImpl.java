@@ -30,6 +30,11 @@ public class WheelImpl implements Wheel {
     }
 
     @Override
+    public String getName() {
+        return servoId;
+    }
+
+    @Override
     public void initialize(Robot robot) {
         this.servoDriver = robot.getServoDriver();
     }

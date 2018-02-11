@@ -10,6 +10,7 @@ import com.pi4j.gpio.extension.ads.ADS1x15GpioProvider;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.i2c.I2CBus;
+import com.pi4j.io.i2c.I2CFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,8 @@ public class ADS1115Driver implements SensorDriver<AnalogPort> {
             LOG.info("Initialisation finished of ADS 1115 Driver");
         } catch(IOException e) {
             LOG.error("Could not load ADS1115", e);
+            throw new RoboException("Could not open ADS1115 GPIO port", e);
+        } catch (I2CFactory.UnsupportedBusNumberException e) {
             throw new RoboException("Could not open ADS1115 GPIO port", e);
         }
     }

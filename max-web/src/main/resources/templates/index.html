@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml">
+<head th:replace="includes/header :: header">
+</head>
+<body>
+
+<script th:src="@{/js/widgetForm.js}" src="/static/js/widgetForm.js"></script>
+<script th:src="@{/js/dashboard.js}" src="/static/js/dashboard.js"></script>
+<script th:src="@{/js/widget.js}" src="/static/js/widget.js"></script>
+
+<script id="joystickTemplate" type="x-tmpl-mustache">
+    <li class="well widget" index="{{index}}" id="{{widgetId}}">
+        <div class="row">
+            <div class="col-xs-3">
+                <label>{{name}}</label>
+            </div>
+            <div class="col-xs-6" id="{{widgetId}}_joystick" style="height: 100px;">
+
+            </div>
+            <div class="col-xs-1">&nbsp;</div>
+            <div class="col-xs-2">
+                <a href="#" widgetId="{{widgetId}}" class="btn btn-default btn-sm removeWidget" title="Deleted widget"><span class="glyphicon glyphicon-trash"></span></a>
+            </div>
+        </div>
+    </li>
+
+</script>
+<script id="containerTemplateGrid" type="x-tmpl-mustache">
+    <div class="row" id="{{containerId}}">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left">{{name}}</h3>
+                    <div class="btn btn-group pull-right">
+                        <a href="#" containerId="{{containerId}}" class="btn btn-default btn-sm removeContainer" title="Delete container"><span class="glyphicon glyphicon-trash"></span></a>
+                        <a href="#" data-toggle="modal" data-target="#dataModal" data-id="{{containerId}}" class="btn btn-default btn-sm addWidget" title="Add a Widget"><span class="glyphicon glyphicon-plus"></span></a>
+                    </div>
+                </div>
+                <div class="row" currentColumn="1" containerId="{{containerId}}" mode="grid">
+                    <div class="col-md-4">
+                        <ul class="panel-body list-unstyled sortable" column="1" containerId="{{containerId}}" next="2">
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="panel-body list-unstyled sortable" column="2" containerId="{{containerId}}" next="3">
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="panel-body list-unstyled sortable" column="3" containerId="{{containerId}}" next="1">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="containerTemplateList" type="x-tmpl-mustache">
+    <div class="row" id="{{containerId}}" containerId="{{containerId}}" mode="list">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left">{{name}}</h3>
+                    <div class="btn btn-group pull-right">
+                        <a href="#" containerId="{{containerId}}" class="btn btn-default btn-sm removeContainer" title="Delete container"><span class="glyphicon glyphicon-trash"></span></a>
+                        <a href="#" data-toggle="modal" data-target="#dataModal" data-id="{{containerId}}" class="btn btn-default btn-sm addWidget" title="Add a Widget"><span class="glyphicon glyphicon-plus"></span></a>
+                    </div>
+                </div>
+                <ul class="panel-body list-unstyled sortable" column="0" containerId="{{containerId}}">
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="tabTemplate" type="x-tmpl-mustache">
+    <li role="presentation" class="{{tabClass}}" id="dashlink_{{dashboardId}}">
+        <a dashboardId="{{dashboardId}}" class="tab" weight="{{weight}}" href="#">{{dashboardName}}</a>
+    </li>
+</script>
+
+
+<div class="container-fluid">
+    <div id="commandsvc" th:attr="location=${@environment.getProperty('command.svc.url')}"/>
+
+    <div th:replace="includes/header :: navigation (selectTab='dashboard')"></div>
+
+    <ul class="nav nav-tabs" id="dashboards">
+    </ul>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div th:replace="includes/widgetForm :: widgetForm"></div>
+
+            <div th:replace="includes/containerForm :: containerForm"></div>
+
+            <div class="panel panel-default" id="dashboard">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left" id="dashboardTitle"></h3>
+                    <div class="btn-group pull-right">
+                        <a href="#" class="btn btn-default btn-sm removeDashboard" title="Delete Dashboard"><span class="glyphicon glyphicon-trash"></span></a>
+                        <a href="#" data-toggle="modal" data-target="#containerModal" data-id="" class="btn btn-default btn-sm addContainer" title="Add a Container"><span class="glyphicon glyphicon-plus"></span></a>
+                    </div>
+                </div>
+                <div class="panel-body" id="container">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="includes/header :: footer"></div>
+</div>
+
+
+</body>
+</html>

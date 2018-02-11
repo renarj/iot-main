@@ -14,10 +14,6 @@
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
             <artifactId>dynamixel-core</artifactId>
         </dependency>
         <dependency>
@@ -28,11 +24,6 @@
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>max-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
-            <artifactId>max-web</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

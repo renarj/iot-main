@@ -15,9 +15,16 @@ public class BehaviouralRobotRegistryImpl implements BehaviouralRobotRegistry {
 
     private List<BehaviouralRobot> robots = new CopyOnWriteArrayList<>();
 
+//    @Autowired(required = false)
+//    private RemoteCloudDriver remoteCloudDriver;
+
     @Override
     public void register(BehaviouralRobot robot) {
         robots.add(robot);
+
+//        if(remoteCloudDriver != null) {
+//            new ControllerPersistCommand();
+//        }
     }
 
     @Override
