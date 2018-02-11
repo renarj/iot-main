@@ -24,6 +24,7 @@
         <module>max-core</module>
         <module>max-pi4j</module>
         <module>max-web</module>
+        <module>robo-max-hexapod</module>
     </modules>
 
     <licenses>
@@ -80,6 +81,12 @@
                 <groupId>com.oberasoftware</groupId>
                 <artifactId>robo-cloud</artifactId>
                 <version>${robo.sdk.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
+                <artifactId>max-core</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
