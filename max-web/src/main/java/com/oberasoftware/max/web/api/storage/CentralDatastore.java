@@ -1,8 +1,8 @@
 package com.oberasoftware.max.web.api.storage;
 
-import com.oberasoftware.home.api.exceptions.DataStoreException;
 import com.oberasoftware.max.web.api.model.Container;
 import com.oberasoftware.max.web.api.model.HomeEntity;
+import com.oberasoftware.robo.api.exceptions.DataStoreException;
 
 /**
  * @author renarj

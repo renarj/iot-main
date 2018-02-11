@@ -2,12 +2,12 @@ package com.oberasoftware.max.core;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.commands.BasicCommand;
-import com.oberasoftware.home.api.model.impl.BasicCommandImpl;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.max.core.behaviours.gripper.GripperBehaviour;
+import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

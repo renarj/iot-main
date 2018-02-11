@@ -52,22 +52,18 @@
             <!-- project deps -->
             <dependency>
                 <groupId>com.oberasoftware</groupId>
+                <artifactId>obera-base</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
                 <artifactId>robo-api</artifactId>
                 <version>${robo.sdk.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oberasoftware</groupId>
-                <artifactId>obera-base</artifactId>
-                <version>1.2</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
                 <artifactId>robo-core</artifactId>
-                <version>${robo.sdk.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-service</artifactId>
                 <version>${robo.sdk.version}</version>
             </dependency>
             <dependency>
@@ -82,10 +78,15 @@
             </dependency>
             <dependency>
                 <groupId>com.oberasoftware</groupId>
+                <artifactId>robo-cloud</artifactId>
+                <version>${robo.sdk.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
                 <artifactId>jasdb-service</artifactId>
                 <version>2.0-SNAPSHOT</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

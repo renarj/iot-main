@@ -35,7 +35,6 @@
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>robo-cloud</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
