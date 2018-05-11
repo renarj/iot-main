@@ -36,7 +36,7 @@ public class GroveBoard implements ActivatableCapability {
             I2CBus bus = I2CFactory.getInstance(busId);
             mainPort = bus.getDevice(ADDRESS);
 
-            port1 = bus.getDevice(0x1E);
+//            port1 = bus.getDevice(0x1E);
         } catch(Exception e) {
             LOG.error("Could not initialize Grove board");
         }
@@ -52,6 +52,10 @@ public class GroveBoard implements ActivatableCapability {
         } else {
             throw new IllegalArgumentException("No such port");
         }
+    }
+
+    public ThumbStick getThumbStick() {
+        return new ThumbStick(new GrovePort(mainPort));
     }
 
     @Override

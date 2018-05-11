@@ -8,14 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class MainController {
-    @RequestMapping("/")
+    @RequestMapping("/dash")
     public String getIndex() {
         return "index";
     }
 
-    @RequestMapping("/s")
+    @RequestMapping("/joystick")
     public String getS() {
         return "simple";
+    }
+
+    @RequestMapping("/walk")
+    public String getWalker() {
+        return "walker";
     }
 
 }

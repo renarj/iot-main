@@ -33,7 +33,7 @@ public class DashboardManagerImpl implements DashboardManager {
     @Autowired
     private UIManager uiManager;
 
-    @PostConstruct
+//    @PostConstruct
     public void initializeDefault() {
         LOG.info("Ensuring default dashboard exists");
 

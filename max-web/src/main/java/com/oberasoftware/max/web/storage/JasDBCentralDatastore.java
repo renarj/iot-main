@@ -50,7 +50,7 @@ public class JasDBCentralDatastore implements CentralDatastore {
         lock.unlock();
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void createIndexOnStartup() {
         LOG.debug("Creating a composite index");
 

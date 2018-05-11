@@ -24,7 +24,7 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
     private static final int RIGHT_REAR = 3;
 
     private static final double SQRT_OF_TWO = Math.sqrt(2.0);
-    private static final double OUTPUT_SCALE_FACTOR = 1023;
+    private static final double OUTPUT_SCALE_FACTOR = 100;
     public static final double DEFAULT_MINIMUM_SPEED = 0.02;
     public static final double DEFAULT_MAXIMUM_SPEED = 1.0;
 
@@ -82,9 +82,9 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
         for(int i=0; i<wheels.size(); i++) {
             int speed = (int) wheelSpeeds[i];
             Wheel wheel = wheels.get(i);
+
             if(speed < 0) {
-                speed = Math.abs(speed);
-                wheel.backward(Math.abs(speed));
+                wheel.backward(speed);
             } else {
                 wheel.forward(speed);
             }

@@ -1,8 +1,9 @@
 package com.oberasoftware.max.core.behaviours.wheels.impl;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.max.core.behaviours.wheels.Wheel;
+import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.robo.api.commands.Scale;
+import com.oberasoftware.robo.api.servo.ServoDriver;
 
 /**
  * @author renarj
@@ -11,22 +12,9 @@ public class WheelImpl implements Wheel {
     private ServoDriver servoDriver;
 
     private final String servoId;
-    private final WheelAction forwardAction;
-    private final WheelAction backwardAction;
 
-    private boolean reversed = false;
-
-    public WheelImpl(String servoId, WheelAction forwardAction, WheelAction backwardAction) {
+    public WheelImpl(String servoId) {
         this.servoId = servoId;
-        this.forwardAction = forwardAction;
-        this.backwardAction = backwardAction;
-    }
-
-    public WheelImpl(String servoId, boolean reversed, WheelAction forwardAction, WheelAction backwardAction) {
-        this.servoId = servoId;
-        this.reversed = reversed;
-        this.forwardAction = forwardAction;
-        this.backwardAction = backwardAction;
     }
 
     @Override
@@ -41,24 +29,27 @@ public class WheelImpl implements Wheel {
 
     @Override
     public void forward(int speed) {
-        if(reversed) {
-            backwardAction.doAction(servoId, speed, servoDriver);
-        } else {
-            forwardAction.doAction(servoId, speed, servoDriver);
-        }
+        move(Math.abs(speed));
     }
 
     @Override
     public void backward(int speed) {
-        if(reversed) {
-            forwardAction.doAction(servoId, speed, servoDriver);
+        //ensure its negative
+        move(-Math.abs(speed));
+    }
+
+    @Override
+    public void move(int speed) {
+        Scale inputScale = new Scale(-100, 100);
+        if(inputScale.isValid(speed)) {
+            servoDriver.setServoSpeed(servoId, speed, inputScale);
         } else {
-            backwardAction.doAction(servoId, speed, servoDriver);
+            throw new IllegalArgumentException("Invalid speed: " + speed + " needs to match scale: " + inputScale);
         }
     }
 
     @Override
     public void stop() {
-        servoDriver.setServoSpeed(servoId, 0);
+        servoDriver.setServoSpeed(servoId, 0, new Scale(-100, 100));
     }
 }

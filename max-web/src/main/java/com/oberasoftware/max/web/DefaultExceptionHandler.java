@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Renze de Vries
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class DefaultExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultExceptionHandler.class);
 

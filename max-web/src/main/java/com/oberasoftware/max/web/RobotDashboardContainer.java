@@ -11,7 +11,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @SpringBootApplication
-@Import(WebConfiguration.class)
+@Import(MaxWebConfiguration.class)
 public class RobotDashboardContainer {
     private static final Logger LOG = getLogger(RobotDashboardContainer.class);
 

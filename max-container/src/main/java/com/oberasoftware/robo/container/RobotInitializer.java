@@ -5,18 +5,20 @@ import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.max.core.BehaviouralRobot;
 import com.oberasoftware.max.core.BehaviouralRobotBuilder;
 import com.oberasoftware.max.core.BehaviouralRobotRegistry;
-import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
-import com.oberasoftware.max.core.behaviours.wheels.DriveTrain;
+import com.oberasoftware.max.core.behaviours.gripper.GripperBuilder;
+import com.oberasoftware.max.core.behaviours.servos.impl.SingleServoBehaviour;
 import com.oberasoftware.max.core.behaviours.wheels.Wheel;
 import com.oberasoftware.max.core.behaviours.wheels.impl.MecanumDriveTrainImpl;
-import com.oberasoftware.max.core.behaviours.wheels.impl.SimpleDriveTrainImpl;
 import com.oberasoftware.max.core.behaviours.wheels.impl.WheelAction;
 import com.oberasoftware.max.core.behaviours.wheels.impl.WheelImpl;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
+import com.oberasoftware.robo.api.commands.Scale;
+import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.commands.OperationModeCommand;
+import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
-import com.oberasoftware.robo.dynamixel.commands.DynamixelAngleLimitCommand;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
 import com.oberasoftware.robo.dynamixel.motion.RoboPlusMotionEngine;
 import org.slf4j.Logger;
@@ -27,7 +29,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -51,56 +52,68 @@ public class RobotInitializer {
 
     public void initialize() {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
-        Robot robot = new SpringAwareRobotBuilder("max", applicationContext)
+        Robot robot = new SpringAwareRobotBuilder("hexapod", applicationContext)
                 .motionEngine(RoboPlusMotionEngine.class,
                         new JsonMotionResource("/basic-animations.json")
                 )
                 .servoDriver(DynamixelServoDriver.class,
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort).build())
+                .capability(ServoSensorDriver.class)
 //                .remote(RemoteCloudDriver.class)
                 .build();
-        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("5", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
-        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("9", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
-        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("6", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
-        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("16", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+//        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("5", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+//        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("9", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+//        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("6", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
+//        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("16", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
 
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
 
-        WheelAction forwardAction = (si, s, d) -> d.setServoSpeed(si, s);
-        WheelAction backwardAction = (si, s, d) -> d.setServoSpeed(si, s + 1024);
+        ServoDriver servoDriver = robot.getServoDriver();
+//        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new AngleLimitCommand(s.getId(), AngleLimitCommand.MODE.JOINT_MODE)));
+        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
 
-        DriveTrain left = new SimpleDriveTrainImpl(newArrayList(
-                new WheelImpl("5", true, forwardAction, backwardAction),
-                new WheelImpl("9", true, forwardAction, backwardAction)));
-        DriveTrain right = new SimpleDriveTrainImpl(newArrayList(
-                new WheelImpl("16", false, forwardAction, backwardAction),
-                new WheelImpl("6", false, forwardAction, backwardAction)));
+        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s.getId(), OperationModeCommand.MODE.VELOCITY_MODE)));
 
-        Wheel frontLeft = new WheelImpl("16", false, forwardAction, backwardAction);
-        Wheel frontRight = new WheelImpl("9", true, forwardAction, backwardAction);
-        Wheel rearLeft = new WheelImpl("6", false, forwardAction, backwardAction);
-        Wheel rearRight = new WheelImpl("5", true, forwardAction, backwardAction);
+        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
 
+        WheelAction forwardAction = (si, s, d) -> d.setServoSpeed(si, s, new Scale(-100, 100));
+        WheelAction backwardAction = (si, s, d) -> d.setServoSpeed(si, s + 1024, new Scale(-100, 100));
+//
+//        DriveTrain left = new SimpleDriveTrainImpl(newArrayList(
+//                new WheelImpl("5", true, forwardAction, backwardAction),
+//                new WheelImpl("9", true, forwardAction, backwardAction)));
+//        DriveTrain right = new SimpleDriveTrainImpl(newArrayList(
+//                new WheelImpl("16", false, forwardAction, backwardAction),
+//                new WheelImpl("6", false, forwardAction, backwardAction)));
+//
+        Wheel frontLeft = new WheelImpl("22");
+        Wheel frontRight = new WheelImpl("21");
+        Wheel rearLeft = new WheelImpl("19");
+        Wheel rearRight = new WheelImpl("20");
+
+        SingleServoBehaviour camerRotate = new SingleServoBehaviour("23", 1350, 650, 1000);
+        SingleServoBehaviour cameraTilt = new SingleServoBehaviour("24", 1266, 600, 1000);
+//
         MecanumDriveTrainImpl mecanumDriveTrain = new MecanumDriveTrainImpl(frontLeft, frontRight, rearLeft, rearRight);
-
+//
         BehaviouralRobot robotCar = BehaviouralRobotBuilder.create(robot)
-//                .gripper(GripperBuilder.create(
-//                        new SingleServoBehaviour("3", 640, 420, 640),
-//                        new SingleServoBehaviour("4", 426, 570, 582))
-//                        .rotation(new SingleServoBehaviour("10", 350, 650, 512))
-//                        .elevator(new SingleServoBehaviour("14", 750, 600, 750)))
+                .gripper(GripperBuilder.create(
+                        new SingleServoBehaviour("3", 640, 420, 640),
+                        new SingleServoBehaviour("4", 426, 570, 582))
+                        .rotation(new SingleServoBehaviour("10", 350, 650, 512))
+                        .elevator(new SingleServoBehaviour("14", 750, 600, 750)))
 //                .wheels(left, right)
                 .wheels(mecanumDriveTrain)
                 .build();
         behaviouralRobotRegistry.register(robotCar);
         LOG.info("Robot: {} was registered", robotCar);
-
+//
         LOG.info("Starting wheels forward");
-//        robotCar.getWheels().ifPresent(w -> w.forward(800));
-//        robotCar.getWheels().ifPresent(w -> w.forward(1000));
-//        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+        robotCar.getWheels().ifPresent(w -> w.forward(30));
+        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+        robotCar.getWheels().ifPresent(w -> w.backward(30));
 //
 //        robotCar.getWheels().ifPresent(w -> w.left(500));
 //        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
@@ -113,14 +126,14 @@ public class RobotInitializer {
 //        robot.getServoDriver().setServoSpeed("16", 1900);
 //        robot.getServoDriver().setServoSpeed("5", 900);
 //        mecanumDriveTrain.forward(512);
-        mecanumDriveTrain.cartesian(0, -0.2, 0);
-        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
-
-        mecanumDriveTrain.cartesian(0, -0.5, -0.2);
-        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
-
-        mecanumDriveTrain.cartesian(0, -0.5, 0.2);
-        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
+//        mecanumDriveTrain.cartesian(0, -0.2, 0);
+//        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
+//
+//        mecanumDriveTrain.cartesian(0, -0.5, -0.2);
+//        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
+//
+//        mecanumDriveTrain.cartesian(0, -0.5, 0.2);
+//        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
 
 
 
@@ -139,10 +152,10 @@ public class RobotInitializer {
 //            Uninterruptibles.sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
 //        }
 
-        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
+//        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
 
 //
-        robotCar.getWheels().ifPresent(DriveBehaviour::stop);
+//        robotCar.getWheels().ifPresent(DriveBehaviour::stop);
 //        LOG.info("Killed wheels");
 
 //        System.exit(0);

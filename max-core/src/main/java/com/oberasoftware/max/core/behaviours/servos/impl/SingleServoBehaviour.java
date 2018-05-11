@@ -1,8 +1,8 @@
 package com.oberasoftware.max.core.behaviours.servos.impl;
 
+import com.oberasoftware.max.core.behaviours.servos.ServoBehaviour;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.servo.ServoDriver;
-import com.oberasoftware.max.core.behaviours.servos.ServoBehaviour;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -37,24 +37,24 @@ public class SingleServoBehaviour implements ServoBehaviour {
         int position = delta + minimumPosition;
 
         LOG.info("Setting target position for servo: {} to percentage position: {}", servoId, position);
-        servoDriver.setTargetPosition(servoId, position);
+        servoDriver.setTargetPosition(servoId, position, DEFAULT_SPEED_SCALE);
     }
 
     @Override
     public void goToMinimum() {
         LOG.info("Setting target position for servo: {} to minimum: {}", servoId, minimumPosition);
-        servoDriver.setTargetPosition(servoId, minimumPosition);
+        servoDriver.setTargetPosition(servoId, minimumPosition, DEFAULT_POSITION_SCALE);
     }
 
     @Override
     public void goToMaximum() {
         LOG.info("Setting target position for servo: {} to maximum: {}", servoId, maximumPosition);
-        servoDriver.setTargetPosition(servoId, maximumPosition);
+        servoDriver.setTargetPosition(servoId, maximumPosition, DEFAULT_POSITION_SCALE);
     }
 
     @Override
     public void goToDefault() {
         LOG.info("Setting target position for servo: {} to default: {}", servoId, defaultPosition);
-        servoDriver.setTargetPosition(servoId, defaultPosition);
+        servoDriver.setTargetPosition(servoId, defaultPosition, DEFAULT_POSITION_SCALE);
     }
 }

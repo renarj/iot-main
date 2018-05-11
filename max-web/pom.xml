@@ -16,11 +16,15 @@
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>dynamixel-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>max-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>robo-max-hexapod</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

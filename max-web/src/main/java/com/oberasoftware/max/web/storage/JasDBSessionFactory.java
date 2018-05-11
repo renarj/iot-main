@@ -16,7 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class JasDBSessionFactory {
     private static final Logger LOG = getLogger(JasDBSessionFactory.class);
 
-    @Value("${jasdb.mode}")
+    @Value("${jasdb.mode:local}")
     private String jasdbMode;
 
     @Value("${jasdb.wipe.startup:false}")

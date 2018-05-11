@@ -74,6 +74,11 @@
             </dependency>
             <dependency>
                 <groupId>com.oberasoftware</groupId>
+                <artifactId>dynamixel-web</artifactId>
+                <version>${robo.sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
                 <artifactId>robo-client</artifactId>
                 <version>${robo.sdk.version}</version>
             </dependency>

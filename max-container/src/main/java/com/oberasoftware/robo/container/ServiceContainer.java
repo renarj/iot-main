@@ -16,8 +16,9 @@
 package com.oberasoftware.robo.container;
 
 import com.oberasoftware.max.core.CoreConfiguration;
-import com.oberasoftware.robo.cloud.RemoteConfiguration;
+import com.oberasoftware.max.web.MaxWebConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
+import com.oberasoftware.robo.dynamixel.web.WebConfiguration;
 import com.oberasoftware.robo.pi4j.SensorConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +40,13 @@ import org.springframework.context.annotation.Import;
         DataSourceTransactionManagerAutoConfiguration.class })
 @Import({
         DynamixelConfiguration.class,
-        RemoteConfiguration.class,
+//        RemoteConfiguration.class,
         SensorConfiguration.class,
-        CoreConfiguration.class
+        CoreConfiguration.class,
+//        HexapodConfiguration.class,
+        MaxWebConfiguration.class,
+        WebConfiguration.class
+
 })
 @ComponentScan
 public class ServiceContainer {
@@ -54,5 +59,17 @@ public class ServiceContainer {
         ConfigurableApplicationContext context = springApplication.run(args);
         RobotInitializer initializer = context.getBean(RobotInitializer.class);
         initializer.initialize();
+
+//        Walker walker = context.getBean(Walker.class);
+//        LOG.info("Setting initial leg position");
+//        walker.walk(new PosData(0, 0, 2), new PosData(0, 0, 0));
+//        Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
+//
+////        for(int i=0; i<10; i++) {
+//            walker.walkDirection();
+////            Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
+////        }
+//
+//        LOG.info("Done");
     }
 }

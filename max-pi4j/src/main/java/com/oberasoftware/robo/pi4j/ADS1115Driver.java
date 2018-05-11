@@ -33,7 +33,7 @@ public class ADS1115Driver implements SensorDriver<AnalogPort> {
     private ADS1115GpioProvider gpioProvider;
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(Robot r, Map<String, String> p) {
         try {
             LOG.info("Initializing ADS 1115 Driver");
             final GpioController gpio = GpioFactory.getInstance();
