@@ -25,6 +25,7 @@
         <module>max-pi4j</module>
         <module>max-web</module>
         <module>robo-max-hexapod</module>
+        <module>max-handcontroller</module>
     </modules>
 
     <licenses>

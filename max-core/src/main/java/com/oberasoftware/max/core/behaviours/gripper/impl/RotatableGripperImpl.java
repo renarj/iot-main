@@ -1,8 +1,9 @@
 package com.oberasoftware.max.core.behaviours.gripper.impl;
 
 import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.max.core.behaviours.gripper.RotatableGripper;
-import com.oberasoftware.max.core.behaviours.servos.ServoBehaviour;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.RotatableGripper;
+import com.oberasoftware.robo.api.behavioural.ServoBehaviour;
 
 /**
  * @author renarj
@@ -16,9 +17,9 @@ public class RotatableGripperImpl extends GripperImpl implements RotatableGrippe
     }
 
     @Override
-    public void initialize(Robot robot) {
-        super.initialize(robot);
-        rotator.initialize(robot);
+    public void initialize(BehaviouralRobot behaviouralRobot, Robot robot) {
+        super.initialize(behaviouralRobot, robot);
+        rotator.initialize(behaviouralRobot, robot);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.oberasoftware.max.core.behaviours.servos.impl;
 
-import com.oberasoftware.max.core.behaviours.servos.ServoBehaviour;
 import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.ServoBehaviour;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import org.slf4j.Logger;
 
@@ -27,7 +28,7 @@ public class SingleServoBehaviour implements ServoBehaviour {
     }
 
     @Override
-    public void initialize(Robot robot) {
+    public void initialize(BehaviouralRobot behaviouralRobot, Robot robot) {
         this.servoDriver = robot.getServoDriver();
     }
 

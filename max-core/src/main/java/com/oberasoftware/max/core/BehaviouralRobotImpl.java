@@ -1,9 +1,10 @@
 package com.oberasoftware.max.core;
 
 import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.max.core.behaviours.Behaviour;
-import com.oberasoftware.max.core.behaviours.gripper.GripperBehaviour;
-import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.Behaviour;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.GripperBehaviour;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class BehaviouralRobotImpl implements BehaviouralRobot {
     }
 
     public void initialize() {
-        behaviours.forEach(b -> b.initialize(robot));
+        behaviours.forEach(b -> b.initialize(this, robot));
     }
 
     @Override

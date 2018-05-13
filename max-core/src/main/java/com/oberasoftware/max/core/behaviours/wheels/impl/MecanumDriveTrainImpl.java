@@ -1,8 +1,11 @@
 package com.oberasoftware.max.core.behaviours.wheels.impl;
 
-import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
-import com.oberasoftware.max.core.behaviours.wheels.Wheel;
 import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.Wheel;
+import com.oberasoftware.robo.api.commands.Scale;
+import com.oberasoftware.robo.api.navigation.DirectionalInput;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -34,13 +37,30 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
     }
 
     @Override
-    public void forward(int speed) {
-        cartesian(0, -1, 0);
+    public void forward(int speed, Scale scale) {
+        double convertedSpeed = convert(-1.0, speed, scale);
+
+        cartesian(0, convertedSpeed, 0);
     }
 
     @Override
-    public void backward(int speed) {
-        cartesian(0, 1, 0);
+    public void backward(int speed, Scale scale) {
+        double convertedSpeed = convert(1.0, speed, scale);
+
+        cartesian(0, convertedSpeed, 0);
+    }
+
+    @Override
+    public void drive(DirectionalInput input, Scale scale) {
+        Double x = input.hasInputAxis("x") ? input.getAxis("x") : 0.0;
+        Double y = input.hasInputAxis("y") ? input.getAxis("y") : 0.0;
+        Double z = input.hasInputAxis("z") ? input.getAxis("z") : 0.0;
+
+        double cX = convert(1.0, x.intValue(), scale);
+        double cY = convert(1.0, y.intValue(), scale);
+        double cZ = convert(1.0, z.intValue(), scale);
+
+        cartesian(cX, cY, cZ);
     }
 
     /**
@@ -183,18 +203,17 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
     }
 
     @Override
-    public void drive(int speed, DIRECTION direction) {
+    public void left(int speed, Scale scale) {
+        double convertedSpeed = convert(-1.0, speed, scale);
 
+        cartesian(convertedSpeed, 0, 0);
     }
 
     @Override
-    public void left(int speed) {
-        cartesian(-1, 0, 0);
-    }
+    public void right(int speed, Scale scale) {
+        double convertedSpeed = convert(1.0, speed, scale);
 
-    @Override
-    public void right(int speed) {
-        cartesian(1, 0, 0);
+        cartesian(convertedSpeed, 0, 0);
     }
 
     @Override
@@ -208,7 +227,13 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
     }
 
     @Override
-    public void initialize(Robot robot) {
-        wheels.forEach(w -> w.initialize(robot));
+    public void initialize(BehaviouralRobot behaviouralRobot, Robot robot) {
+        wheels.forEach(w -> w.initialize(behaviouralRobot, robot));
+    }
+
+    private double convert(double max, int speed, Scale scale) {
+        double factor = max / (double) scale.getMax();
+
+        return (double) speed * factor;
     }
 }

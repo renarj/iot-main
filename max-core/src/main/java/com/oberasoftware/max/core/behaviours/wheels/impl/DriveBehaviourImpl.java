@@ -1,9 +1,12 @@
 package com.oberasoftware.max.core.behaviours.wheels.impl;
 
-import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
-import com.oberasoftware.max.core.behaviours.wheels.DriveTrain;
-import com.oberasoftware.max.core.behaviours.wheels.Wheel;
 import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.DriveTrain;
+import com.oberasoftware.robo.api.behavioural.Wheel;
+import com.oberasoftware.robo.api.commands.Scale;
+import com.oberasoftware.robo.api.navigation.DirectionalInput;
 
 import java.util.List;
 
@@ -24,49 +27,36 @@ public class DriveBehaviourImpl implements DriveBehaviour {
     }
 
     @Override
-    public void initialize(Robot robot) {
-        left.initialize(robot);
-        right.initialize(robot);
+    public void initialize(BehaviouralRobot behaviouralRobot, Robot robot) {
+        left.initialize(behaviouralRobot, robot);
+        right.initialize(behaviouralRobot, robot);
     }
 
     @Override
-    public void forward(int speed) {
+    public void forward(int speed, Scale scale) {
         left.forward(speed);
         right.forward(speed);
     }
 
     @Override
-    public void left(int speed) {
+    public void left(int speed, Scale scale) {
         left.forward(speed);
         right.backward(speed);
     }
 
     @Override
-    public void backward(int speed) {
+    public void backward(int speed, Scale scale) {
         left.backward(speed);
         right.backward(speed);
     }
 
     @Override
-    public void drive(int speed, DIRECTION direction) {
-        switch(direction) {
-            case LEFT:
-                left(speed);
-                break;
-            case RIGHT:
-                right(speed);
-                break;
-            case FORWARD:
-                forward(speed);
-                break;
-            case BACKWARD:
-                backward(speed);
-                break;
-        }
+    public void drive(DirectionalInput input, Scale scale) {
+
     }
 
     @Override
-    public void right(int speed) {
+    public void right(int speed, Scale scale) {
         left.backward(speed);
         right.forward(speed);
     }

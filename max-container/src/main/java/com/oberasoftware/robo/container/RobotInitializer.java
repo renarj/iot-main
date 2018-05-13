@@ -2,17 +2,19 @@ package com.oberasoftware.robo.container;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Uninterruptibles;
-import com.oberasoftware.max.core.BehaviouralRobot;
 import com.oberasoftware.max.core.BehaviouralRobotBuilder;
-import com.oberasoftware.max.core.BehaviouralRobotRegistry;
+import com.oberasoftware.max.core.behaviours.WheelBasedWithCameraNavigationControllerImpl;
 import com.oberasoftware.max.core.behaviours.gripper.GripperBuilder;
 import com.oberasoftware.max.core.behaviours.servos.impl.SingleServoBehaviour;
-import com.oberasoftware.max.core.behaviours.wheels.Wheel;
 import com.oberasoftware.max.core.behaviours.wheels.impl.MecanumDriveTrainImpl;
 import com.oberasoftware.max.core.behaviours.wheels.impl.WheelAction;
 import com.oberasoftware.max.core.behaviours.wheels.impl.WheelImpl;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.Wheel;
 import com.oberasoftware.robo.api.commands.Scale;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
@@ -38,6 +40,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class RobotInitializer {
     private static final Logger LOG = getLogger(RobotInitializer.class);
 
+    private static final Scale DEFAULT_SCALE = new Scale(-100, 100);
+
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -52,7 +56,7 @@ public class RobotInitializer {
 
     public void initialize() {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
-        Robot robot = new SpringAwareRobotBuilder("hexapod", applicationContext)
+        Robot robot = new SpringAwareRobotBuilder("max", applicationContext)
                 .motionEngine(RoboPlusMotionEngine.class,
                         new JsonMotionResource("/basic-animations.json")
                 )
@@ -88,10 +92,10 @@ public class RobotInitializer {
 //                new WheelImpl("16", false, forwardAction, backwardAction),
 //                new WheelImpl("6", false, forwardAction, backwardAction)));
 //
-        Wheel frontLeft = new WheelImpl("22");
-        Wheel frontRight = new WheelImpl("21");
-        Wheel rearLeft = new WheelImpl("19");
-        Wheel rearRight = new WheelImpl("20");
+        Wheel frontLeft = new WheelImpl("22", false);
+        Wheel frontRight = new WheelImpl("21", true);
+        Wheel rearLeft = new WheelImpl("19", false);
+        Wheel rearRight = new WheelImpl("20", true);
 
         SingleServoBehaviour camerRotate = new SingleServoBehaviour("23", 1350, 650, 1000);
         SingleServoBehaviour cameraTilt = new SingleServoBehaviour("24", 1266, 600, 1000);
@@ -106,21 +110,24 @@ public class RobotInitializer {
                         .elevator(new SingleServoBehaviour("14", 750, 600, 750)))
 //                .wheels(left, right)
                 .wheels(mecanumDriveTrain)
+                .navigation(new WheelBasedWithCameraNavigationControllerImpl())
                 .build();
         behaviouralRobotRegistry.register(robotCar);
         LOG.info("Robot: {} was registered", robotCar);
 //
         LOG.info("Starting wheels forward");
-        robotCar.getWheels().ifPresent(w -> w.forward(30));
+        robotCar.getWheels().ifPresent(w -> w.forward(10, DEFAULT_SCALE));
         Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
-        robotCar.getWheels().ifPresent(w -> w.backward(30));
+        robotCar.getWheels().ifPresent(w -> w.backward(10, DEFAULT_SCALE));
 //
-//        robotCar.getWheels().ifPresent(w -> w.left(500));
-//        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
-//        robotCar.getWheels().ifPresent(w -> w.right(500));
+
+        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+        robotCar.getWheels().ifPresent(w -> w.left(10, DEFAULT_SCALE));
+        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+        robotCar.getWheels().ifPresent(w -> w.right(10, DEFAULT_SCALE));
 
         //working strafing
-//        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
 //        robot.getServoDriver().setServoSpeed("6", 900);
 //        robot.getServoDriver().setServoSpeed("9", 1900);
 //        robot.getServoDriver().setServoSpeed("16", 1900);
@@ -155,10 +162,10 @@ public class RobotInitializer {
 //        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
 
 //
-//        robotCar.getWheels().ifPresent(DriveBehaviour::stop);
-//        LOG.info("Killed wheels");
+        robotCar.getWheels().ifPresent(DriveBehaviour::stop);
+        LOG.info("Killed wheels");
 
-//        System.exit(0);
+        System.exit(0);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");

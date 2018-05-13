@@ -1,8 +1,9 @@
 package com.oberasoftware.max.core.behaviours.wheels.impl;
 
 import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.max.core.behaviours.wheels.DriveTrain;
-import com.oberasoftware.max.core.behaviours.wheels.Wheel;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.DriveTrain;
+import com.oberasoftware.robo.api.behavioural.Wheel;
 
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class SimpleDriveTrainImpl implements DriveTrain {
     }
 
     @Override
-    public void initialize(Robot robot) {
-        wheels.forEach(w -> w.initialize(robot));
+    public void initialize(BehaviouralRobot behaviouralRobot, Robot robot) {
+        wheels.forEach(w -> w.initialize(behaviouralRobot, robot));
     }
 
     @Override

@@ -6,7 +6,9 @@ import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.home.util.IntUtils;
-import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
 import com.oberasoftware.robo.api.commands.BasicCommand;
 import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import org.slf4j.Logger;
@@ -55,9 +57,9 @@ public class DriveBehaviourHandler implements EventHandler {
     @MQTTPath(group = MessageGroup.COMMANDS, device = "drive", label = "direction")
     public void right(MQTTMessage message) {
         BasicCommand basicCommand = toCommand(message);
-        DriveBehaviour.DIRECTION direction = DriveBehaviour.DIRECTION.fromString(basicCommand.getProperty("direction"));
+//        DriveBehaviour.DIRECTION direction = DriveBehaviour.DIRECTION.fromString(basicCommand.getProperty("direction"));
 
-        doAction(basicCommand, (d, s) -> d.drive(s, direction));
+//        doAction(basicCommand, (d, s) -> d.drive(s, direction));
     }
 
     @EventSubscribe

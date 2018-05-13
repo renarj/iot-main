@@ -1,11 +1,13 @@
 package com.oberasoftware.max.core;
 
-import com.oberasoftware.max.core.behaviours.wheels.DriveBehaviour;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.max.core.behaviours.Behaviour;
 import com.oberasoftware.max.core.behaviours.gripper.GripperBuilder;
-import com.oberasoftware.max.core.behaviours.wheels.DriveTrain;
 import com.oberasoftware.max.core.behaviours.wheels.impl.DriveBehaviourImpl;
+import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.robo.api.behavioural.Behaviour;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
+import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.DriveTrain;
+import com.oberasoftware.robo.api.navigation.RobotNavigationController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,11 @@ public class BehaviouralRobotBuilder {
 
     public BehaviouralRobotBuilder wheels(DriveBehaviour behaviour) {
         behaviours.add(behaviour);
+        return this;
+    }
+
+    public BehaviouralRobotBuilder navigation(RobotNavigationController controller) {
+        this.behaviours.add(controller);
         return this;
     }
 

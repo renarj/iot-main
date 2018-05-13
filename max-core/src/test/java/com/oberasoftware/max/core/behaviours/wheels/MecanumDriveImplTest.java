@@ -1,6 +1,7 @@
 package com.oberasoftware.max.core.behaviours.wheels;
 
 import com.oberasoftware.max.core.behaviours.wheels.impl.MecanumDriveTrainImpl;
+import com.oberasoftware.robo.api.behavioural.Wheel;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
