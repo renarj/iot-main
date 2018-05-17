@@ -1,8 +1,11 @@
 package com.oberasoftware.robo.hcontrol;
 
 import com.oberasoftware.home.client.api.CommandServiceClient;
+import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.robo.core.model.BasicCommandBuilder;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +26,9 @@ public class HandController {
 
     private final ControlState state = new ControlState();
 
+    @Value("#{target.robot}")
+    private String robotId;
+
     @Autowired
     private CommandServiceClient commandServiceClient;
 
@@ -38,6 +44,17 @@ public class HandController {
 
             LOG.info("Received a value: {} for axis: {}", scaled, p.getAxis());
 
+            BasicCommandBuilder commandBuilder = BasicCommandBuilder.create(robotId)
+                    .item("navigation")
+                    .label("input");
+
+            for(String axis : state.getInput().getInputAxis()) {
+                commandBuilder.property(axis, state.getInput().getAxis(axis).toString());
+            }
+
+            BasicCommand command = commandBuilder.build();
+            LOG.info("Sending command: {}", command);
+            commandServiceClient.sendAsyncCommand(command);
         }));
     }
 
