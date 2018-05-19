@@ -52,15 +52,19 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
 
     @Override
     public void drive(DirectionalInput input, Scale scale) {
-        Double x = input.hasInputAxis("x") ? input.getAxis("x") : 0.0;
-        Double y = input.hasInputAxis("y") ? input.getAxis("y") : 0.0;
-        Double z = input.hasInputAxis("z") ? input.getAxis("z") : 0.0;
+        try {
+            Double x = input.hasInputAxis("x") ? input.getAxis("x") : 0.0;
+            Double y = input.hasInputAxis("y") ? input.getAxis("y") : 0.0;
+            Double z = input.hasInputAxis("rotate") ? input.getAxis("rotate") : 0.0;
 
-        double cX = convert(1.0, x.intValue(), scale);
-        double cY = convert(1.0, y.intValue(), scale);
-        double cZ = convert(1.0, z.intValue(), scale);
+            double cX = convert(1.0, x.intValue(), scale);
+            double cY = convert(1.0, y.intValue(), scale);
+            double cZ = convert(1.0, z.intValue(), scale);
 
-        cartesian(cX, cY, cZ);
+            cartesian(cX, cY, cZ);
+        } catch(Exception e) {
+            LOG.error("", e);
+        }
     }
 
     /**
