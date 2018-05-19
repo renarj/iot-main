@@ -1,7 +1,6 @@
 package com.oberasoftware.robo.container;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.max.core.BehaviouralRobotBuilder;
 import com.oberasoftware.max.core.behaviours.WheelBasedWithCameraNavigationControllerImpl;
 import com.oberasoftware.max.core.behaviours.gripper.GripperBuilder;
@@ -13,10 +12,10 @@ import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
 import com.oberasoftware.robo.api.behavioural.Wheel;
 import com.oberasoftware.robo.api.commands.Scale;
 import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.commands.OperationModeCommand;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
@@ -28,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -64,7 +61,7 @@ public class RobotInitializer {
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort).build())
                 .capability(ServoSensorDriver.class)
-//                .remote(RemoteCloudDriver.class)
+                .remote(RemoteCloudDriver.class)
                 .build();
 //        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("5", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
 //        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("9", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
@@ -115,19 +112,19 @@ public class RobotInitializer {
         behaviouralRobotRegistry.register(robotCar);
         LOG.info("Robot: {} was registered", robotCar);
 //
-        LOG.info("Starting wheels forward");
-        robotCar.getWheels().ifPresent(w -> w.forward(10, DEFAULT_SCALE));
-        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
-        robotCar.getWheels().ifPresent(w -> w.backward(10, DEFAULT_SCALE));
+//        LOG.info("Starting wheels forward");
+//        robotCar.getWheels().ifPresent(w -> w.forward(10, DEFAULT_SCALE));
+//        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+//        robotCar.getWheels().ifPresent(w -> w.backward(10, DEFAULT_SCALE));
+////
 //
-
-        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
-        robotCar.getWheels().ifPresent(w -> w.left(10, DEFAULT_SCALE));
-        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
-        robotCar.getWheels().ifPresent(w -> w.right(10, DEFAULT_SCALE));
-
-        //working strafing
-        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+//        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+//        robotCar.getWheels().ifPresent(w -> w.left(10, DEFAULT_SCALE));
+//        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
+//        robotCar.getWheels().ifPresent(w -> w.right(10, DEFAULT_SCALE));
+//
+//        //working strafing
+//        Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
 //        robot.getServoDriver().setServoSpeed("6", 900);
 //        robot.getServoDriver().setServoSpeed("9", 1900);
 //        robot.getServoDriver().setServoSpeed("16", 1900);
@@ -162,10 +159,10 @@ public class RobotInitializer {
 //        Uninterruptibles.sleepUninterruptibly(2, TimeUnit.SECONDS);
 
 //
-        robotCar.getWheels().ifPresent(DriveBehaviour::stop);
-        LOG.info("Killed wheels");
-
-        System.exit(0);
+//        robotCar.getWheels().ifPresent(DriveBehaviour::stop);
+//        LOG.info("Killed wheels");
+//
+//        System.exit(0);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");
