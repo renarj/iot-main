@@ -24,13 +24,13 @@ public class WheelBasedWithCameraNavigationControllerImpl implements RobotNaviga
     public void move(DirectionalInput input) {
         LOG.info("Received direction input: {}", input);
 
-        boolean cameraMode = input.hasInputAxis("cameraMode");
+        boolean cameraMode = input.hasInputAxis("cameraMode") && input.getAxis("cameraMode") > 0;
+
         if(cameraMode) {
             handleCameraControl(input);
         }
 
         if (input.hasInputAxis("x") || input.hasInputAxis("y")) {
-
             DirectionalInput correctedInput = input;
             if(cameraMode) {
                 Map<String, Double> m = new HashMap<>();

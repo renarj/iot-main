@@ -45,18 +45,18 @@ public class SingleServoBehaviour implements ServoBehaviour {
     @Override
     public void goToMinimum(int speed, Scale scale) {
         LOG.info("Setting target position for servo: {} to minimum: {}", servoId, minimumPosition);
-        servoDriver.setPositionAndSpeed(servoId, speed, scale, minimumPosition, DEFAULT_POSITION_SCALE);
+        servoDriver.setPositionAndSpeed(servoId, speed, scale, minimumPosition, new Scale(0, 2000));
     }
 
     @Override
     public void goToMaximum(int speed, Scale scale) {
         LOG.info("Setting target position for servo: {} to maximum: {}", servoId, maximumPosition);
-        servoDriver.setPositionAndSpeed(servoId, speed, scale, maximumPosition, DEFAULT_POSITION_SCALE);
+        servoDriver.setPositionAndSpeed(servoId, speed, scale, maximumPosition, new Scale(0, 2000));
     }
 
     @Override
     public void goToDefault(int speed, Scale scale) {
         LOG.info("Setting target position for servo: {} to default: {}", servoId, defaultPosition);
-        servoDriver.setPositionAndSpeed(servoId, speed, scale, defaultPosition, DEFAULT_POSITION_SCALE);
+        servoDriver.setPositionAndSpeed(servoId, speed, scale, defaultPosition, new Scale(0, 2000));
     }
 }
