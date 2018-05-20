@@ -29,7 +29,7 @@ public class RotatableGripperImpl extends GripperImpl implements RotatableGrippe
         }
 
         int percentage = (int)((100 / (double)360) * degrees);
-        rotator.goToPosition(percentage);
+        rotator.goToPosition(10, ServoBehaviour.DEFAULT_SPEED_SCALE, percentage);
     }
 
     @Override

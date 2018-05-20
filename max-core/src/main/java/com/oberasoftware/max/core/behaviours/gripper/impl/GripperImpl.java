@@ -38,8 +38,8 @@ public class GripperImpl implements GripperBehaviour {
 
     @Override
     public void open(int percentage) {
-        leftArm.goToPosition(percentage);
-        rightArm.goToPosition(percentage);
+        leftArm.goToPosition(10, ServoBehaviour.DEFAULT_SPEED_SCALE, percentage);
+        rightArm.goToPosition(10, ServoBehaviour.DEFAULT_SPEED_SCALE, percentage);
     }
 
     @Override

@@ -34,12 +34,15 @@ public class WheelBasedWithCameraNavigationControllerImpl implements RobotNaviga
         Double cameraMode = input.getAxis("cameraMode");
         LOG.info("Camera control mode set to: {}", cameraMode);
         if(cameraMode > 0) {
-            Double rotateCamera = input.getAxis("rotational");
-            Double tiltCamera = input.getAxis("tilt");
-
             CameraBehaviour behaviour = behaviouralRobot.getBehaviour(CameraBehaviour.class);
-            behaviour.tilt(tiltCamera.intValue(), new Scale(-500, 500));
-            behaviour.rotate(rotateCamera.intValue(), new Scale(-500, 500));
+            if(input.hasInputAxis("rotate")) {
+                Double rotateCamera = input.getAxis("rotate");
+                behaviour.rotate(rotateCamera.intValue(), new Scale(-500, 500));
+            }
+            if(input.hasInputAxis("tilt")) {
+                Double tiltCamera = input.getAxis("tilt");
+                behaviour.tilt(tiltCamera.intValue(), new Scale(-500, 500));
+            }
         }
     }
 

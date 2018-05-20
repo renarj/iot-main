@@ -27,27 +27,19 @@ public class CameraBehaviour implements Behaviour {
     }
 
     public void rotate(int speed, Scale scale) {
-        LOG.info("Received speed: {} for camera rotation", speed);
-        handleSpeed(rotate, speed, scale);
+        LOG.info("Received position: {} for camera rotation", speed);
+        goToPosition(rotate, speed, scale);
     }
 
     public void tilt(int speed, Scale scale) {
-        LOG.info("Received speed: {} for camera tilt", speed);
-        handleSpeed(tilt, speed, scale);
+        LOG.info("Received position: {} for camera tilt", speed);
+        goToPosition(tilt, speed, scale);
     }
 
-    private void handleSpeed(SingleServoBehaviour servo, int speed, Scale scale) {
-        int pSpeed = Math.abs(speed);
-        if(speed < 0) {
-            LOG.info("Going to minimum at speed: {}", pSpeed);
-            servo.goToMinimum(pSpeed, scale);
-        } else if(speed > 0) {
-            LOG.info("Going to maximum at speed: {}", pSpeed);
-            servo.goToMaximum(pSpeed, scale);
-        } else {
-            LOG.info("Going to default at speed: {}", pSpeed);
-            servo.goToDefault(pSpeed, scale);
-        }
+    private void goToPosition(SingleServoBehaviour servo, int speed, Scale scale) {
+        int percentage = (speed + 100) / 2;
 
+        LOG.info("Going to percentage: {}", percentage);
+        servo.goToPosition(10, scale, percentage);
     }
 }

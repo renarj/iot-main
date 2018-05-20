@@ -18,6 +18,6 @@ public class LiftableRotatableGripperImpl extends RotatableGripperImpl implement
 
     @Override
     public void lift(int percentage) {
-        lifter.goToPosition(percentage);
+        lifter.goToPosition(10, ServoBehaviour.DEFAULT_SPEED_SCALE, percentage);
     }
 }

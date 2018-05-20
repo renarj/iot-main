@@ -34,7 +34,7 @@ public class SingleServoBehaviour implements ServoBehaviour {
     }
 
     @Override
-    public void goToPosition(int percentage) {
+    public void goToPosition(int speed, Scale scale, int percentage) {
         int delta = ((maximumPosition - minimumPosition) / 100) * percentage;
         int position = delta + minimumPosition;
 
