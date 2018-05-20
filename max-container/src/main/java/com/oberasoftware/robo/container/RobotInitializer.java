@@ -1,12 +1,11 @@
 package com.oberasoftware.robo.container;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import com.oberasoftware.max.core.BehaviouralRobotBuilder;
 import com.oberasoftware.max.core.behaviours.WheelBasedWithCameraNavigationControllerImpl;
-import com.oberasoftware.max.core.behaviours.gripper.GripperBuilder;
 import com.oberasoftware.max.core.behaviours.servos.impl.SingleServoBehaviour;
 import com.oberasoftware.max.core.behaviours.wheels.impl.MecanumDriveTrainImpl;
-import com.oberasoftware.max.core.behaviours.wheels.impl.WheelAction;
 import com.oberasoftware.max.core.behaviours.wheels.impl.WheelImpl;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
@@ -75,12 +74,13 @@ public class RobotInitializer {
 //        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new AngleLimitCommand(s.getId(), AngleLimitCommand.MODE.JOINT_MODE)));
         servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
 
-        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s.getId(), OperationModeCommand.MODE.VELOCITY_MODE)));
+        Sets.newHashSet("19", "20", "21", "22").forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s, OperationModeCommand.MODE.VELOCITY_MODE)));
+        Sets.newHashSet("23", "24").forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s, OperationModeCommand.MODE.POSITION_CONTROL)));
 
         servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
 
-        WheelAction forwardAction = (si, s, d) -> d.setServoSpeed(si, s, new Scale(-100, 100));
-        WheelAction backwardAction = (si, s, d) -> d.setServoSpeed(si, s + 1024, new Scale(-100, 100));
+//        WheelAction forwardAction = (si, s, d) -> d.setServoSpeed(si, s, new Scale(-100, 100));
+//        WheelAction backwardAction = (si, s, d) -> d.setServoSpeed(si, s + 1024, new Scale(-100, 100));
 //
 //        DriveTrain left = new SimpleDriveTrainImpl(newArrayList(
 //                new WheelImpl("5", true, forwardAction, backwardAction),
@@ -100,11 +100,11 @@ public class RobotInitializer {
         MecanumDriveTrainImpl mecanumDriveTrain = new MecanumDriveTrainImpl(frontLeft, frontRight, rearLeft, rearRight);
 //
         BehaviouralRobot robotCar = BehaviouralRobotBuilder.create(robot)
-                .gripper(GripperBuilder.create(
-                        new SingleServoBehaviour("3", 640, 420, 640),
-                        new SingleServoBehaviour("4", 426, 570, 582))
-                        .rotation(new SingleServoBehaviour("10", 350, 650, 512))
-                        .elevator(new SingleServoBehaviour("14", 750, 600, 750)))
+//                .gripper(GripperBuilder.create(
+//                        new SingleServoBehaviour("3", 640, 420, 640),
+//                        new SingleServoBehaviour("4", 426, 570, 582))
+//                        .rotation(new SingleServoBehaviour("10", 350, 650, 512))
+//                        .elevator(new SingleServoBehaviour("14", 750, 600, 750)))
 //                .wheels(left, right)
                 .camera(cameraTilt, camerRotate)
                 .wheels(mecanumDriveTrain)
