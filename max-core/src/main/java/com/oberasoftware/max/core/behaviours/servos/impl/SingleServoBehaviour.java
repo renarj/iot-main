@@ -39,7 +39,7 @@ public class SingleServoBehaviour implements ServoBehaviour {
         int position = delta + minimumPosition;
 
         LOG.info("Setting target position for servo: {} to percentage position: {}", servoId, position);
-        servoDriver.setTargetPosition(servoId, position, DEFAULT_SPEED_SCALE);
+        servoDriver.setTargetPosition(servoId, position, new Scale(0, 2000));
     }
 
     @Override
