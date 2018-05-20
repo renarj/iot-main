@@ -8,6 +8,9 @@ import com.oberasoftware.robo.api.navigation.DirectionalInput;
 import com.oberasoftware.robo.api.navigation.RobotNavigationController;
 import org.slf4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class WheelBasedWithCameraNavigationControllerImpl implements RobotNavigationController {
@@ -21,12 +24,26 @@ public class WheelBasedWithCameraNavigationControllerImpl implements RobotNaviga
     public void move(DirectionalInput input) {
         LOG.info("Received direction input: {}", input);
 
-        if(input.hasInputAxis("cameraMode")) {
+        boolean cameraMode = input.hasInputAxis("cameraMode");
+        if(cameraMode) {
             handleCameraControl(input);
         }
 
-        if (input.hasInputAxis("x") || input.hasInputAxis("y") || input.hasInputAxis("z")) {
-            moveBody(input);
+        if (input.hasInputAxis("x") || input.hasInputAxis("y")) {
+
+            DirectionalInput correctedInput = input;
+            if(cameraMode) {
+                Map<String, Double> m = new HashMap<>();
+                input.getInputAxis().forEach(a -> {
+                    if(!a.equalsIgnoreCase("rotate")) {
+                        m.put(a, input.getAxis(a));
+                    }
+                });
+
+                correctedInput = new DirectionalInput(m);
+            }
+
+            moveBody(correctedInput);
         }
     }
 
