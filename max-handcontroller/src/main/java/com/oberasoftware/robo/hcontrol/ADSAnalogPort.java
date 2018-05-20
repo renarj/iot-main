@@ -20,15 +20,17 @@ public class ADSAnalogPort implements AnalogPort {
     private List<PortListener<VoltageValue>> listeners = new CopyOnWriteArrayList<>();
 
     private final String axis;
+    private final boolean reversed;
 
-    protected ADSAnalogPort(String axis, ADS1115GpioProvider provider, GpioPinAnalogInput input) {
+    protected ADSAnalogPort(String axis, boolean reversed, ADS1115GpioProvider provider, GpioPinAnalogInput input) {
         this.axis = axis;
+        this.reversed = reversed;
         GpioPinListenerAnalog listener = event -> {
             double value = event.getValue();
             double percent =  ((value * 100) / ADS1115GpioProvider.ADS1115_RANGE_MAX_VALUE);
             double voltage = provider.getProgrammableGainAmplifier(event.getPin()).getVoltage() * (percent/100);
 
-            LOG.info("Received voltage: {} on input: {}", voltage, input.getName());
+            LOG.info("Received voltage: {} on input: {} sending to listeners: {}", voltage, input.getName(), listeners);
             listeners.forEach(l -> l.receive((VoltageValue) () -> voltage));
         };
         LOG.info("Registering listener for port: {}", input);
@@ -37,6 +39,10 @@ public class ADSAnalogPort implements AnalogPort {
 
     public String getAxis() {
         return axis;
+    }
+
+    public boolean isReversed() {
+        return this.reversed;
     }
 
     @Override

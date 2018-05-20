@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.oberasoftware.robo.hcontrol.InputScaler.convert;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
@@ -26,7 +27,7 @@ public class HandController {
 
     private final ControlState state = new ControlState();
 
-    @Value("#{target.robot}")
+    @Value("${robotId}")
     private String robotId;
 
     @Autowired
@@ -37,9 +38,13 @@ public class HandController {
         ADS1115JoystickDriver d = new ADS1115JoystickDriver();
         d.activate();
 
+        LOG.info("Driver activated, starting port listen");
+
         d.getPorts().forEach(p -> p.listen(e -> {
             Double voltage = e.getRaw();
-            int scaled = convert(voltage);
+            LOG.info("Converting voltage: {} for port: {}", voltage, p);
+            int scaled = p.isReversed() ? -convert(voltage) : convert(voltage);
+
             state.setState(p.getAxis(), scaled);
 
             LOG.info("Received a value: {} for axis: {}", scaled, p.getAxis());
@@ -54,7 +59,7 @@ public class HandController {
 
             BasicCommand command = commandBuilder.build();
             LOG.info("Sending command: {}", command);
-            commandServiceClient.sendAsyncCommand(command);
+            commandServiceClient.sendCommand(command);
         }));
     }
 
@@ -62,15 +67,4 @@ public class HandController {
         return val > MAX_VOLTAGE;
     }
 
-    private static final int convert(Double val) {
-        double factor = MAX_SCALE / MAX_VOLTAGE;
-
-        Double c = val * factor;
-
-        if(c < HALF_SCALE) {
-            return (int)(-(HALF_SCALE - c) * SCALE_FACTOR);
-        } else {
-            return (int)((c - HALF_SCALE) * SCALE_FACTOR);
-        }
-    }
 }

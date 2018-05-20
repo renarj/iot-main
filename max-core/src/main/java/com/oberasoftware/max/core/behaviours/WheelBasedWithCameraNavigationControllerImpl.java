@@ -22,7 +22,9 @@ public class WheelBasedWithCameraNavigationControllerImpl implements RobotNaviga
 
         if(input.hasInputAxis("tilt") || input.hasInputAxis("rotational")) {
             handleCameraControl(input);
-        } else if (input.hasInputAxis("x") || input.hasInputAxis("y") || input.hasInputAxis("z")) {
+        }
+
+        if (input.hasInputAxis("x") || input.hasInputAxis("y") || input.hasInputAxis("z")) {
             moveBody(input);
         }
     }

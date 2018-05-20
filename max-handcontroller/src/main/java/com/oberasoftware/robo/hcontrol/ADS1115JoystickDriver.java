@@ -35,10 +35,10 @@ public class ADS1115JoystickDriver  {
             final GpioController gpio = GpioFactory.getInstance();
             gpioProvider = new ADS1115GpioProvider(I2CBus.BUS_1, ADS1115GpioProvider.ADS1115_ADDRESS_0x48);
 
-            inputs.put("A0", new ADSAnalogPort("x", gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A0, "MyAnalogInput-A0")));
-            inputs.put("A1", new ADSAnalogPort("y", gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A1, "MyAnalogInput-A1")));
-            inputs.put("A2", new ADSAnalogPort("rotate", gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A2, "MyAnalogInput-A2")));
-            inputs.put("A3", new ADSAnalogPort("tilt", gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A3, "MyAnalogInput-A3")));
+            inputs.put("rotate", new ADSAnalogPort("rotate", false, gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A0, "rotate"))); //rotate
+            inputs.put("tilt", new ADSAnalogPort("tilt", true, gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A1, "tilt"))); //tilt
+            inputs.put("x", new ADSAnalogPort("x", false, gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A2, "x"))); //x
+            inputs.put("y", new ADSAnalogPort("y", true, gpioProvider, gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A3, "y"))); //y
 
             gpioProvider.setProgrammableGainAmplifier(ADS1x15GpioProvider.ProgrammableGainAmplifierValue.PGA_4_096V, ADS1115Pin.ALL);
             gpioProvider.setEventThreshold(500, ADS1115Pin.ALL);
