@@ -26,14 +26,14 @@ public class GripperImpl implements GripperBehaviour {
 
     @Override
     public void open() {
-        leftArm.goToMinimum();
-        rightArm.goToMinimum();
+        leftArm.goToMinimum(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
+        rightArm.goToMinimum(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
     }
 
     @Override
     public void rest() {
-        leftArm.goToDefault();
-        rightArm.goToDefault();
+        leftArm.goToDefault(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
+        rightArm.goToDefault(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class GripperImpl implements GripperBehaviour {
 
     @Override
     public void close() {
-        leftArm.goToMaximum();
-        rightArm.goToMaximum();
+        leftArm.goToMaximum(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
+        rightArm.goToMaximum(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
     }
 
     @Override

@@ -34,12 +34,12 @@ public class RotatableGripperImpl extends GripperImpl implements RotatableGrippe
 
     @Override
     public void rotateLevel() {
-        rotator.goToDefault();
+        rotator.goToDefault(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
     }
 
     @Override
     public void rest() {
-        rotator.goToDefault();
+        rotator.goToDefault(50, ServoBehaviour.DEFAULT_SPEED_SCALE);
         super.rest();
     }
 }
