@@ -106,6 +106,7 @@ public class RobotInitializer {
                         .rotation(new SingleServoBehaviour("10", 350, 650, 512))
                         .elevator(new SingleServoBehaviour("14", 750, 600, 750)))
 //                .wheels(left, right)
+                .camera(cameraTilt, camerRotate)
                 .wheels(mecanumDriveTrain)
                 .navigation(new WheelBasedWithCameraNavigationControllerImpl())
                 .build();

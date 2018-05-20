@@ -1,6 +1,8 @@
 package com.oberasoftware.max.core;
 
+import com.oberasoftware.max.core.behaviours.CameraBehaviour;
 import com.oberasoftware.max.core.behaviours.gripper.GripperBuilder;
+import com.oberasoftware.max.core.behaviours.servos.impl.SingleServoBehaviour;
 import com.oberasoftware.max.core.behaviours.wheels.impl.DriveBehaviourImpl;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
@@ -31,6 +33,11 @@ public class BehaviouralRobotBuilder {
 
     public BehaviouralRobotBuilder gripper(GripperBuilder gripperBuilder) {
         behaviours.add(gripperBuilder.build());
+        return this;
+    }
+
+    public BehaviouralRobotBuilder camera(SingleServoBehaviour tilt, SingleServoBehaviour rotate) {
+        behaviours.add(new CameraBehaviour(tilt, rotate));
         return this;
     }
 

@@ -15,12 +15,13 @@ public class WheelBasedWithCameraNavigationControllerImpl implements RobotNaviga
 
     private BehaviouralRobot behaviouralRobot;
 
+    private final static Scale DEFAULT_SCALE = new Scale(-100, 100);
 
     @Override
     public void move(DirectionalInput input) {
         LOG.info("Received direction input: {}", input);
 
-        if(input.hasInputAxis("tilt") || input.hasInputAxis("rotational")) {
+        if(input.hasInputAxis("cameraMode")) {
             handleCameraControl(input);
         }
 
@@ -30,15 +31,21 @@ public class WheelBasedWithCameraNavigationControllerImpl implements RobotNaviga
     }
 
     private void handleCameraControl(DirectionalInput input) {
-        Double rotateCamera = input.getAxis("rotational");
-        Double tiltCamera = input.getAxis("tilt");
+        Double cameraMode = input.getAxis("cameraMode");
+        LOG.info("Camera control mode set to: {}", cameraMode);
+        if(cameraMode > 0) {
+            Double rotateCamera = input.getAxis("rotational");
+            Double tiltCamera = input.getAxis("tilt");
 
-
+            CameraBehaviour behaviour = behaviouralRobot.getBehaviour(CameraBehaviour.class);
+            behaviour.tilt(tiltCamera.intValue(), new Scale(-500, 500));
+            behaviour.rotate(rotateCamera.intValue(), new Scale(-500, 500));
+        }
     }
 
     private void moveBody(DirectionalInput input) {
         DriveBehaviour driveBehaviour = behaviouralRobot.getBehaviour(DriveBehaviour.class);
-        driveBehaviour.drive(input, new Scale(-100, 100));
+        driveBehaviour.drive(input, DEFAULT_SCALE);
     }
 
     @Override
