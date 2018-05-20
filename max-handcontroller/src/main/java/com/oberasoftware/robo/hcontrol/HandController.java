@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.oberasoftware.robo.hcontrol.InputScaler.convert;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -18,14 +18,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class HandController {
     private static final Logger LOG = getLogger(HandController.class);
 
-    private static final double MAX_SCALE = 100.0;
-    private static final double MAX_VOLTAGE = 4.0;
-    private static final double HALF_SCALE = 50.0;
-    private static final double SCALE_FACTOR = 2.0;
-
-    private final ReentrantLock lock = new ReentrantLock();
-
     private final ControlState state = new ControlState();
+
+    private final AtomicBoolean cameraMode = new AtomicBoolean(false);
 
     @Value("${robotId}")
     private String robotId;
@@ -45,13 +40,22 @@ public class HandController {
             LOG.info("Converting voltage: {} for port: {}", voltage, p);
             int scaled = p.isReversed() ? -convert(voltage) : convert(voltage);
 
+
+            boolean mode = cameraMode.get();
+            if(p.getAxis().equalsIgnoreCase("tilt") && Math.abs(scaled) > 100) {
+                mode = !mode;
+                cameraMode.set(mode);
+                LOG.info("Flipping camera control mode to: {}", mode);
+            }
+
             state.setState(p.getAxis(), scaled);
 
             LOG.info("Received a value: {} for axis: {}", scaled, p.getAxis());
 
             BasicCommandBuilder commandBuilder = BasicCommandBuilder.create(robotId)
                     .item("navigation")
-                    .label("input");
+                    .label("input")
+                    .property("cameraMode", mode ? "1.0" : "0.0");
 
             for(String axis : state.getInput().getInputAxis()) {
                 commandBuilder.property(axis, state.getInput().getAxis(axis).toString());
@@ -62,9 +66,4 @@ public class HandController {
             commandServiceClient.sendCommand(command);
         }));
     }
-
-    private static boolean isButtonPressed(Double val) {
-        return val > MAX_VOLTAGE;
-    }
-
 }

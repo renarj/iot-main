@@ -22,7 +22,8 @@ public class CameraBehaviour implements Behaviour {
 
     @Override
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
-
+        tilt.initialize(behaviouralRobot, robotCore);
+        rotate.initialize(behaviouralRobot, robotCore);
     }
 
     public void rotate(int speed, Scale scale) {
