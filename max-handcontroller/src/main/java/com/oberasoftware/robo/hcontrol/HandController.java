@@ -1,5 +1,6 @@
 package com.oberasoftware.robo.hcontrol;
 
+import com.google.common.base.Stopwatch;
 import com.oberasoftware.home.client.api.CommandServiceClient;
 import com.oberasoftware.robo.api.commands.BasicCommand;
 import com.oberasoftware.robo.core.model.BasicCommandBuilder;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.oberasoftware.robo.hcontrol.InputScaler.convert;
@@ -62,8 +64,10 @@ public class HandController {
             }
 
             BasicCommand command = commandBuilder.build();
-            LOG.info("Sending command: {}", command);
+
+            Stopwatch stopwatch = Stopwatch.createStarted();
             commandServiceClient.sendCommand(command);
+            LOG.info("Sending command: {} completed in: {} ms.", command, stopwatch.elapsed(TimeUnit.MILLISECONDS));
         }));
     }
 }
