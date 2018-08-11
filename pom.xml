@@ -11,7 +11,7 @@
         <version>1.0.2</version>
     </parent>
 
-    <artifactId>robo-max</artifactId>
+    <artifactId>robo-projects</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -20,12 +20,13 @@
     </properties>
 
     <modules>
-        <module>max-container</module>
-        <module>max-core</module>
-        <module>max-pi4j</module>
-        <module>max-web</module>
-        <module>robo-max-hexapod</module>
-        <module>max-handcontroller</module>
+        <module>robo-container</module>
+        <module>robo-behaviours</module>
+        <module>robo-pi4j</module>
+        <module>robo-web</module>
+        <module>robo-hexapod</module>
+        <module>robo-handcontroller</module>
+        <module>robo-maximus</module>
     </modules>
 
     <licenses>
@@ -91,7 +92,7 @@
 
             <dependency>
                 <groupId>com.oberasoftware</groupId>
-                <artifactId>max-core</artifactId>
+                <artifactId>robo-behaviours</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

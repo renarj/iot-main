@@ -3,45 +3,56 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>robo-max</artifactId>
+        <artifactId>robo-projects</artifactId>
         <groupId>com.oberasoftware</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>max-web</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>robo-container</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>dynamixel-core</artifactId>
+            <artifactId>dynamixel-web</artifactId>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>max-core</artifactId>
+            <artifactId>robo-pi4j</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-max-hexapod</artifactId>
+            <artifactId>robo-behaviours</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>robo-web</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
-            <artifactId>jasdb-service</artifactId>
+            <artifactId>robo-hexapod</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
