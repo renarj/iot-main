@@ -38,7 +38,6 @@ public class BehaviouralRobotImpl implements BehaviouralRobot {
         return optB.map(behaviourClass::cast).orElse(null);
     }
 
-    @Override
     public <T extends GripperBehaviour> Optional<T> getGripper() {
         for (Behaviour behaviour : behaviours) {
             if(GripperBehaviour.class.isAssignableFrom(behaviour.getClass())) {
@@ -48,7 +47,6 @@ public class BehaviouralRobotImpl implements BehaviouralRobot {
         return null;
     }
 
-    @Override
     public Optional<DriveBehaviour> getWheels() {
         return Optional.of(getBehaviour(DriveBehaviour.class));
     }

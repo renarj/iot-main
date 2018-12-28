@@ -76,7 +76,7 @@ public class DriveBehaviourHandler implements EventHandler {
         int speed = IntUtils.toInt(basicCommand.getProperty("speed"), 512);
 
         Optional<BehaviouralRobot> robot = robotRegistry.getRobot(basicCommand.getControllerId());
-        Optional<DriveBehaviour> w = robot.flatMap(BehaviouralRobot::getWheels);
+        Optional<DriveBehaviour> w = Optional.empty(); //robot.flatMap(BehaviouralRobot::getWheels);
 
         LOG.info("Doing action: {} to robot: {}", b, robot);
         w.ifPresent(ow -> b.accept(ow, speed));

@@ -53,7 +53,7 @@ public class RotatableGripperBehaviourHandler implements EventHandler {
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
         Optional<BehaviouralRobot> robot = robotRegistry.getRobot(basicCommand.getControllerId());
-        Optional<RotatableGripper> obehaviour = robot.flatMap(BehaviouralRobot::getGripper);
+        Optional<RotatableGripper> obehaviour = Optional.empty(); //robot.flatMap(BehaviouralRobot::getGripper);
 
         obehaviour.ifPresent(b);
     }
