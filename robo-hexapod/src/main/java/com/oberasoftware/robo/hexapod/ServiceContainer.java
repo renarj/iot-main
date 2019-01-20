@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.oberasoftware.robo.maximus;
+package com.oberasoftware.robo.hexapod;
 
 import com.oberasoftware.max.core.CoreConfiguration;
+import com.oberasoftware.max.web.MaxWebConfiguration;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.web.WebConfiguration;
@@ -43,7 +44,8 @@ import org.springframework.context.annotation.Import;
         RemoteConfiguration.class,
         SensorConfiguration.class,
         CoreConfiguration.class,
-//        MaxWebConfiguration.class,
+        HexapodConfiguration.class,
+        MaxWebConfiguration.class,
         WebConfiguration.class
 
 })
@@ -56,9 +58,9 @@ public class ServiceContainer {
 
         SpringApplication springApplication = new SpringApplication(ServiceContainer.class);
         ConfigurableApplicationContext context = springApplication.run(args);
+
         RobotInitializer initializer = context.getBean(RobotInitializer.class);
         initializer.initialize();
-
         LOG.info("Done");
     }
 }

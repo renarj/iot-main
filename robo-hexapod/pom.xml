@@ -19,7 +19,15 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>dynamixel-core</artifactId>
+            <artifactId>dynamixel-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>robo-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>robo-pi4j</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -96,6 +96,17 @@
                 <artifactId>robo-behaviours</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
+                <artifactId>robo-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oberasoftware</groupId>
+                <artifactId>robo-pi4j</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>com.oberasoftware</groupId>

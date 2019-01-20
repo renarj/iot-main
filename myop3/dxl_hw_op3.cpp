@@ -124,8 +124,8 @@ void dxl_hw_op3_init(void)
   pinMode(PIN_BUTTON_S3, INPUT_PULLUP);
   pinMode(PIN_BUTTON_S4, INPUT_PULLUP);
 
-  myLidarLite.begin(0, true);
-  myLidarLite.configure(0);
+//  myLidarLite.begin(0, true);
+//  myLidarLite.configure(0);
 
   dxl_hw_op3_led_set(PIN_LED_1, 1); // R
   dxl_hw_op3_led_set(PIN_LED_2, 1); // G
@@ -173,7 +173,7 @@ void dxl_hw_op3_update(void)
 
   dxl_hw_op3_button_update();
   dxl_hw_op3_voltage_update();
-  lidarUpdate();
+//  lidarUpdate();
 }
 
 
