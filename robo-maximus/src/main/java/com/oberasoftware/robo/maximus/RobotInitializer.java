@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
@@ -19,6 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import static com.oberasoftware.robo.core.commands.OperationModeCommand.MODE.POSITION_CONTROL;
+import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.create;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -61,6 +63,29 @@ public class RobotInitializer {
         servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s.getId(), POSITION_CONTROL)));
         servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
 
+        HumanoidRobot maximus = HumanoidRobotBuilder.create("maximus")
+                .legs(
+                    create("LeftLeg")
+                        .ankle("x-id", "y-id")
+                        .knee("knee-id")
+                        .hip("hip-x", "hip-y", "hip-z"),
+                    create("RightLeg")
+                            .ankle("x-id", "y-id")
+                            .knee("knee-id")
+                            .hip("hip-x", "hip-y", "hip-z"))
+                .torso(
+                        HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
+                                .shoulder("x-id", "y-id", "z-id")
+                                .elbow("elbow-id")
+                                .hand("hand-id"),
+                        HumanoidRobotBuilder.ArmBuilder.create("RightArm")
+                                .shoulder("x-id", "y-id", "z-id")
+                                .elbow("elbow-id")
+                                .hand("hand-id"))
+                .head("pitchId", "yawId")
+            .build();
+
+
 
 //        Ankle leftAnkle = new Ankle(new Joint("Ankle-X", "104"), new Joint("Ankle-Y", "105"));
 //        Hip leftHip = new Hip(new Joint("Hip-X", "100"), new Joint("Hip-Z", "101"), new Joint("Hip-Y", "102"));
@@ -73,7 +98,7 @@ public class RobotInitializer {
 //
 //        Legs legs = new Legs(leftLeg, rightLeg);
 //
-//        new Humanoid(head, body, arms, legs);
+//        new Humanoid(head, torso, arms, legs);
 //
 //        BehaviouralRobot robotCar = BehaviouralRobotBuilder.create(robot)
 //                .camera(cameraTilt, camerRotate)

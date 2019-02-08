@@ -1,0 +1,51 @@
+package com.oberasoftware.robo.maximus.impl;
+
+import com.google.common.collect.ImmutableList;
+import com.oberasoftware.robo.api.behavioural.humanoid.Ankle;
+import com.oberasoftware.robo.api.behavioural.humanoid.Hip;
+import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
+import com.oberasoftware.robo.api.behavioural.humanoid.Leg;
+
+import java.util.List;
+
+public class LegImpl implements Leg {
+
+    private final Hip hip;
+    private final Joint knee;
+    private final Ankle ankle;
+
+    public LegImpl(Hip hip, Joint knee, Ankle ankle) {
+        this.hip = hip;
+        this.knee = knee;
+        this.ankle = ankle;
+    }
+
+    @Override
+    public Hip getHip() {
+        return hip;
+    }
+
+    @Override
+    public Joint getKnee() {
+        return knee;
+    }
+
+    @Override
+    public Ankle getAnkle() {
+        return ankle;
+    }
+
+    @Override
+    public List<Joint> getJoints() {
+        return ImmutableList.<Joint>builder()
+                .addAll(hip.getJoints())
+                .add(knee)
+                .addAll(ankle.getJoints())
+                .build();
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+}
