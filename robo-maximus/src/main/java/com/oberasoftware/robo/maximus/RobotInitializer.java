@@ -84,29 +84,7 @@ public class RobotInitializer {
                                 .hand("hand-id"))
                 .head("pitchId", "yawId")
             .build();
-
-
-
-//        Ankle leftAnkle = new Ankle(new Joint("Ankle-X", "104"), new Joint("Ankle-Y", "105"));
-//        Hip leftHip = new Hip(new Joint("Hip-X", "100"), new Joint("Hip-Z", "101"), new Joint("Hip-Y", "102"));
-//        Leg leftLeg = new Leg(leftHip, new Joint("Left-Knee", "103"), leftAnkle);
-//
-//        Ankle rightAnkle = new Ankle(new Joint("Ankle-X", "110"), new Joint("Ankle-Y", "111"));
-//        Hip rightHip = new Hip(new Joint("Hip-X", "106"), new Joint("Hip-Z", "107"), new Joint("Hip-Y", "108"));
-//        Leg rightLeg = new Leg(rightHip, new Joint("Right-Knee", "109"), rightAnkle);
-//
-//
-//        Legs legs = new Legs(leftLeg, rightLeg);
-//
-//        new Humanoid(head, torso, arms, legs);
-//
-//        BehaviouralRobot robotCar = BehaviouralRobotBuilder.create(robot)
-//                .camera(cameraTilt, camerRotate)
-//                .wheels(mecanumDriveTrain)
-//                .navigation(new WheelBasedWithCameraNavigationControllerImpl())
-//                .build();
-//        behaviouralRobotRegistry.register(robotCar);
-//        LOG.info("Robot: {} was registered", robotCar);
+        behaviouralRobotRegistry.register(maximus);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");

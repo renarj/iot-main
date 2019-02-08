@@ -10,11 +10,13 @@ import java.util.List;
 
 public class LegImpl implements Leg {
 
+    private final String name;
     private final Hip hip;
     private final Joint knee;
     private final Ankle ankle;
 
-    public LegImpl(Hip hip, Joint knee, Ankle ankle) {
+    public LegImpl(String name, Hip hip, Joint knee, Ankle ankle) {
+        this.name = name;
         this.hip = hip;
         this.knee = knee;
         this.ankle = ankle;
@@ -46,6 +48,16 @@ public class LegImpl implements Leg {
 
     @Override
     public String getName() {
-        return null;
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "LegImpl{" +
+                "name='" + name + '\'' +
+                ", hip=" + hip +
+                ", knee=" + knee +
+                ", ankle=" + ankle +
+                '}';
     }
 }

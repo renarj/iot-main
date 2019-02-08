@@ -9,6 +9,7 @@ import com.oberasoftware.robo.api.behavioural.humanoid.Legs;
 import java.util.List;
 
 public class LegsImpl implements Legs {
+    private static final String LEGS = "Legs";
     private final Leg leftLeft;
     private final Leg rightLeg;
 
@@ -31,17 +32,23 @@ public class LegsImpl implements Legs {
     }
 
     @Override
-    public Joint getJoint(String name) {
-        return null;
-    }
-
-    @Override
     public List<Joint> getJoints() {
-        return null;
+        return ImmutableList.<Joint>builder()
+                .addAll(leftLeft.getJoints())
+                .addAll(rightLeg.getJoints())
+                .build();
     }
 
     @Override
     public String getName() {
-        return null;
+        return LEGS;
+    }
+
+    @Override
+    public String toString() {
+        return "LegsImpl{" +
+                "leftLeft=" + leftLeft +
+                ", rightLeg=" + rightLeg +
+                '}';
     }
 }
