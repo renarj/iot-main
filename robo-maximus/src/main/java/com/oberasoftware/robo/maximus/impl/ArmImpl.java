@@ -2,7 +2,6 @@ package com.oberasoftware.robo.maximus.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.oberasoftware.robo.api.behavioural.humanoid.Arm;
-import com.oberasoftware.robo.api.behavioural.humanoid.Hand;
 import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
 import com.oberasoftware.robo.api.behavioural.humanoid.Shoulder;
 
@@ -15,7 +14,7 @@ public class ArmImpl implements Arm {
     private final Joint elbow;
     private final Joint hand;
 
-    public ArmImpl(String name, Shoulder shoulder, Joint elbow, Hand hand) {
+    public ArmImpl(String name, Shoulder shoulder, Joint elbow, Joint hand) {
         this.name = name;
         this.shoulder = shoulder;
         this.elbow = elbow;

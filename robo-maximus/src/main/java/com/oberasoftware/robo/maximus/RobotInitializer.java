@@ -66,23 +66,23 @@ public class RobotInitializer {
         HumanoidRobot maximus = HumanoidRobotBuilder.create("maximus")
                 .legs(
                     create("LeftLeg")
-                        .ankle("x-id", "y-id")
+                        .ankle("leftAnkle","x-id", "y-id")
                         .knee("knee-id")
-                        .hip("hip-x", "hip-y", "hip-z"),
+                        .hip("leftHip","hip-x", "hip-y", "hip-z"),
                     create("RightLeg")
-                            .ankle("x-id", "y-id")
+                            .ankle("rightAnkle","x-id", "y-id")
                             .knee("knee-id")
-                            .hip("hip-x", "hip-y", "hip-z"))
+                            .hip("rightHip","hip-x", "hip-y", "hip-z"))
                 .torso(
                         HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
-                                .shoulder("x-id", "y-id", "z-id")
+                                .shoulder("leftShoulder","x-id", "y-id", "z-id")
                                 .elbow("elbow-id")
                                 .hand("hand-id"),
                         HumanoidRobotBuilder.ArmBuilder.create("RightArm")
-                                .shoulder("x-id", "y-id", "z-id")
+                                .shoulder("leftShoulder", "x-id", "y-id", "z-id")
                                 .elbow("elbow-id")
                                 .hand("hand-id"))
-                .head("pitchId", "yawId")
+                .head("head", "pitchId", "yawId")
             .build();
         behaviouralRobotRegistry.register(maximus);
 
