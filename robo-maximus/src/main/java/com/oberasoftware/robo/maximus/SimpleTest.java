@@ -81,8 +81,6 @@ public class SimpleTest {
                 }
             }).get();
 
-            webSocket.sendText()
-
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("", e);
         }

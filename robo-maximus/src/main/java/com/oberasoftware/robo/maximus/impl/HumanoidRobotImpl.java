@@ -1,5 +1,6 @@
 package com.oberasoftware.robo.maximus.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
@@ -14,8 +15,15 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     private final List<ChainSet> chainSets;
 
+    private final Head head;
+    private final Torso torso;
+    private final Legs legs;
+
     public HumanoidRobotImpl(String name, Legs legs, Torso torso, Head head) {
         this.name = name;
+        this.legs = legs;
+        this.torso = torso;
+        this.head = head;
 
         chainSets = ImmutableList.<ChainSet>builder()
                 .add(legs)
@@ -45,10 +53,26 @@ public class HumanoidRobotImpl implements HumanoidRobot {
     }
 
     @Override
+    @JsonIgnore
     public List<JointChain> getChains() {
         return chainSets.stream()
                 .flatMap(c -> c.getChains().stream())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Head getHead() {
+        return head;
+    }
+
+    @Override
+    public Torso getTorso() {
+        return torso;
+    }
+
+    @Override
+    public Legs getLegs() {
+        return legs;
     }
 
     @Override

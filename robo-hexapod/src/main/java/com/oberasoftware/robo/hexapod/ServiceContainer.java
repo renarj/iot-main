@@ -16,7 +16,6 @@
 package com.oberasoftware.robo.hexapod;
 
 import com.oberasoftware.max.core.CoreConfiguration;
-import com.oberasoftware.max.web.MaxWebConfiguration;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.web.WebConfiguration;
@@ -45,7 +44,7 @@ import org.springframework.context.annotation.Import;
         SensorConfiguration.class,
         CoreConfiguration.class,
         HexapodConfiguration.class,
-        MaxWebConfiguration.class,
+//        MaxWebConfiguration.class,
         WebConfiguration.class
 
 })

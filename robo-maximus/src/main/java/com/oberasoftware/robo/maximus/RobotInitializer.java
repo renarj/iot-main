@@ -48,20 +48,20 @@ public class RobotInitializer {
                 .motionEngine(RoboPlusMotionEngine.class,
                         new JsonMotionResource("/basic-animations.json")
                 )
-                .servoDriver(DynamixelServoDriver.class,
-                        ImmutableMap.<String, String>builder()
-                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
-                .capability(ServoSensorDriver.class)
-                .remote(RemoteCloudDriver.class)
+//                .servoDriver(DynamixelServoDriver.class,
+//                        ImmutableMap.<String, String>builder()
+//                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
+//                .capability(ServoSensorDriver.class)
+//                .remote(RemoteCloudDriver.class)
                 .build();
 
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
 
-        ServoDriver servoDriver = robot.getServoDriver();
-        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
-        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s.getId(), POSITION_CONTROL)));
-        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
+//        ServoDriver servoDriver = robot.getServoDriver();
+//        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
+//        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s.getId(), POSITION_CONTROL)));
+//        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
 
         HumanoidRobot maximus = HumanoidRobotBuilder.create("maximus")
                 .legs(
