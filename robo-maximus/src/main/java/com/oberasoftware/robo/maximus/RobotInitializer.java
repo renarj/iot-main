@@ -1,16 +1,10 @@
 package com.oberasoftware.robo.maximus;
 
-import com.google.common.collect.ImmutableMap;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
-import com.oberasoftware.robo.api.servo.ServoDriver;
-import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
-import com.oberasoftware.robo.core.commands.OperationModeCommand;
-import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
-import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
 import com.oberasoftware.robo.dynamixel.motion.RoboPlusMotionEngine;
 import org.slf4j.Logger;
@@ -19,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import static com.oberasoftware.robo.core.commands.OperationModeCommand.MODE.POSITION_CONTROL;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.create;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -66,23 +59,23 @@ public class RobotInitializer {
         HumanoidRobot maximus = HumanoidRobotBuilder.create("maximus")
                 .legs(
                     create("LeftLeg")
-                        .ankle("leftAnkle","x-id", "y-id")
-                        .knee("knee-id")
-                        .hip("leftHip","hip-x", "hip-y", "hip-z"),
+                        .ankle("leftAnkle","104", "105")
+                        .knee("LeftKnee", "103")
+                        .hip("leftHip","100", "102", "101"),
                     create("RightLeg")
-                            .ankle("rightAnkle","x-id", "y-id")
-                            .knee("knee-id")
-                            .hip("rightHip","hip-x", "hip-y", "hip-z"))
+                            .ankle("rightAnkle","110", "111")
+                            .knee("RightKnee", "109")
+                            .hip("rightHip","106", "108", "107"))
                 .torso(
                         HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
-                                .shoulder("leftShoulder","x-id", "y-id", "z-id")
-                                .elbow("elbow-id")
-                                .hand("hand-id"),
+                                .shoulder("leftShoulder","131", "130", "132")
+                                .elbow("LeftElbow", "133")
+                                .hand("LeftHand", "124"),
                         HumanoidRobotBuilder.ArmBuilder.create("RightArm")
-                                .shoulder("leftShoulder", "x-id", "y-id", "z-id")
-                                .elbow("elbow-id")
-                                .hand("hand-id"))
-                .head("head", "pitchId", "yawId")
+                                .shoulder("rightShoulder", "121", "120", "122")
+                                .elbow("RightElbow", "123")
+                                .hand("RightHand", "124"))
+                .head("head", "141", "140")
             .build();
         behaviouralRobotRegistry.register(maximus);
 

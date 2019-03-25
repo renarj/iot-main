@@ -2,6 +2,7 @@ package com.oberasoftware.robo.maximus.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
 
@@ -46,17 +47,25 @@ public class HumanoidRobotImpl implements HumanoidRobot {
     }
 
     @Override
+    public List<ChainSet> getChainSets(boolean includeChildren) {
+        return chainSets;
+    }
+
+    @Override
+    public List<Joint> getJoints(boolean includeChildren) {
+        return getJoints();
+    }
+
+    @Override
     public List<Joint> getJoints() {
-        return chainSets.stream()
-                .flatMap(c -> c.getJoints().stream())
-                .collect(Collectors.toList());
+        return Lists.newArrayList();
     }
 
     @Override
     @JsonIgnore
-    public List<JointChain> getChains() {
+    public List<JointChain> getJointChains() {
         return chainSets.stream()
-                .flatMap(c -> c.getChains().stream())
+                .flatMap(c -> c.getJointChains().stream())
                 .collect(Collectors.toList());
     }
 

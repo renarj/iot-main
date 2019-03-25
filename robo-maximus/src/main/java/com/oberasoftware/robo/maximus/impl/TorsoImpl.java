@@ -1,6 +1,7 @@
 package com.oberasoftware.robo.maximus.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.behavioural.humanoid.Arm;
 import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointChain;
@@ -21,17 +22,26 @@ public class TorsoImpl implements Torso {
     }
 
     @Override
-    public List<JointChain> getChains() {
+    public List<JointChain> getJointChains() {
         return ImmutableList.<JointChain>builder()
                 .add(leftArm, rightArm).build();
     }
 
     @Override
     public List<Joint> getJoints() {
-        return ImmutableList.<Joint>builder()
-                .addAll(leftArm.getJoints())
-                .addAll(rightArm.getJoints())
-                .build();
+        return getJoints(false);
+    }
+
+    @Override
+    public List<Joint> getJoints(boolean includeChildren) {
+        if(includeChildren) {
+            return ImmutableList.<Joint>builder()
+                    .addAll(leftArm.getJoints())
+                    .addAll(rightArm.getJoints())
+                    .build();
+        } else {
+            return Lists.newArrayList();
+        }
     }
 
     @Override

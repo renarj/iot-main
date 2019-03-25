@@ -37,12 +37,14 @@ public class ArmImpl implements Arm {
     }
 
     @Override
-    public List<Joint> getJoints() {
-        return ImmutableList.<Joint>builder()
-                .addAll(shoulder.getJoints())
+    public List<Joint> getJoints(boolean includeChildren) {
+        ImmutableList.Builder<Joint> b = ImmutableList.<Joint>builder()
                 .add(hand)
-                .add(elbow)
-                .build();
+                .add(elbow);
+
+        b.addAll(shoulder.getJoints());
+
+        return b.build();
     }
 
     @Override

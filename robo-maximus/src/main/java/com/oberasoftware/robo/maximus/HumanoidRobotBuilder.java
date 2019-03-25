@@ -6,6 +6,9 @@ import com.oberasoftware.robo.maximus.impl.*;
 
 public class HumanoidRobotBuilder {
 
+    private static final String PITCH = "pitch";
+    private static final String YAW = "yaw";
+
     private final String name;
 
     private Legs legs;
@@ -31,7 +34,9 @@ public class HumanoidRobotBuilder {
     }
 
     public HumanoidRobotBuilder head(String name, String pitchId, String yawId) {
-        head = new HeadImpl(name, new JointImpl(pitchId, "head-pitch"), new JointImpl(yawId, "head-yaw"));
+        head = new HeadImpl(name,
+                new JointImpl(pitchId, name + PITCH, name + PITCH),
+                new JointImpl(yawId, name + YAW, name + YAW));
         return this;
     }
 
@@ -59,18 +64,23 @@ public class HumanoidRobotBuilder {
         }
 
         public LegBuilder ankle(String ankleName, String servoXId, String servoYId) {
-            ankle = new AnkleImpl(ankleName, new JointImpl(servoXId, "ankle-x"), new JointImpl(servoYId, "ankle-y"));
+            ankle = new AnkleImpl(ankleName,
+                    new JointImpl(servoXId, ankleName + "x", "ankle-x"),
+                    new JointImpl(servoYId, ankleName + "y", "ankle-y"));
 
             return this;
         }
 
-        public LegBuilder knee(String kneeId) {
-            knee = new JointImpl(kneeId, "knee");
+        public LegBuilder knee(String name, String kneeId) {
+            knee = new JointImpl(kneeId, name, "knee");
             return this;
         }
 
         public LegBuilder hip(String hipName, String xId, String yId, String zId) {
-            hip = new HipImpl(hipName, new JointImpl(xId, "hip-x"), new JointImpl(yId, "hip-y"), new JointImpl(zId, "hip-z"));
+            hip = new HipImpl(hipName,
+                    new JointImpl(xId, hipName + "x", "hip-x"),
+                    new JointImpl(yId, hipName + "y", "hip-y"),
+                    new JointImpl(zId, hipName + "z", "hip-z"));
             return this;
         }
 
@@ -100,19 +110,19 @@ public class HumanoidRobotBuilder {
 
         public ArmBuilder shoulder(String name, String xId, String yId, String zId) {
             shoulder = new ShoulderImpl(name,
-                    new JointImpl(xId, "shoulder-x"),
-                    new JointImpl(yId, "shoulder-y"),
-                    new JointImpl(zId, "shoulder-z"));
+                    new JointImpl(xId, name + "x", "shoulder-x"),
+                    new JointImpl(yId, name + "y", "shoulder-y"),
+                    new JointImpl(zId, name + "z", "shoulder-z"));
             return this;
         }
 
-        public ArmBuilder elbow(String elbowId) {
-            elbow = new JointImpl(elbowId, "elbow");
+        public ArmBuilder elbow(String name, String elbowId) {
+            elbow = new JointImpl(elbowId, name, "elbow");
             return this;
         }
 
-        public ArmBuilder hand(String handId) {
-            hand = new JointImpl(handId, "hand");
+        public ArmBuilder hand(String name, String handId) {
+            hand = new JointImpl(handId, name, "hand");
             return this;
         }
 

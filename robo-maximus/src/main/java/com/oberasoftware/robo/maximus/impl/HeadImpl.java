@@ -20,12 +20,12 @@ public class HeadImpl implements Head {
     }
 
     @Override
-    public List<JointChain> getChains() {
+    public List<JointChain> getJointChains() {
         return Lists.newArrayList();
     }
 
     @Override
-    public List<Joint> getJoints() {
+    public List<Joint> getJoints(boolean includeChildren) {
         return Lists.newArrayList(pitch, yaw);
     }
 

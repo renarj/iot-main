@@ -1,6 +1,7 @@
 package com.oberasoftware.robo.maximus.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointChain;
 import com.oberasoftware.robo.api.behavioural.humanoid.Leg;
@@ -24,7 +25,7 @@ public class LegsImpl implements Legs {
     }
 
     @Override
-    public List<JointChain> getChains() {
+    public List<JointChain> getJointChains() {
         return ImmutableList.<JointChain>builder()
                 .add(leftLeft)
                 .add(rightLeg)
@@ -32,11 +33,15 @@ public class LegsImpl implements Legs {
     }
 
     @Override
-    public List<Joint> getJoints() {
-        return ImmutableList.<Joint>builder()
-                .addAll(leftLeft.getJoints())
-                .addAll(rightLeg.getJoints())
-                .build();
+    public List<Joint> getJoints(boolean includeChildren) {
+        if(includeChildren) {
+            return ImmutableList.<Joint>builder()
+                    .addAll(leftLeft.getJoints())
+                    .addAll(rightLeg.getJoints())
+                    .build();
+        } else {
+            return Lists.newArrayList();
+        }
     }
 
     @Override

@@ -29,7 +29,7 @@ public class AnkleImpl implements Ankle {
     }
 
     @Override
-    public List<Joint> getJoints() {
+    public List<Joint> getJoints(boolean includeChildren) {
         return Lists.newArrayList(x, y);
     }
 

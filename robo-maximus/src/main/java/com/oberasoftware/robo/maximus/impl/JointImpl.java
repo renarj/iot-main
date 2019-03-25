@@ -8,13 +8,15 @@ import com.oberasoftware.robo.api.servo.ServoDriver;
 
 public class JointImpl implements Joint {
 
+    private final String id;
     private final String name;
     private final String type;
 
     private Servo servo;
     private ServoDriver servoDriver;
 
-    public JointImpl(String name, String type) {
+    public JointImpl(String id, String name, String type) {
+        this.id = id;
         this.name = name;
         this.type = type;
     }
@@ -22,7 +24,12 @@ public class JointImpl implements Joint {
     @Override
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
         this.servoDriver = robotCore.getServoDriver();
-        this.servo = this.servoDriver.getServo(name);
+        this.servo = this.servoDriver.getServo(id);
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 
     @Override

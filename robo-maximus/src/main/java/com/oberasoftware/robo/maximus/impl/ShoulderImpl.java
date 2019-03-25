@@ -37,7 +37,7 @@ public class ShoulderImpl implements Shoulder {
     }
 
     @Override
-    public List<Joint> getJoints() {
+    public List<Joint> getJoints(boolean includeChildren) {
         return Lists.newArrayList(x, y, z);
     }
 

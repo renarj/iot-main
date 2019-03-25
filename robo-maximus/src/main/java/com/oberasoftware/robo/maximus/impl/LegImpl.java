@@ -38,12 +38,14 @@ public class LegImpl implements Leg {
     }
 
     @Override
-    public List<Joint> getJoints() {
-        return ImmutableList.<Joint>builder()
-                .addAll(hip.getJoints())
-                .add(knee)
-                .addAll(ankle.getJoints())
-                .build();
+    public List<Joint> getJoints(boolean includeChildren) {
+        ImmutableList.Builder<Joint> b = ImmutableList.<Joint>builder()
+                .add(knee);
+
+        b.addAll(hip.getJoints());
+        b.addAll(ankle.getJoints());
+
+        return b.build();
     }
 
     @Override
