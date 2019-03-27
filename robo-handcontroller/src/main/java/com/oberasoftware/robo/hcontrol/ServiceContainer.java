@@ -19,7 +19,7 @@ public class ServiceContainer {
         LOG.info("Starting Handheld Controller");
 
         SpringApplication application = new SpringApplication(ServiceContainer.class);
-        application.setWebEnvironment(false);
+//        application.setWebEnvironment(false);
         application.run();
 
         LOG.info("Handheld controller started");
