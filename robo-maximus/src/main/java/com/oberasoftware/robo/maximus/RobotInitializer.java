@@ -70,7 +70,7 @@ public class RobotInitializer {
                         HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
                                 .shoulder("leftShoulder","131", "130", "132")
                                 .elbow("LeftElbow", "133")
-                                .hand("LeftHand", "124"),
+                                .hand("LeftHand", "134"),
                         HumanoidRobotBuilder.ArmBuilder.create("RightArm")
                                 .shoulder("rightShoulder", "121", "120", "122")
                                 .elbow("RightElbow", "123")

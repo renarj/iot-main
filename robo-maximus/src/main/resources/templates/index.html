@@ -6,14 +6,50 @@
 
 <script th:src="@{/js/editor.js}" src="/static/js/editor.js"></script>
 
+<script id="chain" type="x-tmpl-mustache">
+<div class="row">
+    <div class="card bg-light mb-3 w-100">
+        <div class="card-header">{{name}}</div>
+      <div class="card-body">
 
-<div class="container-fluid">
-    <div class="row">
-
+        <div id="{{id}}" class="row">
+        </div>
+      </div>
     </div>
-    <div th:replace="includes/header :: footer"></div>
+</div>
+</script>
+
+<script id="jointChain" type="x-tmpl-mustache">
+<div class="col-sm-6">
+    <div class="card" >
+      <div class="card-body">
+        <h5 class="card-title">{{name}}</h5>
+        <div id="{{id}}">
+        </div>
+      </div>
+    </div>
+</div>
+</script>
+
+
+<script id="joint" type="x-tmpl-mustache">
+<div class="row">
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{name}}</h5>
+        <div id="{{id}}">
+            <input id="{{sliderId}}" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
+        </div>
+      </div>
+    </div>
+</div>
+</script>
+
+<div class="container-fluid" id="chainContainer">
+
 </div>
 
+<div th:replace="includes/header :: footer"></div>
 
 </body>
 </html>
