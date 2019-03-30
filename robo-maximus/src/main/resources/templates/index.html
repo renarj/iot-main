@@ -24,7 +24,7 @@
     <div class="card" >
       <div class="card-body">
         <h5 class="card-title">{{name}}</h5>
-        <div id="{{id}}">
+        <div id="{{id}}" class="row">
         </div>
       </div>
     </div>
@@ -33,16 +33,36 @@
 
 
 <script id="joint" type="x-tmpl-mustache">
-<div class="row">
-    <div class="card" style="width: 18rem;">
+    <div class="card mr-1 w-25">
+      <div class="card-header text-white bg-primary "><b>{{name}}</b></div>
       <div class="card-body">
-        <h5 class="card-title">{{name}}</h5>
         <div id="{{id}}">
-            <input id="{{sliderId}}" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="small">-180</div>
+                    <input id="{{sliderId}}" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
+                    <div>180</div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="f" class="col-sm-3 col-form-label col-form-label-sm">Pos</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="f" placeholder="" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-primary btn-sm">On</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-secondary btn-sm">Off</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
       </div>
     </div>
-</div>
 </script>
 
 <div class="container-fluid" id="chainContainer">
