@@ -3,6 +3,7 @@ package com.oberasoftware.robo.maximus.rest;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
+import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,22 @@ public class HumanoidRestService {
     @RequestMapping(path = "/robot/{robotId}")
     public ResponseEntity<HumanoidRobot> getRobot(@PathVariable String robotId) {
         LOG.info("Requesting robot with id: {}", robotId);
-        Optional<BehaviouralRobot> robot = behaviouralRobotRegistry.getRobot(robotId);
-        return robot.map(behaviouralRobot -> new ResponseEntity<>((HumanoidRobot) behaviouralRobot, HttpStatus.OK))
+
+        return findRobot(robotId).map(behaviouralRobot -> new ResponseEntity<>(behaviouralRobot, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/robot/{robotId}/joints")
+    public ResponseEntity<List<JointData>> getJointData(@PathVariable String robotId) {
+        Optional<HumanoidRobot> robot = findRobot(robotId);
+        return robot.map(humanoidRobot -> new ResponseEntity<>(humanoidRobot.getMotionControl().getJoints(), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    private Optional<HumanoidRobot> findRobot(String robotId) {
+        Optional<BehaviouralRobot> robot = behaviouralRobotRegistry.getRobot(robotId);
+
+        return robot.map(r -> (HumanoidRobot) r);
     }
 }
 

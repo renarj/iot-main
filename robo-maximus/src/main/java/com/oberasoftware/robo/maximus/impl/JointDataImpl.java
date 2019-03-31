@@ -4,15 +4,24 @@ import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
 
 public class JointDataImpl implements JointData {
     private final String jointId;
-    private final int desired;
-    private final int actual;
+    private final int degrees;
+    private final int position;
 
-    public JointDataImpl(String jointId, int desired, int actual) {
+    public JointDataImpl(String jointId, int degrees, int position) {
         this.jointId = jointId;
-        this.desired = desired;
-        this.actual = actual;
+        this.position = position;
+        this.degrees = degrees;
     }
 
+    @Override
+    public int getDegrees() {
+        return degrees;
+    }
+
+    @Override
+    public int getPosition() {
+        return position;
+    }
 
     @Override
     public String getId() {
@@ -20,21 +29,11 @@ public class JointDataImpl implements JointData {
     }
 
     @Override
-    public int getActualPosition() {
-        return actual;
-    }
-
-    @Override
-    public int getRequestedPosition() {
-        return desired;
-    }
-
-    @Override
     public String toString() {
         return "JointDataImpl{" +
                 "jointId='" + jointId + '\'' +
-                ", desired=" + desired +
-                ", actual=" + actual +
+                ", degrees=" + degrees +
+                ", position=" + position +
                 '}';
     }
 }

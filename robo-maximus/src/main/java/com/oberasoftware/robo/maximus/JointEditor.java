@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class JointEditor {
-    @RequestMapping("/editor")
+    @RequestMapping("/joints")
     public String getIndex() {
-        return "index";
+        return "joints";
     }
 
 }

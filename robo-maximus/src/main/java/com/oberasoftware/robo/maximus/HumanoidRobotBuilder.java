@@ -1,5 +1,6 @@
 package com.oberasoftware.robo.maximus;
 
+import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
 import com.oberasoftware.robo.api.exceptions.RoboException;
 import com.oberasoftware.robo.maximus.impl.*;
@@ -10,17 +11,19 @@ public class HumanoidRobotBuilder {
     private static final String YAW = "yaw";
 
     private final String name;
+    private final Robot robot;
 
     private Legs legs;
     private Torso torso;
     private Head head;
 
-    public HumanoidRobotBuilder(String name) {
+    public HumanoidRobotBuilder(Robot robot, String name) {
+        this.robot = robot;
         this.name = name;
     }
 
-    public static HumanoidRobotBuilder create(String name) {
-        return new HumanoidRobotBuilder(name);
+    public static HumanoidRobotBuilder create(Robot robot, String name) {
+        return new HumanoidRobotBuilder(robot, name);
     }
 
     public HumanoidRobotBuilder legs(LegBuilder leftLeg, LegBuilder rightLeg) {
@@ -42,7 +45,10 @@ public class HumanoidRobotBuilder {
 
     public HumanoidRobot build() {
         if(legs != null && torso != null) {
-            return new HumanoidRobotImpl(name, legs, torso, head);
+            HumanoidRobot humanoidRobot = new HumanoidRobotImpl(robot, name, legs, torso, head);
+            humanoidRobot.initialize(humanoidRobot, robot);
+
+            return humanoidRobot;
         } else {
             throw new BuildException("Cannot build a robot without legs or arms!!!!");
         }

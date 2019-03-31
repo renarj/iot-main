@@ -1,10 +1,13 @@
 package com.oberasoftware.robo.maximus;
 
+import com.google.common.collect.ImmutableMap;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
+import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
 import com.oberasoftware.robo.dynamixel.motion.RoboPlusMotionEngine;
 import org.slf4j.Logger;
@@ -32,19 +35,19 @@ public class RobotInitializer {
     @Autowired
     private BehaviouralRobotRegistry behaviouralRobotRegistry;
 
-    @Value("${dynamixelPort:}")
+    @Value("${robot.port:}")
     private String dynamixelPort;
 
     public void initialize() {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
-        Robot robot = new SpringAwareRobotBuilder("maximus", applicationContext)
+        Robot robot = new SpringAwareRobotBuilder("maximus-core", applicationContext)
                 .motionEngine(RoboPlusMotionEngine.class,
                         new JsonMotionResource("/basic-animations.json")
                 )
-//                .servoDriver(DynamixelServoDriver.class,
-//                        ImmutableMap.<String, String>builder()
-//                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
-//                .capability(ServoSensorDriver.class)
+                .servoDriver(DynamixelServoDriver.class,
+                        ImmutableMap.<String, String>builder()
+                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
+                .capability(ServoSensorDriver.class)
 //                .remote(RemoteCloudDriver.class)
                 .build();
 
@@ -56,7 +59,7 @@ public class RobotInitializer {
 //        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s.getId(), POSITION_CONTROL)));
 //        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
 
-        HumanoidRobot maximus = HumanoidRobotBuilder.create("maximus")
+        HumanoidRobot maximus = HumanoidRobotBuilder.create(robot, "maximus")
                 .legs(
                     create("LeftLeg")
                         .ankle("leftAnkle","104", "105")

@@ -4,7 +4,22 @@ function renderRobots() {
 
         $.each(data, function(i, robot) {
             renderRobot(robot);
+            renderJointPosition(robot);
         })
+    });
+}
+
+function renderJointPosition(robot) {
+    $.get("/humanoid/robot/" + robot.name + "/joints", function(data) {
+        console.log("Joint Data: " + JSON.stringify(data));
+
+        $.each(data, function(i, joint) {
+            console.log("Joint data for: " + joint.id);
+
+            $("#degrees-" + joint.id).val(joint.degrees);
+            $("#position-" + joint.id).val(joint.position);
+            $("#slider-" + joint.id).slider('setValue', joint.degrees);
+        });
     });
 }
 

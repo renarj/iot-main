@@ -8,6 +8,7 @@ import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
     private final Torso torso;
     private final Legs legs;
 
-    private MotionControl motionControl;
+    private List<Behaviour> behaviours = new ArrayList<>();
 
     public HumanoidRobotImpl(Robot robot, String name, Legs legs, Torso torso, Head head) {
         this.robot = robot;
@@ -41,16 +42,32 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
-        motionControl = new MotionControlImpl();
+        MotionControl motionControl = new MotionControlImpl();
         motionControl.initialize(behaviouralRobot, robotCore);
+
+        behaviours.add(motionControl);
     }
 
     @Override
+    public <T extends Behaviour> T getBehaviour(Class<T> behaviourClass) {
+        Optional<Behaviour> o = behaviours.stream()
+                .filter(behaviourClass::isInstance)
+                .findFirst();
+        if(o.isPresent()) {
+            return (T)o.get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    @JsonIgnore
     public Robot getRobotCore() {
         return robot;
     }
 
     @Override
+    @JsonIgnore
     public MotionControl getMotionControl() {
         return getBehaviour(MotionControl.class);
     }
@@ -118,11 +135,6 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     public List<Behaviour> getBehaviours() {
-        return null;
-    }
-
-    @Override
-    public <T extends Behaviour> T getBehaviour(Class<T> behaviourClass) {
         return null;
     }
 }
