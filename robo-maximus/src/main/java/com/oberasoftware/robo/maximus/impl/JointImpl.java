@@ -25,6 +25,8 @@ public class JointImpl implements Joint {
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
         this.servoDriver = robotCore.getServoDriver();
         this.servo = this.servoDriver.getServo(id);
+
+
     }
 
     @Override

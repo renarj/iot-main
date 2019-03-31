@@ -3,7 +3,9 @@ package com.oberasoftware.robo.maximus.impl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
+import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
 
 import java.util.List;
@@ -16,11 +18,15 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     private final List<ChainSet> chainSets;
 
+    private final Robot robot;
     private final Head head;
     private final Torso torso;
     private final Legs legs;
 
-    public HumanoidRobotImpl(String name, Legs legs, Torso torso, Head head) {
+    private MotionControl motionControl;
+
+    public HumanoidRobotImpl(Robot robot, String name, Legs legs, Torso torso, Head head) {
+        this.robot = robot;
         this.name = name;
         this.legs = legs;
         this.torso = torso;
@@ -31,6 +37,22 @@ public class HumanoidRobotImpl implements HumanoidRobot {
                 .add(torso)
                 .add(head)
                 .build();
+    }
+
+    @Override
+    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+        motionControl = new MotionControlImpl();
+        motionControl.initialize(behaviouralRobot, robotCore);
+    }
+
+    @Override
+    public Robot getRobotCore() {
+        return robot;
+    }
+
+    @Override
+    public MotionControl getMotionControl() {
+        return getBehaviour(MotionControl.class);
     }
 
     @Override
