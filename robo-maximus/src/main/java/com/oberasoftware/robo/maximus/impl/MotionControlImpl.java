@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class MotionControlImpl implements MotionControl {
 
-    private static final Scale RADIAL_SCALE = new Scale(-180, 180);
+    public static final Scale RADIAL_SCALE = new Scale(-180, 180);
 
     private ServoDriver servoDriver;
 

@@ -1,3 +1,24 @@
+var stompClient = null;
+
+function connect() {
+    console.log("Connecting to websocket");
+    var socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/joints', function(frame){
+            handleStateUpdate(JSON.parse(frame.body));
+        });
+    });
+    stompClient.debug = null
+}
+
+function handleStateUpdate(state) {
+    $("#degrees-" + state.id).val(state.degrees);
+    $("#position-" + state.id).val(state.position);
+    $("#slider-" + state.id).slider('setValue', state.degrees);
+}
+
 function renderRobots() {
     $.get("/humanoid/", function(data) {
         console.log("Humanoid Robots: " + JSON.stringify(data));
@@ -79,6 +100,53 @@ function renderJoint(jointChainId, joint) {
 
     var slider = $("#slider-" + joint.id);
     slider.slider();
+
+    slider.on("slideStop", handleSlideStop);
+
+    $("#tEnable-" + joint.id).click(function (e) {
+        e.preventDefault();
+
+        var jointId = this.getAttribute('jointid');
+
+        console.log("We had torgue enable on joint: " + jointId);
+        $.ajax({
+            url: "/servos/enable/" + jointId + "/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Enable torgue for servo successfully");
+            }
+        });
+
+    });
+
+    $("#tDisable-" + joint.id).click(function (e) {
+        e.preventDefault();
+
+        var jointId = this.getAttribute('jointid');
+        console.log("We had torgue disable on joint: " + jointId);
+        $.ajax({
+            url: "/servos/disable/" + jointId + "/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Disable torgue for servo successfully");
+            }
+        });
+    });
+}
+
+function handleSlideStop(slideEvt) {
+    var val = slideEvt.value;
+    var jointId = this.getAttribute('jointId');
+
+    setServoProperty(jointId, "position", val);
+}
+
+function setServoProperty(servoId, property, value) {
+    $.ajax({url: "/servos/set/" + servoId + "/" + property + "/" + value, type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+            console.log("Set joint: " + servoId + " " + property + " to value: " + value + " successfully");
+        }});
 }
 
 function renderTemplate(templateName, data) {
@@ -89,4 +157,6 @@ function renderTemplate(templateName, data) {
 
 $(document).ready(function() {
     renderRobots();
+
+    connect();
 });
