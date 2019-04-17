@@ -5,7 +5,9 @@ import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
+import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.commands.VelocityModeCommand;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
@@ -53,6 +55,14 @@ public class RobotInitializer {
 
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
+
+        ServoDriver driver = robot.getServoDriver();
+
+//        driver.sendCommand(new RebootCommand("107"));
+//        driver.getServos().forEach(s -> driver.sendCommand(new CurrentLimitCommand(s.getId(), 50)));
+
+//        robot.getServoDriver().sendCommand(new VelocityModeCommand("133", 20, 20));
+        driver.getServos().forEach(s -> driver.sendCommand(new VelocityModeCommand(s.getId(), 50, 5)));
 
 //        ServoDriver servoDriver = robot.getServoDriver();
 //        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));

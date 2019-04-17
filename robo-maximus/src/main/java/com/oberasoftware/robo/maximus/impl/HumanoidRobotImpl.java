@@ -42,7 +42,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
-        MotionControl motionControl = new MotionControlImpl();
+        MotionControl motionControl = new MotionControlImpl(getJoints(true));
         motionControl.initialize(behaviouralRobot, robotCore);
 
         behaviours.add(motionControl);
@@ -92,6 +92,13 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     public List<Joint> getJoints(boolean includeChildren) {
+        if(includeChildren) {
+            return ImmutableList.<Joint>builder()
+                    .addAll(legs.getJoints(true))
+                    .addAll(torso.getJoints(true))
+                    .addAll(head.getJoints(true))
+                    .build();
+        }
         return getJoints();
     }
 

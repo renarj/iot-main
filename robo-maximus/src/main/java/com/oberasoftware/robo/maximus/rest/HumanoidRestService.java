@@ -4,14 +4,13 @@ import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
+import com.oberasoftware.robo.maximus.impl.JointDataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +48,32 @@ public class HumanoidRestService {
     public ResponseEntity<List<JointData>> getJointData(@PathVariable String robotId) {
         Optional<HumanoidRobot> robot = findRobot(robotId);
         return robot.map(humanoidRobot -> new ResponseEntity<>(humanoidRobot.getMotionControl().getJoints(), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/robot/{robotId}/joints", method = RequestMethod.POST)
+    public ResponseEntity<Object> setJointAngles(@PathVariable String robotId, List<JointDataImpl> jointAngles) {
+        Optional<HumanoidRobot> robot = findRobot(robotId);
+
+        LOG.info("Joint angles requested: {}", jointAngles);
+
+        robot.ifPresent(r -> r.getMotionControl()
+                .setJointPositions(jointAngles.stream().map(j -> (JointData)j)
+                .collect(Collectors.toList())));
+
+        return robot.map(r -> ResponseEntity.accepted().build())
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/robot/{robotId}/joint", method = RequestMethod.POST)
+    public ResponseEntity<Object> setJointAngle(@PathVariable String robotId, @RequestBody JointDataImpl jointAngle) {
+        Optional<HumanoidRobot> robot = findRobot(robotId);
+
+        LOG.info("Joint angle request: {}", jointAngle);
+
+        robot.ifPresent(r -> r.getMotionControl().setJointPosition(jointAngle));
+
+        return robot.map(r -> ResponseEntity.accepted().build())
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

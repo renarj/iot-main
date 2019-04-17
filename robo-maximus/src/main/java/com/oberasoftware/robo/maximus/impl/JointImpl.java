@@ -8,9 +8,15 @@ import com.oberasoftware.robo.api.servo.ServoDriver;
 
 public class JointImpl implements Joint {
 
+    public static final int DEFAULT_MAX_DEGREES = 180;
+    public static final int DEFAULT_MIN_DEGREES = -180;
+
     private final String id;
     private final String name;
     private final String type;
+
+    private final int minDegrees;
+    private final int maxDegrees;
 
     private Servo servo;
     private ServoDriver servoDriver;
@@ -19,6 +25,16 @@ public class JointImpl implements Joint {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.minDegrees = DEFAULT_MIN_DEGREES;
+        this.maxDegrees = DEFAULT_MAX_DEGREES;
+    }
+
+    public JointImpl(String id, String name, String type, int minDegrees, int maxDegrees) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.minDegrees = minDegrees;
+        this.maxDegrees = maxDegrees;
     }
 
     @Override
@@ -27,6 +43,16 @@ public class JointImpl implements Joint {
         this.servo = this.servoDriver.getServo(id);
 
 
+    }
+
+    @Override
+    public int getMaxDegrees() {
+        return maxDegrees;
+    }
+
+    @Override
+    public int getMinDegrees() {
+        return minDegrees;
     }
 
     @Override

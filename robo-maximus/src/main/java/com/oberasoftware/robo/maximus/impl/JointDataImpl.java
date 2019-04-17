@@ -3,14 +3,29 @@ package com.oberasoftware.robo.maximus.impl;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
 
 public class JointDataImpl implements JointData {
-    private final String jointId;
-    private final int degrees;
-    private final int position;
+    private String id;
+    private int degrees;
+    private int position;
 
-    public JointDataImpl(String jointId, int degrees, int position) {
-        this.jointId = jointId;
+    public JointDataImpl(String id, int degrees, int position) {
+        this.id = id;
         this.position = position;
         this.degrees = degrees;
+    }
+
+    public JointDataImpl() {
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDegrees(int degrees) {
+        this.degrees = degrees;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override
@@ -25,13 +40,13 @@ public class JointDataImpl implements JointData {
 
     @Override
     public String getId() {
-        return jointId;
+        return id;
     }
 
     @Override
     public String toString() {
         return "JointDataImpl{" +
-                "jointId='" + jointId + '\'' +
+                "id='" + id + '\'' +
                 ", degrees=" + degrees +
                 ", position=" + position +
                 '}';

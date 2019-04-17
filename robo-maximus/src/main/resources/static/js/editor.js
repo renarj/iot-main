@@ -16,7 +16,7 @@ function connect() {
 function handleStateUpdate(state) {
     $("#degrees-" + state.id).val(state.degrees);
     $("#position-" + state.id).val(state.position);
-    $("#slider-" + state.id).slider('setValue', state.degrees);
+    // $("#slider-" + state.id).slider('setValue', state.degrees);
 }
 
 function renderRobots() {
@@ -138,14 +138,22 @@ function renderJoint(jointChainId, joint) {
 
 function handleSlideStop(slideEvt) {
     var val = slideEvt.value;
-    var jointId = this.getAttribute('jointId');
+    var jointId = this.getAttribute('jointid');
 
-    setServoProperty(jointId, "position", val);
+    setServoProperty(jointId, val);
 }
 
-function setServoProperty(servoId, property, value) {
-    $.ajax({url: "/servos/set/" + servoId + "/" + property + "/" + value, type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("Set joint: " + servoId + " " + property + " to value: " + value + " successfully");
+function setServoProperty(jointId, degrees) {
+    var json = {
+        id: jointId,
+        degrees: degrees,
+        position: 0
+    };
+
+    console.log("Posting: " + JSON.stringify(json));
+
+    $.ajax({url: "/humanoid/robot/maximus/joint", data: JSON.stringify((json)), type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+            console.log("Set joint succesfully");
         }});
 }
 

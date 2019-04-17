@@ -29,11 +29,14 @@ public class JointDataController implements EventHandler {
     public void receiveStateUpdate(ServoUpdateEvent stateUpdateEvent) {
         LOG.debug("Received servo update event: {}", stateUpdateEvent);
         ServoData data = stateUpdateEvent.getServoData();
-        Integer position = data.getValue(ServoProperty.POSITION);
-        Scale positionScale = data.getValue(ServoProperty.POSITION_SCALE);
 
-        messagingTemplate.convertAndSend("/topic/joints",
-                new JointDataImpl(stateUpdateEvent.getServoId(),
-                        positionScale.convertToScale(position, MotionControlImpl.RADIAL_SCALE), position));
+        if(data.containsValue(ServoProperty.POSITION) && data.containsValue(ServoProperty.POSITION_SCALE)) {
+            Integer position = data.getValue(ServoProperty.POSITION);
+            Scale positionScale = data.getValue(ServoProperty.POSITION_SCALE);
+
+            messagingTemplate.convertAndSend("/topic/joints",
+                    new JointDataImpl(stateUpdateEvent.getServoId(),
+                            positionScale.convertToScale(position, MotionControlImpl.RADIAL_SCALE), position));
+        }
     }
 }
