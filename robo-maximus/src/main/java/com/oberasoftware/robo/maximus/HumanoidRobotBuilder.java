@@ -69,24 +69,24 @@ public class HumanoidRobotBuilder {
             return new LegBuilder(legName);
         }
 
-        public LegBuilder ankle(String ankleName, String servoXId, String servoYId) {
+        public LegBuilder ankle(String ankleName, JointBuilder x, JointBuilder y) {
             ankle = new AnkleImpl(ankleName,
-                    new JointImpl(servoXId, ankleName + "x", "ankle-x"),
-                    new JointImpl(servoYId, ankleName + "y", "ankle-y"));
+                    x.type("ankle-x").build(),
+                    y.type("ankle-y").build());
 
             return this;
         }
 
-        public LegBuilder knee(String name, String kneeId) {
-            knee = new JointImpl(kneeId, name, "knee");
+        public LegBuilder knee(JointBuilder jointBuilder) {
+            knee = jointBuilder.type("knee").build();
             return this;
         }
 
-        public LegBuilder hip(String hipName, String xId, String yId, String zId) {
+        public LegBuilder hip(String hipName, JointBuilder x, JointBuilder y, JointBuilder z) {
             hip = new HipImpl(hipName,
-                    new JointImpl(xId, hipName + "x", "hip-x"),
-                    new JointImpl(yId, hipName + "y", "hip-y"),
-                    new JointImpl(zId, hipName + "z", "hip-z"));
+                    x.type("hip-x").build(),
+                    y.type("hip-y").build(),
+                    z.type("hip-z").build());
             return this;
         }
 
@@ -122,8 +122,8 @@ public class HumanoidRobotBuilder {
             return this;
         }
 
-        public ArmBuilder elbow(String name, String elbowId) {
-            elbow = new JointImpl(elbowId, name, "elbow");
+        public ArmBuilder elbow(JointBuilder jointBuilder) {
+            elbow = jointBuilder.type("elbow").build();
             return this;
         }
 
@@ -137,6 +137,47 @@ public class HumanoidRobotBuilder {
                 return new ArmImpl(armName, shoulder, elbow, hand);
             } else {
                 throw new BuildException("Could not create robot, missing shoulder, elbow or hand");
+            }
+        }
+    }
+
+    public static class JointBuilder {
+        private final String id;
+        private final String name;
+
+        private String type;
+        private Integer min;
+        private Integer max;
+
+        public JointBuilder(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public static JointBuilder create(String id, String name) {
+            return new JointBuilder(id, name);
+        }
+
+        public JointBuilder type(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public JointBuilder min(int min) {
+            this.min = min;
+            return this;
+        }
+
+        public JointBuilder max(int max) {
+            this.max = max;
+            return this;
+        }
+
+        public Joint build() {
+            if(min != null && max != null) {
+                return new JointImpl(id, name, type, min, max);
+            } else {
+                return new JointImpl(id, name, type);
             }
         }
     }

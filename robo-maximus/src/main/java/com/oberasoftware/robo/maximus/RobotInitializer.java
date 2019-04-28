@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.create;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -72,21 +73,31 @@ public class RobotInitializer {
         HumanoidRobot maximus = HumanoidRobotBuilder.create(robot, "maximus")
                 .legs(
                     create("LeftLeg")
-                        .ankle("leftAnkle","104", "105")
-                        .knee("LeftKnee", "103")
-                        .hip("leftHip","100", "102", "101"),
+                        .ankle("leftAnkle",
+                                create("104", "leftAnkle-x"),
+                                create("105", "leftAnkle-y"))
+                        .knee(create("103", "LeftKnee").max(5).min(-110))
+                        .hip("leftHip",
+                                create("100", "leftHip-x"),
+                                create("102", "leftHip-y"),
+                                create("101", "leftHip-z")),
                     create("RightLeg")
-                            .ankle("rightAnkle","110", "111")
-                            .knee("RightKnee", "109")
-                            .hip("rightHip","106", "108", "107"))
+                            .ankle("rightAnkle",
+                                    create("110", "rightAnkle-x"),
+                                    create("111", "rightAnkle-y"))
+                            .knee(create("109", "RightKnee").max(110).min(-5))
+                            .hip("rightHip",
+                                    create("106", "rightHip-x"),
+                                    create("108", "rightHip-y"),
+                                    create("107", "rightHip-z")))
                 .torso(
                         HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
                                 .shoulder("leftShoulder","131", "130", "132")
-                                .elbow("LeftElbow", "133")
+                                .elbow(create("133", "LeftElbow").max(110).min(-110))
                                 .hand("LeftHand", "134"),
                         HumanoidRobotBuilder.ArmBuilder.create("RightArm")
                                 .shoulder("rightShoulder", "121", "120", "122")
-                                .elbow("RightElbow", "123")
+                                .elbow(create("123", "RightElbow").max(110).min(-110))
                                 .hand("RightHand", "124"))
                 .head("head", "141", "140")
             .build();
