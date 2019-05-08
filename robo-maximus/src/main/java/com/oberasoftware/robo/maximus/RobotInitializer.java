@@ -93,7 +93,7 @@ public class RobotInitializer {
                 .torso(
                         HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
                                 .shoulder("leftShoulder","131", "130", "132")
-                                .elbow(create("133", "LeftElbow").max(110).min(-110))
+                                .elbow(create("133", "LeftElbow", true).max(110).min(-110))
                                 .hand("LeftHand", "134"),
                         HumanoidRobotBuilder.ArmBuilder.create("RightArm")
                                 .shoulder("rightShoulder", "121", "120", "122")

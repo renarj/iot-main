@@ -52,7 +52,7 @@ public class HumanoidRestService {
     }
 
     @RequestMapping(path = "/robot/{robotId}/joints", method = RequestMethod.POST)
-    public ResponseEntity<Object> setJointAngles(@PathVariable String robotId, List<JointDataImpl> jointAngles) {
+    public ResponseEntity<Object> setJointAngles(@PathVariable String robotId, @RequestBody List<JointDataImpl> jointAngles) {
         Optional<HumanoidRobot> robot = findRobot(robotId);
 
         LOG.info("Joint angles requested: {}", jointAngles);

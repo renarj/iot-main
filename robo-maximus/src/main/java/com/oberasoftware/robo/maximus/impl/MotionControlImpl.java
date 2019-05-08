@@ -5,6 +5,8 @@ import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
 import com.oberasoftware.robo.api.behavioural.humanoid.MotionControl;
+import com.oberasoftware.robo.api.commands.BulkPositionSpeedCommand;
+import com.oberasoftware.robo.api.commands.PositionAndSpeedCommand;
 import com.oberasoftware.robo.api.commands.Scale;
 import com.oberasoftware.robo.api.exceptions.RoboException;
 import com.oberasoftware.robo.api.servo.Servo;
@@ -66,7 +68,7 @@ public class MotionControlImpl implements MotionControl {
 
         if(jointMap.containsKey(position.getId())) {
             Joint joint = jointMap.get(position.getId());
-            if(position.getDegrees() > joint.getMinDegrees() && position.getDegrees() < joint.getMaxDegrees()) {
+            if(validateDegrees(position, joint)) {
                 servoDriver.setTargetPosition(position.getId(), position.getDegrees(), RADIAL_SCALE);
             } else {
                 throw new RoboException(String.format("Joint: %s position: %s exceeds minimum: %d and Maximum: %d",
@@ -77,7 +79,19 @@ public class MotionControlImpl implements MotionControl {
 
     @Override
     public void setJointPositions(List<JointData> jointPositions) {
-        jointPositions.forEach(this::setJointPosition);
+        Map<String, PositionAndSpeedCommand> commands = jointPositions.stream()
+                .filter(j -> jointMap.containsKey(j.getId()))
+                .filter(j -> validateDegrees(j, jointMap.get(j.getId())))
+                .map(j -> new PositionAndSpeedCommand(j.getId(), j.getDegrees(), RADIAL_SCALE, 0, new Scale(0, 100)))
+                .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, c -> c));
+
+        LOG.info("Setting bulk positions: {}", commands);
+
+        servoDriver.bulkSetPositionAndSpeed(commands, BulkPositionSpeedCommand.WRITE_MODE.REGISTERED_WRITE);
+    }
+
+    private boolean validateDegrees(JointData desiredPosition, Joint actual) {
+        return desiredPosition.getDegrees() > actual.getMinDegrees() && desiredPosition.getDegrees() < actual.getMaxDegrees();
     }
 
     private ServoData getServoData(String servoId) {

@@ -92,6 +92,7 @@ function renderJoint(jointChainId, joint) {
     var data = {
         "name": joint.name,
         "id" : joint.id,
+        "jointType" : joint.jointType,
         "sliderId" : "slider-" + joint.id
     };
 
@@ -140,7 +141,42 @@ function handleSlideStop(slideEvt) {
     var val = slideEvt.value;
     var jointId = this.getAttribute('jointid');
 
-    setServoProperty(jointId, val);
+    var syncCheckBox = $("#sync-" + jointId);
+    if(syncCheckBox.first().prop("checked")) {
+        console.log("Sync moving mode");
+
+        var jointDiv = $("#" + jointId);
+        var jointType = jointDiv.attr("jointType");
+
+        var nrTypes = $("div[jointType=" + jointType + "]");
+        if(nrTypes.length > 1) {
+            console.log("We have multiple joints");
+
+            var joints = [];
+            $.each(nrTypes, function(i, joint) {
+                var jointId = joint.getAttribute("id");
+
+                var json = {
+                    id: jointId,
+                    degrees: val,
+                    position: 0
+                };
+                console.log("JSON for ID " + jointId + " val: " + JSON.stringify(json));
+                joints.push(json);
+            });
+            console.log("Full struct: " + JSON.stringify(joints));
+            $.ajax({url: "/humanoid/robot/maximus/joints", data: JSON.stringify((joints)), type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+                    console.log("Set joints succesfully");
+                }});
+        }
+
+    } else {
+        console.log("Non sync mode");
+        setServoProperty(jointId, val);
+    }
+
+
+
 }
 
 function setServoProperty(jointId, degrees) {

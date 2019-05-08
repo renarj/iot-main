@@ -38,8 +38,8 @@ public class HumanoidRobotBuilder {
 
     public HumanoidRobotBuilder head(String name, String pitchId, String yawId) {
         head = new HeadImpl(name,
-                new JointImpl(pitchId, name + PITCH, name + PITCH),
-                new JointImpl(yawId, name + YAW, name + YAW));
+                new JointImpl(pitchId, name + PITCH, name + PITCH, false),
+                new JointImpl(yawId, name + YAW, name + YAW, false));
         return this;
     }
 
@@ -116,9 +116,9 @@ public class HumanoidRobotBuilder {
 
         public ArmBuilder shoulder(String name, String xId, String yId, String zId) {
             shoulder = new ShoulderImpl(name,
-                    new JointImpl(xId, name + "x", "shoulder-x"),
-                    new JointImpl(yId, name + "y", "shoulder-y"),
-                    new JointImpl(zId, name + "z", "shoulder-z"));
+                    new JointImpl(xId, name + "x", "shoulder-x", false),
+                    new JointImpl(yId, name + "y", "shoulder-y", false),
+                    new JointImpl(zId, name + "z", "shoulder-z", false));
             return this;
         }
 
@@ -128,7 +128,7 @@ public class HumanoidRobotBuilder {
         }
 
         public ArmBuilder hand(String name, String handId) {
-            hand = new JointImpl(handId, name, "hand");
+            hand = new JointImpl(handId, name, "hand", false);
             return this;
         }
 
@@ -145,17 +145,24 @@ public class HumanoidRobotBuilder {
         private final String id;
         private final String name;
 
+        private final boolean inverted;
+
         private String type;
         private Integer min;
         private Integer max;
 
-        public JointBuilder(String id, String name) {
+        public JointBuilder(String id, String name, boolean inverted) {
             this.id = id;
             this.name = name;
+            this.inverted = inverted;
         }
 
         public static JointBuilder create(String id, String name) {
-            return new JointBuilder(id, name);
+            return new JointBuilder(id, name, false);
+        }
+
+        public static JointBuilder create(String id, String name, boolean inverted) {
+            return new JointBuilder(id, name, inverted);
         }
 
         public JointBuilder type(String type) {
@@ -175,9 +182,9 @@ public class HumanoidRobotBuilder {
 
         public Joint build() {
             if(min != null && max != null) {
-                return new JointImpl(id, name, type, min, max);
+                return new JointImpl(id, name, type, min, max, inverted);
             } else {
-                return new JointImpl(id, name, type);
+                return new JointImpl(id, name, type, inverted);
             }
         }
     }

@@ -14,6 +14,7 @@ public class JointImpl implements Joint {
     private final String id;
     private final String name;
     private final String type;
+    private final boolean inverted;
 
     private final int minDegrees;
     private final int maxDegrees;
@@ -21,20 +22,22 @@ public class JointImpl implements Joint {
     private Servo servo;
     private ServoDriver servoDriver;
 
-    public JointImpl(String id, String name, String type) {
+    public JointImpl(String id, String name, String type, boolean inverted) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.minDegrees = DEFAULT_MIN_DEGREES;
         this.maxDegrees = DEFAULT_MAX_DEGREES;
+        this.inverted = inverted;
     }
 
-    public JointImpl(String id, String name, String type, int minDegrees, int maxDegrees) {
+    public JointImpl(String id, String name, String type, int minDegrees, int maxDegrees, boolean inverted) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.minDegrees = minDegrees;
         this.maxDegrees = maxDegrees;
+        this.inverted = inverted;
     }
 
     @Override

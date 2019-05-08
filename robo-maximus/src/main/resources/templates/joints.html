@@ -34,14 +34,12 @@
 
 <script id="joint" type="x-tmpl-mustache">
     <div class="card mr-1 col">
-      <div class="card-header text-white bg-primary "><b>{{name}} ({{id}})</b></div>
-      <div class="card-body">
-        <div id="{{id}}">
+      <div class="card-header row text-white bg-primary "><h6>{{name}} ({{id}})</h6></div>
+      <div class="card-body row">
+        <div id="{{id}}" jointType="{{jointType}}">
             <div class="row">
                 <div class="col-sm-4">
-
                     <input id="{{sliderId}}" jointid="{{id}}" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
-
                 </div>
                 <div class="col-sm-8 small">
                     <div class="form-group row">
@@ -52,11 +50,15 @@
                         <label for="f">Pos</label>
                         <input type="text" class="form-control small" id="position-{{id}}" placeholder="" disabled>
                     </div>
+                    <div class="form-group row">
+                        <label for="f">Sync</label>
+                        <input type="checkbox" class="form-control small" id="sync-{{id}}">
+                    </div>
                     <div class="row">
-                        <div class="col-sm-4 ">
+                        <div class="col-sm-6">
                             <button type="button" class="btn btn-primary btn-sm torgueEnable" id="tEnable-{{id}}" jointid="{{id}}">On</button>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable-{{id}}" jointid="{{id}}">Off</button>
                         </div>
                     </div>
