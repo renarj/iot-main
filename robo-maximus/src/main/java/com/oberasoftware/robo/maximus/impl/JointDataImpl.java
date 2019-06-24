@@ -1,8 +1,9 @@
 package com.oberasoftware.robo.maximus.impl;
 
+import com.oberasoftware.base.event.Event;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
 
-public class JointDataImpl implements JointData {
+public class JointDataImpl implements JointData, Event {
     private String id;
     private int degrees;
     private int position;

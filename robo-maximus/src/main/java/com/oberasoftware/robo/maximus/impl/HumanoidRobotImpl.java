@@ -46,6 +46,9 @@ public class HumanoidRobotImpl implements HumanoidRobot {
         motionControl.initialize(behaviouralRobot, robotCore);
 
         behaviours.add(motionControl);
+
+        ServoListener listener = new ServoListener(motionControl);
+        robotCore.listen(listener);
     }
 
     @Override

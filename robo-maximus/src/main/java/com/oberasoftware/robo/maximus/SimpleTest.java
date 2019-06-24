@@ -1,5 +1,6 @@
 package com.oberasoftware.robo.maximus;
 
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.slf4j.Logger;
 
 import java.net.URI;
@@ -18,7 +19,7 @@ public class SimpleTest {
 
     private final static ExecutorService executor = Executors.newFixedThreadPool(10);
 
-    public static void main(String[] args) {
+    public static void oldMain(String[] args) {
         LOG.info("Hello world");
 
         HttpClient httpClient = HttpClient.newBuilder().executor(executor).build();
@@ -90,5 +91,14 @@ public class SimpleTest {
         sleepUninterruptibly(100, TimeUnit.SECONDS);
         webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "ok").thenRun(() -> LOG.info("Sent close"));
 
+    }
+
+
+    public static void main(String[] args) {
+
+        var f = new LinearInterpolator().interpolate(new double[] {40, 120, 180}, new double[] {0.0, 5.0, 8.0});
+
+        double[] knots = f.getKnots();
+        LOG.info("Knots: {}", knots);
     }
 }

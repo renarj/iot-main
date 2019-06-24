@@ -51,6 +51,7 @@ import org.springframework.context.annotation.Import;
 public class ServiceContainer {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceContainer.class);
 
+
     public static void main(String[] args) {
         LOG.info("Starting Robot Service Application container");
 

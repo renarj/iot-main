@@ -156,6 +156,8 @@ function handleSlideStop(slideEvt) {
             $.each(nrTypes, function(i, joint) {
                 var jointId = joint.getAttribute("id");
 
+                $("#slider-" + jointId).slider('setValue', val);
+
                 var json = {
                     id: jointId,
                     degrees: val,

@@ -15,6 +15,7 @@ import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.api.servo.ServoProperty;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class MotionControlImpl implements MotionControl {
     }
 
     @Override
-    public JointData getJoint(String jointId) {
+    public JointData getJointData(String jointId) {
         ServoData data = getServoData(jointId);
 
         return convert(jointId, data);
@@ -55,11 +56,21 @@ public class MotionControlImpl implements MotionControl {
     }
 
     @Override
-    public List<JointData> getJoints() {
+    public List<JointData> getJointsData() {
         return servoDriver.getServos()
                 .stream()
                 .map(s -> convert(s.getId(), s.getData()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Joint getJoint(String jointId) {
+        return jointMap.get(jointId);
+    }
+
+    @Override
+    public List<Joint> getJoints() {
+        return new ArrayList<>(jointMap.values());
     }
 
     @Override
@@ -69,7 +80,7 @@ public class MotionControlImpl implements MotionControl {
         if(jointMap.containsKey(position.getId())) {
             Joint joint = jointMap.get(position.getId());
             if(validateDegrees(position, joint)) {
-                servoDriver.setTargetPosition(position.getId(), position.getDegrees(), RADIAL_SCALE);
+                servoDriver.setTargetPosition(position.getId(), correctInversion(joint, position.getDegrees()), RADIAL_SCALE);
             } else {
                 throw new RoboException(String.format("Joint: %s position: %s exceeds minimum: %d and Maximum: %d",
                         position.getId(), position.getDegrees(), joint.getMinDegrees(), joint.getMaxDegrees()));
@@ -82,12 +93,20 @@ public class MotionControlImpl implements MotionControl {
         Map<String, PositionAndSpeedCommand> commands = jointPositions.stream()
                 .filter(j -> jointMap.containsKey(j.getId()))
                 .filter(j -> validateDegrees(j, jointMap.get(j.getId())))
-                .map(j -> new PositionAndSpeedCommand(j.getId(), j.getDegrees(), RADIAL_SCALE, 0, new Scale(0, 100)))
+                .map(j -> new PositionAndSpeedCommand(j.getId(), correctInversion(jointMap.get(j.getId()), j.getDegrees()), RADIAL_SCALE, 0, new Scale(0, 100)))
                 .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, c -> c));
 
         LOG.info("Setting bulk positions: {}", commands);
 
         servoDriver.bulkSetPositionAndSpeed(commands, BulkPositionSpeedCommand.WRITE_MODE.REGISTERED_WRITE);
+    }
+
+    private int correctInversion(Joint joint, int degrees) {
+        if(joint.isInverted()) {
+            return -degrees;
+        } else {
+            return degrees;
+        }
     }
 
     private boolean validateDegrees(JointData desiredPosition, Joint actual) {

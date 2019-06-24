@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.maximus;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
@@ -8,8 +8,6 @@ import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.commands.VelocityModeCommand;
-import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
-import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
 import com.oberasoftware.robo.dynamixel.motion.RoboPlusMotionEngine;
 import org.slf4j.Logger;
@@ -17,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.create;
@@ -42,15 +43,18 @@ public class RobotInitializer {
     private String dynamixelPort;
 
     public void initialize() {
-        LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
+        List<String> servos = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "122", "123", "124", "130", "131", "132", "133", "134", "141", "140");
+
+                LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
         Robot robot = new SpringAwareRobotBuilder("maximus-core", applicationContext)
                 .motionEngine(RoboPlusMotionEngine.class,
                         new JsonMotionResource("/basic-animations.json")
                 )
-                .servoDriver(DynamixelServoDriver.class,
-                        ImmutableMap.<String, String>builder()
-                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
-                .capability(ServoSensorDriver.class)
+//                .servoDriver(DynamixelServoDriver.class,
+//                        ImmutableMap.<String, String>builder()
+//                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
+                .servoDriver(new MockServoDriver(servos), new HashMap<>())
+//                .capability(ServoSensorDriver.class)
 //                .remote(RemoteCloudDriver.class)
                 .build();
 
@@ -93,7 +97,7 @@ public class RobotInitializer {
                 .torso(
                         HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
                                 .shoulder("leftShoulder","131", "130", "132")
-                                .elbow(create("133", "LeftElbow", true).max(110).min(-110))
+                                .elbow(create("133", "LeftElbow", true  ).max(110).min(-110))
                                 .hand("LeftHand", "134"),
                         HumanoidRobotBuilder.ArmBuilder.create("RightArm")
                                 .shoulder("rightShoulder", "121", "120", "122")

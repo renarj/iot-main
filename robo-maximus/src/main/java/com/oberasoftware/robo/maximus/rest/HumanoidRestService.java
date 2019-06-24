@@ -47,7 +47,7 @@ public class HumanoidRestService {
     @RequestMapping(path = "/robot/{robotId}/joints")
     public ResponseEntity<List<JointData>> getJointData(@PathVariable String robotId) {
         Optional<HumanoidRobot> robot = findRobot(robotId);
-        return robot.map(humanoidRobot -> new ResponseEntity<>(humanoidRobot.getMotionControl().getJoints(), HttpStatus.OK))
+        return robot.map(humanoidRobot -> new ResponseEntity<>(humanoidRobot.getMotionControl().getJointsData(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

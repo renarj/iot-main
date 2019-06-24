@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml">
+<head th:replace="includes/header :: header">
+</head>
+<body>
+
+<script th:src="@{/js/motion.js}" src="/static/js/motion.js"></script>
+
+
+
+<script id="joint" type="x-tmpl-mustache">
+    <div class="card mr-1 col">
+      <div class="card-header row text-white bg-primary "><h6>{{name}} ({{id}})</h6></div>
+      <div class="card-body row">
+        <div id="{{id}}" jointType="{{jointType}}">
+            <div class="row">
+                <div class="col-sm-4">
+                    <input id="{{sliderId}}" jointid="{{id}}" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
+                </div>
+                <div class="col-sm-8 small">
+                    <div class="form-group row">
+                        <label for="f">Degrees</label>
+                        <input type="text" class="form-control" id="degrees-{{id}}" placeholder="" disabled>
+                    </div>
+                    <div class="form-group row">
+                        <label for="f">Pos</label>
+                        <input type="text" class="form-control small" id="position-{{id}}" placeholder="" disabled>
+                    </div>
+                    <div class="form-group row">
+                        <label for="f">Sync</label>
+                        <input type="checkbox" class="form-control small" id="sync-{{id}}">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary btn-sm torgueEnable" id="tEnable-{{id}}" jointid="{{id}}">On</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable-{{id}}" jointid="{{id}}">Off</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</script>
+
+<script id="chainContainer" type="x-tmp-mustache">
+    <div class="card" style="width: 18rem;">
+      <h5 class="card-header" style="height: 40px; padding: 10px 15px;">{{name}}</h5>
+      <div class="card-body pt-1" id="{{id}}">
+
+      </div>
+    </div>
+</script>
+
+<script id="jointContainer" type="x-tmp-mustache">
+    <div class="card border-dark mb-3 mt-1" style="width: 18rem;">
+      <div class="card-header text-white bg-primary" style="height: 40px; padding: 10px 15px;">{{chainName}} - {{name}}</div>
+      <div class="card-body">
+            <ul class="list-group py-0" id="{{id}}">
+            </ul>
+      </div>
+    </div>
+</script>
+
+<script id="jointsTemplate" type="x-tmp-mustache">
+     <a href="#" class="list-group-item list-group-item-action" id="{{id}}" style="height: 40px; padding: 10px 15px;">{{name}}</a>
+</script>
+
+<div class="container-fluid" id="chainContainer">
+    <div class="row">
+        <div class="col-md-2" id="joints">
+
+        </div>
+        <div class="col-md-7 mb-3 mt-1" id="editor">
+            <div class="row mb-3 card">
+                <div class="card-header bg-primary text-white">
+                    Editor
+                </div>
+                <div class="card-body row mt-1 ml-1">
+                    <div class="col-md-4">
+                        <div class="card mr-1">
+                            <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Position of: </h6></div>
+                            <div class="card-body row">
+                                <div class="col-sm-4">
+                                    <input id="positionSlider" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
+                                </div>
+                                <div class="col-sm-8 small">
+                                    <div class="form-group row">
+                                        <label for="f">Degrees</label>
+                                        <input type="text" class="form-control" id="degrees-{{id}}" placeholder="" disabled>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="f">Pos</label>
+                                        <input type="text" class="form-control small" id="position-{{id}}" placeholder="" disabled>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="f">Mirror Grouped Joints:</label>
+                                        <input type="checkbox" class="form-control small" id="sync-{{id}}">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-primary btn-sm torgueEnable" id="tEnable-{{id}}" jointid="{{id}}">On</button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable-{{id}}" jointid="{{id}}">Off</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header" style="height: 40px; padding: 10px 15px;">Joints</div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Joint Id</th>
+                                        <th scope="col">Position</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Mark</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Jacob</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>Larry</td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mt-2 border-dark">
+                            <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools</h6></div>
+                            <div class="card-body mb-1 mt-1 ml-1">
+                                <form>
+                                <div class="form-group row">
+                                    <label for="time" class="col-sm-4 col-form-label">Time (in ms.)</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" size="10" id="time">
+                                    </div>
+                                </div>
+                                </form>
+                                <button type="submit" class="btn btn-primary btn-sm">Save Frame</button>
+                                <button type="submit" class="btn btn-primary btn-sm">New Frame</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row card border-dark">
+                <div class="card-header text-white bg-primary">Key Frames</div>
+                <div class="body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nr Joints</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-3" id="motions">
+            <div class="card row mt-1 mr-1 ml-1">
+                <div class="card-header bg-primary text-white">
+                    <h5>Animations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Stored Animations</h6></div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Motion Id</th>
+                                    <th scope="col"># Frames</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Stand</th>
+                                    <td>10</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Wave</th>
+                                    <td>5</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Clap</th>
+                                    <td>3</td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card mt-1 border-dark">
+                        <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools</h6></div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group row">
+                                    <label for="time" class="col-sm-4 col-form-label">Motion Name</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" size="10" id="time">
+                                    </div>
+                                </div>
+                            </form>
+                            <button type="submit" class="btn btn-primary btn-sm">Save Motion</button>
+                            <button type="submit" class="btn btn-primary btn-sm">New Motion</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="includes/header :: footer"></div>
+
+</body>
+</html>
