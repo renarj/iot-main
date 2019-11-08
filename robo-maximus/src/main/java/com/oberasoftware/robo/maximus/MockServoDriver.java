@@ -4,10 +4,7 @@ import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.robo.api.commands.PositionAndSpeedCommand;
 import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.servo.Servo;
-import com.oberasoftware.robo.api.servo.ServoCommand;
-import com.oberasoftware.robo.api.servo.ServoData;
-import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.robo.api.servo.*;
 import com.oberasoftware.robo.core.ServoDataImpl;
 
 import java.util.ArrayList;
@@ -102,7 +99,11 @@ public class MockServoDriver implements ServoDriver {
 
         @Override
         public ServoData getData() {
-            return new ServoDataImpl(new HashMap<>());
+            Map<ServoProperty, Object> m = new HashMap<>();
+            m.put(ServoProperty.POSITION, 2000);
+            m.put(ServoProperty.POSITION_SCALE, new Scale(0, 4096));
+
+            return new ServoDataImpl(m);
         }
 
         @Override

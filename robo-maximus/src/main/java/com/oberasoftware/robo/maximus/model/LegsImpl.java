@@ -1,4 +1,4 @@
-package com.oberasoftware.robo.maximus.impl;
+package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;

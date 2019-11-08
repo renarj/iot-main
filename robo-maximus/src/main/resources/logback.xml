@@ -11,6 +11,10 @@
 
     <logger name="com.oberasoftware" level="info"/>
     <logger name="com.oberasoftware.robo.dynamixel" level="info"/>
+<!--    <logger name="com.oberasoftware.robo.dynamixel.DynamixelServoDriver" level="debug"/>-->
+
+<!--    <logger name="com.oberasoftware.robo.dynamixel.protocolv2.handlers.DynamixelV2ReadPositionHandler" level="debug"/>-->
+
     <!--<logger name="com.oberasoftware.robo.dynamixel.DynamixelServoDataManager" level="debug"/>-->
     <logger name="org.springframework" level="info"/>
     <!--<logger name="com.oberasoftware.robo.dynamixel.handlers.DynamixelReadTemperatureHandler" level="debug"/>-->

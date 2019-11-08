@@ -12,8 +12,10 @@ function renderRobot(robot) {
     console.log("Rendering robot with name: " + robot.name);
 
     $.each(robot.chainSets, function(i, chain) {
-        renderChain(chain);
-    })
+        renderChain(chain, robot.robotId);
+    });
+
+    $("#joints").attr("robotId", robot.robotId);
 }
 
 function renderChain(chain) {
@@ -32,7 +34,7 @@ function renderChain(chain) {
 }
 
 function renderJointChain(chainName, parentChainId, jointChain) {
-    console.log("Rendering jointChain: " + jointChain.name)
+    console.log("Rendering jointChain: " + jointChain.name);
 
     var jointChainId = "jointChain-" + jointChain.name;
     var data = {
@@ -51,17 +53,31 @@ function renderJointChain(chainName, parentChainId, jointChain) {
 function renderJoint(jointChainId, joint) {
     console.log("Rendering joint: " + joint.name);
 
-    var jointId = "joint-" + joint.id;
+    var elementId = "joint-" + joint.id;
     var data = {
         "name" : joint.name,
-        "id" : jointId,
-        "jointType": joint.jointType,
+        "id" : elementId,
+        "jointId": joint.id,
+        "jointType": joint.jointType
     };
     var rendered = renderTemplate("jointsTemplate", data);
     $("#" + jointChainId).append(rendered);
 
-    $( "#" +jointId).click(function() {
+    $( "#" +elementId).click(function(e) {
+        e.preventDefault();
+        var jointId = $(this).attr("jointId");
+        var robotId = $("#joints").attr("robotId");
 
+        var url = "/humanoid/robot/" + robotId + "/joints/" + jointId;
+        console.log("Requesting joint information: " + url);
+
+        $.get(url, function(data) {
+            console.log("Received joint data: " + JSON.stringify(data));
+
+            $("#position").val(data.position);
+            $("#degrees").val(data.degrees);
+            $("#positionSlider").slider('setValue', data.degrees);
+        });
     });
 }
 
@@ -73,7 +89,7 @@ function renderTemplate(templateName, data) {
 
 
 $(document).ready(function() {
-    renderRobots()
+    $("#positionSlider").slider();
 
-    $("#positionSlider").slider()
+    renderRobots();
 });

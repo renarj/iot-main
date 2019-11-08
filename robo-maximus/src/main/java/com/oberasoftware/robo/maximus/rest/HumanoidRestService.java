@@ -4,7 +4,7 @@ import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
-import com.oberasoftware.robo.maximus.impl.JointDataImpl;
+import com.oberasoftware.robo.maximus.model.JointDataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +48,12 @@ public class HumanoidRestService {
     public ResponseEntity<List<JointData>> getJointData(@PathVariable String robotId) {
         Optional<HumanoidRobot> robot = findRobot(robotId);
         return robot.map(humanoidRobot -> new ResponseEntity<>(humanoidRobot.getMotionControl().getJointsData(), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @RequestMapping(path = "/robot/{robotId}/joints/{jointId}")
+    public ResponseEntity<JointData> getJointData(@PathVariable String robotId, @PathVariable String jointId) {
+        return findRobot(robotId).map(h -> new ResponseEntity<>(h.getMotionControl().getJointData(jointId), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

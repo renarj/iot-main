@@ -1,47 +1,49 @@
-package com.oberasoftware.robo.maximus.impl;
+package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.Lists;
-import com.oberasoftware.robo.api.behavioural.humanoid.Hip;
+import com.oberasoftware.robo.api.behavioural.humanoid.Ankle;
 import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
 
 import java.util.List;
 
-public class HipImpl implements Hip {
+public class AnkleImpl implements Ankle {
 
     private final String name;
     private final Joint x;
     private final Joint y;
-    private final Joint z;
 
-    public HipImpl(String name, Joint x, Joint y, Joint z) {
+    public AnkleImpl(String name, Joint x, Joint y) {
         this.name = name;
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     @Override
-    public Joint getXJoint() {
+    public Joint getAnkleX() {
         return x;
     }
 
     @Override
-    public Joint getYJoint() {
+    public Joint getAnkleY() {
         return y;
     }
 
     @Override
-    public Joint getZJoint() {
-        return z;
-    }
-
-    @Override
     public List<Joint> getJoints(boolean includeChildren) {
-        return Lists.newArrayList(x, y, z);
+        return Lists.newArrayList(x, y);
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "AnkleImpl{" +
+                "name='" + name + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

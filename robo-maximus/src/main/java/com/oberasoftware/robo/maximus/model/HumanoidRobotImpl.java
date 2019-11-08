@@ -1,4 +1,4 @@
-package com.oberasoftware.robo.maximus.impl;
+package com.oberasoftware.robo.maximus.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;

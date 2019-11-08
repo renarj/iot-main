@@ -1,9 +1,9 @@
-package com.oberasoftware.robo.maximus;
+package com.oberasoftware.robo.maximus.controllers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.robo.dynamixel.web.ServoStateController;
-import com.oberasoftware.robo.maximus.impl.JointDataImpl;
+import com.oberasoftware.robo.maximus.model.JointDataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

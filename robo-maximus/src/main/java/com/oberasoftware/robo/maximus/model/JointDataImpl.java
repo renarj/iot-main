@@ -1,4 +1,4 @@
-package com.oberasoftware.robo.maximus.impl;
+package com.oberasoftware.robo.maximus.model;
 
 import com.oberasoftware.base.event.Event;
 import com.oberasoftware.robo.api.behavioural.humanoid.JointData;

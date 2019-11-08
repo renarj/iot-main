@@ -1,4 +1,4 @@
-package com.oberasoftware.robo.maximus.impl;
+package com.oberasoftware.robo.maximus.model;
 
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
@@ -116,7 +116,5 @@ public class MotionControlImpl implements MotionControl {
     private ServoData getServoData(String servoId) {
         Servo servo = servoDriver.getServo(servoId);
         return servo.getData();
-
-
     }
 }

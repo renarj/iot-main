@@ -1,10 +1,13 @@
 package com.oberasoftware.robo.maximus.storage;
 
-import com.oberasoftware.robo.api.motion.KeyFrame;
 import com.oberasoftware.robo.api.motion.Motion;
 
-public interface MotionStorage {
-    void storeKeyFrame(KeyFrame keyFrame);
+import java.util.List;
 
-    void storeMotion(Motion motion);
+public interface MotionStorage {
+    void storeMotion(String motionId, Motion motion);
+
+    List<Motion> findAllMotions();
+
+    Motion findMotion(String motionId);
 }

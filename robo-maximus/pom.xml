@@ -53,6 +53,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>jasdb_entity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>jasdb-restclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>jasdb-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+
 
     </dependencies>
 

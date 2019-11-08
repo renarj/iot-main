@@ -1,4 +1,4 @@
-package com.oberasoftware.robo.maximus.impl;
+package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.behavioural.humanoid.Joint;

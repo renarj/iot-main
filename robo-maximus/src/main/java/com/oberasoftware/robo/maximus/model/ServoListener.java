@@ -1,4 +1,4 @@
-package com.oberasoftware.robo.maximus.impl;
+package com.oberasoftware.robo.maximus.model;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;

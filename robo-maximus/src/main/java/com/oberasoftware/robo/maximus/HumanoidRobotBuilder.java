@@ -3,7 +3,7 @@ package com.oberasoftware.robo.maximus;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
 import com.oberasoftware.robo.api.exceptions.RoboException;
-import com.oberasoftware.robo.maximus.impl.*;
+import com.oberasoftware.robo.maximus.model.*;
 
 public class HumanoidRobotBuilder {
 
@@ -65,7 +65,7 @@ public class HumanoidRobotBuilder {
             this.legName = legName;
         }
 
-        public static LegBuilder create(String legName) {
+        public static LegBuilder createLeg(String legName) {
             return new LegBuilder(legName);
         }
 
@@ -110,7 +110,7 @@ public class HumanoidRobotBuilder {
             this.armName = armName;
         }
 
-        public static ArmBuilder create(String armName) {
+        public static ArmBuilder createArm(String armName) {
             return new ArmBuilder(armName);
         }
 

@@ -1,5 +1,6 @@
 package com.oberasoftware.robo.maximus;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
@@ -7,7 +8,8 @@ import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
-import com.oberasoftware.robo.core.commands.VelocityModeCommand;
+import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
+import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
 import com.oberasoftware.robo.dynamixel.motion.RoboPlusMotionEngine;
 import org.slf4j.Logger;
@@ -16,11 +18,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 
+import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.ArmBuilder.createArm;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
-import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.create;
+import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.createLeg;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -50,11 +52,11 @@ public class RobotInitializer {
                 .motionEngine(RoboPlusMotionEngine.class,
                         new JsonMotionResource("/basic-animations.json")
                 )
-//                .servoDriver(DynamixelServoDriver.class,
-//                        ImmutableMap.<String, String>builder()
-//                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
-                .servoDriver(new MockServoDriver(servos), new HashMap<>())
-//                .capability(ServoSensorDriver.class)
+                .servoDriver(DynamixelServoDriver.class,
+                        ImmutableMap.<String, String>builder()
+                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
+//                .servoDriver(new MockServoDriver(servos), new HashMap<>())
+                .capability(ServoSensorDriver.class)
 //                .remote(RemoteCloudDriver.class)
                 .build();
 
@@ -67,7 +69,7 @@ public class RobotInitializer {
 //        driver.getServos().forEach(s -> driver.sendCommand(new CurrentLimitCommand(s.getId(), 50)));
 
 //        robot.getServoDriver().sendCommand(new VelocityModeCommand("133", 20, 20));
-        driver.getServos().forEach(s -> driver.sendCommand(new VelocityModeCommand(s.getId(), 50, 5)));
+//        driver.getServos().forEach(s -> driver.sendCommand(new VelocityModeCommand(s.getId(), 50, 5)));
 
 //        ServoDriver servoDriver = robot.getServoDriver();
 //        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
@@ -76,7 +78,7 @@ public class RobotInitializer {
 
         HumanoidRobot maximus = HumanoidRobotBuilder.create(robot, "maximus")
                 .legs(
-                    create("LeftLeg")
+                    createLeg("LeftLeg")
                         .ankle("leftAnkle",
                                 create("104", "leftAnkle-x"),
                                 create("105", "leftAnkle-y"))
@@ -85,7 +87,7 @@ public class RobotInitializer {
                                 create("100", "leftHip-x"),
                                 create("102", "leftHip-y"),
                                 create("101", "leftHip-z")),
-                    create("RightLeg")
+                    createLeg("RightLeg")
                             .ankle("rightAnkle",
                                     create("110", "rightAnkle-x"),
                                     create("111", "rightAnkle-y"))
@@ -95,11 +97,11 @@ public class RobotInitializer {
                                     create("108", "rightHip-y"),
                                     create("107", "rightHip-z")))
                 .torso(
-                        HumanoidRobotBuilder.ArmBuilder.create("LeftArm")
+                        createArm("LeftArm")
                                 .shoulder("leftShoulder","131", "130", "132")
                                 .elbow(create("133", "LeftElbow", true  ).max(110).min(-110))
                                 .hand("LeftHand", "134"),
-                        HumanoidRobotBuilder.ArmBuilder.create("RightArm")
+                        createArm("RightArm")
                                 .shoulder("rightShoulder", "121", "120", "122")
                                 .elbow(create("123", "RightElbow").max(110).min(-110))
                                 .hand("RightHand", "124"))
