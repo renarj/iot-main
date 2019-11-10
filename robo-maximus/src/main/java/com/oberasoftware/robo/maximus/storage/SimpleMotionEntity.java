@@ -15,6 +15,12 @@ public class SimpleMotionEntity {
         this.blob = blob;
     }
 
+    public SimpleMotionEntity(String id, String name, String blob) {
+        this.id = id;
+        this.name = name;
+        this.blob = blob;
+    }
+
     public SimpleMotionEntity() {
     }
 

@@ -5,9 +5,9 @@ import com.oberasoftware.robo.api.motion.Motion;
 import java.util.List;
 
 public interface MotionStorage {
-    void storeMotion(String motionId, Motion motion);
+    void storeMotion(String motionName, Motion motion);
 
     List<Motion> findAllMotions();
 
-    Motion findMotion(String motionId);
+    Motion findMotion(String motionName);
 }

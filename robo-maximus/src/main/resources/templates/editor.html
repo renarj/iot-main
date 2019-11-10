@@ -4,46 +4,7 @@
 </head>
 <body>
 
-<script th:src="@{/js/motion.js}" src="/static/js/motion.js"></script>
-
-
-
-<script id="joint" type="x-tmpl-mustache">
-    <div class="card mr-1 col">
-      <div class="card-header row text-white bg-primary "><h6>{{name}} ({{id}})</h6></div>
-      <div class="card-body row">
-        <div id="{{id}}" jointType="{{jointType}}">
-            <div class="row">
-                <div class="col-sm-4">
-                    <input id="{{sliderId}}" jointid="{{id}}" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
-                </div>
-                <div class="col-sm-8 small">
-                    <div class="form-group row">
-                        <label for="f">Degrees</label>
-                        <input type="text" class="form-control" id="degrees-{{id}}" placeholder="" disabled>
-                    </div>
-                    <div class="form-group row">
-                        <label for="f">Pos</label>
-                        <input type="text" class="form-control small" id="position-{{id}}" placeholder="" disabled>
-                    </div>
-                    <div class="form-group row">
-                        <label for="f">Sync</label>
-                        <input type="checkbox" class="form-control small" id="sync-{{id}}">
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary btn-sm torgueEnable" id="tEnable-{{id}}" jointid="{{id}}">On</button>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable-{{id}}" jointid="{{id}}">Off</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-    </div>
-</script>
+<script th:src="@{/js/editor.js}" src="/static/js/editor.js"></script>
 
 <script id="chainContainer" type="x-tmp-mustache">
     <div class="card" style="width: 18rem;">
@@ -65,7 +26,42 @@
 </script>
 
 <script id="jointsTemplate" type="x-tmp-mustache">
-     <a href="" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" style="height: 40px; padding: 10px 15px;">{{name}}</a>
+     <a href="#" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" jointType="{{jointType}}" style="height: 40px; padding: 10px 15px;">{{name}} (ID: {{jointId}})</a>
+</script>
+
+<script id="jointPosition" type="x-tmp-mustache">
+    <tr id="jointPosition-{{id}}" jointId="{{id}}">
+        <td class="jid" jointId="{{id}}">{{id}}</td>
+        <td class="pos">{{position}}</td>
+        <td class="deg">{{degrees}}</td>
+        <td class="action">
+            <button type="button" class="btn btn-sm btn-secondary" id="jedit-{{id}}">Edit</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="jdelete-{{id}}">Delete</button>
+        </td>
+    </tr>
+</script>
+
+<script id="frame" type="x-tmp-mustache">
+    <tr id="frame-{{id}}">
+        <td class="fid" frameId="{{id}}">{{id}}</td>
+        <td >{{frames}}</td>
+        <td class="time">{{time}}</td>
+        <td class="action" json="{{json}}">
+            <button type="button" class="btn btn-sm btn-secondary" id="fedit-{{id}}">Edit</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="fdelete-{{id}}">Delete</button>
+        </td>
+    </tr>
+</script>
+
+<script id="motion" type="x-tmp-mustache">
+    <tr id="motion-{{id}}" motionId="{{id}}">
+        <td class="mid" motionId="{{id}}">{{id}}</td>
+        <td>{{frames}}</td>
+        <td class="action">
+            <button type="button" class="btn btn-sm btn-secondary" id="medit-{{id}}">Edit</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="mdelete-{{id}}">Delete</button>
+        </td>
+    </tr>
 </script>
 
 <div class="container-fluid" id="chainContainer">
@@ -81,7 +77,7 @@
                 <div class="card-body row mt-1 ml-1">
                     <div class="col-md-4">
                         <div class="card mr-1">
-                            <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Position of: </h6></div>
+                            <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Position of: <label id="servoTitle"></label></h6></div>
                             <div class="card-body row">
                                 <div class="col-sm-4">
                                     <input id="positionSlider" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
@@ -101,13 +97,13 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <button type="button" class="btn btn-secondary btn-sm torgueEnable" id="tEnable-{{id}}" jointid="{{id}}">On</button>
+                                            <button type="button" class="btn btn-secondary btn-sm torgueEnable" id="tEnable">On</button>
                                         </div>
                                         <div class="col-sm-3">
-                                            <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable-{{id}}" jointid="{{id}}">Off</button>
+                                            <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable">Off</button>
                                         </div>
                                         <div class="col-sm-3">
-                                            <button type="button" class="btn btn-primary btn-sm torgueDisable" id="add-{{id}}" jointid="{{id}}">Add</button>
+                                            <button type="button" class="btn btn-primary btn-sm" id="add">Add</button>
                                         </div>
                                     </div>
                                 </div>
@@ -123,32 +119,18 @@
                                     <tr>
                                         <th scope="col">Joint Id</th>
                                         <th scope="col">Position</th>
+                                        <th scope="col">Degrees</th>
                                         <th scope="col">Actions</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Jacob</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>Larry</td>
-                                        <td></td>
-                                    </tr>
+                                    <tbody id="jointPositions">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <div class="card mt-2 border-dark">
-                            <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools</h6></div>
+                            <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools <label id="frameLabel"></label></h6></div>
                             <div class="card-body mb-1 mt-1 ml-1">
                                 <form>
                                 <div class="form-group row">
@@ -158,8 +140,8 @@
                                     </div>
                                 </div>
                                 </form>
-                                <button type="submit" class="btn btn-primary btn-sm">Save Frame</button>
-                                <button type="submit" class="btn btn-primary btn-sm">New Frame</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="saveFrame">Save Frame</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="newFrame">New Frame</button>
                             </div>
                         </div>
 
@@ -178,25 +160,7 @@
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td></td>
-                        </tr>
+                        <tbody id="keyFrames">
                         </tbody>
                     </table>
                 </div>
@@ -220,40 +184,25 @@
                                     <th scope="col">Actions</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">Stand</th>
-                                    <td>10</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Wave</th>
-                                    <td>5</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Clap</th>
-                                    <td>3</td>
-                                    <td></td>
-                                </tr>
+                                <tbody id="motionList">
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="card mt-1 border-dark">
-                        <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools</h6></div>
+                    <div class="card mt-1 border-dark" id="motionTool">
+                        <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Current Motion: <label id="motionLabel"></label></h6></div>
                         <div class="card-body">
                             <form>
                                 <div class="form-group row">
-                                    <label for="time" class="col-sm-4 col-form-label">Motion Name</label>
+                                    <label for="motionName" class="col-sm-4 col-form-label">Motion Name</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" size="10" id="time">
+                                        <input type="text" class="form-control" size="10" id="motionName">
                                     </div>
                                 </div>
                             </form>
-                            <button type="submit" class="btn btn-primary btn-sm">Save Motion</button>
-                            <button type="submit" class="btn btn-primary btn-sm">New Motion</button>
-
+                            <button type="submit" class="btn btn-primary btn-sm" id="saveMotion">Save Motion</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="newMotion">New Motion</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="runMotion">Run Motion</button>
                         </div>
                     </div>
                 </div>

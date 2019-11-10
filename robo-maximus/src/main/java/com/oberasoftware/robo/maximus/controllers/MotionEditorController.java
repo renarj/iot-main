@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MotionEditorController {
-    @RequestMapping("/motion")
+    @RequestMapping("/editor")
     public String getIndex() {
-        return "motion";
+        return "editor";
     }
 }

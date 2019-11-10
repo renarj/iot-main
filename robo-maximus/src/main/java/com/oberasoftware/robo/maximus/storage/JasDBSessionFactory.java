@@ -7,6 +7,7 @@ import com.oberasoftware.jasdb.rest.client.RestDBSession;
 import com.oberasoftware.jasdb.service.local.LocalDBSession;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import static com.oberasoftware.jasdb.core.utils.StringUtils.stringNotEmpty;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -14,7 +15,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author renarj
  */
-//@Component
+@Component
 public class JasDBSessionFactory {
     private static final Logger LOG = getLogger(JasDBSessionFactory.class);
 
@@ -41,6 +42,7 @@ public class JasDBSessionFactory {
             session = new RestDBSession(jasdbInstance, jasdbHost, jasdbPort);
         } else {
             LOG.debug("Creating JasDB Local session to instance: {}", jasdbInstance);
+            System.setProperty("spring.application.admin.enabled", "false");
             session = new LocalDBSession(jasdbInstance);
         }
         handleWipeData(session);
