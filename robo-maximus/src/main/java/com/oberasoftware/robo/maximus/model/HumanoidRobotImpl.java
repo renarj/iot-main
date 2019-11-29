@@ -7,6 +7,9 @@ import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
+import com.oberasoftware.robo.maximus.motion.MotionControlImpl;
+import com.oberasoftware.robo.maximus.motion.MotionEngine;
+import com.oberasoftware.robo.maximus.motion.MotionEngineImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +45,12 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+        MotionEngine motionEngine = new MotionEngineImpl();
+        motionEngine.initialize(behaviouralRobot, robotCore);
+        behaviours.add(motionEngine);
+
         MotionControl motionControl = new MotionControlImpl(getJoints(true));
         motionControl.initialize(behaviouralRobot, robotCore);
-
         behaviours.add(motionControl);
 
         ServoListener listener = new ServoListener(motionControl);

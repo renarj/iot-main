@@ -84,7 +84,7 @@ public class JasDBMotionStorageImpl implements MotionStorage {
     }
 
     private Motion fromBlob(String blob) {
-        LOG.info("Raw blow from storage: {}", blob);
+        LOG.info("Raw blob from storage: {}", blob);
         try {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(blob, MotionImpl.class);

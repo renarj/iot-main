@@ -10,8 +10,7 @@ import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
-import com.oberasoftware.robo.dynamixel.motion.JsonMotionResource;
-import com.oberasoftware.robo.dynamixel.motion.RoboPlusMotionEngine;
+import com.oberasoftware.robo.maximus.storage.MotionStorage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,14 +48,12 @@ public class RobotInitializer {
 
                 LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
         Robot robot = new SpringAwareRobotBuilder("maximus-core", applicationContext)
-                .motionEngine(RoboPlusMotionEngine.class,
-                        new JsonMotionResource("/basic-animations.json")
-                )
                 .servoDriver(DynamixelServoDriver.class,
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort).build())
 //                .servoDriver(new MockServoDriver(servos), new HashMap<>())
                 .capability(ServoSensorDriver.class)
+                .capability(MotionStorage.class)
 //                .remote(RemoteCloudDriver.class)
                 .build();
 

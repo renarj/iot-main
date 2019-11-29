@@ -13,6 +13,7 @@
 
 int LED_PIN = 13;
 int SEND_PIN = 2;
+int FEEDBACK_TIMEOUT = 200;
 
 ControllerSensors sensors = ControllerSensors();
 
@@ -107,6 +108,7 @@ bool handleCommand(String inputString) {
     deserializeJson(doc, inputString);
   
     String command = doc["command"];
+    String wait = doc["wait"];
   
 //    Serial.println("We have a command: " + command);
   
@@ -135,12 +137,44 @@ bool handleCommand(String inputString) {
 
       return false;
     }
-  }  
 
-  return true;
+    return String("true").equalsIgnoreCase(wait);
+  } else {
+    return false;
+  }
 }
 
 String receiveFeedback() {
+  int start = millis();
+  bool feedbackReceived = false;
+  String feedback = "{\"feedback\":\"";
+  
+  while(!feedbackReceived) {
+    int available = Serial1.available();   
+    if(available) {
+      while(Serial1.available()) {
+        char tmp[8];
+        int x = Serial1.read();
+        sprintf(tmp, "%.2X ", x);
+    
+        feedback.concat(String(tmp));            
+      }    
+      feedbackReceived = true;      
+    } else {
+      int current = millis();
+      if((current - start) > FEEDBACK_TIMEOUT) {
+        feedbackReceived = true;
+      } else {
+        delay(10);
+      }
+    }
+  }
+
+  feedback.trim();
+  return feedback.concat("\"}");
+}
+
+String receiveFeedbackOld() {
   delay(50);
 
   String feedback = "{\"feedback\":\"";
@@ -164,6 +198,7 @@ String receiveFeedback() {
 String waitForCommand() {
     String inputString = String("");
     bool complete = false;
+    bool startedReceive = false;
     while (!complete) {
         if(Serial.available()) {
         
@@ -171,9 +206,11 @@ String waitForCommand() {
           if (inchar == '}') {   
               inputString.concat(inchar);            
               complete = true;
-          } else {
+              startedReceive = false;
+          } else if(inchar == '{' || startedReceive) {
+            startedReceive = true;
             inputString.concat(inchar);
-          }
+          } 
         } else {
           delay(100);
         }

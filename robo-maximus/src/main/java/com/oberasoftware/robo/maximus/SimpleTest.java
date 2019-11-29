@@ -14,8 +14,15 @@ public class SimpleTest {
 
 
     public static void main(String[] args) {
+        //{"command":"dynamixel","wait":"true","dxldata":"FFFF7C020180"}
+
+
         TeensyProxySerialConnector t = new TeensyProxySerialConnector();
         t.connect("/dev/tty.usbmodem61074701");
+
+        byte[] pingPkt = new DynamixelV2CommandPacket(DynamixelInstruction.PING, 124).build();
+        LOG.info("Received on ping: {}", bb2hex(t.sendAndReceive(pingPkt)));
+
 
         byte[] pkg = new DynamixelV2CommandPacket(DynamixelInstruction.WRITE_DATA, 124).add8BitParam(DynamixelV2Address.TORGUE_ENABLE, 0x01).build();
         LOG.info("Sending package: {}", bb2hex(pkg));

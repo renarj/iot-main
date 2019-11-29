@@ -16,7 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class TeensyProxySerialConnector extends SerialDynamixelConnector {
     private static final Logger LOG = getLogger(TeensyProxySerialConnector.class);
 
-    private static final String DXL_MSG = "{\"command\":\"dynamixel\",\"dxldata\":\"%s\"}";
+    private static final String DXL_MSG = "{\"command\":\"dynamixel\",\"wait\":\"%s\",\"dxldata\":\"%s\"}";
 
     public TeensyProxySerialConnector() {
         super();
@@ -26,15 +26,22 @@ public class TeensyProxySerialConnector extends SerialDynamixelConnector {
     }
 
     @Override
+    public void sendNoReceive(byte[] bytes) {
+        send(bytes, false);
+    }
+
+    @Override
     public synchronized byte[] sendAndReceive(byte[] bytes) {
+        return send(bytes, true);
+    }
+
+    protected byte[] send(byte[] bytes, boolean wait) {
         LOG.debug("Sending Dynamixel package to Teensy: {}", bb2hex(bytes));
 
-
-        String msg = String.format(DXL_MSG, bb2hex(bytes, false));
+        String msg = String.format(DXL_MSG, Boolean.toString(wait), bb2hex(bytes, false));
         LOG.debug("Sending message to Teensy: {}", msg);
-        byte[] recvd = super.sendAndReceive(msg.getBytes(Charset.defaultCharset()));
-
-        if(recvd.length > 0) {
+        byte[] recvd = super.send(msg.getBytes(Charset.defaultCharset()), wait);
+        if(recvd.length > 0 && wait) {
             LOG.debug("Received: {}", new String(recvd));
 
             JSONObject jo = new JSONObject(new String(recvd));

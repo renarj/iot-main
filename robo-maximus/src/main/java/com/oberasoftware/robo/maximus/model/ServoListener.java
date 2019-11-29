@@ -8,6 +8,7 @@ import com.oberasoftware.robo.api.commands.Scale;
 import com.oberasoftware.robo.api.servo.ServoData;
 import com.oberasoftware.robo.api.servo.ServoProperty;
 import com.oberasoftware.robo.api.servo.events.ServoUpdateEvent;
+import com.oberasoftware.robo.maximus.motion.MotionControlImpl;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;

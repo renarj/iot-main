@@ -1,11 +1,11 @@
 package com.oberasoftware.robo.maximus;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oberasoftware.robo.api.motion.KeyFrame;
 import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.robo.core.motion.JointTargetImpl;
 import com.oberasoftware.robo.core.motion.KeyFrameImpl;
 import com.oberasoftware.robo.core.motion.MotionImpl;
-import com.oberasoftware.robo.core.motion.ServoStepImpl;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -16,14 +16,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class SimpleJsonStructureTest {
     private static final Logger LOG = getLogger(SimpleJsonStructureTest.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         KeyFrameImpl keyFrame1 = new KeyFrameImpl("Raise", 2000);
-        keyFrame1.addServoStep(new ServoStepImpl("124", 2029));
-        keyFrame1.addServoStep(new ServoStepImpl("135", 2029));
+        keyFrame1.addServoStep(new JointTargetImpl("124", 2029));
+        keyFrame1.addServoStep(new JointTargetImpl("135", 2029));
 
         KeyFrameImpl keyFrame2 = new KeyFrameImpl("Lower", 1000);
-        keyFrame2.addServoStep(new ServoStepImpl("124", 20));
-        keyFrame2.addServoStep(new ServoStepImpl("135", 20));
+        keyFrame2.addServoStep(new JointTargetImpl("124", 20));
+        keyFrame2.addServoStep(new JointTargetImpl("135", 20));
 
 
         List<KeyFrame> keyFrames = new ArrayList<>();
@@ -31,11 +31,13 @@ public class SimpleJsonStructureTest {
         keyFrames.add(keyFrame2);
         MotionImpl motion = new MotionImpl("raise Hand", keyFrames);
 
-        String json = new Gson().toJson(motion);
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json = mapper.writeValueAsString(motion);
         LOG.info("JSON Structure: {}", json);
 
-        Motion loadedMotion = new Gson().fromJson(json, MotionImpl.class);
+        Motion loadedMotion = mapper.readValue(json, MotionImpl.class);
 
-        LOG.info("Motion Name: {} with keyframes: {}", loadedMotion.getName(), loadedMotion.getKeyFrames());
+        LOG.info("Motion Name: {} with keyframes: {}", loadedMotion.getName(), loadedMotion.getFrames());
     }
 }

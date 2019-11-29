@@ -57,7 +57,7 @@ function addListeners() {
         var jointId = $("#editor").attr("currentJoint");
         console.log("We had torgue disable on joint: " + jointId);
         $.ajax({
-            url: "/servos/disable/" + servoId + "/torgue",
+            url: "/servos/disable/" + jointId + "/torgue",
             type: "POST",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
@@ -98,6 +98,7 @@ function addListeners() {
     });
 
     $("#saveMotion").click(function (e) {
+        e.preventDefault();
         var frames = $("#keyFrames").find("tr");
 
         var motionName = $("#motionName").val();
@@ -119,13 +120,24 @@ function addListeners() {
                 console.log("Saved motion")
         }});
     });
+
+    $("#runMotion").click(function (e) {
+        e.preventDefault();
+
+        var motionId = $("#motionName").val();
+        console.log("Running motion: " + motionId);
+
+        $.ajax({url: "/editor/motion/run/maximus/" + motionId, type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+                console.log("Executed motion")
+            }});
+    });
 }
 
 function storeFrame(frameId) {
     var servoSteps = getPositionData();
     var timeInMs = $("#time").val();
     var json = {
-        "servoSteps": servoSteps,
+        "jointTargets": servoSteps,
         "timeInMs": timeInMs,
         "keyFrameId" : frameId
     };
@@ -159,7 +171,7 @@ function renderFrame(frameId, time, nrSteps, json) {
         $("#time").val(parsedJson.timeInMs);
         $("#editor").attr("frameid", parsedJson.keyFrameId);
         $("#jointPositions").empty();
-        $.each(parsedJson.servoSteps, function(i, step){
+        $.each(parsedJson.jointTargets, function(i, step){
             renderJointPosition(step.servoId, step.targetPosition, step.targetAngle);
         });
     });
@@ -392,7 +404,7 @@ function loadMotions() {
 
             var data = {
                 "id" : motion.name,
-                "frames" : motion.keyFrames.length
+                "frames" : motion.frames.length
             };
             var rendered = renderTemplate("motion", data);
             $("#motionList").append(rendered);
@@ -417,8 +429,8 @@ function loadMotionInEditor(motionId) {
 
         $("#keyFrames").empty();
 
-        $.each(data.keyFrames, function(i, frame) {
-            renderFrame(frame.keyFrameId, frame.timeInMs, frame.servoSteps.length, frame);
+        $.each(data.frames, function(i, frame) {
+            renderFrame(frame.keyFrameId, frame.timeInMs, frame.jointTargets.length, frame);
         });
     });
 }
