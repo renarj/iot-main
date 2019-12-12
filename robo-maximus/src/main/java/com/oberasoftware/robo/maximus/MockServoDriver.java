@@ -103,7 +103,7 @@ public class MockServoDriver implements ServoDriver {
             m.put(ServoProperty.POSITION, 2000);
             m.put(ServoProperty.POSITION_SCALE, new Scale(0, 4096));
 
-            return new ServoDataImpl(m);
+            return new ServoDataImpl(servoId, m);
         }
 
         @Override

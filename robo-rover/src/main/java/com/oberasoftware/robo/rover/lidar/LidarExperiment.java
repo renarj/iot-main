@@ -28,9 +28,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class LidarExperiment {
     private static final Logger LOG = getLogger(LidarExperiment.class);
 
-    public static void main(String[] args) {
+    public static void lidarTest() {
         LOG.info("Starting Dynamixel Web Console");
-        ConfigurableApplicationContext c = SpringApplication.run(DynamixelConsole.class, args);
+        ConfigurableApplicationContext c = SpringApplication.run(DynamixelConsole.class);
 
         DynamixelServoDriver servoDriver = c.getBean(DynamixelServoDriver.class);
         SerialDynamixelConnector connector = c.getBean(SerialDynamixelConnector.class);
