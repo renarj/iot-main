@@ -7,8 +7,21 @@ function connect() {
         stompClient.subscribe('/topic/joints', function(frame){
             handleStateUpdate(JSON.parse(frame.body));
         });
+
+        stompClient.subscribe('/topic/sensors', function(frame) {
+            handleSensorUpdate(JSON.parse(frame.body));
+        });
     });
     stompClient.debug = null
+}
+
+function handleSensorUpdate(state) {
+    // console.log("sensor update: " + JSON.stringify(state));
+
+    var value = state.value.raw;
+    var id = state.sensorId.split(".").join("-");
+
+    $("#sensor-value-" + id).html(value);
 }
 
 function handleStateUpdate(state) {
@@ -47,6 +60,32 @@ function addListeners() {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 console.log("Enable torgue for servo successfully");
+            }
+        });
+    });
+
+    $("#torgueAllOn").click(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/servos/enable/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Enable torgue for all servos successfully");
+            }
+        });
+    });
+
+    $("#torgueAllOff").click(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/servos/disable/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Enable torgue for all servos successfully");
             }
         });
     });
@@ -258,7 +297,23 @@ function renderRobot(robot) {
         renderChain(chain, robot.robotId);
     });
 
+    $.each(robot.sensors, function(i, sensor) {
+        renderSensor(sensor);
+    });
+
     $("#joints").attr("robotId", robot.robotId);
+}
+
+function renderSensor(sensor) {
+    $.each(sensor.values, function(i, value) {
+        var data = {
+            "id" : i.split(".").join("-"),
+            "value": value.raw
+        };
+        var rendered = renderTemplate("sensor", data);
+        $("#sensors").append(rendered);
+
+    });
 }
 
 function renderChain(chain) {

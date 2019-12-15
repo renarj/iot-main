@@ -64,6 +64,13 @@
     </tr>
 </script>
 
+<script id="sensor" type="x-tmp-mustache">
+    <tr id="sensor-{{id}}" sensorId="{{id}}">
+        <td>{{id}}</td>
+        <td id="sensor-value-{{id}}">{{value}}</td>
+    </tr>
+</script>
+
 <div class="container-fluid" id="chainContainer">
     <div class="row">
         <div class="col-md-2" id="joints">
@@ -205,6 +212,30 @@
                             <button type="submit" class="btn btn-primary btn-sm" id="runMotion">Run Motion</button>
                         </div>
                     </div>
+                    <div class="card mt-1 border-dark" id="robotTool">
+                        <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools</h6></div>
+                        <div class="card-body">
+                            <button type="submit" class="btn btn-primary btn-sm" id="torgueAllOn">Torgue On - All</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="torgueAllOff">Torgue Off - All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card row mt-1 mr-1 ml-1">
+                <div class="card-header bg-primary text-white">
+                    <h5>Sensors</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Sensor</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody id="sensors">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

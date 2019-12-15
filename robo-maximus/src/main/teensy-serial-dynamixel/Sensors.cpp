@@ -169,7 +169,7 @@ String ControllerSensors::getJson() {
   json.concat(getPower());
   json.concat("},\"LSM9DS1\":{\"roll\":");
   json.concat(getRoll());
-  json.concat(".\"pitch\":");
+  json.concat(",\"pitch\":");
   json.concat(getPitch());
   json.concat(",\"heading\":");
   json.concat(getHeading());

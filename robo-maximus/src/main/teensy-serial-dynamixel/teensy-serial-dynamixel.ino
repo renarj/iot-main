@@ -13,7 +13,7 @@
 
 int LED_PIN = 13;
 int SEND_PIN = 2;
-int FEEDBACK_TIMEOUT = 200;
+int FEEDBACK_TIMEOUT = 250;
 
 ControllerSensors sensors = ControllerSensors();
 
@@ -88,7 +88,8 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(LED_PIN, HIGH);  
+  flushDynaBuffer();
+  digitalWrite(LED_PIN, HIGH);    
   String inputString = waitForCommand();
   bool listenFeedback = handleCommand(inputString);
 
@@ -97,6 +98,13 @@ void loop() {
   if(listenFeedback) {
     String feedback = receiveFeedback();
     Serial.println(feedback);
+    Serial.flush();
+  }
+}
+
+void flushDynaBuffer() {
+  while(Serial1.available()) {
+    Serial1.read();
   }
 }
 
@@ -129,9 +137,9 @@ bool handleCommand(String inputString) {
     } else if (String("sensors").equalsIgnoreCase(command)) {
       sensors.readSensors();
       
-      String feedback = "{\"feedback\":\"{";
+      String feedback = "{\"feedback\":{";
       feedback.concat(sensors.getJson());
-      feedback.concat("}");
+      feedback.concat(",\"format\":\"json\"}");
       feedback.trim();
       Serial.println(feedback);      
 
@@ -171,29 +179,10 @@ String receiveFeedback() {
   }
 
   feedback.trim();
-  return feedback.concat("\"}");
+  return feedback.concat("\",\"format\":\"hex\"}");
 }
 
-String receiveFeedbackOld() {
-  delay(50);
 
-  String feedback = "{\"feedback\":\"";
-
-  int available = Serial1.available();
- 
-  for(int i=0; i<available; i++) {
-    char tmp[8];
-    int x = Serial1.read();
-    sprintf(tmp, "%.2X ", x);
-    
-    feedback.concat(String(tmp));    
-  }
-
-  feedback.trim();
-
-  return feedback.concat("\"}");
-    
-}
 
 String waitForCommand() {
     String inputString = String("");
@@ -212,7 +201,7 @@ String waitForCommand() {
             inputString.concat(inchar);
           } 
         } else {
-          delay(100);
+          delay(10);
         }
     }    
 

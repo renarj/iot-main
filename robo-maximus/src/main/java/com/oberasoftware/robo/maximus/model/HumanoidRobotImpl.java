@@ -7,6 +7,7 @@ import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
+import com.oberasoftware.robo.api.sensors.Sensor;
 import com.oberasoftware.robo.maximus.motion.MotionControlImpl;
 import com.oberasoftware.robo.maximus.motion.MotionEngine;
 import com.oberasoftware.robo.maximus.motion.MotionEngineImpl;
@@ -27,9 +28,11 @@ public class HumanoidRobotImpl implements HumanoidRobot {
     private final Torso torso;
     private final Legs legs;
 
+    private final List<Sensor> sensors;
+
     private List<Behaviour> behaviours = new ArrayList<>();
 
-    public HumanoidRobotImpl(Robot robot, String name, Legs legs, Torso torso, Head head) {
+    public HumanoidRobotImpl(Robot robot, String name, Legs legs, Torso torso, Head head, List<Sensor> sensors) {
         this.robot = robot;
         this.name = name;
         this.legs = legs;
@@ -41,6 +44,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
                 .add(torso)
                 .add(head)
                 .build();
+        this.sensors = sensors;
     }
 
     @Override
@@ -55,6 +59,10 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
         ServoListener listener = new ServoListener(motionControl);
         robotCore.listen(listener);
+
+        this.sensors.forEach(s -> {
+            s.activate(robotCore);
+        });
     }
 
     @Override
@@ -122,6 +130,17 @@ public class HumanoidRobotImpl implements HumanoidRobot {
         return chainSets.stream()
                 .flatMap(c -> c.getJointChains().stream())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Sensor> getSensors() {
+        return sensors;
+    }
+
+    @Override
+    public Sensor getSensor(String name) {
+        return sensors.stream().filter(s -> s.getName()
+                .equalsIgnoreCase(name)).findFirst().orElseThrow();
     }
 
     @Override

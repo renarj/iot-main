@@ -3,7 +3,11 @@ package com.oberasoftware.robo.maximus;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.humanoid.*;
 import com.oberasoftware.robo.api.exceptions.RoboException;
+import com.oberasoftware.robo.api.sensors.Sensor;
 import com.oberasoftware.robo.maximus.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HumanoidRobotBuilder {
 
@@ -16,6 +20,8 @@ public class HumanoidRobotBuilder {
     private Legs legs;
     private Torso torso;
     private Head head;
+
+    private List<Sensor> sensors = new ArrayList<>();
 
     public HumanoidRobotBuilder(Robot robot, String name) {
         this.robot = robot;
@@ -43,9 +49,14 @@ public class HumanoidRobotBuilder {
         return this;
     }
 
+    public HumanoidRobotBuilder sensor(Sensor sensor) {
+        this.sensors.add(sensor);
+        return this;
+    }
+
     public HumanoidRobot build() {
         if(legs != null && torso != null) {
-            HumanoidRobot humanoidRobot = new HumanoidRobotImpl(robot, name, legs, torso, head);
+            HumanoidRobot humanoidRobot = new HumanoidRobotImpl(robot, name, legs, torso, head, sensors);
             humanoidRobot.initialize(humanoidRobot, robot);
 
             return humanoidRobot;

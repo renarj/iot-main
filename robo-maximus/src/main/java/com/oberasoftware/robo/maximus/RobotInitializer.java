@@ -10,6 +10,9 @@ import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
+import com.oberasoftware.robo.maximus.sensors.Ina260CurrentSensor;
+import com.oberasoftware.robo.maximus.sensors.LSM9DS1GyroSensor;
+import com.oberasoftware.robo.maximus.sensors.TeensySensorDriver;
 import com.oberasoftware.robo.maximus.storage.MotionStorage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,15 +48,19 @@ public class RobotInitializer {
 
     public void initialize() {
         List<String> servos = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "122", "123", "124", "130", "131", "132", "133", "134", "141", "140");
+        String motorIdentifiers = String.join(",", servos);
 
-                LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
+        LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
         Robot robot = new SpringAwareRobotBuilder("maximus-core", applicationContext)
                 .servoDriver(DynamixelServoDriver.class,
                         ImmutableMap.<String, String>builder()
-                                .put(DynamixelServoDriver.PORT, dynamixelPort).build())
+                                .put(DynamixelServoDriver.PORT, dynamixelPort)
+                                .put("motors", motorIdentifiers)
+                                .build())
 //                .servoDriver(new MockServoDriver(servos), new HashMap<>())
                 .capability(ServoSensorDriver.class)
                 .capability(MotionStorage.class)
+                .capability(TeensySensorDriver.class)
 //                .remote(RemoteCloudDriver.class)
                 .build();
 
@@ -103,6 +110,8 @@ public class RobotInitializer {
                                 .elbow(create("123", "RightElbow").max(110).min(-110))
                                 .hand("RightHand", "124"))
                 .head("head", "141", "140")
+                .sensor(new Ina260CurrentSensor())
+                .sensor(new LSM9DS1GyroSensor())
             .build();
         behaviouralRobotRegistry.register(maximus);
 
