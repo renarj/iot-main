@@ -68,6 +68,11 @@ public class MockServoDriver implements ServoDriver {
     }
 
     @Override
+    public boolean setTorgueAll(boolean state) {
+        return false;
+    }
+
+    @Override
     public List<Servo> getServos() {
         return servos.stream().map((Function<String, Servo>) MockServo::new).collect(Collectors.toList());
     }
