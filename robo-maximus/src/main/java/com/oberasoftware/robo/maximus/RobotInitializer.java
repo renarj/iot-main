@@ -2,11 +2,11 @@ package com.oberasoftware.robo.maximus;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
-import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
@@ -20,7 +20,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.ArmBuilder.createArm;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
@@ -33,6 +36,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Component
 public class RobotInitializer {
     private static final Logger LOG = getLogger(RobotInitializer.class);
+
+    private static final List<String> SERVO_IDS = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "122", "123", "124", "130", "131", "132", "133", "134", "141", "140");
+    private static final String MOTOR_ID_STRING = String.join(",", SERVO_IDS);
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -47,59 +53,69 @@ public class RobotInitializer {
     private String dynamixelPort;
 
     public void initialize() {
-        List<String> servos = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "122", "123", "124", "130", "131", "132", "133", "134", "141", "140");
-        String motorIdentifiers = String.join(",", servos);
+        initialize(new ArrayList<>(), false);
+    }
 
+    public void initialize(BiConsumer<Robot, HumanoidRobot> action, boolean terminateAfterAction) {
+        initialize(Lists.newArrayList(action), terminateAfterAction);
+
+    }
+
+    public void initialize(List<BiConsumer<Robot, HumanoidRobot>> actions, boolean terminateAfterAction) {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
         Robot robot = new SpringAwareRobotBuilder("maximus-core", applicationContext)
                 .servoDriver(DynamixelServoDriver.class,
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort)
-                                .put("motors", motorIdentifiers)
+                                .put("motors", MOTOR_ID_STRING)
                                 .build())
-//                .servoDriver(new MockServoDriver(servos), new HashMap<>())
                 .capability(ServoSensorDriver.class)
                 .capability(MotionStorage.class)
                 .capability(TeensySensorDriver.class)
-//                .remote(RemoteCloudDriver.class)
                 .build();
 
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
 
-        ServoDriver driver = robot.getServoDriver();
+        HumanoidRobot humanoidRobot = constructHumanoid(robot);
+        actions.forEach(a -> {
+            a.accept(robot, humanoidRobot);
+        });
 
-//        driver.sendCommand(new RebootCommand("107"));
-//        driver.getServos().forEach(s -> driver.sendCommand(new CurrentLimitCommand(s.getId(), 50)));
+        if(terminateAfterAction) {
+            Uninterruptibles.sleepUninterruptibly(30, TimeUnit.SECONDS);
 
-//        robot.getServoDriver().sendCommand(new VelocityModeCommand("133", 20, 20));
-//        driver.getServos().forEach(s -> driver.sendCommand(new VelocityModeCommand(s.getId(), 50, 5)));
+            robot.shutdown();
+            System.exit(-1);
+        } else {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                LOG.info("Killing the robot gracefully on shutdown");
+                robot.shutdown();
+            }));
+        }
+    }
 
-//        ServoDriver servoDriver = robot.getServoDriver();
-//        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
-//        servoDriver.getServos().forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s.getId(), POSITION_CONTROL)));
-//        servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
-
+    private HumanoidRobot constructHumanoid(Robot robot) {
         HumanoidRobot maximus = HumanoidRobotBuilder.create(robot, "maximus")
                 .legs(
-                    createLeg("LeftLeg")
-                        .ankle("leftAnkle",
-                                create("104", "leftAnkle-x"),
-                                create("105", "leftAnkle-y"))
-                        .knee(create("103", "LeftKnee").max(5).min(-110))
-                        .hip("leftHip",
-                                create("100", "leftHip-x"),
-                                create("102", "leftHip-y"),
-                                create("101", "leftHip-z")),
-                    createLeg("RightLeg")
-                            .ankle("rightAnkle",
-                                    create("110", "rightAnkle-x"),
-                                    create("111", "rightAnkle-y"))
-                            .knee(create("109", "RightKnee").max(110).min(-5))
-                            .hip("rightHip",
-                                    create("106", "rightHip-x"),
-                                    create("108", "rightHip-y"),
-                                    create("107", "rightHip-z")))
+                        createLeg("LeftLeg")
+                                .ankle("leftAnkle",
+                                        create("104", "leftAnkle-x"),
+                                        create("105", "leftAnkle-y"))
+                                .knee(create("103", "LeftKnee").max(5).min(-110))
+                                .hip("leftHip",
+                                        create("100", "leftHip-x"),
+                                        create("102", "leftHip-y"),
+                                        create("101", "leftHip-z")),
+                        createLeg("RightLeg")
+                                .ankle("rightAnkle",
+                                        create("110", "rightAnkle-x"),
+                                        create("111", "rightAnkle-y"))
+                                .knee(create("109", "RightKnee").max(110).min(-5))
+                                .hip("rightHip",
+                                        create("106", "rightHip-x"),
+                                        create("108", "rightHip-y"),
+                                        create("107", "rightHip-z")))
                 .torso(
                         createArm("LeftArm")
                                 .shoulder("leftShoulder","131", "130", "132")
@@ -112,12 +128,9 @@ public class RobotInitializer {
                 .head("head", "141", "140")
                 .sensor(new Ina260CurrentSensor())
                 .sensor(new LSM9DS1GyroSensor())
-            .build();
+                .build();
         behaviouralRobotRegistry.register(maximus);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            LOG.info("Killing the robot gracefully on shutdown");
-            robot.shutdown();
-        }));
+        return maximus;
     }
 }

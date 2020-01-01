@@ -56,7 +56,14 @@ public class MotionRestController {
         }
     }
 
-    @RequestMapping(value = "/motions")
+    @RequestMapping(value = "/motion/{motionId}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteMotion(@PathVariable String motionId) {
+        motionStorage.deleteMotion(motionId);
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+        @RequestMapping(value = "/motions")
     public List<Motion> getMotions() {
         return motionStorage.findAllMotions();
     }

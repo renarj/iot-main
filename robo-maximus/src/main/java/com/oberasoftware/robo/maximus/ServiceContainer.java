@@ -63,6 +63,11 @@ public class ServiceContainer {
         RobotInitializer initializer = context.getBean(RobotInitializer.class);
         initializer.initialize();
 
+//        initializer.initialize((r, max) -> {
+//            max.getMotionControl().runMotion("wave");
+//        }, true);
+
         LOG.info("Done");
     }
+
 }

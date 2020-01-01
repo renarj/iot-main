@@ -13,7 +13,6 @@ import com.oberasoftware.robo.api.motion.JointTarget;
 import com.oberasoftware.robo.api.motion.KeyFrame;
 import com.oberasoftware.robo.api.motion.Motion;
 import com.oberasoftware.robo.api.motion.MotionUnit;
-import com.oberasoftware.robo.api.servo.Servo;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.api.servo.ServoProperty;
 import com.oberasoftware.robo.core.motion.JointTargetImpl;
@@ -34,7 +33,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MotionEngineImpl implements MotionEngine, Behaviour {
     private static final Logger LOG = getLogger(MotionEngineImpl.class);
 
-    private static final int MOVEMENT_INTERVAL = 100;
+    private static final int FREQUENCY = 50;
+//    private static final double FULL_REV_POSITION = 4000;
+
+    private static final Scale TARGET_SCALE = new Scale(0, 4095);
+
+    private static final double REV_MINUTE_UNIT = 0.229;
+    private static final double REV_PER_FREQ_INT = (REV_MINUTE_UNIT / 60 / 1000) * FREQUENCY;
 
     private static final int QUEUE_INTERVAL = 1000;
 
@@ -80,6 +85,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
             int initialPosition = s.getData().getValue(ServoProperty.POSITION);
             Scale scale = s.getData().getValue(ServoProperty.POSITION_SCALE);
             int currentAngle = scale.convertToScale(initialPosition, RADIAL_SCALE);
+            LOG.info("Initial position: {} angle: {} for servo: {}", initialPosition, currentAngle, s.getId());
 
             lastServoPositions.put(s.getId(), currentAngle);
         });
@@ -92,7 +98,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         LOG.info("Calculated: {} intervals in: {} for motion: {}", intervalList.size(), w.elapsed(MILLISECONDS), unit);
 
         LOG.info("Enabling torgue");
-        servoDriver.getServos().forEach(Servo::enableTorgue);
+        servoDriver.setTorgueAll(true);
 
         int counter = 0;
         for (IntervalTarget interval : intervalList) {
@@ -100,14 +106,14 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
             Stopwatch is = Stopwatch.createStarted();
             Map<String, PositionAndSpeedCommand> m = targets.stream()
-                    .map(jt -> new PositionAndSpeedCommand(jt.getServoId(), jt.getTargetAngle(), RADIAL_SCALE, 0, new Scale(0, 100)))
+                    .map(jt -> new PositionAndSpeedCommand(jt.getServoId(), jt.getTargetAngle(), RADIAL_SCALE, jt.getTargetVelocity(), new Scale(0, 100)))
                     .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, jtm -> jtm));
 
             servoDriver.bulkSetPositionAndSpeed(m, BulkPositionSpeedCommand.WRITE_MODE.SYNC);
-            LOG.info("Completed interval: {} in: {} for frame: {}", counter, is.elapsed(MILLISECONDS), interval.getFrameId());
+            LOG.info("Completed interval: {} in: {} for frame: {} motorData: {}", counter, is.elapsed(MILLISECONDS), interval.getFrameId(), m);
 
             counter++;
-            sleepUninterruptibly(MOVEMENT_INTERVAL, MILLISECONDS);
+            sleepUninterruptibly(FREQUENCY, MILLISECONDS);
         }
     }
 
@@ -115,32 +121,49 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         LOG.info("Calculate frame: {} with {} joint positions", frame.getKeyFrameId(), frame.getJointTargets().size());
 
         long timeInMs = frame.getTimeInMs();
-        boolean oneShot = timeInMs < MOVEMENT_INTERVAL;
+        boolean oneShot = timeInMs < FREQUENCY;
         if(oneShot) {
             return Lists.newArrayList(new IntervalTarget(frame.getKeyFrameId(), frame.getJointTargets()));
         } else {
-            int iterations = (int)(timeInMs / MOVEMENT_INTERVAL);
+            int iterations = (int)(timeInMs / FREQUENCY);
 
             var l = IntStream.range(0, iterations).mapToObj(i -> new IntervalTarget(frame.getKeyFrameId(), new ArrayList<>())).collect(Collectors.toList());
 
+            LOG.info("REv PER FREQ: {}", REV_PER_FREQ_INT);
+
+
             for(JointTarget t: frame.getJointTargets()) {
-//                Servo servo = servoDriver.getServo(t.getServoId());
-//                int initialPosition = servo.getData().getValue(ServoProperty.POSITION);
-//                Scale scale = servo.getData().getValue(ServoProperty.POSITION_SCALE);
-//                int currentAngle = scale.convertToScale(initialPosition, RADIAL_SCALE);
                 int currentAngle = positions.get(t.getServoId());
 
                 int targetAngle = t.getTargetAngle();
-                int angleIncrement = (targetAngle - currentAngle) / iterations;
+                if(currentAngle != targetAngle) {
+                    double deltaPerFrame = (double)(targetAngle - currentAngle) / iterations;
 
-                for(int i=0; i<iterations; i++) {
-                    int interim = (angleIncrement * (i + 1));
-                    int angle = currentAngle + interim;
+                    double abs = RADIAL_SCALE.getMin() + Math.abs(deltaPerFrame);
 
-                    l.get(i).addTarget(new JointTargetImpl(t.getServoId(), 0, angle));
+                    double deltaTargetPerFrame = RADIAL_SCALE.convertToScale(abs, TARGET_SCALE);
+
+                    LOG.info("TARGET: {} current: {} delta: {} deltaPerFrameConv: {}", targetAngle, currentAngle, deltaPerFrame, deltaTargetPerFrame);
+
+                    double revAmount = deltaTargetPerFrame / (double)TARGET_SCALE.getMax();
+                    int velocityProfile = (int)(revAmount / REV_PER_FREQ_INT);
+                    LOG.info("Rev amount: {} vel prof: {}", revAmount, velocityProfile);
+
+                    for(int i=0; i<iterations; i++) {
+                        double interim = (deltaPerFrame * (i + 1));
+                        int angle = (int)(currentAngle + interim);
+
+                        LOG.info("Target: {} at velocity: {} for servo: {}", angle, velocityProfile, t.getServoId());
+
+                        JointTargetImpl jt = new JointTargetImpl(t.getServoId(), 0, angle);
+                        jt.setTargetVelocity(velocityProfile);
+                        l.get(i).addTarget(jt);
+                    }
+
+                    positions.put(t.getServoId(), targetAngle);
+                } else {
+                    LOG.info("Target angle: {} is already reached for servo: {}", targetAngle, t.getServoId());
                 }
-
-                positions.put(t.getServoId(), targetAngle);
             }
 
             return l;

@@ -54,17 +54,19 @@ public class LSM9DS1GyroSensor implements MultiValueSensor<DoubleValue> {
     @Override
     public void activate(Robot robot) {
         TeensySensorDriver sensorDriver = robot.getCapability(TeensySensorDriver.class);
-        sensorDriver.getPort(LSM_9_DS_1_HEADING).listen(e -> {
-            this.heading = e.getRaw();
-            robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM_9_DS_1_HEADING));
-        });
-        sensorDriver.getPort(LSM_9_DS_1_PITCH).listen(e -> {
-            this.pitch = e.getRaw();
-            robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM_9_DS_1_PITCH));
-        });
-        sensorDriver.getPort(LSM_9_DS_1_ROLL).listen(e -> {
-            this.roll = e.getRaw();
-            robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM_9_DS_1_ROLL));
-        });
+        if(sensorDriver != null) {
+            sensorDriver.getPort(LSM_9_DS_1_HEADING).listen(e -> {
+                this.heading = e.getRaw();
+                robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM_9_DS_1_HEADING));
+            });
+            sensorDriver.getPort(LSM_9_DS_1_PITCH).listen(e -> {
+                this.pitch = e.getRaw();
+                robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM_9_DS_1_PITCH));
+            });
+            sensorDriver.getPort(LSM_9_DS_1_ROLL).listen(e -> {
+                this.roll = e.getRaw();
+                robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM_9_DS_1_ROLL));
+            });
+        }
     }
 }

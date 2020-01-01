@@ -43,6 +43,19 @@ public class JasDBMotionStorageImpl implements MotionStorage {
     }
 
     @Override
+    public void deleteMotion(String motionName) {
+        SimpleMotionEntity existingMotion = findMotionEntity(motionName);
+        if(existingMotion != null) {
+            try {
+                DBSession session = sessionFactory.createSession();
+                session.getEntityManager().remove(existingMotion);
+            } catch (JasDBException e) {
+                LOG.error("Could not remove motion with name: " + motionName);
+            }
+        }
+    }
+
+    @Override
     public List<Motion> findAllMotions() {
         try {
             DBSession session = sessionFactory.createSession();

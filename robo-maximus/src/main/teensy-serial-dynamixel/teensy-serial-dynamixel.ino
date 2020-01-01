@@ -123,7 +123,7 @@ bool handleCommand(String inputString) {
     if(String("dynamixel").equalsIgnoreCase(command)) {
       String dxlData = doc["dxldata"];
 //      Serial.println("Sending DXL Data: " + dxlData);
-  
+
       int nrBytes = dxlData.length() / 2;
       byte byteArray[nrBytes] = {0};
       hexCharacterStringToBytes(byteArray, dxlData.c_str());
@@ -203,7 +203,7 @@ String waitForCommand() {
         } else {
           delay(10);
         }
-    }    
+    }
 
     return inputString;
 }

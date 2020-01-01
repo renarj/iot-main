@@ -55,19 +55,20 @@ public class Ina260CurrentSensor implements MultiValueSensor<DoubleValue> {
     @Override
     public void activate(Robot robot) {
         TeensySensorDriver sensorDriver = robot.getCapability(TeensySensorDriver.class);
-        sensorDriver.getPort(INA_260_CURRENT).listen(e -> {
-            this.current = e.getRaw() / UNIT_DIVISION;
-            robot.publish(new SensorDataImpl(new DoubleValue(this.current), INA_260_CURRENT));
-        });
-        sensorDriver.getPort(INA_260_VOLTAGE).listen(e -> {
-            this.voltage = e.getRaw() / UNIT_DIVISION;
+        if(sensorDriver != null) {
+            sensorDriver.getPort(INA_260_CURRENT).listen(e -> {
+                this.current = e.getRaw() / UNIT_DIVISION;
+                robot.publish(new SensorDataImpl(new DoubleValue(this.current), INA_260_CURRENT));
+            });
+            sensorDriver.getPort(INA_260_VOLTAGE).listen(e -> {
+                this.voltage = e.getRaw() / UNIT_DIVISION;
 
-            robot.publish(new SensorDataImpl(new DoubleValue(this.voltage), INA_260_VOLTAGE));
-        });
-        sensorDriver.getPort(INA_260_POWER).listen(e -> {
-            this.power = e.getRaw() / UNIT_DIVISION;
-            robot.publish(new SensorDataImpl(new DoubleValue(this.power), INA_260_POWER));
-        });
-
+                robot.publish(new SensorDataImpl(new DoubleValue(this.voltage), INA_260_VOLTAGE));
+            });
+            sensorDriver.getPort(INA_260_POWER).listen(e -> {
+                this.power = e.getRaw() / UNIT_DIVISION;
+                robot.publish(new SensorDataImpl(new DoubleValue(this.power), INA_260_POWER));
+            });
+        }
     }
 }

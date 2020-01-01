@@ -151,7 +151,7 @@ function addListeners() {
 
         var motion = {
             "name" :motionName,
-            "keyFrames" : keyFrames
+            "frames" : keyFrames
         };
 
         console.log("Posting: " + JSON.stringify(motion));
@@ -323,6 +323,11 @@ function renderChain(chain) {
     $.each(chain.jointChains, function(i, jointChain) {
         renderJointChain(chain.name, chainId, jointChain);
     });
+
+    if(chain.joints.length > 0) {
+        console.log("We have joints here");
+        renderJointChain(chain.name, chainId, chain);
+    }
 }
 
 function renderJointChain(chainName, parentChainId, jointChain) {
@@ -356,7 +361,7 @@ function renderJoint(jointChainId, joint) {
     $("#" + jointChainId).append(rendered);
 
     $( "#" +elementId).click(function(e) {
-        e.preventDefault();
+        // e.preventDefault();
         var jointId = $(this).attr("jointId");
         var robotId = $("#joints").attr("robotId");
 
