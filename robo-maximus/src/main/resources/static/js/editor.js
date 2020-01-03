@@ -167,8 +167,19 @@ function addListeners() {
 
             storeFrame(frameId);
         }
+    });
 
+    $("#goToPositions").click(function (e) {
+        e.preventDefault();
 
+        var data = getFrameData("tempFrame");
+        var robotId = getRobotId();
+
+        $.ajax({url: "/editor/motion/run/" + robotId + "/keyFrame", data: JSON.stringify((data)), type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+                console.log("Executed keyframe");
+            }, error: function(data) {
+                showModal("KeyFrame error", "Could not run frame: " + JSON.stringify(data));
+            }});
     });
 
     $("#newFrame").click(function (e) {
@@ -258,21 +269,26 @@ function getSelectedJoints() {
 }
 
 function storeFrame(frameId) {
+    var frameData = getFrameData(frameId);
+
+    if(frameData.timeInMs === undefined || frameData.timeInMs === "") {
+        showModal("KeyFrame error", "No time specified");
+    } else {
+
+        $("#editor").attr("frameid", frameId);
+        renderFrame(frameId, frameData.timeInMs, frameData.jointTargets.length, frameData);
+    }
+}
+
+function getFrameData(frameId) {
     var servoSteps = getPositionData();
     var timeInMs = $("#time").val();
 
-    if(timeInMs === undefined || timeInMs === "") {
-        showModal("KeyFrame error", "No time specified");
-    } else {
-        var json = {
-            "jointTargets": servoSteps,
-            "timeInMs": timeInMs,
-            "keyFrameId" : frameId
-        };
-
-        $("#editor").attr("frameid", frameId);
-        renderFrame(frameId, timeInMs, servoSteps.length, json);
-    }
+    return {
+        "jointTargets": servoSteps,
+        "timeInMs": timeInMs,
+        "keyFrameId": frameId
+    };
 }
 
 function renderFrame(frameId, time, nrSteps, json) {
@@ -619,6 +635,10 @@ function loadMotionInEditor(motionId) {
             renderFrame(frame.keyFrameId, frame.timeInMs, frame.jointTargets.length, frame);
         });
     });
+}
+
+function getRobotId() {
+    return $("#joints").attr("robotId");
 }
 
 function showModal(title, body) {

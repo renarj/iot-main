@@ -1,10 +1,13 @@
 package com.oberasoftware.robo.maximus.rest;
 
+import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.robo.api.behavioural.humanoid.MotionControl;
 import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.robo.core.motion.KeyFrameImpl;
 import com.oberasoftware.robo.core.motion.MotionImpl;
+import com.oberasoftware.robo.maximus.motion.MotionEngine;
 import com.oberasoftware.robo.maximus.storage.MotionStorage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +57,22 @@ public class MotionRestController {
         } else {
             return new ResponseEntity<>("Could not execute motion", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(value = "/motion/run/{robotId}/keyFrame")
+    public ResponseEntity<String> runKeyFrame(@PathVariable String robotId, @RequestBody KeyFrameImpl keyFrame) {
+        LOG.info("Requesting keyframe: {} to be run on robot: {}", keyFrame, robotId);
+
+        Motion motion = new MotionImpl("tempMotion", Lists.newArrayList(keyFrame));
+        Optional<BehaviouralRobot> br = behaviouralRobotRegistry.getRobot(robotId);
+        br.ifPresent(behaviouralRobot -> behaviouralRobot.getBehaviour(MotionEngine.class).post(motion));
+
+        if(br.isPresent()) {
+            return new ResponseEntity<>("Keyframe executed", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Could not execute keyFrame, robot not found", HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @RequestMapping(value = "/motion/{motionId}", method = RequestMethod.DELETE)
