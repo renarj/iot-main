@@ -119,10 +119,14 @@ public class RobotInitializer {
                 .torso(
                         createArm("LeftArm")
                                 .shoulder("leftShoulder","131", "130", "132")
-                                .elbow(create("133", "LeftElbow", true  ).max(110).min(-110))
+                                .elbow(create("133", "LeftElbow", false  ).max(110).min(-110))
                                 .hand("LeftHand", "134"),
                         createArm("RightArm")
-                                .shoulder("rightShoulder", "121", "120", "122")
+                                .shoulder("rightShoulder",
+                                        create("121", "rightShoulderX", true),
+                                        create("120", "rightShoulderY", true),
+                                        create("122", "rightShoulderZ"))
+//                                .shoulder("rightShoulder", "121", "120", "122")
                                 .elbow(create("123", "RightElbow").max(110).min(-110))
                                 .hand("RightHand", "124"))
                 .head("head", "141", "140")

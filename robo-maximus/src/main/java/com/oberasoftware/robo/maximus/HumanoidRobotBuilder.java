@@ -133,6 +133,15 @@ public class HumanoidRobotBuilder {
             return this;
         }
 
+        public ArmBuilder shoulder(String name, JointBuilder x, JointBuilder y, JointBuilder z) {
+            shoulder = new ShoulderImpl(name,
+                    x.build(),
+                    y.build(),
+                    z.build());
+            return this;
+
+        }
+
         public ArmBuilder elbow(JointBuilder jointBuilder) {
             elbow = jointBuilder.type("elbow").build();
             return this;

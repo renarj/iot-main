@@ -26,26 +26,26 @@
     <script th:src="@{/js/nipplejs.min.js}" src="/static/js/nipplejs.min.js"></script>
 </head>
 
-<nav class="navbar navbar-default" role="navigation" th:fragment="navigation (selectTab)">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#"><img height="" th:src="@{/images/obera.png}"/></a>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navigation">
+    <a class="navbar-brand" href="#">
+        <img height="" th:src="@{/images/obera.png}"/>
+    </a>
 
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li th:classappend="${selectTab == 'dashboard'} ? 'active'"><a th:href="@{'/'}">DashBoard</a></li>
-            </ul>
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" disabled="true" class="form-control" placeholder="Search"/>
-                </div>
-                <button type="submit" disabled="true" class="btn btn-default">Submit</button>
-            </form>
-        </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Servo Control</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/joints">Joint Control</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/editor">Motion Editor</a>
+            </li>
+        </ul>
+        </ul>
     </div>
 </nav>
-
 
 <div id="version" th:fragment="footer">
     <p class="text-center">&#169; Copyright 2019 Oberasoftware, version: <span>1.0</span></p>

@@ -1,3 +1,5 @@
+
+
 function connect() {
     console.log("Connecting to websocket");
     var socket = new SockJS('/ws');
@@ -105,6 +107,18 @@ function addListeners() {
         });
     });
 
+    $("#torgueOnSelected").click(function (e) {
+        e.preventDefault();
+
+        setTorgueSelected(true);
+    });
+
+    $("#torgueOffSelected").click(function (e) {
+        e.preventDefault();
+
+        setTorgueSelected(false);
+    });
+
     $("#add").click(function (e) {
         e.preventDefault();
 
@@ -121,19 +135,49 @@ function addListeners() {
         }
     });
 
+    $("#addSelected").click(function (e) {
+        e.preventDefault();
+
+        var servos = getSelectedJoints();
+        $.each(servos, function(i, joint) {
+            addLivePosition(joint);
+        })
+    });
+
+    $("#clearFrame").click(function (e) {
+        e.preventDefault();
+
+        $("#jointPositions").empty();
+    });
 
     $("#saveFrame").click(function (e) {
         e.preventDefault();
 
-        var frameId = $("#editor").attr("frameid");
-        if(frameId !== undefined) {
-            console.log("We already have a frame id: " + frameId);
+        var frameName = $("#frameName").val();
+        if(frameName !== undefined && frameName !== "") {
+            storeFrame(frameName);
         } else {
-            frameId = findNextFrameId();
-            console.log("Frame not set yet, generated frameId: " + frameId);
+            var frameId = $("#editor").attr("frameid");
+            if(frameId !== undefined) {
+                console.log("We already have a frame id: " + frameId);
+            } else {
+                frameId = findNextFrameId();
+                console.log("Frame not set yet, generated frameId: " + frameId);
+            }
+
+            storeFrame(frameId);
         }
 
-        storeFrame(frameId);
+
+    });
+
+    $("#newFrame").click(function (e) {
+        e.preventDefault();
+
+        $("#editor").attr("frameid", "");
+        $("#jointPositions").empty();
+        $("#time").val("");
+        $("#frameName").val("");
     });
 
     $("#saveMotion").click(function (e) {
@@ -149,15 +193,24 @@ function addListeners() {
             keyFrames.push(parsedJson);
         });
 
-        var motion = {
-            "name" :motionName,
-            "frames" : keyFrames
-        };
+        if(motionName === undefined || motionName === "") {
+            showModal("Motion Save Error", "Could not store motion without name");
+        } else {
+            var motion = {
+                "name" :motionName,
+                "frames" : keyFrames
+            };
 
-        console.log("Posting: " + JSON.stringify(motion));
-        $.ajax({url: "/editor/motion/" + motionName, data: JSON.stringify((motion)), type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-                console.log("Saved motion")
-        }});
+            console.log("Posting: " + JSON.stringify(motion));
+            $.ajax({url: "/editor/motion/" + motionName, data: JSON.stringify((motion)), type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
+                    console.log("Saved motion");
+                    loadMotions();
+
+                    showModal("Motion Saved", "Motion was saved successfully");
+                }, error: function(data) {
+                    showModal("Motion Save Error", "Could not save motion: " + JSON.stringify(data));
+                }});
+        }
     });
 
     $("#runMotion").click(function (e) {
@@ -172,17 +225,54 @@ function addListeners() {
     });
 }
 
+function setTorgueSelected(state) {
+    var servos = getSelectedJoints();
+
+    if(servos.length > 0) {
+        var data = {
+            servos : servos,
+            enable : state
+        };
+
+        console.log("Torgue command: " + JSON.stringify(data));
+
+        $.ajax({
+            url: "/servos/torgue",
+            data: JSON.stringify(data),
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Torgue set to: " + state + " for all servos successfully");
+            }
+        });
+    }
+}
+
+function getSelectedJoints() {
+    var servos = [];
+    $(".jointCheckBox:checked").each(function (i) {
+        var jId = $(this).attr("jointId");
+        servos.push(jId);
+    });
+    return servos;
+}
+
 function storeFrame(frameId) {
     var servoSteps = getPositionData();
     var timeInMs = $("#time").val();
-    var json = {
-        "jointTargets": servoSteps,
-        "timeInMs": timeInMs,
-        "keyFrameId" : frameId
-    };
 
+    if(timeInMs === undefined || timeInMs === "") {
+        showModal("KeyFrame error", "No time specified");
+    } else {
+        var json = {
+            "jointTargets": servoSteps,
+            "timeInMs": timeInMs,
+            "keyFrameId" : frameId
+        };
 
-    renderFrame(frameId, timeInMs, servoSteps.length, json);
+        $("#editor").attr("frameid", frameId);
+        renderFrame(frameId, timeInMs, servoSteps.length, json);
+    }
 }
 
 function renderFrame(frameId, time, nrSteps, json) {
@@ -208,6 +298,7 @@ function renderFrame(frameId, time, nrSteps, json) {
         var parsedJson = JSON.parse(frameJson);
 
         $("#time").val(parsedJson.timeInMs);
+        $("#frameName").val(parsedJson.keyFrameId);
         $("#editor").attr("frameid", parsedJson.keyFrameId);
         $("#jointPositions").empty();
         $.each(parsedJson.jointTargets, function(i, step){
@@ -255,6 +346,18 @@ function findNextFrameId() {
     });
 
     return ++highest;
+}
+
+function addLivePosition(jointId) {
+    var robotId = $("#joints").attr("robotId");
+    var url = "/humanoid/robot/" + robotId + "/joints/" + jointId;
+    console.log("Requesting joint information: " + url);
+
+    $.get(url, function(data) {
+        console.log("Received joint data: " + JSON.stringify(data));
+        $("#jointPosition-" + jointId).remove();
+        renderJointPosition(jointId, data.position, data.degrees);
+    });
 }
 
 function addPosition(jointId) {
@@ -345,6 +448,14 @@ function renderJointChain(chainName, parentChainId, jointChain) {
     $.each(jointChain.joints, function(i, joint) {
         renderJoint(jointChainId, joint);
     });
+
+    $("#cb-" + jointChainId).change(function() {
+        if ($(this).is(':checked')) {
+            $("input[jointChainId=" + jointChainId + "]").prop("checked", true);
+        } else {
+            $("input[jointChainId=" + jointChainId + "]").prop("checked", false);
+        }
+    });
 }
 
 function renderJoint(jointChainId, joint) {
@@ -354,6 +465,7 @@ function renderJoint(jointChainId, joint) {
     var data = {
         "name" : joint.name,
         "id" : elementId,
+        "jointChainId" : jointChainId,
         "jointId": joint.id,
         "jointType": joint.jointType
     };
@@ -456,6 +568,9 @@ function renderTemplate(templateName, data) {
 }
 
 function loadMotions() {
+    var ml = $("#motionList");
+    ml.empty();
+
     $.get("/editor/motions", function(data) {
         console.log("Motions available: " + JSON.stringify(data));
 
@@ -467,7 +582,7 @@ function loadMotions() {
                 "frames" : motion.frames.length
             };
             var rendered = renderTemplate("motion", data);
-            $("#motionList").append(rendered);
+            ml.append(rendered);
 
             $("#medit-" + motion.name).click(function (e) {
                 e.preventDefault();
@@ -475,6 +590,17 @@ function loadMotions() {
                 var motionId = $(this).closest("tr").attr("motionId");
                 loadMotionInEditor(motionId);
             });
+
+            $("#mdelete-" + motion.name).click(function (e) {
+                e.preventDefault();
+
+                $.ajax({url: "/editor/motion/" + motion.name, type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
+                        console.log("Motion deleted succesfully");
+                        loadMotions();
+
+                        showModal("Motion Deleted", "Motion " + motion.name + " was deleted");
+                    }});
+            }) ;
         })
     });
 }
@@ -493,6 +619,17 @@ function loadMotionInEditor(motionId) {
             renderFrame(frame.keyFrameId, frame.timeInMs, frame.jointTargets.length, frame);
         });
     });
+}
+
+function showModal(title, body) {
+    var modal = $("#feedbackModal");
+
+    $("#modalTitle").text(title);
+    $("#modalText").text(body);
+
+    modal.modal({
+        show: true
+    })
 }
 
 

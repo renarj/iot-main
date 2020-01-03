@@ -49,9 +49,13 @@ public class MotionControlImpl implements MotionControl {
 
     @Override
     public JointData getJointData(String jointId) {
-        ServoData data = getServoData(jointId);
+        if(jointMap.containsKey(jointId)) {
+            ServoData data = getServoData(jointId);
 
-        return convert(jointId, data);
+            return convert(jointId, data);
+        } else {
+            return null;
+        }
     }
 
     private JointData convert(String jointId, ServoData data) {
@@ -66,6 +70,7 @@ public class MotionControlImpl implements MotionControl {
     public List<JointData> getJointsData() {
         return servoDriver.getServos()
                 .stream()
+                .filter(s -> jointMap.containsKey(s))
                 .map(s -> convert(s.getId(), s.getData()))
                 .collect(Collectors.toList());
     }

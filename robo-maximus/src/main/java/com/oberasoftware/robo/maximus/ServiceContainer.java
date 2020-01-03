@@ -18,6 +18,7 @@ package com.oberasoftware.robo.maximus;
 import com.oberasoftware.max.core.CoreConfiguration;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
+import com.oberasoftware.robo.dynamixel.SerialDynamixelConnector;
 import com.oberasoftware.robo.dynamixel.web.WebConfiguration;
 import com.oberasoftware.robo.pi4j.SensorConfiguration;
 import org.slf4j.Logger;
@@ -61,10 +62,24 @@ public class ServiceContainer {
         SpringApplication springApplication = new SpringApplication(ServiceContainer.class);
         ConfigurableApplicationContext context = springApplication.run(args);
         RobotInitializer initializer = context.getBean(RobotInitializer.class);
+        SerialDynamixelConnector d = context.getBean(SerialDynamixelConnector.class);
+
         initializer.initialize();
 
 //        initializer.initialize((r, max) -> {
 //            max.getMotionControl().runMotion("wave");
+//        }, true);
+
+//        initializer.initialize((r, max) -> {
+//            byte[] rcvd = d.sendAndReceive(new DynamixelV2CommandPacket(DynamixelInstruction.WRITE_DATA, 101)
+//                            .add8BitParam(DynamixelV2Address.TORGUE_ENABLE, 1).build());
+//            LOG.info("Received: {}", bb2hex(rcvd));
+//
+//
+//            rcvd = d.sendAndReceive(new DynamixelV2CommandPacket(DynamixelInstruction.READ_DATA, 101)
+//                    .addParam(DynamixelV2Address.GOAL_POSITION_L, (byte)0x04, (byte)0x00).build());
+//            LOG.info("Received: {}", bb2hex(rcvd));
+//
 //        }, true);
 
         LOG.info("Done");

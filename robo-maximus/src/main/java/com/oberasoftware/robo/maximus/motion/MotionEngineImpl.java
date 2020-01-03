@@ -118,7 +118,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
     }
 
     private List<IntervalTarget> calculateFrame(Map<String, Integer> positions, KeyFrame frame) {
-        LOG.info("Calculate frame: {} with {} joint positions", frame.getKeyFrameId(), frame.getJointTargets().size());
+        LOG.debug("Calculate frame: {} with {} joint positions", frame.getKeyFrameId(), frame.getJointTargets().size());
 
         long timeInMs = frame.getTimeInMs();
         boolean oneShot = timeInMs < FREQUENCY;
@@ -129,7 +129,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
             var l = IntStream.range(0, iterations).mapToObj(i -> new IntervalTarget(frame.getKeyFrameId(), new ArrayList<>())).collect(Collectors.toList());
 
-            LOG.info("REv PER FREQ: {}", REV_PER_FREQ_INT);
+            LOG.debug("REv PER FREQ: {}", REV_PER_FREQ_INT);
 
 
             for(JointTarget t: frame.getJointTargets()) {
@@ -143,17 +143,17 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
                     double deltaTargetPerFrame = RADIAL_SCALE.convertToScale(abs, TARGET_SCALE);
 
-                    LOG.info("TARGET: {} current: {} delta: {} deltaPerFrameConv: {}", targetAngle, currentAngle, deltaPerFrame, deltaTargetPerFrame);
+                    LOG.debug("TARGET: {} current: {} delta: {} deltaPerFrameConv: {}", targetAngle, currentAngle, deltaPerFrame, deltaTargetPerFrame);
 
                     double revAmount = deltaTargetPerFrame / (double)TARGET_SCALE.getMax();
                     int velocityProfile = (int)(revAmount / REV_PER_FREQ_INT);
-                    LOG.info("Rev amount: {} vel prof: {}", revAmount, velocityProfile);
+                    LOG.debug("Rev amount: {} vel prof: {}", revAmount, velocityProfile);
 
                     for(int i=0; i<iterations; i++) {
                         double interim = (deltaPerFrame * (i + 1));
                         int angle = (int)(currentAngle + interim);
 
-                        LOG.info("Target: {} at velocity: {} for servo: {}", angle, velocityProfile, t.getServoId());
+                        LOG.debug("Target: {} at velocity: {} for servo: {}", angle, velocityProfile, t.getServoId());
 
                         JointTargetImpl jt = new JointTargetImpl(t.getServoId(), 0, angle);
                         jt.setTargetVelocity(velocityProfile);
@@ -162,7 +162,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
                     positions.put(t.getServoId(), targetAngle);
                 } else {
-                    LOG.info("Target angle: {} is already reached for servo: {}", targetAngle, t.getServoId());
+                    LOG.debug("Target angle: {} is already reached for servo: {}", targetAngle, t.getServoId());
                 }
             }
 

@@ -10,7 +10,7 @@
     <div class="card border-dark mb-3 mt-1" style="width: 18rem;">
       <div class="card-header text-white bg-primary" style="height: 40px; padding: 10px 15px;">
         <div class="checkbox" style="display:inline">
-            <input  type="checkbox" value="" id="defaultCheck1">
+            <input  type="checkbox" value="" id="cb-{{id}}">
         </div>
         <label class="form-check-label" for="defaultCheck1">
             {{chainName}} - {{name}}
@@ -26,7 +26,7 @@
 <script id="jointsTemplate" type="x-tmp-mustache">
      <a href="#" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" jointType="{{jointType}}" style="height: 40px; padding: 10px 15px;">
             <div class="checkbox" style="display:inline">
-            <input  type="checkbox" value="" id="defaultCheck1">
+            <input  type="checkbox" value="" jointChainId="{{jointChainId}}" jointId="{{jointId}}" class="jointCheckBox">
         </div>
         <label class="form-check-label" for="defaultCheck1">
             {{name}} (ID: {{jointId}})
@@ -75,6 +75,27 @@
         <td id="sensor-value-{{id}}">{{value}}</td>
     </tr>
 </script>
+
+<div class="modal" tabindex="-1" role="dialog" id="feedbackModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalText"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="includes/header :: navigation"/>
 
 <div class="container-fluid" id="chainContainer">
     <div class="row">
@@ -148,7 +169,7 @@
                                     <div class="form-group row">
                                         <label for="time" class="col-sm-4 col-form-label">Name (optional)</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" size="10" id="time">
+                                            <input type="text" class="form-control" size="10" id="frameName">
                                         </div>
                                     </div>
                                     <div class="form-group row">
