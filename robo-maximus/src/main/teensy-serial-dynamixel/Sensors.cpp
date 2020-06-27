@@ -2,6 +2,7 @@
 
 void ControllerSensors::setup() 
 {  
+  Wire.begin();
   // Before initializing the IMU, there are a few settings
   // we may need to adjust. Use the settings struct to set
   // the device's communication mode and addresses:
@@ -25,7 +26,7 @@ void ControllerSensors::setup()
 }
 
 void ControllerSensors::readSensors() {
-    if ( imu.gyroAvailable() )
+  if ( imu.gyroAvailable() )
   {
     imu.readGyro();
   }

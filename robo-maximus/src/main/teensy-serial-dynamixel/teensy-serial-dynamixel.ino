@@ -2,20 +2,19 @@
 #include <ArduinoJson.h>
 #include "Sensors.h"
 
-/*
- * TEST Command: Turn on Torgue of servo 124
- * {"command":"dynamixel","dxldata":"FFFFFD007C070003400001015D8A"}
- * 
- * 
- * Torgue OFF
- * {"command":"dynamixel","dxldata":"FFFFFD007C070003400000015E0C"}
- */
-
 int LED_PIN = 13;
 int SEND_PIN = 2;
 int FEEDBACK_TIMEOUT = 250;
 
+bool debugMode = false;
+
 ControllerSensors sensors = ControllerSensors();
+
+void printDebug(char * message) {
+  if(debugMode) {
+    Serial.println(message);
+  }
+}
 
 byte nibble(char c)
 {
@@ -36,10 +35,13 @@ void hexCharacterStringToBytes(byte *byteArray, const char *hexString)
   bool oddLength = strlen(hexString) & 1;
 
   byte currentByte = 0;
-  byte byteIndex = 0;
+  int byteIndex = 0;
 
-  for (byte charIndex = 0; charIndex < strlen(hexString); charIndex++)
+  printDebug("Entering hex to byte conversion");
+  printDebug(("Lenght: " + String(strlen(hexString))).c_str());
+  for (int charIndex = 0; charIndex < strlen(hexString); charIndex++)
   {
+    printDebug(("Loop: " + String(charIndex)).c_str());
     bool oddCharIndex = charIndex & 1;
 
     if (oddLength)
@@ -75,6 +77,7 @@ void hexCharacterStringToBytes(byte *byteArray, const char *hexString)
       }
     }
   }
+  printDebug("Exiting hex to byte conversion");
 }
 
 void setup() {
@@ -99,6 +102,8 @@ void loop() {
     String feedback = receiveFeedback();
     Serial.println(feedback);
     Serial.flush();
+  } else {
+    printDebug("Skipping waiting for feedback");
   }
 }
 
@@ -110,7 +115,7 @@ void flushDynaBuffer() {
 
 bool handleCommand(String inputString) {
   if(inputString.length() > 0) {
-//    Serial.println("Received: " + inputString);
+    printDebug(("Received: " + inputString).c_str());
   
     DynamicJsonDocument doc(1024);
     deserializeJson(doc, inputString);
@@ -118,15 +123,17 @@ bool handleCommand(String inputString) {
     String command = doc["command"];
     String wait = doc["wait"];
   
-//    Serial.println("We have a command: " + command);
+    printDebug(("We have a command: " + command).c_str());
   
     if(String("dynamixel").equalsIgnoreCase(command)) {
       String dxlData = doc["dxldata"];
-//      Serial.println("Sending DXL Data: " + dxlData);
+      printDebug(("Sending DXL Data: " + dxlData).c_str());
 
       int nrBytes = dxlData.length() / 2;
       byte byteArray[nrBytes] = {0};
       hexCharacterStringToBytes(byteArray, dxlData.c_str());
+
+      printDebug("Byte conversion completed");
   
       digitalWrite(SEND_PIN, HIGH);
       delay(5);
@@ -134,6 +141,8 @@ bool handleCommand(String inputString) {
       Serial1.flush();
       digitalWrite(SEND_PIN, LOW);
       delay(5);
+
+      printDebug("Command delivered");
     } else if (String("sensors").equalsIgnoreCase(command)) {
       sensors.readSensors();
       
@@ -144,6 +153,10 @@ bool handleCommand(String inputString) {
       Serial.println(feedback);      
 
       return false;
+    } else if(String("toggleDebug").equalsIgnoreCase(command)) {
+      debugMode = !debugMode;
+
+      printDebug("Debug mode enabled");
     }
 
     return String("true").equalsIgnoreCase(wait);
