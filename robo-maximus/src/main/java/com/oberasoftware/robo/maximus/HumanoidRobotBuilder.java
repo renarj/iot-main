@@ -125,19 +125,17 @@ public class HumanoidRobotBuilder {
             return new ArmBuilder(armName);
         }
 
-        public ArmBuilder shoulder(String name, String xId, String yId, String zId) {
+        public ArmBuilder shoulder(String name, String xId, String yId) {
             shoulder = new ShoulderImpl(name,
                     new JointImpl(xId, name + "x", "shoulder-x", false),
-                    new JointImpl(yId, name + "y", "shoulder-y", false),
-                    new JointImpl(zId, name + "z", "shoulder-z", false));
+                    new JointImpl(yId, name + "y", "shoulder-y", false));
             return this;
         }
 
-        public ArmBuilder shoulder(String name, JointBuilder x, JointBuilder y, JointBuilder z) {
+        public ArmBuilder shoulder(String name, JointBuilder x, JointBuilder y) {
             shoulder = new ShoulderImpl(name,
                     x.build(),
-                    y.build(),
-                    z.build());
+                    y.build());
             return this;
 
         }

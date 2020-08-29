@@ -24,7 +24,7 @@
 </script>
 
 <script id="jointsTemplate" type="x-tmp-mustache">
-     <a href="#" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" jointType="{{jointType}}" style="height: 40px; padding: 10px 15px;">
+     <a href="#" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" friendlyName="{{name}}" jointType="{{jointType}}" style="height: 40px; padding: 10px 15px;">
             <div class="checkbox" style="display:inline">
             <input  type="checkbox" value="" jointChainId="{{jointChainId}}" jointId="{{jointId}}" class="jointCheckBox">
         </div>
@@ -36,9 +36,9 @@
 
 <script id="jointPosition" type="x-tmp-mustache">
     <tr id="jointPosition-{{id}}" jointId="{{id}}">
-        <td class="jid" jointId="{{id}}">{{id}}</td>
+        <td class="jid" jointId="{{id}}">{{id}} ({{name}})</td>
         <td class="pos">{{position}}</td>
-        <td class="deg">{{degrees}}</td>
+        <td ><input class="deg form-control form-control-sm" size="5" type="text" value="{{degrees}}"></td>
         <td class="action">
             <button type="button" class="btn btn-sm btn-secondary" id="jedit-{{id}}">Edit</button>
             <button type="button" class="btn btn-sm btn-secondary" id="jdelete-{{id}}">Delete</button>
@@ -255,6 +255,7 @@
                             <button type="submit" class="btn btn-primary btn-sm" id="saveMotion">Save Motion</button>
                             <button type="submit" class="btn btn-primary btn-sm" id="newMotion">New Motion</button>
                             <button type="submit" class="btn btn-primary btn-sm" id="runMotion">Run Motion</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="exportMotions">Export All</button>
                         </div>
                     </div>
                     <div class="card mt-1 border-dark" id="robotTool">

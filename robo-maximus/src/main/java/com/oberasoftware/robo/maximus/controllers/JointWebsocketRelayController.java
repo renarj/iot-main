@@ -2,12 +2,10 @@ package com.oberasoftware.robo.maximus.controllers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.dynamixel.web.ServoStateController;
 import com.oberasoftware.robo.maximus.model.JointDataImpl;
 import com.oberasoftware.robo.maximus.model.SensorDataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -16,10 +14,13 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class JointWebsocketRelayController implements EventHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(ServoStateController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JointWebsocketRelayController.class);
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public JointWebsocketRelayController(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @EventSubscribe
     public void receiveStateUpdate(JointDataImpl jointUpdateEvent) {
@@ -31,7 +32,6 @@ public class JointWebsocketRelayController implements EventHandler {
     @EventSubscribe
     public void receiveSensorUpdate(SensorDataImpl sensorUpdate) {
         LOG.debug("Received sensor update event, relaying over websocket: {}", sensorUpdate);
-
         messagingTemplate.convertAndSend("/topic/sensors", sensorUpdate);
     }
 }

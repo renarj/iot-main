@@ -10,14 +10,12 @@ public class ShoulderImpl implements Shoulder {
 
     private final Joint x;
     private final Joint y;
-    private final Joint z;
 
     private final String name;
 
-    public ShoulderImpl(String name, Joint x, Joint y, Joint z) {
+    public ShoulderImpl(String name, Joint x, Joint y) {
         this.x = x;
         this.y = y;
-        this.z = z;
         this.name = name;
     }
 
@@ -33,12 +31,12 @@ public class ShoulderImpl implements Shoulder {
 
     @Override
     public Joint getZJoint() {
-        return z;
+        return null;
     }
 
     @Override
     public List<Joint> getJoints(boolean includeChildren) {
-        return Lists.newArrayList(x, y, z);
+        return Lists.newArrayList(x, y);
     }
 
     @Override
@@ -51,7 +49,6 @@ public class ShoulderImpl implements Shoulder {
         return "ShoulderImpl{" +
                 "x=" + x +
                 ", y=" + y +
-                ", z=" + z +
                 ", name='" + name + '\'' +
                 '}';
     }

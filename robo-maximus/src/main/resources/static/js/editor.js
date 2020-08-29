@@ -234,6 +234,31 @@ function addListeners() {
                 console.log("Executed motion")
             }});
     });
+
+    $("#newMotion").click(function (e) {
+        e.preventDefault();
+
+        console.log("Clearing motion");
+
+        $("#jointPositions").empty();
+        $("#editor").attr("frameid", "");
+        $("#time").val("");
+        $("#frameName").val("");
+
+        $("#motionTool").attr("currentMotion", "");
+        $("#motionLabel").html("");
+        $("#motionName").val("");
+
+        $("#keyFrames").empty();
+    });
+
+    $("#exportMotions").click(function (e) {
+        e.preventDefault();
+
+        $.get("/editor/motions", function(data) {
+
+        });
+    });
 }
 
 function setTorgueSelected(state) {
@@ -334,9 +359,9 @@ function getPositionData() {
 
     var rows = $("#jointPositions").find("tr");
     $.each(rows, function(i, row) {
-        var servoId = $(this).find(".jid").html();
+        var servoId = $(this).find(".jid").attr("jointId");
         var pos = parseInt($(this).find(".pos").html());
-        var deg = parseInt($(this).find(".deg").html());
+        var deg = parseInt($(this).find(".deg").val());
 
         console.log("Found a servo: " + servoId + " with position: " + pos + " and degrees: " + deg);
 
@@ -385,9 +410,17 @@ function addPosition(jointId) {
     renderJointPosition(jointId, position, degrees);
 }
 
+function findName(jointId) {
+    var elementId = "joint-" + jointId;
+    var n = $("#" + elementId).attr("friendlyName");
+    console.log("Found friendly name: " + n + " for joint: " + jointId);
+    return n;
+}
+
 function renderJointPosition(jointId, position, degrees) {
     var data = {
         "id": jointId,
+        "name" : findName(jointId),
         "position": position,
         "degrees": degrees
     };

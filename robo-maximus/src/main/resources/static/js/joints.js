@@ -67,10 +67,15 @@ function renderChain(chain) {
     $.each(chain.jointChains, function(i, jointChain) {
         renderJointChain(chainId, jointChain);
     });
+
+    if(chain.joints.length > 0) {
+        console.log("We have joints here to load");
+        renderJointChain(chainId, chain);
+    }
 }
 
 function renderJointChain(parentChainId, jointChain) {
-    console.log("Rendering jointChain: " + jointChain.name)
+    console.log("Rendering jointChain: " + jointChain.name);
 
     var jointChainId = "jointChain-" + jointChain.name;
     var data = {

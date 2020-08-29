@@ -21,9 +21,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.ArmBuilder.createArm;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
@@ -37,7 +40,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class RobotInitializer {
     private static final Logger LOG = getLogger(RobotInitializer.class);
 
-    private static final List<String> SERVO_IDS = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "122", "123", "124", "130", "131", "132", "133", "134", "141", "140");
+    public static final List<String> SERVO_IDS = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "123", "124", "130", "131", "133", "134", "141", "140");
     private static final String MOTOR_ID_STRING = String.join(",", SERVO_IDS);
 
     @Autowired
@@ -72,10 +75,17 @@ public class RobotInitializer {
                 .capability(ServoSensorDriver.class)
                 .capability(MotionStorage.class)
                 .capability(TeensySensorDriver.class)
+//                .capability(InfluxDBMetricsCapability.class)
                 .build();
 
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
+
+        Set<String> detectedServos = robot.getServoDriver().getServos().stream().map(s -> s.getId()).collect(Collectors.toSet());
+
+        Set<String> undetectedServos = new HashSet<>(SERVO_IDS);
+        undetectedServos.removeAll(detectedServos);
+        undetectedServos.forEach(s -> LOG.info("Did not detect servo: {}", s));
 
         HumanoidRobot humanoidRobot = constructHumanoid(robot);
         actions.forEach(a -> {
@@ -102,7 +112,7 @@ public class RobotInitializer {
                                 .ankle("leftAnkle",
                                         create("104", "leftAnkle-x"),
                                         create("105", "leftAnkle-y"))
-                                .knee(create("103", "LeftKnee").max(5).min(-110))
+                                .knee(create("103", "LeftKnee", true).max(110).min(-5))
                                 .hip("leftHip",
                                         create("100", "leftHip-x"),
                                         create("102", "leftHip-y"),
@@ -118,16 +128,16 @@ public class RobotInitializer {
                                         create("107", "rightHip-z")))
                 .torso(
                         createArm("LeftArm")
-                                .shoulder("leftShoulder","131", "130", "132")
+                                .shoulder("leftShoulder","131", "130")
                                 .elbow(create("133", "LeftElbow", false  ).max(110).min(-110))
                                 .hand("LeftHand", "134"),
                         createArm("RightArm")
                                 .shoulder("rightShoulder",
                                         create("121", "rightShoulderX", true),
-                                        create("120", "rightShoulderY", true),
-                                        create("122", "rightShoulderZ"))
+                                        create("120", "rightShoulderY", true)
+                                        )
 //                                .shoulder("rightShoulder", "121", "120", "122")
-                                .elbow(create("123", "RightElbow").max(110).min(-110))
+                                .elbow(create("123", "RightElbow", true).max(110).min(-110))
                                 .hand("RightHand", "124"))
                 .head("head", "141", "140")
                 .sensor(new Ina260CurrentSensor())
