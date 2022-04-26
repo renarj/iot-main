@@ -20,10 +20,11 @@ function connect() {
 function handleSensorUpdate(state) {
     // console.log("sensor update: " + JSON.stringify(state));
 
-    var value = state.value.raw;
-    var id = state.sensorId.split(".").join("-");
-
-    $("#sensor-value-" + id).html(value);
+    $.each(state.attributes, function(i, attr) {
+        var value = state.values[attr];
+        var id = state.sensorId + "-" + attr;
+        $("#sensor-value-" + id).html(value);
+    });
 }
 
 function handleStateUpdate(state) {
@@ -397,7 +398,7 @@ function addLivePosition(jointId) {
     $.get(url, function(data) {
         console.log("Received joint data: " + JSON.stringify(data));
         $("#jointPosition-" + jointId).remove();
-        renderJointPosition(jointId, data.position, data.degrees);
+        renderJointPosition(jointId, data.values.position, data.values.degrees);
     });
 }
 
@@ -459,7 +460,7 @@ function renderRobot(robot) {
 function renderSensor(sensor) {
     $.each(sensor.values, function(i, value) {
         var data = {
-            "id" : i.split(".").join("-"),
+            "id" : sensor.name + "-" + i,
             "value": value.raw
         };
         var rendered = renderTemplate("sensor", data);
@@ -538,9 +539,9 @@ function renderJoint(jointChainId, joint) {
 
 
             $("#servoTitle").text(data.id);
-            $("#position").val(data.position);
-            $("#degrees").val(data.degrees);
-            $("#positionSlider").slider('setValue', data.degrees);
+            $("#position").val(data.values.position);
+            $("#degrees").val(data.values.degrees);
+            $("#positionSlider").slider('setValue', data.values.degrees);
         });
     });
 }

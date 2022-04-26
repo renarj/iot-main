@@ -8,18 +8,26 @@
     <parent>
         <groupId>com.oberasoftware</groupId>
         <artifactId>oss-maven</artifactId>
-        <version>2.4</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>robo-projects</artifactId>
+    <artifactId>robotics</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <robo.sdk.version>2.0-SNAPSHOT</robo.sdk.version>
         <jasdb.version>2.0-SNAPSHOT</jasdb.version>
+        <jssc.version>2.8.0</jssc.version>
     </properties>
 
     <modules>
+        <module>robo-api</module>
+        <module>robo-core</module>
+        <module>robo-client</module>
+        <module>robo-cloud</module>
+        <module>robo-mqtt</module>
+        <module>robo-util</module>
+        <module>dynamixel-core</module>
+        <module>dynamixel-web</module>
         <module>robo-container</module>
         <module>robo-behaviours</module>
         <module>robo-pi4j</module>
@@ -59,55 +67,6 @@
                 <artifactId>obera-base</artifactId>
                 <version>1.2</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-api</artifactId>
-                <version>${robo.sdk.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-core</artifactId>
-                <version>${robo.sdk.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>dynamixel-core</artifactId>
-                <version>${robo.sdk.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>dynamixel-web</artifactId>
-                <version>${robo.sdk.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-client</artifactId>
-                <version>${robo.sdk.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-cloud</artifactId>
-                <version>${robo.sdk.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-behaviours</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oberasoftware</groupId>
-                <artifactId>robo-pi4j</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
             <dependency>
                 <groupId>com.oberasoftware</groupId>
                 <artifactId>jasdb-restclient</artifactId>
@@ -123,6 +82,22 @@
                 <artifactId>jasdb-service</artifactId>
                 <version>${jasdb.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.paho</groupId>
+                <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.scream3r</groupId>
+                <artifactId>jssc</artifactId>
+                <version>${jssc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.moquette</groupId>
+                <artifactId>moquette-broker</artifactId>
+                <version>0.8</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -139,8 +114,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
         </plugins>

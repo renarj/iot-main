@@ -9,14 +9,45 @@ function connect() {
         stompClient.subscribe('/topic/joints', function(frame){
             handleStateUpdate(JSON.parse(frame.body));
         });
+
+        stompClient.subscribe('/topic/sensors', function(frame) {
+            handleSensorUpdate(JSON.parse(frame.body));
+        });
     });
     stompClient.debug = null
 }
 
+function handleSensorUpdate(state) {
+    // console.log("sensor update: " + JSON.stringify(state));
+
+    $.each(state.attributes, function(i, attr) {
+        var value = state.values[attr];
+        var id = state.sensorId + "-" + attr;
+        $("#sensor-value-" + id).html(value);
+    });
+}
+
 function handleStateUpdate(state) {
-    $("#degrees-" + state.id).val(state.degrees);
-    $("#position-" + state.id).val(state.position);
-    // $("#slider-" + state.id).slider('setValue', state.degrees);
+    var jointState = $("#" + state.id).attr("state")
+    if(jointState === "ready") {
+        if(state.values.degrees) {
+            $("#degrees-" + state.id).val(state.values.degrees);
+            $("#slider-" + state.id).slider('setValue', state.values.degrees);
+        }
+        if(state.values.position) {
+            $("#position-" + state.id).val(state.values.position);
+        }
+
+        if(state.values.torgue !== undefined) {
+            var tState = $("#tToggle-" + state.id);
+            console.log("Torgue state: " + state.values.torgue + " for joint: " + state.id);
+            if(state.values.torgue === 1) {
+                tState.prop('checked', true);
+            } else {
+                tState.prop('checked', false);
+            }
+        }
+    }
 }
 
 function renderRobots() {
@@ -28,6 +59,36 @@ function renderRobots() {
             renderJointPosition(robot);
         })
     });
+
+    addListeners();
+}
+
+function addListeners() {
+    $("#torgueAllOn").click(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/servos/enable/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Enable torgue for all servos successfully");
+            }
+        });
+    });
+
+    $("#torgueAllOff").click(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/servos/disable/torgue",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log("Disable torgue for all servos successfully");
+            }
+        });
+    });
 }
 
 function renderJointPosition(robot) {
@@ -35,11 +96,16 @@ function renderJointPosition(robot) {
         console.log("Joint Data: " + JSON.stringify(data));
 
         $.each(data, function(i, joint) {
-            console.log("Joint data for: " + joint.id);
+            $("#degrees-" + joint.id).val(joint.values.degrees);
+            $("#position-" + joint.id).val(joint.values.position);
+            $("#slider-" + joint.id).slider('setValue', joint.values.degrees);
 
-            $("#degrees-" + joint.id).val(joint.degrees);
-            $("#position-" + joint.id).val(joint.position);
-            $("#slider-" + joint.id).slider('setValue', joint.degrees);
+            var tState = $("#tToggle-" + joint.id);
+            if(joint.values.torgue === 1) {
+                tState.prop('checked', true);
+            } else {
+                tState.prop('checked', false);
+            }
         });
     });
 }
@@ -50,6 +116,22 @@ function renderRobot(robot) {
     $.each(robot.chainSets, function(i, chain) {
         renderChain(chain);
     })
+
+    $.each(robot.sensors, function(i, sensor) {
+        renderSensor(sensor);
+    });
+}
+
+function renderSensor(sensor) {
+    $.each(sensor.values, function(i, value) {
+        var data = {
+            "id" : sensor.name + "-" + i,
+            "value": value.raw
+        };
+        var rendered = renderTemplate("sensor", data);
+        $("#sensors").append(rendered);
+
+    });
 }
 
 function renderChain(chain) {
@@ -105,41 +187,70 @@ function renderJoint(jointChainId, joint) {
     $("#" + jointChainId).append(rendered);
 
     var slider = $("#slider-" + joint.id);
-    slider.slider();
+    slider.slider({
+        min: joint.minDegrees,
+        max: joint.maxDegrees
+    });
 
     slider.on("slideStop", handleSlideStop);
 
-    $("#tEnable-" + joint.id).click(function (e) {
-        e.preventDefault();
-
+    $("#tToggle-" + joint.id).change(function() {
         var jointId = this.getAttribute('jointid');
+        console.log("Toggled the torgue button to: " + this.checked + " for joint: " + jointId);
 
-        console.log("We had torgue enable on joint: " + jointId);
+        var state = "disable";
+        if(this.checked) {
+            state = "enable";
+        }
+
+        var url = "/servos/" + state + "/" + jointId + "/torgue";
+
         $.ajax({
-            url: "/servos/enable/" + jointId + "/torgue",
+            url: url,
             type: "POST",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                console.log("Enable torgue for servo successfully");
+                console.log("Torgue for servo " + jointId + " set successfully to: " + state);
             }
         });
 
     });
 
-    $("#tDisable-" + joint.id).click(function (e) {
+    $("#angle-edit-" + joint.id).click(function(e) {
+       e.preventDefault();
+       var jointId = this.getAttribute('jointid');
+       var j = $("#" + jointId);
+       if(j.attr("state") === "ready") {
+           j.attr("state", "editing");
+           $("#icon-" + jointId).text("check");
+           $("#stop-icon-" + jointId).text("delete")
+
+           $("#degrees-" + jointId).prop("disabled", false);
+       } else {
+           var degreeInput = $("#degrees-" + jointId);
+           var angle = degreeInput.val();
+           setServoAngle(jointId, angle);
+
+           degreeInput.prop("disabled", true);
+
+           stopEditJoint(jointId);
+       }
+    });
+    $("#angle-edit-stop-" + joint.id).click(function(e) {
         e.preventDefault();
 
         var jointId = this.getAttribute('jointid');
-        console.log("We had torgue disable on joint: " + jointId);
-        $.ajax({
-            url: "/servos/disable/" + jointId + "/torgue",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                console.log("Disable torgue for servo successfully");
-            }
-        });
-    });
+        stopEditJoint(jointId);
+    })
+}
+
+function stopEditJoint(jointId) {
+    console.log("Stop Angle Edit on joint: " + jointId);
+
+    $("#" + jointId).attr("state", "ready");
+    $("#icon-" + jointId).text("edit");
+    $("#stop-icon-" + jointId).text("");
+    $("#degrees-" + jointId).prop("disabled", true);
 }
 
 function handleSlideStop(slideEvt) {
@@ -179,15 +290,15 @@ function handleSlideStop(slideEvt) {
 
     } else {
         console.log("Non sync mode");
-        setServoProperty(jointId, val);
+        setServoAngle(jointId, val);
     }
 }
 
-function setServoProperty(jointId, degrees) {
+function setServoAngle(jointId, degrees) {
     var json = {
-        id: jointId,
-        degrees: degrees,
-        position: 0
+        servoId: jointId,
+        targetAngle: degrees,
+        targetPosition: 0
     };
 
     console.log("Posting: " + JSON.stringify(json));

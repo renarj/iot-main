@@ -1,10 +1,10 @@
 package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.ImmutableList;
-import com.oberasoftware.robo.api.behavioural.humanoid.Ankle;
-import com.oberasoftware.robo.api.behavioural.humanoid.Hip;
-import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
-import com.oberasoftware.robo.api.behavioural.humanoid.Leg;
+import com.oberasoftware.robo.api.humanoid.components.Ankle;
+import com.oberasoftware.robo.api.humanoid.components.Hip;
+import com.oberasoftware.robo.api.humanoid.components.Leg;
+import com.oberasoftware.robo.api.humanoid.joints.Joint;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.home.util.IntUtils;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.wheel.DriveBehaviour;
 import com.oberasoftware.robo.api.commands.BasicCommand;
 import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import org.slf4j.Logger;

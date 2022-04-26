@@ -11,7 +11,7 @@ import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.api.behavioural.Wheel;
+import com.oberasoftware.robo.api.behavioural.wheel.Wheel;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;

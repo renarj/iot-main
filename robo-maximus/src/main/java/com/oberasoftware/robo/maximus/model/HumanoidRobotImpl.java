@@ -6,18 +6,28 @@ import com.google.common.collect.Lists;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.humanoid.*;
+import com.oberasoftware.robo.api.humanoid.HumanoidRobot;
+import com.oberasoftware.robo.api.humanoid.JointControl;
+import com.oberasoftware.robo.api.humanoid.components.ChainSet;
+import com.oberasoftware.robo.api.humanoid.components.Head;
+import com.oberasoftware.robo.api.humanoid.components.Legs;
+import com.oberasoftware.robo.api.humanoid.components.Torso;
+import com.oberasoftware.robo.api.humanoid.joints.Joint;
+import com.oberasoftware.robo.api.humanoid.joints.JointChain;
 import com.oberasoftware.robo.api.sensors.Sensor;
-import com.oberasoftware.robo.maximus.motion.MotionControlImpl;
-import com.oberasoftware.robo.maximus.motion.MotionEngine;
+import com.oberasoftware.robo.maximus.motion.JointControlImpl;
 import com.oberasoftware.robo.maximus.motion.MotionEngineImpl;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class HumanoidRobotImpl implements HumanoidRobot {
+    private static final Logger LOG = getLogger( HumanoidRobotImpl.class );
 
     private final String name;
 
@@ -30,14 +40,17 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     private final List<Sensor> sensors;
 
-    private List<Behaviour> behaviours = new ArrayList<>();
+    private final List<Behaviour> behaviours = new ArrayList<>();
+    private final List<Behaviour> registeredBehaviours = new ArrayList<>();
 
-    public HumanoidRobotImpl(Robot robot, String name, Legs legs, Torso torso, Head head, List<Sensor> sensors) {
+    public HumanoidRobotImpl(Robot robot, String name, Legs legs, Torso torso, Head head, List<Sensor> sensors, List<Behaviour> behaviours) {
         this.robot = robot;
         this.name = name;
         this.legs = legs;
         this.torso = torso;
         this.head = head;
+
+        this.registeredBehaviours.addAll(behaviours);
 
         chainSets = ImmutableList.<ChainSet>builder()
                 .add(legs)
@@ -49,13 +62,21 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
-        MotionEngine motionEngine = new MotionEngineImpl();
+        List<Joint> joints = getJoints(true);
+
+        MotionEngineImpl motionEngine = new MotionEngineImpl(joints);
         motionEngine.initialize(behaviouralRobot, robotCore);
         behaviours.add(motionEngine);
 
-        MotionControl motionControl = new MotionControlImpl(getJoints(true));
+        JointControl motionControl = new JointControlImpl(getJoints(true));
         motionControl.initialize(behaviouralRobot, robotCore);
         behaviours.add(motionControl);
+
+        registeredBehaviours.forEach(b -> {
+            LOG.info("Registering and initializing behaviour controller: {}", b);
+            b.initialize(behaviouralRobot, robotCore);
+            behaviours.add(b);
+        });
 
         ServoListener listener = new ServoListener(motionControl);
         robotCore.listen(listener);
@@ -85,8 +106,8 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     @JsonIgnore
-    public MotionControl getMotionControl() {
-        return getBehaviour(MotionControl.class);
+    public JointControl getJointControl() {
+        return getBehaviour(JointControl.class);
     }
 
     @Override

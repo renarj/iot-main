@@ -2,7 +2,7 @@ package com.oberasoftware.max.core.behaviours.wheels.impl;
 
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.Wheel;
+import com.oberasoftware.robo.api.behavioural.wheel.Wheel;
 import com.oberasoftware.robo.api.commands.Scale;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 import org.slf4j.Logger;

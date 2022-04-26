@@ -3,13 +3,21 @@ package com.oberasoftware.robo.maximus;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Uninterruptibles;
+import com.oberasoftware.base.event.EventHandler;
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.RobotRegistry;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.api.behavioural.humanoid.HumanoidRobot;
+import com.oberasoftware.robo.api.humanoid.HumanoidRobot;
+import com.oberasoftware.robo.api.servo.DynamixelDevice;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
+import com.oberasoftware.robo.dynamixel.DynamixelTorgueManager;
+import com.oberasoftware.robo.maximus.model.SensorDataImpl;
+import com.oberasoftware.robo.maximus.motion.NavigationControlImpl;
+import com.oberasoftware.robo.maximus.motion.cartesian.CartesianControlImpl;
+import com.oberasoftware.robo.maximus.motion.cartesian.CoordinatesMonitor;
 import com.oberasoftware.robo.maximus.sensors.Ina260CurrentSensor;
 import com.oberasoftware.robo.maximus.sensors.LSM9DS1GyroSensor;
 import com.oberasoftware.robo.maximus.sensors.TeensySensorDriver;
@@ -28,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import static com.oberasoftware.robo.api.humanoid.components.ComponentNames.*;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.ArmBuilder.createArm;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.createLeg;
@@ -40,8 +49,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class RobotInitializer {
     private static final Logger LOG = getLogger(RobotInitializer.class);
 
-    public static final List<String> SERVO_IDS = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "123", "124", "130", "131", "133", "134", "141", "140");
+    public static final List<String> SERVO_IDS = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "122", "123", "124", "130", "131", "132", "133", "134", "141", "140");
     private static final String MOTOR_ID_STRING = String.join(",", SERVO_IDS);
+
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -75,13 +85,15 @@ public class RobotInitializer {
                 .capability(ServoSensorDriver.class)
                 .capability(MotionStorage.class)
                 .capability(TeensySensorDriver.class)
-//                .capability(InfluxDBMetricsCapability.class)
+                .capability(InfluxDBMetricsCapability.class)
+                .capability(DynamixelTorgueManager.class)
                 .build();
 
         robotRegistry.register(robot);
         LOG.info("Low level robot created: {}", robot);
 
-        Set<String> detectedServos = robot.getServoDriver().getServos().stream().map(s -> s.getId()).collect(Collectors.toSet());
+        Set<String> detectedServos = robot.getServoDriver().getServos().stream()
+                .map(DynamixelDevice::getId).collect(Collectors.toSet());
 
         Set<String> undetectedServos = new HashSet<>(SERVO_IDS);
         undetectedServos.removeAll(detectedServos);
@@ -108,43 +120,69 @@ public class RobotInitializer {
     private HumanoidRobot constructHumanoid(Robot robot) {
         HumanoidRobot maximus = HumanoidRobotBuilder.create(robot, "maximus")
                 .legs(
-                        createLeg("LeftLeg")
-                                .ankle("leftAnkle",
-                                        create("104", "leftAnkle-x"),
-                                        create("105", "leftAnkle-y"))
-                                .knee(create("103", "LeftKnee", true).max(110).min(-5))
-                                .hip("leftHip",
-                                        create("100", "leftHip-x"),
-                                        create("102", "leftHip-y"),
-                                        create("101", "leftHip-z")),
-                        createLeg("RightLeg")
-                                .ankle("rightAnkle",
-                                        create("110", "rightAnkle-x"),
-                                        create("111", "rightAnkle-y"))
-                                .knee(create("109", "RightKnee").max(110).min(-5))
-                                .hip("rightHip",
-                                        create("106", "rightHip-x"),
-                                        create("108", "rightHip-y"),
-                                        create("107", "rightHip-z")))
+                        createLeg(RIGHT_LEG)
+                                .ankle(RIGHT_ANKLE,
+                                        create("110", RIGHT_ANKLE_PITCH),
+                                        create("111", RIGHT_ANKLE_ROLL))
+                                .knee(create("109", RIGHT_KNEE))
+                                .hip(RIGHT_HIP,
+                                        create("100", RIGHT_HIP_ROLL),
+                                        create("102", RIGHT_HIP_PITCH),
+                                        create("101", RIGHT_HIP_YAW)),
+                        createLeg(LEFT_LEG)
+                                .ankle(LEFT_ANKLE,
+                                        create("104", LEFT_ANKLE_PITCH),
+                                        create("105", LEFT_ANKLE_ROLL))
+                                .knee(create("103", LEFT_KNEE, true ))
+                                .hip(LEFT_HIP,
+                                        create("106", LEFT_HIP_ROLL),
+                                        create("108", LEFT_HIP_PITCH),
+                                        create("107", LEFT_HIP_YAW)))
                 .torso(
-                        createArm("LeftArm")
-                                .shoulder("leftShoulder","131", "130")
-                                .elbow(create("133", "LeftElbow", false  ).max(110).min(-110))
-                                .hand("LeftHand", "134"),
-                        createArm("RightArm")
-                                .shoulder("rightShoulder",
-                                        create("121", "rightShoulderX", true),
-                                        create("120", "rightShoulderY", true)
+                        createArm(LEFT_ARM)
+                                .shoulder(LEFT_SHOULDER,
+                                        create("131", LEFT_SHOULDER_ROLL, true),
+                                        create("130", LEFT_SHOULDER_PITCH))
+                                .elbow(
+                                        create("133", LEFT_ELBOW, true  ).max(110).min(-110),
+                                        create("132", LEFT_ELBOW_ROLL))
+                                .hand(create("134", LEFT_HAND).min(-5).max(20)), //"LeftHand", "134"
+                        createArm(RIGHT_ARM)
+                                .shoulder(RIGHT_SHOULDER,
+                                        create("121", RIGHT_SHOULDER_ROLL, true),
+                                        create("120", RIGHT_SHOULDER_PITCH, true)
                                         )
-//                                .shoulder("rightShoulder", "121", "120", "122")
-                                .elbow(create("123", "RightElbow", true).max(110).min(-110))
-                                .hand("RightHand", "124"))
-                .head("head", "141", "140")
+                                .elbow(
+                                        create("123", RIGHT_ELBOW, true).max(110).min(-110),
+                                        create("122", RIGHT_ELBOW_ROLL)
+                                )
+                                .hand(create("124", RIGHT_HAND, true).min(-5).max(20)))  //"RightHand", "124"
+                .head("head",
+                        create("141", PITCH_HEAD).min(-25).max(25),
+                        create("140", ROLL_HEAD).min(-50).max(50))
                 .sensor(new Ina260CurrentSensor())
                 .sensor(new LSM9DS1GyroSensor())
+                .behaviourController(new CartesianControlImpl())
+                .behaviourController(new NavigationControlImpl())
+                .behaviourController(new CoordinatesMonitor())
                 .build();
         behaviouralRobotRegistry.register(maximus);
 
+        robot.listen(new LowVoltageMonitor());
+
         return maximus;
+    }
+
+    public static class LowVoltageMonitor implements EventHandler {
+        @EventSubscribe
+        public void receive(SensorDataImpl data) {
+            if(data.getSourcePath().equalsIgnoreCase("ina260.voltage")) {
+                Double v = data.getValue("voltage");
+                if(v < 11.6) {
+                    LOG.error("Low battery voltage: {}, Exiting robot", v);
+//                    System.exit(-1);
+                }
+            }
+        }
     }
 }

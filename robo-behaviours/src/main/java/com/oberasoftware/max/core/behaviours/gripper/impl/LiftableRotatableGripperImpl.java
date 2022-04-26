@@ -1,8 +1,8 @@
 package com.oberasoftware.max.core.behaviours.gripper.impl;
 
 
-import com.oberasoftware.robo.api.behavioural.LiftableRotatableGripper;
 import com.oberasoftware.robo.api.behavioural.ServoBehaviour;
+import com.oberasoftware.robo.api.behavioural.gripper.LiftableRotatableGripper;
 
 /**
  * @author renarj

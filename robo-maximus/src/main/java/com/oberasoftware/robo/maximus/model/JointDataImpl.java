@@ -1,11 +1,10 @@
 package com.oberasoftware.robo.maximus.model;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.oberasoftware.base.event.Event;
-import com.oberasoftware.robo.api.behavioural.humanoid.JointData;
+import com.oberasoftware.robo.api.humanoid.joints.JointData;
+import com.oberasoftware.robo.api.servo.ServoProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,14 +12,22 @@ public class JointDataImpl implements JointData {
     public static final String JOINTS_PATH_BASE = "joints.";
     public static final String DEGREES = "degrees";
     public static final String POSITION = "position";
-    private String id;
-    private int degrees;
-    private int position;
+    public static final String TORGUE = "torgue";
 
-    public JointDataImpl(String id, int degrees, int position) {
+    private String id;
+//    private int degrees;
+//    private int position;
+//    private int torgueState;
+
+    private Map<String, Object> jointValues = new HashMap<>();
+
+    public JointDataImpl(String id) {
         this.id = id;
-        this.position = position;
-        this.degrees = degrees;
+    }
+
+    public JointDataImpl(String id, Map<String, Object> jointValues) {
+        this.id = id;
+        this.jointValues = jointValues;
     }
 
     public JointDataImpl() {
@@ -38,43 +45,40 @@ public class JointDataImpl implements JointData {
 
     @Override
     public Map<String, ?> getValues() {
-        return ImmutableMap.<String, Object> builder()
-                .put(DEGREES, getDegrees())
-                .put(POSITION, getPosition())
-                .build();
+//        return ImmutableMap.<String, Object> builder()
+//                .put(DEGREES, getDegrees())
+//                .put(POSITION, getPosition())
+//                .put(TORGUE, getTorgueState())
+//                .build();
+
+        return new HashMap<>(jointValues);
     }
 
     @Override
     public <T> T getValue(String attribute) {
-        if(DEGREES.equalsIgnoreCase(attribute)) {
-            return (T) Integer.valueOf(getDegrees());
-        } else if(POSITION.equalsIgnoreCase(attribute)) {
-            return (T) Integer.valueOf(getPosition());
-        }
-
-        return null;
+        return (T) jointValues.get(attribute);
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setDegrees(int degrees) {
-        this.degrees = degrees;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     @Override
     public int getDegrees() {
-        return degrees;
+        Integer degrees = getValue(DEGREES);
+        return degrees == null ? 0 : degrees;
     }
 
     @Override
     public int getPosition() {
-        return position;
+        Integer position = getValue(ServoProperty.POSITION.name().toLowerCase());
+        return position == null ? 0 : position;
+    }
+
+    @Override
+    public int getTorgueState() {
+        Integer val = getValue(ServoProperty.TORGUE.name().toLowerCase());
+        return val == null ? 0 : val;
     }
 
     @Override
@@ -86,8 +90,7 @@ public class JointDataImpl implements JointData {
     public String toString() {
         return "JointDataImpl{" +
                 "id='" + id + '\'' +
-                ", degrees=" + degrees +
-                ", position=" + position +
+                ", jointValues=" + jointValues +
                 '}';
     }
 }

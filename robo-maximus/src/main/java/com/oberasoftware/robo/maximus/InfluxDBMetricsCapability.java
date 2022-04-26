@@ -3,7 +3,6 @@ package com.oberasoftware.robo.maximus;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.robo.api.ActivatableCapability;
-import com.oberasoftware.robo.api.Capability;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.events.RobotValueEvent;
 import org.influxdb.InfluxDB;
@@ -23,7 +22,7 @@ public class InfluxDBMetricsCapability implements ActivatableCapability, EventHa
     private static final Logger LOG = LoggerFactory.getLogger(InfluxDBMetricsCapability.class);
     public static final String ROBOT_EVENTS = "sensor_data";
 
-    @Value("${influxdb.host.uri:http://k8master:8086}")
+    @Value("${influxdb.host.uri:http://10.1.0.2:8086}")
     private String influxDBHostUri;
 
     @Value("${influxdb.name:SENSOR_DATA}")

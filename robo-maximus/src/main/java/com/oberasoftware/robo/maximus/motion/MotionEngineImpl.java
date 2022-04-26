@@ -2,6 +2,7 @@ package com.oberasoftware.robo.maximus.motion;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import com.oberasoftware.robo.api.MotionTask;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
@@ -9,6 +10,8 @@ import com.oberasoftware.robo.api.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.robo.api.commands.PositionAndSpeedCommand;
 import com.oberasoftware.robo.api.commands.Scale;
 import com.oberasoftware.robo.api.exceptions.RoboException;
+import com.oberasoftware.robo.api.humanoid.MotionEngine;
+import com.oberasoftware.robo.api.humanoid.joints.Joint;
 import com.oberasoftware.robo.api.motion.JointTarget;
 import com.oberasoftware.robo.api.motion.KeyFrame;
 import com.oberasoftware.robo.api.motion.Motion;
@@ -19,6 +22,7 @@ import com.oberasoftware.robo.core.motion.JointTargetImpl;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -26,7 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
-import static com.oberasoftware.robo.maximus.motion.MotionControlImpl.RADIAL_SCALE;
+import static com.oberasoftware.robo.maximus.motion.JointControlImpl.RADIAL_SCALE;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -45,10 +49,17 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
     private ServoDriver servoDriver;
 
-    private Queue<MotionTask> queue = new LinkedBlockingQueue<>();
+    private Queue<MotionTaskImpl> queue = new LinkedBlockingQueue<>();
+    private Map<String, MotionTaskImpl> motionTasks = new ConcurrentHashMap<>();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private volatile boolean running;
+
+    private final Map<String, Joint> jointMap;
+
+    public MotionEngineImpl(List<Joint> joints) {
+        this.jointMap = joints.stream().collect(Collectors.toMap(Joint::getID, jv -> jv));
+    }
 
     @Override
     public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
@@ -62,12 +73,15 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         executor.execute(() -> {
             LOG.info("Starting motion queue");
             while(running && !Thread.currentThread().isInterrupted()) {
-                MotionTask task = queue.poll();
+                MotionTaskImpl task = queue.poll();
                 if(task != null && !task.isCancelled()) {
                     try {
-                        runMotion(task);
+                        LOG.info("Starting motion task: {}", task.getTaskId());
+                        runMotionLoop(task);
                     } finally {
+                        LOG.info("Task: {} is marked as complete", task.getTaskId());
                         task.markComplete();
+                        motionTasks.remove(task.getTaskId());
                     }
                 } else {
                     sleepUninterruptibly(QUEUE_INTERVAL, MILLISECONDS);
@@ -77,7 +91,32 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         });
     }
 
-    private void runMotion(MotionTask task) {
+    private int checkAngle(String jointId, int angle) {
+        if(jointMap.containsKey(jointId) && jointMap.get(jointId).isInverted()) {
+            return -angle;
+        } else {
+            return angle;
+        }
+    }
+
+    private void runMotionLoop(MotionTaskImpl task) {
+        if(task.getState() == MotionTaskImpl.STATE.NOT_STARTED) {
+            task.setState(MotionTask.STATE.STARTED);
+            if (task.isLoop()) {
+                LOG.info("Starting motion loop for task: {}", task.getTaskId());
+                while(task.hasStarted()) {
+                    runMotion(task);
+                }
+                LOG.info("Motion loop for task: {} finished", task.getTaskId());
+            } else {
+                runMotion(task);
+            }
+        } else {
+            LOG.warn("Cannot start task: {} as has invalid state: {}", task.getTaskId(), task.getState());
+        }
+    }
+
+    private void runMotion(MotionTaskImpl task) {
         MotionUnit unit = task.getMotion();
 
         Map<String, Integer> lastServoPositions = new HashMap<>();
@@ -98,6 +137,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         LOG.info("Calculated: {} intervals in: {} for motion: {}", intervalList.size(), w.elapsed(MILLISECONDS), unit);
 
         LOG.info("Enabling torgue");
+        task.setState(MotionTask.STATE.RUNNING);
         servoDriver.setTorgueAll(true);
 
         int counter = 0;
@@ -135,7 +175,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
             for(JointTarget t: frame.getJointTargets()) {
                 int currentAngle = positions.get(t.getServoId());
 
-                int targetAngle = t.getTargetAngle();
+                int targetAngle = checkAngle(t.getServoId(), t.getTargetAngle());
                 if(currentAngle != targetAngle) {
                     double deltaPerFrame = (double)(targetAngle - currentAngle) / iterations;
 
@@ -194,9 +234,10 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
     @Override
     public MotionTask post(Motion motion) throws RoboException {
-        MotionTask task = new MotionTask(UUID.randomUUID().toString(), motion);
+        MotionTaskImpl task = new MotionTaskImpl(UUID.randomUUID().toString(), motion);
 
         if(queue.offer(task)) {
+            motionTasks.put(task.getTaskId(), task);
             return task;
         } else {
             throw new RoboException("Could not submit motion task");
@@ -210,7 +251,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
     @Override
     public Optional<MotionTask> getTask(String taskId) {
-        return Optional.empty();
+        return Optional.of(motionTasks.get(taskId));
     }
 
     @Override
@@ -230,6 +271,9 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
     @Override
     public boolean removeTask(String taskId) throws RoboException {
-        return false;
+        return motionTasks.computeIfPresent(taskId, (k, v) -> {
+            v.setState(MotionTask.STATE.CANCELLED);
+            return v;
+        }) != null;
     }
 }

@@ -1,18 +1,24 @@
 package com.oberasoftware.robo.maximus;
 
 import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.humanoid.*;
+import com.oberasoftware.robo.api.behavioural.Behaviour;
 import com.oberasoftware.robo.api.exceptions.RoboException;
+import com.oberasoftware.robo.api.humanoid.HumanoidRobot;
+import com.oberasoftware.robo.api.humanoid.components.*;
+import com.oberasoftware.robo.api.humanoid.joints.Joint;
 import com.oberasoftware.robo.api.sensors.Sensor;
 import com.oberasoftware.robo.maximus.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.oberasoftware.robo.api.humanoid.components.ComponentNames.*;
+
 public class HumanoidRobotBuilder {
 
     private static final String PITCH = "pitch";
     private static final String YAW = "yaw";
+
 
     private final String name;
     private final Robot robot;
@@ -21,7 +27,8 @@ public class HumanoidRobotBuilder {
     private Torso torso;
     private Head head;
 
-    private List<Sensor> sensors = new ArrayList<>();
+    private final List<Sensor> sensors = new ArrayList<>();
+    private final List<Behaviour> behaviours = new ArrayList<>();
 
     public HumanoidRobotBuilder(Robot robot, String name) {
         this.robot = robot;
@@ -49,14 +56,25 @@ public class HumanoidRobotBuilder {
         return this;
     }
 
+    public HumanoidRobotBuilder head(String name, JointBuilder pitchBuilder, JointBuilder rollBuilder) {
+        head = new HeadImpl(name, pitchBuilder.type(PITCH_HEAD).build(), rollBuilder.type(ROLL_HEAD).build());
+
+        return this;
+    }
+
     public HumanoidRobotBuilder sensor(Sensor sensor) {
         this.sensors.add(sensor);
         return this;
     }
 
+    public HumanoidRobotBuilder behaviourController(Behaviour behaviour) {
+        behaviours.add(behaviour);
+        return this;
+    }
+
     public HumanoidRobot build() {
         if(legs != null && torso != null) {
-            HumanoidRobot humanoidRobot = new HumanoidRobotImpl(robot, name, legs, torso, head, sensors);
+            HumanoidRobot humanoidRobot = new HumanoidRobotImpl(robot, name, legs, torso, head, sensors, behaviours);
             humanoidRobot.initialize(humanoidRobot, robot);
 
             return humanoidRobot;
@@ -82,22 +100,22 @@ public class HumanoidRobotBuilder {
 
         public LegBuilder ankle(String ankleName, JointBuilder x, JointBuilder y) {
             ankle = new AnkleImpl(ankleName,
-                    x.type("ankle-x").build(),
-                    y.type("ankle-y").build());
+                    x.type(ANKLE_PITCH).build(),
+                    y.type(ANKLE_ROLL).build());
 
             return this;
         }
 
         public LegBuilder knee(JointBuilder jointBuilder) {
-            knee = jointBuilder.type("knee").build();
+            knee = jointBuilder.type(KNEE).build();
             return this;
         }
 
         public LegBuilder hip(String hipName, JointBuilder x, JointBuilder y, JointBuilder z) {
             hip = new HipImpl(hipName,
-                    x.type("hip-x").build(),
-                    y.type("hip-y").build(),
-                    z.type("hip-z").build());
+                    x.type(HIP_ROLL).build(),
+                    y.type(HIP_PITCH).build(),
+                    z.type(HIP_YAW).build());
             return this;
         }
 
@@ -115,6 +133,7 @@ public class HumanoidRobotBuilder {
 
         private Shoulder shoulder;
         private Joint elbow;
+        private Joint elbowRoll;
         private Joint hand;
 
         public ArmBuilder(String armName) {
@@ -127,32 +146,39 @@ public class HumanoidRobotBuilder {
 
         public ArmBuilder shoulder(String name, String xId, String yId) {
             shoulder = new ShoulderImpl(name,
-                    new JointImpl(xId, name + "x", "shoulder-x", false),
-                    new JointImpl(yId, name + "y", "shoulder-y", false));
+                    new JointImpl(xId, name + "x", SHOULDER_ROLL, false),
+                    new JointImpl(yId, name + "y", SHOULDER_PITCH, false));
             return this;
         }
 
         public ArmBuilder shoulder(String name, JointBuilder x, JointBuilder y) {
             shoulder = new ShoulderImpl(name,
-                    x.build(),
-                    y.build());
+                    x.type(SHOULDER_ROLL).build(),
+                    y.type(SHOULDER_PITCH).build());
             return this;
 
         }
 
-        public ArmBuilder elbow(JointBuilder jointBuilder) {
-            elbow = jointBuilder.type("elbow").build();
+        public ArmBuilder elbow(JointBuilder jointBuilder, JointBuilder rotateBuilder) {
+            elbow = jointBuilder.type(ELBOW).build();
+            elbowRoll = rotateBuilder.type(ELBOW_ROLL).build();
+
+            return this;
+        }
+
+        public ArmBuilder hand(JointBuilder jointBuilder) {
+            hand = jointBuilder.type(HAND).build();
             return this;
         }
 
         public ArmBuilder hand(String name, String handId) {
-            hand = new JointImpl(handId, name, "hand", false);
+            hand = new JointImpl(handId, name, HAND, false);
             return this;
         }
 
         public Arm build() {
-            if(shoulder != null && elbow != null && hand != null) {
-                return new ArmImpl(armName, shoulder, elbow, hand);
+            if(shoulder != null && elbow != null && elbowRoll != null && hand != null) {
+                return new ArmImpl(armName, shoulder, elbow, elbowRoll, hand);
             } else {
                 throw new BuildException("Could not create robot, missing shoulder, elbow or hand");
             }

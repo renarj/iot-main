@@ -2,7 +2,7 @@ package com.oberasoftware.robo.maximus.model;
 
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
+import com.oberasoftware.robo.api.humanoid.joints.Joint;
 import com.oberasoftware.robo.api.servo.Servo;
 import com.oberasoftware.robo.api.servo.ServoDriver;
 

@@ -2,7 +2,7 @@ package com.oberasoftware.max.core.behaviours;
 
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.DriveBehaviour;
+import com.oberasoftware.robo.api.behavioural.wheel.DriveBehaviour;
 import com.oberasoftware.robo.api.commands.Scale;
 import com.oberasoftware.robo.api.navigation.DirectionalInput;
 import com.oberasoftware.robo.api.navigation.RobotNavigationController;

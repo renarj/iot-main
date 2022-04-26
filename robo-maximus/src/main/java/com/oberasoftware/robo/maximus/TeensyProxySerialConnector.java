@@ -87,7 +87,7 @@ public class TeensyProxySerialConnector extends SerialDynamixelConnector {
                 return jo.getJSONObject("feedback").toString().getBytes();
             }
         } else if(wait) {
-            LOG.info("Received nothing?: {}", recvd);
+            LOG.info("Received nothing?: {} on message request: {}", recvd, msg);
         }
 
         return new byte[]{};

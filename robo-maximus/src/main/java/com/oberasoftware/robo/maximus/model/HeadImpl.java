@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.Lists;
-import com.oberasoftware.robo.api.behavioural.humanoid.Head;
-import com.oberasoftware.robo.api.behavioural.humanoid.Joint;
-import com.oberasoftware.robo.api.behavioural.humanoid.JointChain;
+import com.oberasoftware.robo.api.humanoid.components.Head;
+import com.oberasoftware.robo.api.humanoid.joints.Joint;
+import com.oberasoftware.robo.api.humanoid.joints.JointChain;
 
 import java.util.List;
 
