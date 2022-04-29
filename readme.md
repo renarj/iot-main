@@ -5,7 +5,7 @@ This repository contains all my Robotics projects, currently we have two active 
 
 ## Humanoid Robot Maximus
 The Humanoid robot is an open source Humanoid robot where the intent is to develop this into a fully functional walking humanoid robot.
-![Image of Maximus Robot](https://github.com/renarj/robo-max/blob/master/robo-maximus/src/main/3d-design/robot-looks.png)
+![Image of Maximus Robot](https://github.com/renarj/robo-max/blob/master/robot-models/robo-maximus/src/main/3d-design/robot-looks.png)
 
 **Current status:**
 * 3D design v2 is finished, expect further iterations as we explore walking possibilities for the robot.

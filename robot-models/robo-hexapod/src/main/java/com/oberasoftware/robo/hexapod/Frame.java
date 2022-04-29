@@ -1,6 +1,5 @@
 package com.oberasoftware.robo.hexapod;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Frame {
