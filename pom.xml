@@ -11,7 +11,8 @@
         <version>2.6.7</version>
     </parent>
 
-    <artifactId>robotics</artifactId>
+    <artifactId>iot-main</artifactId>
+    <groupId>com.oberasoftware</groupId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -43,6 +44,15 @@
         <module>robot-models/robo-handcontroller</module>
         <module>robot-models/robo-maximus</module>
         <module>robot-models/robo-rover</module>
+        <module>iot-main/home-api</module>
+        <module>iot-main/home-core</module>
+        <module>iot-main/home-rules</module>
+        <module>iot-main/home-web</module>
+        <module>iot-main/home-service</module>
+        <module>iot-main/home-hue</module>
+        <module>iot-main/home-storage</module>
+
+        <module>iot-main/home-rest</module>
     </modules>
 
     <licenses>
@@ -119,6 +129,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

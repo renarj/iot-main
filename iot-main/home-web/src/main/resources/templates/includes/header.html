@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <title>Oberasoftware HomeAutomation Service</title>
+
+    <link th:href="@{/images/favicon.ico}" rel="shortcut icon" href="/static/images/favicon.ico" title="Favicon"/>
+
+    <script th:src="@{/javascript/ext/jquery-2.1.0.min.js}" src="/static/javascript/ext/jquery-2.1.0.min.js"></script>
+    <script th:src="@{/javascript/ext/jquery-ui.min.js}" src="/static/javascript/ext/jquery-ui.min.js"></script>
+
+
+    <link th:href="@{/css/jquery-ui.min.css}" href="/static/css/jquery-ui.min.css" rel="stylesheet"/>
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link th:href="@{/bootstrap/css/bootstrap-switch.min.css}" href="/static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet"/>
+    <link th:href="@{/bootstrap/css/bootstrap-slider.min.css}" href="/static/bootstrap/css/bootstrap-slider.min.css" rel="stylesheet"/>
+    <link th:href="@{/css/spectrum.css}" href="/static/css/spectrum.css" rel="stylesheet"/>
+
+
+    <script th:src="@{/javascript/ext/mustache.min.js}" src="/static/javascript/ext/mustache.min.js"></script>
+    <script th:src="@{/javascript/ext/stomp.min.js}" src="/static/javascript/ext/stomp.min.js"></script>
+    <script th:src="@{/javascript/ext/sockjs-0.3.4.min.js}" src="/static/javascript/ext/sockjs-0.3.4.min.js"></script>
+
+    <script th:src="@{/javascript/global.js}" src="/static/javascript/global.js"></script>
+
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}" src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script th:src="@{/bootstrap/js/bootstrap-switch.min.js}" src="/static/bootstrap/js/bootstrap-switch.min.js"></script>
+    <script th:src="@{/bootstrap/js/bootstrap-slider.min.js}" src="/static/bootstrap/js/bootstrap-slider.min.js"></script>
+    <script th:src="@{/javascript/ext/spectrum.js}" src="/static/javascript/ext/spectrum.js"></script>
+
+    <script th:src="@{/javascript/ext/highcharts.js}" src="/static/javascript/ext/highcharts.js"></script>
+</head>
+
+
+    <nav class="navbar navbar-default" role="navigation" th:fragment="navigation (selectTab)">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><img height="" th:src="@{/images/obera.png}"/></a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li th:classappend="${selectTab == 'dashboard'} ? 'active'"><a th:href="@{'/web/'}">DashBoard</a></li>
+                    <li th:classappend="${selectTab == 'admin'} ? 'active'"><a th:href="@{'/web/admin/devices'}">Administration</a></li>
+                </ul>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" disabled="true" class="form-control" placeholder="Search"/>
+                    </div>
+                    <button type="submit" disabled="true" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <ul class="nav nav-tabs" th:fragment="adminTabs (selectTab)">
+        <li role="presentation" th:classappend="${selectTab == 'devices'} ? 'active'"><a href="#" th:href="@{'/web/admin/devices'}">Devices</a></li>
+        <li role="presentation" th:classappend="${selectTab == 'groups'} ? 'active'"><a href="#" th:href="@{'/web/admin/groups'}">Groups</a></li>
+        <li role="presentation" th:classappend="${selectTab == 'rules'} ? 'active'"><a href="#" th:href="@{'/web/admin/rules'}">Rules</a></li>
+        <li role="presentation" th:classappend="${selectTab == 'virtualitems'} ? 'active'"><a href="#" th:href="@{'/web/admin/virtualitems'}">Virtual Items</a></li>
+    </ul>
+
+
+<div id="version" th:fragment="footer">
+    <p class="text-center">&#169; Copyright 2015 Oberasoftware, version: <span>1.0</span></p>
+</div>
+
+</html>
