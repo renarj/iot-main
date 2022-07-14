@@ -2,7 +2,7 @@ package com.oberasoftware.home.rest;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.events.devices.StateUpdateEvent;
+import com.oberasoftware.iot.core.events.StateUpdateEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

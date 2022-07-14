@@ -1,6 +1,6 @@
 package com.oberasoftware.home.core.mqtt.converters;
 
-import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.robo.api.converters.Converter;
 import com.oberasoftware.robo.api.converters.TypeConverter;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;

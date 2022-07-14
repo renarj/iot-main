@@ -7,9 +7,9 @@ import com.oberasoftware.base.event.EventFilter;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.robo.api.converters.ConverterManager;
-import com.oberasoftware.robo.api.exceptions.ConversionException;
-import com.oberasoftware.robo.api.exceptions.HomeAutomationException;
-import com.oberasoftware.robo.api.exceptions.RuntimeHomeAutomationException;
+import com.oberasoftware.iot.core.exceptions.ConversionException;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class MQTTTopicEventBus implements DistributedTopicEventBus {
     private LocalEventBus localEventBus;
 
     @PostConstruct
-    public void initialize() throws HomeAutomationException {
+    public void initialize() throws IOTException {
         String connectionString = String.format(CONNECTION_STRING, mqttHost, mqttPort);
         broker = new MQTTBroker(connectionString, mqttUsername, mqttPassword);
         localEventBus.registerFilter(new MQTTPathFilter());
@@ -85,9 +85,9 @@ public class MQTTTopicEventBus implements DistributedTopicEventBus {
                     try {
                         connectBroker();
                         connected = true;
-                    } catch (HomeAutomationException e) {
+                    } catch (IOTException e) {
                         if(!retryOnConnect) {
-                            throw new RuntimeHomeAutomationException("Unable to connect to MQTT Broker", e);
+                            throw new RuntimeIOTException("Unable to connect to MQTT Broker", e);
                         } else {
                             Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS);
                             LOG.warn("Could not connect, retrying in 5 seconds");
@@ -102,7 +102,7 @@ public class MQTTTopicEventBus implements DistributedTopicEventBus {
         }
     }
 
-    private void connectBroker() throws HomeAutomationException {
+    private void connectBroker() throws IOTException {
         broker.connect();
         LOG.info("Connected to MQTT Broker: {} with user: {}", mqttHost, mqttUsername);
 

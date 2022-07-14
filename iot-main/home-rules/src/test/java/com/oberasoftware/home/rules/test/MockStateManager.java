@@ -1,10 +1,9 @@
 package com.oberasoftware.home.rules.test;
 
 import com.oberasoftware.home.api.managers.StateManager;
-import com.oberasoftware.home.api.model.State;
+import com.oberasoftware.iot.core.model.State;
 import com.oberasoftware.home.api.model.Status;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.types.Value;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

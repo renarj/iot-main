@@ -1,6 +1,6 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.model.storage.Dashboard;
+import com.oberasoftware.iot.core.model.storage.Dashboard;
 
 import java.util.List;
 

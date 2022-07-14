@@ -1,7 +1,7 @@
 package com.oberasoftware.home.rest;
 
 import com.oberasoftware.home.api.managers.DashboardManager;
-import com.oberasoftware.home.api.model.storage.Dashboard;
+import com.oberasoftware.iot.core.model.storage.Dashboard;
 import com.oberasoftware.home.core.model.storage.DashboardImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

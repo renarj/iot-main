@@ -2,8 +2,8 @@ package com.oberasoftware.home.core.mqtt.converters;
 
 import com.oberasoftware.robo.api.converters.Converter;
 import com.oberasoftware.robo.api.converters.TypeConverter;
-import com.oberasoftware.robo.api.events.DeviceValueEvent;
-import com.oberasoftware.robo.api.model.Value;
+import com.oberasoftware.iot.core.events.DeviceValueEvent;
+import com.oberasoftware.iot.core.model.Value;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTMessageImpl;
 import org.springframework.stereotype.Component;

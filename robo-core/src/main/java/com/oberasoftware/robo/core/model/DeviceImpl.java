@@ -1,11 +1,13 @@
 package com.oberasoftware.robo.core.model;
 
+import com.oberasoftware.iot.core.model.IotThing;
+
 import java.util.Map;
 
 /**
  * @author renarj
  */
-public class DeviceImpl implements com.oberasoftware.robo.api.model.Device {
+public class DeviceImpl implements IotThing {
     private String controllerId;
     private String itemId;
     private Map<String, String> properties;

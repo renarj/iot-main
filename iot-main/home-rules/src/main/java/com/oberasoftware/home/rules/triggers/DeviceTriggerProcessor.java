@@ -2,9 +2,7 @@ package com.oberasoftware.home.rules.triggers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.events.DeviceEvent;
 import com.oberasoftware.home.api.managers.DeviceManager;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
 import com.oberasoftware.home.rules.RuleEngine;
 import com.oberasoftware.home.rules.api.Block;
 import com.oberasoftware.home.rules.api.general.Rule;
@@ -12,6 +10,8 @@ import com.oberasoftware.home.rules.api.trigger.DeviceTrigger;
 import com.oberasoftware.home.rules.api.trigger.Trigger;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.blocks.BlockEvaluator;
+import com.oberasoftware.iot.core.events.DeviceEvent;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

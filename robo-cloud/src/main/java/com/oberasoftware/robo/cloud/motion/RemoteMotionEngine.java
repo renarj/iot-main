@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.cloud.motion;
 
-import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.robo.api.MotionEngine;
 import com.oberasoftware.robo.api.MotionTask;
 import com.oberasoftware.robo.api.Robot;

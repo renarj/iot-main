@@ -2,11 +2,11 @@ package com.oberasoftware.home.rest;
 
 import com.oberasoftware.home.api.managers.ItemManager;
 import com.oberasoftware.home.api.managers.StateManager;
-import com.oberasoftware.home.api.model.State;
-import com.oberasoftware.home.api.model.storage.ControllerItem;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.model.storage.Item;
-import com.oberasoftware.home.api.model.storage.PluginItem;
+import com.oberasoftware.iot.core.model.State;
+import com.oberasoftware.iot.core.model.storage.ControllerItem;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.Item;
+import com.oberasoftware.iot.core.model.storage.PluginItem;
 import com.oberasoftware.home.rest.model.RestItemDevice;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

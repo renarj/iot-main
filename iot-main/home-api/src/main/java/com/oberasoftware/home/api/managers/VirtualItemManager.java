@@ -1,6 +1,6 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.model.storage.VirtualItem;
+import com.oberasoftware.iot.core.model.storage.VirtualItem;
 
 /**
  * @author Renze de Vries

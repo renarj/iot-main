@@ -1,9 +1,9 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.model.State;
+import com.oberasoftware.iot.core.model.State;
 import com.oberasoftware.home.api.model.Status;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.types.Value;
+import com.oberasoftware.iot.core.model.Value;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 
 import java.util.Map;
 

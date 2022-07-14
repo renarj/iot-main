@@ -1,6 +1,6 @@
 package com.oberasoftware.home.core.mqtt;
 
-import com.oberasoftware.robo.api.exceptions.HomeAutomationException;
+import com.oberasoftware.iot.core.exceptions.IOTException;
 import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class MQTTBroker {
         this.password = password;
     }
 
-    public synchronized void connect() throws HomeAutomationException {
+    public synchronized void connect() throws IOTException {
         try {
             LOG.info("Connecting to host: {}", host);
             client = new MqttClient(host, UUID.randomUUID().toString());
@@ -79,7 +79,7 @@ public class MQTTBroker {
             client.connect(options);
             connected.set(true);
         } catch (MqttException e) {
-            throw new HomeAutomationException("Could not connect to MQTT broker: " + host);
+            throw new IOTException("Could not connect to MQTT broker: " + host);
         }
     }
 

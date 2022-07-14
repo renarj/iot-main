@@ -41,4 +41,14 @@ public class HueDevice implements Device {
     public Map<String, String> getProperties() {
         return properties;
     }
+
+    @Override
+    public String toString() {
+        return "HueDevice{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", properties=" + properties +
+                '}';
+    }
 }

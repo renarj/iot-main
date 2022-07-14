@@ -1,7 +1,7 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.model.storage.GroupItem;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.GroupItem;
 
 import java.util.List;
 

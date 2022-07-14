@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.cloud;
 
-import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.robo.api.Robot;
 import com.oberasoftware.robo.api.SpeechEngine;
 import org.slf4j.Logger;

@@ -2,18 +2,16 @@ package com.oberasoftware.home.service;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
-import com.oberasoftware.home.api.exceptions.DataStoreException;
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
 import com.oberasoftware.home.api.managers.ItemManager;
 import com.oberasoftware.home.core.model.storage.ControllerItemImpl;
 import com.oberasoftware.home.core.model.storage.DeviceItemImpl;
 import com.oberasoftware.home.core.model.storage.PluginItemImpl;
 import com.oberasoftware.home.api.storage.CentralDatastore;
 import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.api.model.storage.ControllerItem;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.model.storage.Item;
-import com.oberasoftware.home.api.model.storage.PluginItem;
+import com.oberasoftware.iot.core.model.storage.ControllerItem;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.Item;
+import com.oberasoftware.iot.core.model.storage.PluginItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,7 +55,7 @@ public class ItemManagerImpl implements ItemManager {
         centralDatastore.beginTransaction();
         try {
             Optional<PluginItem> optionalPlugin = homeDAO.findPlugin(controllerId, pluginId);
-            if (!optionalPlugin.isPresent()) {
+            if (optionalPlugin.isEmpty()) {
                 String itemId = generateId();
                 LOG.debug("Plugin does not exist, storing in central datastore: {}", pluginId);
 
@@ -67,7 +65,8 @@ public class ItemManagerImpl implements ItemManager {
                 if(havePropertiesChanged(currentPlugin.getProperties(), properties) || !name.equals(currentPlugin.getName())) {
                     LOG.debug("Plugin information has changed, storing plugin item: {}", pluginId);
 
-                    return safelyStorePluginItem(currentPlugin.getId(), controllerId, pluginId, name, properties);
+                    var mergedProperties = mergeProperties(currentPlugin.getProperties(), properties);
+                    return safelyStorePluginItem(currentPlugin.getId(), controllerId, pluginId, name, mergedProperties);
                 } else {
                     LOG.debug("Plugin information has not been updated, skipping storing");
                     return currentPlugin;
@@ -83,6 +82,16 @@ public class ItemManagerImpl implements ItemManager {
 
         LOG.debug("Storing plugin data: {}", item);
         return centralDatastore.store(item);
+    }
+
+    private Map<String, String> mergeProperties(Map<String, String> currentConfig, Map<String, String> updatedProperties) {
+        if(currentConfig.isEmpty()) {
+            return updatedProperties;
+        } else {
+            Map<String, String> mergedProperties = new HashMap<>(currentConfig);
+            mergedProperties.putAll(updatedProperties);
+            return mergedProperties;
+        }
     }
 
     private PluginItemImpl createPluginItem(String id, String controllerId, String pluginId, String name, Map<String, String> properties) {

@@ -1,6 +1,6 @@
 package com.oberasoftware.home.client.api;
 
-import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
 
 import java.util.concurrent.Future;
 

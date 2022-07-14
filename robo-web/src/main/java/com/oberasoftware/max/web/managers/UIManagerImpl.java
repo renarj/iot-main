@@ -8,8 +8,8 @@ import com.oberasoftware.max.web.api.storage.CentralDataDAO;
 import com.oberasoftware.max.web.api.storage.CentralDatastore;
 import com.oberasoftware.max.web.storage.model.ContainerImpl;
 import com.oberasoftware.max.web.storage.model.WidgetImpl;
-import com.oberasoftware.robo.api.exceptions.DataStoreException;
-import com.oberasoftware.robo.api.exceptions.RuntimeHomeAutomationException;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,7 +55,7 @@ public class UIManagerImpl implements UIManager {
             return homeDAO.findContainer(containerId).get();
         } catch(Exception e) {
             LOG.error("", e);
-            throw new RuntimeHomeAutomationException("Error", e);
+            throw new RuntimeIOTException("Error", e);
         }
     }
 

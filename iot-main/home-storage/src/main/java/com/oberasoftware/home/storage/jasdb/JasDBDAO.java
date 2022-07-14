@@ -2,9 +2,10 @@ package com.oberasoftware.home.storage.jasdb;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.oberasoftware.home.api.model.storage.*;
 import com.oberasoftware.home.api.storage.HomeDAO;
 import com.oberasoftware.home.core.model.storage.*;
+import com.oberasoftware.iot.core.model.IotBaseEntity;
+import com.oberasoftware.iot.core.model.storage.*;
 import com.oberasoftware.jasdb.api.entitymapper.EntityManager;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;
 import com.oberasoftware.jasdb.api.session.DBSession;
@@ -32,7 +33,7 @@ public class JasDBDAO implements HomeDAO {
     private JasDBSessionFactory sessionFactory;
 
     @Override
-    public <T extends HomeEntity> Optional<T> findItem(Class<T> type, String id) {
+    public <T extends IotBaseEntity> Optional<T> findItem(Class<T> type, String id) {
         try {
             DBSession session = sessionFactory.createSession();
             EntityManager entityManager = session.getEntityManager();

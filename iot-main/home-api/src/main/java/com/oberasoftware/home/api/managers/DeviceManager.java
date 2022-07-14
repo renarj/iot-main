@@ -1,8 +1,8 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
 import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author renarj
  */
 public interface DeviceManager {
-    DeviceItem registerDevice(String pluginId, Device device) throws HomeAutomationException;
+    DeviceItem registerDevice(String pluginId, Device device) throws IOTException;
 
     DeviceItem findDevice(String itemId);
 

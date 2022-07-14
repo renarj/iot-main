@@ -1,13 +1,8 @@
 package com.oberasoftware.home.service.commands.converters;
 
-import com.oberasoftware.home.api.commands.BasicCommand;
-import com.oberasoftware.home.api.commands.ItemValueCommand;
-import com.oberasoftware.home.api.commands.converters.CommandConverter;
-import com.oberasoftware.home.api.commands.converters.ConverterType;
-import com.oberasoftware.home.api.types.VALUE_TYPE;
-import com.oberasoftware.home.api.types.Value;
+import com.oberasoftware.iot.core.commands.converters.CommandConverter;
+import com.oberasoftware.iot.core.commands.converters.ConverterType;
 import com.oberasoftware.home.core.types.ValueImpl;
-import com.oberasoftware.home.core.commands.ValueCommandImpl;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 

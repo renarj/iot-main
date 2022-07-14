@@ -1,8 +1,8 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.model.storage.Container;
-import com.oberasoftware.home.api.model.storage.MutableItem;
-import com.oberasoftware.home.api.model.storage.Widget;
+import com.oberasoftware.iot.core.model.storage.Container;
+import com.oberasoftware.iot.core.model.storage.MutableItem;
+import com.oberasoftware.iot.core.model.storage.Widget;
 
 import java.util.List;
 

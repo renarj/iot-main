@@ -1,11 +1,11 @@
 package com.oberasoftware.home.hue;
 
 import com.google.common.reflect.TypeToken;
-import com.oberasoftware.home.api.commands.Command;
 import com.oberasoftware.home.api.commands.handlers.GroupCommandHandler;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.model.storage.GroupItem;
 import com.oberasoftware.home.hue.actions.HueCommandAction;
+import com.oberasoftware.iot.core.commands.Command;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.GroupItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

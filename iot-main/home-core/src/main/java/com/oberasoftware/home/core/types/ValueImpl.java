@@ -1,7 +1,7 @@
 package com.oberasoftware.home.core.types;
 
-import com.oberasoftware.home.api.types.VALUE_TYPE;
-import com.oberasoftware.home.api.types.Value;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.Value;
 
 /**
  * @author renarj

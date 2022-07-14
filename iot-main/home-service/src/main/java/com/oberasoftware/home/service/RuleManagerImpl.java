@@ -1,11 +1,8 @@
 package com.oberasoftware.home.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oberasoftware.home.api.exceptions.DataStoreException;
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
-import com.oberasoftware.home.api.exceptions.RuntimeHomeAutomationException;
 import com.oberasoftware.home.api.managers.RuleManager;
-import com.oberasoftware.home.api.model.storage.RuleItem;
+import com.oberasoftware.iot.core.model.storage.RuleItem;
 import com.oberasoftware.home.api.storage.CentralDatastore;
 import com.oberasoftware.home.api.storage.HomeDAO;
 import com.oberasoftware.home.core.model.storage.RuleItemImpl;

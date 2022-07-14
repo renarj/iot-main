@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.model;
 
-import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
 
 import java.util.HashMap;
 import java.util.Map;

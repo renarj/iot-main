@@ -4,7 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.oberasoftware.robo.api.converters.ConverterManager;
 import com.oberasoftware.robo.api.converters.Converter;
 import com.oberasoftware.robo.api.converters.TypeConverter;
-import com.oberasoftware.robo.api.exceptions.ConversionException;
+import com.oberasoftware.iot.core.exceptions.ConversionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

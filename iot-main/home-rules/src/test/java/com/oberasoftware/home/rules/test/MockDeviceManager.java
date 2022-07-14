@@ -1,9 +1,8 @@
 package com.oberasoftware.home.rules.test;
 
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
 import com.oberasoftware.home.api.managers.DeviceManager;
 import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

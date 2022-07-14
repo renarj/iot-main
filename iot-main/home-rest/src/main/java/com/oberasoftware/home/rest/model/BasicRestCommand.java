@@ -1,6 +1,6 @@
 package com.oberasoftware.home.rest.model;
 
-import com.oberasoftware.home.api.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
 
 import java.util.HashMap;
 import java.util.Map;

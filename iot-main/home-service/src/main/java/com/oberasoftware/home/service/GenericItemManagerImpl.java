@@ -1,8 +1,7 @@
 package com.oberasoftware.home.service;
 
-import com.oberasoftware.home.api.exceptions.DataStoreException;
 import com.oberasoftware.home.api.managers.GenericItemManager;
-import com.oberasoftware.home.api.model.storage.VirtualItem;
+import com.oberasoftware.iot.core.model.storage.VirtualItem;
 import com.oberasoftware.home.api.storage.CentralDatastore;
 import com.oberasoftware.home.api.storage.HomeDAO;
 import org.slf4j.Logger;

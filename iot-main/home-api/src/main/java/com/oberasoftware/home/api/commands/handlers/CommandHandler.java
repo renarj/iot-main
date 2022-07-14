@@ -1,7 +1,7 @@
 package com.oberasoftware.home.api.commands.handlers;
 
-import com.oberasoftware.home.api.commands.Command;
-import com.oberasoftware.home.api.model.storage.Item;
+import com.oberasoftware.iot.core.commands.Command;
+import com.oberasoftware.iot.core.model.storage.Item;
 
 /**
  * @author renarj

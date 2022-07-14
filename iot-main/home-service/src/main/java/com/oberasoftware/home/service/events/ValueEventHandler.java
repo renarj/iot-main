@@ -2,12 +2,9 @@ package com.oberasoftware.home.service.events;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.events.devices.DeviceValueEvent;
-import com.oberasoftware.home.api.events.items.ItemValueEvent;
 import com.oberasoftware.home.api.managers.DeviceManager;
 import com.oberasoftware.home.api.managers.StateManager;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.types.Value;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,14 +1,17 @@
 package com.oberasoftware.robo.core.model;
 
+import com.oberasoftware.iot.core.model.Controller;
+import com.oberasoftware.iot.core.model.IotThing;
+
 import java.util.List;
 
 /**
  * @author Renze de Vries
  */
-public class ControllerImpl implements com.oberasoftware.robo.api.model.Controller {
+public class ControllerImpl implements Controller {
     private String controllerId;
     private long lastSeen;
-    private List<com.oberasoftware.robo.api.model.Device> devices;
+    private List<IotThing> devices;
 
     public ControllerImpl(String controllerId) {
         this.controllerId = controllerId;
@@ -32,11 +35,11 @@ public class ControllerImpl implements com.oberasoftware.robo.api.model.Controll
     }
 
     @Override
-    public List<com.oberasoftware.robo.api.model.Device> getDevices() {
+    public List<IotThing> getDevices() {
         return devices;
     }
 
-    public void setDevices(List<com.oberasoftware.robo.api.model.Device> devices) {
+    public void setDevices(List<IotThing> devices) {
         this.devices = devices;
     }
 

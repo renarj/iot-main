@@ -5,7 +5,7 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.client.api.CommandServiceClient;
 import com.oberasoftware.home.client.api.StateServiceClient;
-import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
 import com.oberasoftware.robo.api.RemoteDriver;
 import com.oberasoftware.robo.api.Robot;

@@ -44,6 +44,8 @@
         <module>robot-models/robo-handcontroller</module>
         <module>robot-models/robo-maximus</module>
         <module>robot-models/robo-rover</module>
+        <module>trainautomation/roco-z21-adapter</module>
+        <module>iot-main/iot-core</module>
         <module>iot-main/home-api</module>
         <module>iot-main/home-core</module>
         <module>iot-main/home-rules</module>

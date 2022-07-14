@@ -2,7 +2,7 @@ package com.oberasoftware.home.api.extensions;
 
 import com.oberasoftware.home.api.commands.handlers.CommandHandler;
 import com.oberasoftware.home.api.model.ExtensionResource;
-import com.oberasoftware.home.api.model.storage.PluginItem;
+import com.oberasoftware.iot.core.model.storage.PluginItem;
 
 import java.util.Map;
 import java.util.Optional;

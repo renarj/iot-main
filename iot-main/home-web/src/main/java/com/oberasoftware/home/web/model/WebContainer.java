@@ -1,6 +1,6 @@
 package com.oberasoftware.home.web.model;
 
-import com.oberasoftware.home.api.model.storage.Widget;
+import com.oberasoftware.iot.core.model.storage.Widget;
 import com.oberasoftware.home.core.model.storage.ContainerImpl;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.oberasoftware.home.api.extensions;
 
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
+import com.oberasoftware.iot.core.exceptions.IOTException;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,9 +9,9 @@ import java.util.Optional;
  * @author renarj
  */
 public interface ExtensionManager {
-    void activateController(String controllerId) throws HomeAutomationException;
+    void activateController(String controllerId) throws IOTException;
 
-    void activateExtensions() throws HomeAutomationException;
+    void activateExtensions() throws IOTException;
 
     List<AutomationExtension> getExtensions();
 

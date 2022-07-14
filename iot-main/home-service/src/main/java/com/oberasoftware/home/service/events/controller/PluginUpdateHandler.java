@@ -2,8 +2,6 @@ package com.oberasoftware.home.service.events.controller;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.events.controller.PluginUpdateEvent;
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
 import com.oberasoftware.home.api.managers.ItemManager;
 import com.oberasoftware.home.core.ControllerConfiguration;
 import org.slf4j.Logger;

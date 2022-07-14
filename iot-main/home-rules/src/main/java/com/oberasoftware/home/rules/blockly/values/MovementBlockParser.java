@@ -1,11 +1,11 @@
 package com.oberasoftware.home.rules.blockly.values;
 
-import com.oberasoftware.home.api.types.VALUE_TYPE;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 import com.oberasoftware.home.rules.api.values.StaticValue;
 import com.oberasoftware.home.rules.blockly.BlockParser;
 import com.oberasoftware.home.rules.blockly.BlocklyParseException;
 import com.oberasoftware.home.rules.blockly.XMLUtils;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 

@@ -1,6 +1,6 @@
 package com.oberasoftware.home.api.commands.handlers;
 
-import com.oberasoftware.home.api.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 
 /**
  * @author Renze de Vries

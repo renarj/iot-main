@@ -2,8 +2,8 @@ package com.oberasoftware.home.web;
 
 import com.oberasoftware.home.api.managers.ItemManager;
 import com.oberasoftware.home.api.managers.RuleManager;
-import com.oberasoftware.home.api.model.storage.ControllerItem;
-import com.oberasoftware.home.api.model.storage.RuleItem;
+import com.oberasoftware.iot.core.model.storage.ControllerItem;
+import com.oberasoftware.iot.core.model.storage.RuleItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

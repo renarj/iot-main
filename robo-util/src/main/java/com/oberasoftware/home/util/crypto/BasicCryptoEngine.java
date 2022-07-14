@@ -1,6 +1,6 @@
 package com.oberasoftware.home.util.crypto;
 
-import com.oberasoftware.robo.api.exceptions.SecurityException;
+import com.oberasoftware.iot.core.exceptions.SecurityException;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.util.StringUtils;
 

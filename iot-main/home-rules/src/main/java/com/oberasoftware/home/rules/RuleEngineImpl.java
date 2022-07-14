@@ -1,12 +1,12 @@
 package com.oberasoftware.home.rules;
 
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
 import com.oberasoftware.home.rules.api.Block;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.evaluators.EvalException;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.blocks.BlockEvaluator;
 import com.oberasoftware.home.rules.triggers.TriggerProcessor;
+import com.oberasoftware.iot.core.exceptions.IOTException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class RuleEngineImpl implements RuleEngine {
     private List<Rule> rules = new CopyOnWriteArrayList<>();
 
     @Override
-    public void register(Rule rule) throws HomeAutomationException {
+    public void register(Rule rule) throws IOTException {
         checkNotNull(rule);
 
         if(rules.stream().anyMatch(r -> r.getId().equals(rule.getId()))) {

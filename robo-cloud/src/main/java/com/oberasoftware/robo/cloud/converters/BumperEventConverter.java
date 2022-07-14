@@ -2,8 +2,8 @@ package com.oberasoftware.robo.cloud.converters;
 
 import com.oberasoftware.robo.api.converters.Converter;
 import com.oberasoftware.robo.api.converters.TypeConverter;
-import com.oberasoftware.robo.api.model.VALUE_TYPE;
-import com.oberasoftware.robo.api.model.Value;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.Value;
 import com.oberasoftware.robo.core.model.ValueImpl;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTMessageBuilder;

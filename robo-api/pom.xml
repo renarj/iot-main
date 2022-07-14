@@ -16,5 +16,11 @@
             <groupId>com.oberasoftware</groupId>
             <artifactId>obera-base</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>iot-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

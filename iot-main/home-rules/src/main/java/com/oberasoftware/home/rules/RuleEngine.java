@@ -1,13 +1,13 @@
 package com.oberasoftware.home.rules;
 
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
 import com.oberasoftware.home.rules.api.general.Rule;
+import com.oberasoftware.iot.core.exceptions.IOTException;
 
 /**
  * @author Renze de Vries
  */
 public interface RuleEngine {
-    void register(Rule rule) throws HomeAutomationException;
+    void register(Rule rule) throws IOTException;
 
     void evalRule(String id);
 

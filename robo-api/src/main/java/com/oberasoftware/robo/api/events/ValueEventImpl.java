@@ -1,7 +1,8 @@
 package com.oberasoftware.robo.api.events;
 
 
-import com.oberasoftware.robo.api.model.Value;
+import com.oberasoftware.iot.core.events.ValueEvent;
+import com.oberasoftware.iot.core.model.Value;
 
 /**
  * @author Renze de Vries

@@ -1,7 +1,7 @@
 package com.oberasoftware.home.rest.model;
 
-import com.oberasoftware.home.api.model.State;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.State;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 
 /**
  * @author renarj

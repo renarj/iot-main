@@ -1,6 +1,6 @@
 package com.oberasoftware.home.util.crypto;
 
-import com.oberasoftware.robo.api.exceptions.SecurityException;
+import com.oberasoftware.iot.core.exceptions.SecurityException;
 import org.junit.Ignore;
 import org.junit.Test;
 

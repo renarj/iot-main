@@ -1,10 +1,10 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
-import com.oberasoftware.home.api.model.storage.ControllerItem;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
-import com.oberasoftware.home.api.model.storage.Item;
-import com.oberasoftware.home.api.model.storage.PluginItem;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.model.storage.ControllerItem;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.Item;
+import com.oberasoftware.iot.core.model.storage.PluginItem;
 
 import java.util.List;
 import java.util.Map;
@@ -13,11 +13,11 @@ import java.util.Map;
  * @author renarj
  */
 public interface ItemManager {
-    ControllerItem createOrUpdateController(String controllerId) throws HomeAutomationException;
+    ControllerItem createOrUpdateController(String controllerId) throws IOTException;
 
-    PluginItem createOrUpdatePlugin(String controllerId, String pluginId, String name, Map<String, String> properties) throws HomeAutomationException;
+    PluginItem createOrUpdatePlugin(String controllerId, String pluginId, String name, Map<String, String> properties) throws IOTException;
 
-    DeviceItem createOrUpdateDevice(String controllerId, String pluginId, String deviceId, String name, Map<String, String> properties) throws HomeAutomationException;
+    DeviceItem createOrUpdateDevice(String controllerId, String pluginId, String deviceId, String name, Map<String, String> properties) throws IOTException;
 
     List<ControllerItem> findControllers();
 

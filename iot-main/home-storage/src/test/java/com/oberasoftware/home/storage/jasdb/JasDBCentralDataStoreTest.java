@@ -1,7 +1,6 @@
 package com.oberasoftware.home.storage.jasdb;
 
-import com.oberasoftware.home.api.exceptions.DataStoreException;
-import com.oberasoftware.home.api.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.storage.DeviceItem;
 import com.oberasoftware.home.core.model.storage.DeviceItemImpl;
 import com.oberasoftware.home.core.model.storage.WidgetImpl;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;

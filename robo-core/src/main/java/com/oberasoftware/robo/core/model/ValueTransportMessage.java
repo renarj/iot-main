@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.core.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.oberasoftware.robo.api.model.Value;
+import com.oberasoftware.iot.core.model.Value;
 
 /**
  * @author Renze de Vries

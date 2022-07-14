@@ -7,8 +7,8 @@ import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
 import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.api.commands.BasicCommand;
-import com.oberasoftware.robo.api.exceptions.RuntimeHomeAutomationException;
+import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.robo.api.navigation.DirectionalInput;
 import com.oberasoftware.robo.api.navigation.RobotNavigationController;
 import com.oberasoftware.robo.core.model.BasicCommandImpl;
@@ -56,6 +56,6 @@ public class RemoteNavigationHandler implements EventHandler {
             LOG.info("Sending directional input: {} to robot: {}", directionInput, basicCommand.getControllerId());
             navigationController.move(new DirectionalInput(directionInput));
         });
-        behaviouralRobot.orElseThrow(() -> new RuntimeHomeAutomationException("Could not find robot with id: " + basicCommand.getControllerId()));
+        behaviouralRobot.orElseThrow(() -> new RuntimeIOTException("Could not find robot with id: " + basicCommand.getControllerId()));
     }
 }

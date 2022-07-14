@@ -1,10 +1,10 @@
 package com.oberasoftware.home.rules.evaluators.blocks;
 
 import com.oberasoftware.home.api.AutomationBus;
-import com.oberasoftware.home.api.commands.ItemCommand;
-import com.oberasoftware.home.api.events.devices.ItemCommandEvent;
-import com.oberasoftware.home.core.commands.SwitchCommandImpl;
 import com.oberasoftware.home.rules.api.general.SwitchItem;
+import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.impl.SwitchCommandImpl;
+import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

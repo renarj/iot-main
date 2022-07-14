@@ -3,11 +3,11 @@ package com.oberasoftware.home.hue;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.api.AutomationBus;
-import com.oberasoftware.home.api.events.controller.PluginUpdateEvent;
-import com.oberasoftware.home.api.model.storage.PluginItem;
-import io.github.zeroone3010.yahueapi.Hue;
-import io.github.zeroone3010.yahueapi.HueBridge;
-import io.github.zeroone3010.yahueapi.discovery.HueBridgeDiscoveryService;
+import com.oberasoftware.home.api.storage.HomeDAO;
+import com.oberasoftware.home.core.ControllerConfiguration;
+import com.oberasoftware.home.util.IntUtils;
+import com.oberasoftware.iot.core.events.impl.PluginUpdateEvent;
+import com.oberasoftware.iot.core.model.storage.PluginItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -29,154 +28,108 @@ public class HueConnectorImpl implements EventHandler, HueConnector {
 
     private static final String APP_NAME = "HomeAutomation";
 
+    private static final String BRIDGE_TOKEN = "bridgeToken-";
+    private static final String BRIDGE_PORT = "bridgePort-";
+    private static final String BRIDGE_IP = "bridgeIp-";
+    private static final String BRIDGE = "bridge-";
+    private static final int DEFAULT_PORT = 443;
+
     private String bridgeIp;
     private String bridgeToken;
 
-    private AtomicBoolean connected = new AtomicBoolean(false);
+//    private AtomicBoolean connected = new AtomicBoolean(false);
 
-    private List<Hue> connectedBridges = new ArrayList<>();
+    private List<HueBridge> connectedBridges = new ArrayList<>();
+
+    @Autowired
+    private HueBridgeDiscoveryService hueBridgeDiscoveryService;
 
     @Autowired
     private AutomationBus automationBus;
 
+    @Autowired
+    private ControllerConfiguration controllerConfiguration;
+
+    @Autowired
+    private HomeDAO homeDAO;
+
     @Override
     public void connect(Optional<PluginItem> pluginItem) {
         LOG.info("Connecting to Philips HUE bridge");
-
-
-        if(!pluginItem.isPresent()) {
+        if(pluginItem.isEmpty()) {
             LOG.info("No bridge configured");
-            startSearchBrige();
+            startSearchBridge();
         } else {
+            LOG.info("Loading existing bridges");
             Map<String, String> properties = pluginItem.get().getProperties();
-            this.bridgeIp = properties.get("bridgeIp");
-            this.bridgeToken = properties.get("bridgeToken");
-            if(bridgeIp != null && bridgeToken != null) {
-                LOG.info("Existing bridge found: {} token: {}", bridgeIp, bridgeToken);
-                automationBus.publish(new HueBridgeDiscovered(bridgeIp, bridgeToken));
+            Set<String> bridgeIds = properties.keySet().stream().filter(k -> k.startsWith("bridge-")).map(properties::get).collect(Collectors.toSet());
+            if(bridgeIds.isEmpty()) {
+                startSearchBridge();
             } else {
-                startSearchBrige();
-            }
+                LOG.info("We have {} previously configured Hue Bridges", bridgeIds.size());
+                bridgeIds.forEach(b -> {
+                    String bridgeToken = properties.get(BRIDGE_TOKEN + b);
+                    String bridgeIp = properties.get(BRIDGE_IP + b);
+                    int bridgePort = IntUtils.toInt(properties.get(BRIDGE_PORT + b), DEFAULT_PORT);
+                    var bridge = new HueBridge(b, bridgeIp, bridgePort, bridgeToken);
 
+                    LOG.info("Loading pre-discovered bridge: {}", bridge);
+                    automationBus.publish(new HueBridgeDiscovered(bridge));
+                });
+            }
         }
     }
 
     @Override
-    public List<Hue> getBridges() {
+    public List<HueBridge> getBridges() {
         return connectedBridges;
     }
 
-    private void startSearchBrige() {
+    private void startSearchBridge() {
         LOG.info("No existing bridge found, searching for a bridge");
-        HueListener hueListener = new HueListener();
-        new HueBridgeDiscoveryService().discoverBridges(hueListener);
-    }
+        Set<HueBridge> bridges = hueBridgeDiscoveryService.startBridgeSearch();
+        bridges.forEach(b -> {
+            LOG.info("Discovered a bridge: {}, authenticating", b);
+            automationBus.publish(new HueBridgeAuthEvent(b));
+        });
 
-//    @Override
-//    public PHHueSDK getSdk() {
-//        return sdk;
-//    }
-//
-//    @Override
-//    public PHBridge getBridge() {
-//        return sdk.getSelectedBridge();
-//    }
-
-    private class HueListener implements Consumer<HueBridge> {
-        @Override
-        public void accept(HueBridge hueBridge) {
-            hueBridge.getIp();
-
-
-        }
-//
-//        @Override
-//        public void onCacheUpdated(List<Integer> list, PHBridge phBridge) {
-//            LOG.debug("Cache updated");
-//        }
-//
-//        @Override
-//        public void onBridgeConnected(PHBridge phBridge, String s) {
-//            LOG.info("Bridge connected: {} with user: {}", phBridge, bridgeUser);
-//            connected.set(true);
-//
-//            sdk.setSelectedBridge(phBridge);
-//            sdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
-//
-//            Map<String, String> properties = new HashMap<>();
-//            properties.put("bridgeIp", bridgeIp);
-//            properties.put("username", bridgeUser);
-//
-//            automationBus.publish(new PluginUpdateEvent(HueExtension.HUE_ID, HueExtension.HUE_NAME, properties));
-//        }
-//
-//        @Override
-//        public void onAuthenticationRequired(PHAccessPoint phAccessPoint) {
-//            LOG.info("Hue authentication required: {}", phAccessPoint.getIpAddress());
-//            automationBus.publish(new HueBridgeAuthEvent(phAccessPoint));
-//        }
-//
-//        @Override
-//        public void onAccessPointsFound(List<PHAccessPoint> list) {
-//            list.forEach(a -> LOG.debug("Found accesspoint: {}", a.getIpAddress()));
-//
-//            if(list.size() == 1) {
-//                Optional<PHAccessPoint> ap = list.stream().findFirst();
-//
-//                bridgeUser = UUID.randomUUID().toString();
-//                bridgeIp = ap.get().getIpAddress();
-//
-//                ap.ifPresent(a -> automationBus.publish(new HueBridgeDiscovered(a.getIpAddress(), bridgeUser)));
-//            } else {
-//                LOG.warn("Detected multiple accesspoints");
-//            }
-//        }
-//
-//        @Override
-//        public void onError(int i, String s) {
-//            LOG.error("Hue Connection error: {} reason: {}", i, s);
-//        }
-//
-//        @Override
-//        public void onConnectionResumed(PHBridge phBridge) {
-//            LOG.trace("Connection resumed");
-//        }
-//
-//        @Override
-//        public void onConnectionLost(PHAccessPoint phAccessPoint) {
-//            LOG.debug("Connection lost");
-//        }
-//
-//        @Override
-//        public void onParsingErrors(List<PHHueParsingError> list) {
-//            LOG.debug("Parsing error");
-//        }
     }
 
     @EventSubscribe
     public void receive(HueBridgeDiscovered bridgeEvent) {
-        LOG.info("Connecting to bridge: {} with token: {}", bridgeEvent.getBridgeIp(), bridgeEvent.getBridgeToken());
+        LOG.info("Connected to bridge: {} with token: {}", bridgeEvent.getBridgeIp(), bridgeEvent.getBridgeToken());
 
-        connectedBridges.add(new Hue(bridgeEvent.getBridgeIp(), bridgeEvent.getBridgeToken()));
+        connectedBridges.add(bridgeEvent.getBridge());
     }
 
     @EventSubscribe
     public void receive(HueBridgeAuthEvent authEvent) throws ExecutionException, InterruptedException {
-        LOG.info("Authentication on bridge required: {}", authEvent);
+        LOG.info("Authentication on Hue Bridge required: {}", authEvent);
 
-        final CompletableFuture<String> apiKey = Hue.hueBridgeConnectionBuilder(bridgeIp).initializeApiConnection(APP_NAME);
-        LOG.info("Please push the link button on your Philips Hue Bridge: {}", authEvent.getBridgeIp());
+        HueBridge targetBridge = authEvent.getBridgeDetails();
 
-        final String bridgeToken = apiKey.get();
-        Map<String, String> properties = new HashMap<>();
-        properties.put("bridgeIp", bridgeIp);
-        properties.put("bridgeToken", bridgeToken);
-        automationBus.publish(new PluginUpdateEvent(HueExtension.HUE_ID, HueExtension.HUE_NAME, properties));
-        automationBus.publish(new HueBridgeDiscovered(bridgeIp, bridgeToken));
+        LOG.info("Please push the link button on your Philips Hue Bridge: {}", targetBridge.getBridgeIp());
+        CompletableFuture<Optional<String>> apiKey = hueBridgeDiscoveryService.getApiKey(targetBridge);
+
+        Optional<String> bridgeToken = apiKey.get();
+        if(bridgeToken.isPresent()) {
+            Map<String, String> properties = new HashMap<>();
+            properties.put(BRIDGE + targetBridge.getBridgeId(), targetBridge.getBridgeId());
+            properties.put(BRIDGE_IP + targetBridge.getBridgeId(), targetBridge.getBridgeIp());
+            properties.put(BRIDGE_PORT + targetBridge.getBridgeId(), Integer.toString(targetBridge.getBridgePort()));
+            properties.put(BRIDGE_TOKEN + targetBridge.getBridgeId(), bridgeToken.get());
+            var hueBridge = new HueBridge(targetBridge.getBridgeId(), targetBridge.getBridgeIp(), targetBridge.getBridgePort(), bridgeToken.get());
+
+            LOG.info("Successfully authenticated on Hue Bridge: {}", hueBridge);
+            automationBus.publish(new PluginUpdateEvent(HueExtension.HUE_ID, HueExtension.HUE_NAME, properties));
+            automationBus.publish(new HueBridgeDiscovered(hueBridge));
+        } else {
+            LOG.error("Could not authenticate to Hue Bridge: {}", targetBridge);
+        }
     }
 
     @Override
     public boolean isConnected() {
-        return connected.get();
+        return !connectedBridges.isEmpty();
     }
 }

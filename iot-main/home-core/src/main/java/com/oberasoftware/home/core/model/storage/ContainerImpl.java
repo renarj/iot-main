@@ -1,6 +1,6 @@
 package com.oberasoftware.home.core.model.storage;
 
-import com.oberasoftware.home.api.model.storage.Container;
+import com.oberasoftware.iot.core.model.storage.Container;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;

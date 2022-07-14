@@ -1,10 +1,10 @@
 package com.oberasoftware.home.storage.jasdb;
 
-import com.oberasoftware.home.api.exceptions.DataStoreException;
-import com.oberasoftware.home.api.model.storage.Container;
-import com.oberasoftware.home.api.model.storage.HomeEntity;
 import com.oberasoftware.home.api.storage.CentralDatastore;
 import com.oberasoftware.home.api.storage.HomeDAO;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.model.IotBaseEntity;
+import com.oberasoftware.iot.core.model.storage.Container;
 import com.oberasoftware.jasdb.api.entitymapper.EntityManager;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;
 import com.oberasoftware.jasdb.api.session.DBSession;
@@ -81,7 +81,7 @@ public class JasDBCentralDatastore implements CentralDatastore {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends HomeEntity> T store(HomeEntity entity) throws DataStoreException {
+    public <T extends IotBaseEntity> T store(IotBaseEntity entity) throws DataStoreException {
         LOG.debug("Storing entity: {}", entity);
         createOrUpdate(entity);
 
@@ -96,7 +96,7 @@ public class JasDBCentralDatastore implements CentralDatastore {
         return container;
     }
 
-    private void createOrUpdate(HomeEntity entity) throws DataStoreException {
+    private void createOrUpdate(IotBaseEntity entity) throws DataStoreException {
         try {
             DBSession session = jasDBSessionFactory.createSession();
             EntityManager entityManager = session.getEntityManager();

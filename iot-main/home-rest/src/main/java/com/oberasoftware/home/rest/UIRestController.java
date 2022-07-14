@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rest;
 
 import com.oberasoftware.home.api.managers.UIManager;
-import com.oberasoftware.home.api.model.storage.Container;
-import com.oberasoftware.home.api.model.storage.Widget;
+import com.oberasoftware.iot.core.model.storage.Container;
+import com.oberasoftware.iot.core.model.storage.Widget;
 import com.oberasoftware.home.core.model.storage.ContainerImpl;
 import com.oberasoftware.home.core.model.storage.WidgetImpl;
 import org.slf4j.Logger;

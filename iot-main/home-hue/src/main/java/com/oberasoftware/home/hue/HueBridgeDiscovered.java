@@ -7,27 +7,28 @@ import com.oberasoftware.base.event.Event;
  * @author renarj
  */
 public class HueBridgeDiscovered implements Event {
-    private final String bridgeIp;
-    private final String bridgeToken;
+    private final HueBridge bridge;
 
-    public HueBridgeDiscovered(String bridgeIp, String bridgeToken) {
-        this.bridgeIp = bridgeIp;
-        this.bridgeToken = bridgeToken;
+    public HueBridgeDiscovered(HueBridge bridge) {
+        this.bridge = bridge;
     }
 
     public String getBridgeToken() {
-        return bridgeToken;
+        return bridge.getBridgeToken();
     }
 
     public String getBridgeIp() {
-        return bridgeIp;
+        return bridge.getBridgeIp();
+    }
+
+    public HueBridge getBridge() {
+        return bridge;
     }
 
     @Override
     public String toString() {
         return "HueBridgeDiscovered{" +
-                "bridgeIp='" + bridgeIp + '\'' +
-                ", bridgeToken='" + bridgeToken + '\'' +
+                "bridge=" + bridge +
                 '}';
     }
 }

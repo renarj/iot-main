@@ -1,10 +1,10 @@
 package com.oberasoftware.home.rules.evaluators.conditions;
 
 import com.google.common.base.Preconditions;
-import com.oberasoftware.home.api.types.VALUE_TYPE;
-import com.oberasoftware.home.api.types.Value;
 import com.oberasoftware.home.core.types.ValueImpl;
 import com.oberasoftware.home.rules.evaluators.EvalException;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.Value;
 
 /**
  * @author Renze de Vries

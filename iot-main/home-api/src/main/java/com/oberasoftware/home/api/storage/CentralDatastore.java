@@ -1,8 +1,8 @@
 package com.oberasoftware.home.api.storage;
 
-import com.oberasoftware.home.api.exceptions.DataStoreException;
-import com.oberasoftware.home.api.model.storage.Container;
-import com.oberasoftware.home.api.model.storage.HomeEntity;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.model.IotBaseEntity;
+import com.oberasoftware.iot.core.model.storage.Container;
 
 /**
  * @author renarj
@@ -14,7 +14,7 @@ public interface CentralDatastore {
 
     void delete(Class<?> type, String id) throws DataStoreException;
 
-    <T extends HomeEntity> T store(HomeEntity entity) throws DataStoreException;
+    <T extends IotBaseEntity> T store(IotBaseEntity entity) throws DataStoreException;
 
     Container store(Container container) throws DataStoreException;
 

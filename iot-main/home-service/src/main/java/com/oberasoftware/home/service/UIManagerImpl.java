@@ -1,11 +1,9 @@
 package com.oberasoftware.home.service;
 
-import com.oberasoftware.home.api.exceptions.DataStoreException;
-import com.oberasoftware.home.api.exceptions.RuntimeHomeAutomationException;
 import com.oberasoftware.home.api.managers.UIManager;
-import com.oberasoftware.home.api.model.storage.Container;
-import com.oberasoftware.home.api.model.storage.MutableItem;
-import com.oberasoftware.home.api.model.storage.Widget;
+import com.oberasoftware.iot.core.model.storage.Container;
+import com.oberasoftware.iot.core.model.storage.MutableItem;
+import com.oberasoftware.iot.core.model.storage.Widget;
 import com.oberasoftware.home.api.storage.CentralDatastore;
 import com.oberasoftware.home.api.storage.HomeDAO;
 import com.oberasoftware.home.core.model.storage.ContainerImpl;

@@ -1,8 +1,8 @@
 package com.oberasoftware.home.core.mqtt;
 
 import com.oberasoftware.base.BaseConfiguration;
-import com.oberasoftware.robo.core.events.devices.DeviceValueEventImpl;
-import com.oberasoftware.robo.api.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.events.impl.DeviceValueEventImpl;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
 import com.oberasoftware.robo.core.model.ValueImpl;
 import io.moquette.server.Server;
 import io.moquette.server.config.MemoryConfig;

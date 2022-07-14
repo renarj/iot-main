@@ -1,6 +1,6 @@
 package com.oberasoftware.home.core.mqtt;
 
-import com.oberasoftware.robo.api.model.Value;
+import com.oberasoftware.iot.core.model.Value;
 import com.oberasoftware.home.util.ConverterHelper;
 import com.oberasoftware.robo.core.model.ValueTransportMessage;
 import org.slf4j.Logger;

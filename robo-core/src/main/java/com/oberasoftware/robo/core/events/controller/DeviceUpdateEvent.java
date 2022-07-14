@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.core.events.controller;
 
 import com.oberasoftware.base.event.Event;
-import com.oberasoftware.robo.api.model.Device;
+import com.oberasoftware.iot.core.model.IotThing;
 
 /**
  * @author renarj
@@ -9,9 +9,9 @@ import com.oberasoftware.robo.api.model.Device;
 public class DeviceUpdateEvent implements Event {
 
     private final String pluginId;
-    private final Device device;
+    private final IotThing device;
 
-    public DeviceUpdateEvent(String pluginId, Device device) {
+    public DeviceUpdateEvent(String pluginId, IotThing device) {
         this.pluginId = pluginId;
         this.device = device;
     }
@@ -20,7 +20,7 @@ public class DeviceUpdateEvent implements Event {
         return pluginId;
     }
 
-    public Device getDevice() {
+    public IotThing getDevice() {
         return device;
     }
 

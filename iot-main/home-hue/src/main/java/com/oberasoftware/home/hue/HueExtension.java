@@ -5,7 +5,7 @@ import com.oberasoftware.home.api.commands.handlers.CommandHandler;
 import com.oberasoftware.home.api.extensions.DeviceExtension;
 import com.oberasoftware.home.api.extensions.ExtensionCapability;
 import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.home.api.model.storage.PluginItem;
+import com.oberasoftware.iot.core.model.storage.PluginItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

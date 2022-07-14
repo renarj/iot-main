@@ -1,7 +1,6 @@
 package com.oberasoftware.home.hue;
 
-import com.oberasoftware.home.api.model.storage.PluginItem;
-import io.github.zeroone3010.yahueapi.Hue;
+import com.oberasoftware.iot.core.model.storage.PluginItem;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +11,7 @@ import java.util.Optional;
 public interface HueConnector {
     void connect(Optional<PluginItem> pluginItem);
 
-    List<Hue> getBridges();
+    List<HueBridge> getBridges();
 
     boolean isConnected();
 }

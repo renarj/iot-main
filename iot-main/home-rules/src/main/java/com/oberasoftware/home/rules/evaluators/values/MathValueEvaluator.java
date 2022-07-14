@@ -1,12 +1,12 @@
 package com.oberasoftware.home.rules.evaluators.values;
 
-import com.oberasoftware.home.api.types.VALUE_TYPE;
-import com.oberasoftware.home.api.types.Value;
 import com.oberasoftware.home.rules.api.values.MathValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 import com.oberasoftware.home.rules.evaluators.EvalException;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.conditions.NumberTypeOperator;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

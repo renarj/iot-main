@@ -1,8 +1,6 @@
 package com.oberasoftware.home.service;
 
 import com.oberasoftware.base.BaseConfiguration;
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
-import com.oberasoftware.home.api.exceptions.RuntimeHomeAutomationException;
 import com.oberasoftware.home.api.extensions.ExtensionManager;
 import com.oberasoftware.home.api.extensions.SpringExtension;
 import com.oberasoftware.home.core.ControllerConfiguration;

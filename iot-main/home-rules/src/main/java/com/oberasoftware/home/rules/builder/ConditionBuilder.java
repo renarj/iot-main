@@ -1,14 +1,14 @@
 package com.oberasoftware.home.rules.builder;
 
 import com.google.common.collect.Lists;
-import com.oberasoftware.home.api.types.VALUE_TYPE;
-import com.oberasoftware.home.rules.api.logic.CompareCondition;
 import com.oberasoftware.home.rules.api.Condition;
-import com.oberasoftware.home.rules.api.values.ItemValue;
-import com.oberasoftware.home.rules.api.logic.LogicCondition;
 import com.oberasoftware.home.rules.api.Operator;
+import com.oberasoftware.home.rules.api.logic.CompareCondition;
+import com.oberasoftware.home.rules.api.logic.LogicCondition;
+import com.oberasoftware.home.rules.api.values.ItemValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 import com.oberasoftware.home.rules.api.values.StaticValue;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
 
 /**
  * @author Renze de Vries

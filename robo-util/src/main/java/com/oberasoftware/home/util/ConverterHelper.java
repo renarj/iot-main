@@ -2,7 +2,7 @@ package com.oberasoftware.home.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oberasoftware.robo.api.exceptions.RuntimeHomeAutomationException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class ConverterHelper {
             return OBJECT_MAPPER.readValue(json, targetType);
         } catch (IOException e) {
             LOG.error("Unable to map json", e);
-            throw new RuntimeHomeAutomationException("Could not map JSON", e);
+            throw new RuntimeIOTException("Could not map JSON", e);
         }
     }
 
@@ -33,7 +33,7 @@ public class ConverterHelper {
             return OBJECT_MAPPER.writeValueAsString(mappableObject);
         } catch (JsonProcessingException e) {
             LOG.error("Unable to map json", e);
-            throw new RuntimeHomeAutomationException("Could not map JSON", e);
+            throw new RuntimeIOTException("Could not map JSON", e);
         }
     }
 }

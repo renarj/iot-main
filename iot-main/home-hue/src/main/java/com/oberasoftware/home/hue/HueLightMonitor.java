@@ -1,22 +1,19 @@
 package com.oberasoftware.home.hue;
 
 import com.oberasoftware.home.api.AutomationBus;
-import com.oberasoftware.home.api.events.OnOffValue;
-import com.oberasoftware.home.api.events.devices.DeviceValueEvent;
-import com.oberasoftware.home.api.events.devices.DeviceValueEventImpl;
-import com.oberasoftware.home.api.types.VALUE_TYPE;
-import com.oberasoftware.home.api.types.Value;
+import com.oberasoftware.home.core.ControllerConfiguration;
 import com.oberasoftware.home.core.types.ValueImpl;
-import com.philips.lighting.model.PHBridge;
-import com.philips.lighting.model.PHBridgeResourcesCache;
-import com.philips.lighting.model.PHLight;
-import com.philips.lighting.model.PHLightState;
+import com.oberasoftware.iot.core.events.DeviceValueEvent;
+import com.oberasoftware.iot.core.events.impl.DeviceValueEventImpl;
+import com.oberasoftware.iot.core.model.OnOffValue;
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.Value;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,13 +29,22 @@ public class HueLightMonitor {
 
     private static final int MONITOR_INTERVAL = 60000;
 
-    @Autowired
-    private HueConnector hueConnector;
+    private final HueConnector hueConnector;
 
-    @Autowired
-    private AutomationBus bus;
+    private final HueDeviceManager deviceManager;
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private final AutomationBus bus;
+
+    private final ControllerConfiguration controllerConfiguration;
+
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+
+    public HueLightMonitor(HueConnector hueConnector, HueDeviceManager deviceManager, AutomationBus bus, ControllerConfiguration controllerConfiguration) {
+        this.hueConnector = hueConnector;
+        this.deviceManager = deviceManager;
+        this.bus = bus;
+        this.controllerConfiguration = controllerConfiguration;
+    }
 
     @PostConstruct
     public void start() {
@@ -53,31 +59,28 @@ public class HueLightMonitor {
 
     public void checkAllLightStates() {
         if(hueConnector.isConnected()) {
-            LOG.debug("Checking hue light state");
-            PHBridge bridge = hueConnector.getBridge();
+            hueConnector.getBridges().forEach(b -> {
+                LOG.info("Checking hue light state for bridge: {}", b.getBridgeId());
+                List<HueDeviceState> states = deviceManager.retrieveStates(b.getBridgeId());
+                states.forEach(this::checkLightState);
+            });
 
-            PHBridgeResourcesCache resourcesCache = bridge.getResourceCache();
-            resourcesCache.getAllLights().forEach(this::checkLightState);
         } else {
             LOG.debug("Skipping light state check, not connected to bridge");
         }
     }
 
-    public void checkLightState(PHLight light) {
+    public void checkLightState(HueDeviceState light) {
         LOG.debug("Checking light state: {}", light);
+        String deviceId = light.getLightId();
 
-        String deviceId = light.getIdentifier();
-        PHLightState lightState = light.getLastKnownLightState();
+        bus.publish(new DeviceValueEventImpl(controllerConfiguration.getControllerId(),
+                HueExtension.HUE_ID, deviceId, light.getOnOffState(), OnOffValue.LABEL));
 
-        Value onOffValue = new OnOffValue(lightState.isOn());
-
-        bus.publish(new DeviceValueEventImpl(bus.getControllerId(),
-                HueExtension.HUE_ID, deviceId, onOffValue, OnOffValue.LABEL));
-
-        int brightness = lightState.getBrightness();
+        int brightness = light.getBrightness();
         int correctedScale = (int)((double)brightness/255 * 100);
         Value value = new ValueImpl(VALUE_TYPE.NUMBER, correctedScale);
-        DeviceValueEvent valueEvent = new DeviceValueEventImpl(bus.getControllerId(),
+        DeviceValueEvent valueEvent = new DeviceValueEventImpl(controllerConfiguration.getControllerId(),
                 HueExtension.HUE_ID, deviceId, value, "value");
         bus.publish(valueEvent);
     }

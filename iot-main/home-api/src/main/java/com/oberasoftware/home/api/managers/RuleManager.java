@@ -1,7 +1,7 @@
 package com.oberasoftware.home.api.managers;
 
-import com.oberasoftware.home.api.exceptions.HomeAutomationException;
-import com.oberasoftware.home.api.model.storage.RuleItem;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.model.storage.RuleItem;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +14,7 @@ public interface RuleManager {
 
     List<RuleItem> getRules(String controllerId);
 
-    RuleItem store(RuleItem ruleItem) throws HomeAutomationException;
+    RuleItem store(RuleItem ruleItem) throws IOTException;
 
     void delete(String ruleId);
 

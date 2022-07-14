@@ -2,11 +2,11 @@ package com.oberasoftware.home.service.commands.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.commands.BasicCommand;
-import com.oberasoftware.home.api.commands.ItemCommand;
-import com.oberasoftware.home.api.commands.converters.CommandConverter;
-import com.oberasoftware.home.api.commands.converters.ConverterType;
-import com.oberasoftware.home.api.events.devices.ItemCommandEvent;
+import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.converters.CommandConverter;
+import com.oberasoftware.iot.core.commands.converters.ConverterType;
+import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,7 @@
 package com.oberasoftware.home.api.storage;
 
-import com.oberasoftware.home.api.model.storage.*;
+import com.oberasoftware.iot.core.model.IotBaseEntity;
+import com.oberasoftware.iot.core.model.storage.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.Optional;
  * @author renarj
  */
 public interface HomeDAO {
-    <T extends HomeEntity> Optional<T> findItem(Class<T> type, String id);
+    <T extends IotBaseEntity> Optional<T> findItem(Class<T> type, String id);
 
     Optional<ControllerItem> findController(String controllerId);
 

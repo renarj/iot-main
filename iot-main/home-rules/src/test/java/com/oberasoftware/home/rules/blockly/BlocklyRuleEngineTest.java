@@ -2,16 +2,10 @@ package com.oberasoftware.home.rules.blockly;
 
 import com.google.common.collect.Iterables;
 import com.oberasoftware.base.event.Event;
-import com.oberasoftware.home.api.commands.ItemCommand;
 import com.oberasoftware.home.api.commands.SwitchCommand;
-import com.oberasoftware.home.api.events.devices.ItemCommandEvent;
 import com.oberasoftware.home.api.model.Status;
-import com.oberasoftware.home.api.types.VALUE_TYPE;
-import com.oberasoftware.home.api.types.Value;
-import com.oberasoftware.home.core.commands.SwitchCommandImpl;
-import com.oberasoftware.home.core.commands.ValueCommandImpl;
-import com.oberasoftware.home.core.model.StateImpl;
-import com.oberasoftware.home.core.model.StateItemImpl;
+import com.oberasoftware.iot.core.model.impl.StateImpl;
+import com.oberasoftware.iot.core.model.impl.StateItemImpl;
 import com.oberasoftware.home.core.types.ValueImpl;
 import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.rules.RuleEngine;

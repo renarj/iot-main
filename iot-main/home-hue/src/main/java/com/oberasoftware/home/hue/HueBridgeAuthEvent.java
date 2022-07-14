@@ -6,20 +6,24 @@ import com.oberasoftware.base.event.Event;
  * @author renarj
  */
 public class HueBridgeAuthEvent implements Event {
-    private final String bridgeIp;
+    private final HueBridge bridgeDetails;
 
-    public HueBridgeAuthEvent(String bridgeIp) {
-        this.bridgeIp = bridgeIp;
+    public HueBridgeAuthEvent(HueBridge  bridgeDetails) {
+        this.bridgeDetails = bridgeDetails;
     }
 
     public String getBridgeIp() {
-        return bridgeIp;
+        return bridgeDetails.getBridgeIp();
+    }
+
+    public HueBridge getBridgeDetails() {
+        return bridgeDetails;
     }
 
     @Override
     public String toString() {
         return "HueBridgeAuthEvent{" +
-                "bridgeIp='" + bridgeIp + '\'' +
+                "bridgeDetails=" + bridgeDetails +
                 '}';
     }
 }

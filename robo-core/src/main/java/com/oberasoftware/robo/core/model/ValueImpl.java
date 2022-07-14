@@ -1,14 +1,17 @@
 package com.oberasoftware.robo.core.model;
 
+import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.Value;
+
 /**
  * @author renarj
  */
-public class ValueImpl implements com.oberasoftware.robo.api.model.Value {
+public class ValueImpl implements Value {
     
     private Object value;
-    private com.oberasoftware.robo.api.model.VALUE_TYPE type;
+    private VALUE_TYPE type;
 
-    public ValueImpl(com.oberasoftware.robo.api.model.VALUE_TYPE type, Object value) {
+    public ValueImpl(VALUE_TYPE type, Object value) {
         this.type = type;
         this.value = value;
     }
@@ -17,7 +20,7 @@ public class ValueImpl implements com.oberasoftware.robo.api.model.Value {
     }
 
     @Override
-    public com.oberasoftware.robo.api.model.VALUE_TYPE getType() {
+    public VALUE_TYPE getType() {
         return type;
     }
 

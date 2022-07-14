@@ -1,5 +1,7 @@
 package com.oberasoftware.robo.api.commands;
 
+import com.oberasoftware.iot.core.commands.Command;
+
 /**
  * @author renarj
  */

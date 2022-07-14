@@ -1,7 +1,7 @@
 package com.oberasoftware.home.rest;
 
 import com.oberasoftware.home.api.managers.RuleManager;
-import com.oberasoftware.home.api.model.storage.RuleItem;
+import com.oberasoftware.iot.core.model.storage.RuleItem;
 import com.oberasoftware.home.core.model.storage.RuleItemImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
