@@ -28,15 +28,15 @@
     </properties>
 
     <modules>
-        <module>robo-core</module>
-        <module>robo-client</module>
-        <module>robo-cloud</module>
-        <module>dynamixel-core</module>
-        <module>dynamixel-web</module>
-        <module>robo-container</module>
-        <module>robo-behaviours</module>
-        <module>robo-pi4j</module>
-        <module>robo-web</module>
+        <module>robotics/robo-core</module>
+        <module>robotics/robo-client</module>
+        <module>robotics/robo-cloud</module>
+        <module>robotics/dynamixel-core</module>
+        <module>robotics/dynamixel-web</module>
+        <module>robotics/robo-container</module>
+        <module>robotics/robo-behaviours</module>
+        <module>robotics/robo-pi4j</module>
+        <module>robotics/robo-web</module>
         <module>robot-models/robo-hexapod</module>
         <module>robot-models/robo-handcontroller</module>
         <module>robot-models/robo-maximus</module>

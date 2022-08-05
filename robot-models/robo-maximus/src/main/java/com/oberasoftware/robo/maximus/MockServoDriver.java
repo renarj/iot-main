@@ -4,8 +4,6 @@ import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
-import com.oberasoftware.iot.core.robotics.servo.*;
-import com.oberasoftware.robo.api.servo.*;
 import com.oberasoftware.robo.core.ServoDataImpl;
 
 import java.util.ArrayList;

@@ -6,16 +6,25 @@
         <artifactId>iot-main</artifactId>
         <groupId>com.oberasoftware</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>robo-core</artifactId>
+    <artifactId>robo-client</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>iot-core</artifactId>
+            <artifactId>robo-core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
     </dependencies>
 </project>
