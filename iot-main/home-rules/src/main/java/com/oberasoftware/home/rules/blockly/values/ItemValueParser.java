@@ -6,7 +6,7 @@ import com.oberasoftware.home.rules.api.values.StaticValue;
 import com.oberasoftware.home.rules.blockly.BlockParser;
 import com.oberasoftware.home.rules.blockly.BlockParserFactory;
 import com.oberasoftware.home.rules.blockly.BlocklyParseException;
-import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

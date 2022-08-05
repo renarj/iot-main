@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rules.api.general;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.oberasoftware.home.api.commands.SwitchCommand;
 import com.oberasoftware.home.rules.api.ItemBlock;
+import com.oberasoftware.iot.core.commands.SwitchCommand;
 
 /**
  * @author Renze de Vries
@@ -11,6 +11,9 @@ import com.oberasoftware.home.rules.api.ItemBlock;
 public class SwitchItem implements ItemBlock {
 
     private String itemId;
+
+    private String controllerId;
+
     private SwitchCommand.STATE state;
 
     public SwitchItem(String itemId, SwitchCommand.STATE state) {
@@ -28,6 +31,14 @@ public class SwitchItem implements ItemBlock {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    public String getControllerId() {
+        return controllerId;
+    }
+
+    public void setControllerId(String controllerId) {
+        this.controllerId = controllerId;
     }
 
     public SwitchCommand.STATE getState() {

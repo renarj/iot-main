@@ -2,9 +2,9 @@ package com.oberasoftware.robo.dynamixel.protocolv2.handlers;
 
 import com.google.common.collect.ImmutableMap;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.servo.ServoProperty;
-import com.oberasoftware.robo.api.servo.events.ServoDataReceivedEvent;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.servo.events.ServoDataReceivedEvent;
 import com.oberasoftware.robo.core.ServoDataImpl;
 import com.oberasoftware.robo.core.commands.ReadPositionAndSpeedCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;

@@ -1,11 +1,11 @@
 package com.oberasoftware.home.rules.blockly.general;
 
-import com.oberasoftware.home.api.commands.SwitchCommand;
 import com.oberasoftware.home.rules.api.ItemBlock;
 import com.oberasoftware.home.rules.api.general.SwitchItem;
 import com.oberasoftware.home.rules.blockly.BlockParser;
 import com.oberasoftware.home.rules.blockly.BlocklyParseException;
 import com.oberasoftware.home.rules.blockly.XMLUtils;
+import com.oberasoftware.iot.core.commands.SwitchCommand;
 import com.oberasoftware.jasdb.core.utils.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rules.test;
 
-import com.oberasoftware.home.api.managers.DeviceManager;
-import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.managers.DeviceManager;
+import com.oberasoftware.iot.core.model.IotThing;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,33 +16,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class MockDeviceManager implements DeviceManager {
 
-    private List<DeviceItem> deviceItems = new CopyOnWriteArrayList<>();
-
+    private List<IotThing> deviceItems = new CopyOnWriteArrayList<>();
 
     @Override
-    public DeviceItem registerDevice(String pluginId, Device device) throws HomeAutomationException {
+    public IotThing registerThing(IotThing thing) throws IOTException {
         return null;
     }
 
-    public void addDevice(DeviceItem deviceItem) {
+    public void addDevice(IotThing deviceItem) {
         this.deviceItems.add(deviceItem);
     }
 
     @Override
-    public DeviceItem findDevice(String itemId) {
-        return deviceItems.stream().filter(d -> d.getId().equals(itemId)).findFirst().get();
+    public Optional<IotThing> findThing(String controllerId, String itemId) {
+        return deviceItems.stream().filter(d -> d.getId().equals(itemId)).findFirst();
     }
 
     @Override
-    public List<DeviceItem> getDevices(String controllerId) {
+    public List<IotThing> getThings(String controllerId) {
         return new ArrayList<>(deviceItems);
-    }
-
-    @Override
-    public Optional<DeviceItem> findDeviceItem(String controllerId, String pluginId, String deviceId) {
-        return deviceItems.stream().filter(d ->
-                d.getControllerId().equals(controllerId) &&
-                d.getPluginId().equals(pluginId) &&
-                d.getDeviceId().equals(deviceId)).findFirst();
     }
 }

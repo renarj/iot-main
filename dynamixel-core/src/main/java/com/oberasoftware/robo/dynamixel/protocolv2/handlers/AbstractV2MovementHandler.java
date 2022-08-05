@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.dynamixel.protocolv2.handlers;
 
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.servo.ServoCommand;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelConnector;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2Address;

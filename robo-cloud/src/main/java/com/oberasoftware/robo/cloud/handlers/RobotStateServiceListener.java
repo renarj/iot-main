@@ -1,10 +1,10 @@
 package com.oberasoftware.robo.cloud.handlers;
 
 import com.oberasoftware.home.client.api.StateServiceListener;
-import com.oberasoftware.robo.core.model.ValueTransportMessage;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.RobotRegistry;
-import com.oberasoftware.robo.api.events.ValueEventImpl;
+import com.oberasoftware.iot.core.model.ValueTransportMessage;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.events.ValueEventImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

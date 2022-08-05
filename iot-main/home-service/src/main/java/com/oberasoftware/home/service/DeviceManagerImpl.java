@@ -1,19 +1,20 @@
 package com.oberasoftware.home.service;
 
-import com.oberasoftware.home.api.managers.DeviceManager;
-import com.oberasoftware.home.api.managers.ItemManager;
-import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
-import com.oberasoftware.iot.core.model.storage.PluginItem;
-import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.core.ControllerConfiguration;
-import com.oberasoftware.home.core.model.storage.DeviceItemImpl;
+import com.oberasoftware.iot.core.ControllerConfiguration;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.managers.DeviceManager;
+import com.oberasoftware.iot.core.managers.ItemManager;
+import com.oberasoftware.iot.core.model.Controller;
+import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.storage.HomeDAO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -34,33 +35,30 @@ public class DeviceManagerImpl implements DeviceManager {
     private ControllerConfiguration controllerConfiguration;
 
     @Override
-    public DeviceItem registerDevice(String pluginId, Device device) throws HomeAutomationException {
-        LOG.debug("Registering device: {} for plugin: {}", device, pluginId);
-        String controllerId = controllerConfiguration.getControllerId();
+    public IotThing registerThing(IotThing thing) throws IOTException {
+        LOG.debug("Registering device: {} on controller: {}", thing, thing.getControllerId());
 
-        Optional<PluginItem> plugin = homeDAO.findPlugin(controllerId, pluginId);
-        if(plugin.isPresent()) {
-            return itemManager.createOrUpdateDevice(controllerConfiguration.getControllerId(), plugin.get().getPluginId(), device.getId(), device.getName(), device.getProperties());
-        } else {
-            LOG.error("Unable to register device: {} for plugin: {}", device, pluginId);
-            return null;
-        }
+        return homeDAO.findController(thing.getControllerId()).map(new Function<Controller, IotThing>() {
+            @Override
+            public IotThing apply(Controller controller) {
+                try {
+                    return itemManager.createOrUpdateThing(thing.getControllerId(), thing.getId(), thing.getPluginId(), thing.getParentId(), thing.getProperties());
+                } catch (IOTException e) {
+                    throw new RuntimeIOTException("Unable to store Thing: " + thing.getId() + " on controller: " + thing.getControllerId(), e);
+                }
+            }
+        }).orElseThrow(() -> new IOTException("Unable to store Thing: " +
+                thing.getId() + " on controller: " + thing.getControllerId() + " as controller not found"));
     }
 
     @Override
-    public DeviceItem findDevice(String deviceId) {
-        Optional<DeviceItemImpl> d =  homeDAO.findItem(DeviceItemImpl.class, deviceId);
-        return d.get();
+    public Optional<IotThing> findThing(String controllerId, String deviceId) {
+        return homeDAO.findThing(controllerId, deviceId);
     }
 
     @Override
-    public Optional<DeviceItem> findDeviceItem(String controllerId, String pluginId, String deviceId) {
-        return homeDAO.findDevice(controllerId, pluginId, deviceId);
-    }
-
-    @Override
-    public List<DeviceItem> getDevices(String controllerId) {
-        return homeDAO.findDevices(controllerId);
+    public List<IotThing> getThings(String controllerId) {
+        return homeDAO.findThings(controllerId);
     }
 
 }

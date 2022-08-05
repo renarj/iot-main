@@ -3,9 +3,8 @@ package com.oberasoftware.home.hue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.home.api.model.Status;
-import com.oberasoftware.iot.core.model.OnOffValue;
+import com.oberasoftware.iot.core.legacymodel.Status;
+import com.oberasoftware.iot.core.legacymodel.OnOffValue;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,7 @@
 package com.oberasoftware.home.web;
 
-import com.oberasoftware.home.api.managers.ItemManager;
-import com.oberasoftware.home.api.managers.RuleManager;
-import com.oberasoftware.iot.core.model.storage.ControllerItem;
+import com.oberasoftware.iot.core.managers.ItemManager;
+import com.oberasoftware.iot.core.managers.RuleManager;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,7 @@ public class RulesAdminController {
 
     @RequestMapping
     public String getRules(Model model) {
-        List<ControllerItem> controllers = itemManager.findControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
         model.addAttribute("controllers", controllers);
 
         return "admin/rules";
@@ -36,7 +35,7 @@ public class RulesAdminController {
 
     @RequestMapping("/{controllerId}")
     public String getRules(@PathVariable String controllerId, Model model) {
-        List<ControllerItem> controllers = itemManager.findControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
         List<RuleItem> ruleItems = ruleManager.getRules(controllerId);
 
         model.addAttribute("controllers", controllers);
@@ -48,7 +47,7 @@ public class RulesAdminController {
 
     @RequestMapping("/{controllerId}/{ruleId}")
     public String editRule(@PathVariable String controllerId, @PathVariable String ruleId, Model model) {
-        List<ControllerItem> controllers = itemManager.findControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
         List<RuleItem> ruleItems = ruleManager.getRules(controllerId);
         Optional<RuleItem> selectedRule = ruleManager.getRule(ruleId);
 
@@ -65,7 +64,7 @@ public class RulesAdminController {
 
     @RequestMapping("/{controllerId}/new")
     public String newRule(@PathVariable String controllerId, Model model) {
-        List<ControllerItem> controllers = itemManager.findControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
         List<RuleItem> ruleItems = ruleManager.getRules(controllerId);
 
         model.addAttribute("controllers", controllers);

@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.cloud.motion.controllers;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.motion.controller.HandsController;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.motion.controller.HandsController;
 import org.springframework.stereotype.Component;
 
 import static com.oberasoftware.robo.core.model.BasicCommandBuilder.create;

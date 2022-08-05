@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>home-core</artifactId>
+            <artifactId>iot-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

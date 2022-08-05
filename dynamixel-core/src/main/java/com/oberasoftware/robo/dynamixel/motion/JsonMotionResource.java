@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.dynamixel.motion;
 
-import com.oberasoftware.robo.api.motion.MotionResource;
+import com.oberasoftware.iot.core.robotics.motion.MotionResource;
 
 /**
  * @author Renze de Vries

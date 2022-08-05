@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.dynamixel.web;
 
 import com.google.common.collect.ImmutableMap;
-import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;

@@ -28,12 +28,9 @@
     </properties>
 
     <modules>
-        <module>robo-api</module>
         <module>robo-core</module>
         <module>robo-client</module>
         <module>robo-cloud</module>
-        <module>robo-mqtt</module>
-        <module>robo-util</module>
         <module>dynamixel-core</module>
         <module>dynamixel-web</module>
         <module>robo-container</module>
@@ -46,15 +43,19 @@
         <module>robot-models/robo-rover</module>
         <module>trainautomation/roco-z21-adapter</module>
         <module>iot-main/iot-core</module>
-        <module>iot-main/home-api</module>
-        <module>iot-main/home-core</module>
+        <module>iot-main/iot-mqtt</module>
         <module>iot-main/home-rules</module>
         <module>iot-main/home-web</module>
         <module>iot-main/home-service</module>
         <module>iot-main/home-hue</module>
         <module>iot-main/home-storage</module>
-
         <module>iot-main/home-rest</module>
+        <module>iot-agent/agent-core</module>
+        <module>backend/queue-connectors</module>
+        <module>backend/command-svc</module>
+        <module>backend/edge-svc</module>
+        <module>backend/state-svc</module>
+        <module>backend/thing-svc</module>
     </modules>
 
     <licenses>

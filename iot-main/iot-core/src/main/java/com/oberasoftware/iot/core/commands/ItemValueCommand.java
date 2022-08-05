@@ -1,6 +1,6 @@
 package com.oberasoftware.iot.core.commands;
 
-import com.oberasoftware.iot.core.model.Value;
+import com.oberasoftware.iot.core.legacymodel.Value;
 
 import java.util.Map;
 

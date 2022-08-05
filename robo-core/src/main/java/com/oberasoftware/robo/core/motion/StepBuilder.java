@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.motion;
 
-import com.oberasoftware.robo.api.motion.KeyFrame;
+import com.oberasoftware.iot.core.robotics.motion.KeyFrame;
 
 import java.util.ArrayList;
 import java.util.List;

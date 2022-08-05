@@ -8,5 +8,9 @@ import java.util.Map;
 public interface IotThing extends IotBaseEntity {
     String getControllerId();
 
+    String getPluginId();
+
+    String getParentId();
+
     Map<String, String> getProperties();
 }

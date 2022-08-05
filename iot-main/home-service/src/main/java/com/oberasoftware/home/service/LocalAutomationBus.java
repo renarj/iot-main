@@ -3,7 +3,7 @@ package com.oberasoftware.home.service;
 import com.oberasoftware.base.event.Event;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.home.api.AutomationBus;
+import com.oberasoftware.iot.core.AutomationBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

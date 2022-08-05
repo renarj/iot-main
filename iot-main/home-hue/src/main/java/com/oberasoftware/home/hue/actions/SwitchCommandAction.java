@@ -1,13 +1,10 @@
 package com.oberasoftware.home.hue.actions;
 
-import com.oberasoftware.home.api.AutomationBus;
-import com.oberasoftware.home.api.commands.SwitchCommand;
+import com.oberasoftware.iot.core.AutomationBus;
 import com.oberasoftware.home.hue.HueConnector;
 import com.oberasoftware.home.hue.HueDeviceManager;
-import com.oberasoftware.home.hue.HueExtension;
 import com.oberasoftware.iot.core.events.impl.DeviceValueEventImpl;
-import com.oberasoftware.iot.core.model.OnOffValue;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.legacymodel.OnOffValue;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +46,7 @@ public class SwitchCommandAction implements HueCommandAction<SwitchCommand> {
             LOG.info("Switching state of light: {} on bridge: {} to: {}", light.get().getId(), bridgeId, value);
             deviceManager.switchState(bridgeId, item.getDeviceId(), value);
 
-            automationBus.publish(new DeviceValueEventImpl(item.getControllerId(), HueExtension.HUE_ID, item.getDeviceId(),value, OnOffValue.LABEL));
+            automationBus.publish(new DeviceValueEventImpl(item.getControllerId(), item.getDeviceId(),value, OnOffValue.LABEL));
         }
     }
 

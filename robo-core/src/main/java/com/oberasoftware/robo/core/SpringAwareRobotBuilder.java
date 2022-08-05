@@ -2,11 +2,11 @@ package com.oberasoftware.robo.core;
 
 import com.oberasoftware.base.event.EventBus;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.robo.api.*;
-import com.oberasoftware.robo.api.motion.MotionResource;
-import com.oberasoftware.robo.api.sensors.Sensor;
-import com.oberasoftware.robo.api.sensors.SensorDriver;
-import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.iot.core.robotics.*;
+import com.oberasoftware.iot.core.robotics.motion.MotionResource;
+import com.oberasoftware.iot.core.robotics.sensors.Sensor;
+import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
+import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

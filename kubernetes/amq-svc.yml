@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: amq
+  labels:
+    app: amq
+spec:
+  type: ClusterIP
+  ports:
+  - port: 61616
+    targetPort: 61616
+    protocol: TCP
+    name: amq
+  selector:
+    app: amq

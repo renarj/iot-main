@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.motion;
 
-import com.oberasoftware.robo.api.motion.JointTarget;
+import com.oberasoftware.iot.core.robotics.motion.JointTarget;
 
 /**
  * @author Renze de Vries

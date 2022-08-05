@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.dynamixel.motion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oberasoftware.robo.api.motion.Motion;
-import com.oberasoftware.robo.api.motion.MotionConverter;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
+import com.oberasoftware.iot.core.robotics.motion.MotionConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

@@ -2,11 +2,12 @@ package com.oberasoftware.robo.dynamixel;
 
 import com.google.common.base.Stopwatch;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.commands.*;
 import com.oberasoftware.robo.api.commands.*;
-import com.oberasoftware.robo.api.servo.Servo;
-import com.oberasoftware.robo.api.servo.ServoCommand;
-import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.iot.core.robotics.servo.Servo;
+import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
+import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import com.oberasoftware.robo.core.ConverterUtil;
 import com.oberasoftware.robo.core.commands.RebootCommand;
 import com.oberasoftware.robo.dynamixel.protocolv1.DynamixelV1CommandPacket;

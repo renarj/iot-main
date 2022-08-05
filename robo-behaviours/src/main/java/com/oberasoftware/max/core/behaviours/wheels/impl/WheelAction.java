@@ -1,6 +1,6 @@
 package com.oberasoftware.max.core.behaviours.wheels.impl;
 
-import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 
 /**
  * @author renarj

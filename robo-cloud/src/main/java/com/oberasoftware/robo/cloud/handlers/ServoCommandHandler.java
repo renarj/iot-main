@@ -2,16 +2,16 @@ package com.oberasoftware.robo.cloud.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
-import com.oberasoftware.home.util.IntUtils;
-import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.iot.core.util.IntUtils;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import com.oberasoftware.robo.api.RobotRegistry;
-import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.robo.api.commands.BasicCommand;
+import com.oberasoftware.robo.api.commands.Scale;
+import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
-import static com.oberasoftware.home.util.ConverterHelper.mapFromJson;
+import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
 
 /**
  * @author Renze de Vries

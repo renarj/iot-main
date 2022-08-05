@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.maximus.sensors;
 
-import com.oberasoftware.robo.api.sensors.SensorValue;
+import com.oberasoftware.iot.core.robotics.sensors.SensorValue;
 
 public class DoubleValue implements SensorValue<Double> {
     private final double value;

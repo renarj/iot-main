@@ -1,8 +1,9 @@
 package com.oberasoftware.home.storage.jasdb;
 
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
-import com.oberasoftware.home.core.model.storage.DeviceItemImpl;
-import com.oberasoftware.home.core.model.storage.WidgetImpl;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.model.storage.impl.WidgetImpl;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;
 import com.oberasoftware.jasdb.engine.HomeLocatorUtil;
 import com.oberasoftware.jasdb.service.JasDBMain;
@@ -57,19 +58,17 @@ public class JasDBCentralDataStoreTest {
     public void storeAndUpdateDevice() throws JasDBException, DataStoreException {
         String id = UUID.randomUUID().toString();
 
-        centralDatastore.store(new DeviceItemImpl(id, "controller1", "plugin1", "device1", "test device", new HashMap<>()));
+        centralDatastore.store(new IotThingImpl(id, "controller1", "device1", "plugin1", null, new HashMap<>()));
 
-        Optional<DeviceItem> item = jasDBDAO.findDevice("controller1", "plugin1", "device1");
+        Optional<IotThing> item = jasDBDAO.findThing("controller1",  "device1");
         assertThat(item.isPresent(), is(true));
-        assertThat(item.get().getName(), is("test device"));
 
-        centralDatastore.store(new DeviceItemImpl(id, "controller1", "plugin1", "device1", "updated name", new HashMap<>()));
+        centralDatastore.store(new IotThingImpl(id, "controller1", "plugin1", "device1", "updated name", new HashMap<>()));
 
-        assertThat(jasDBDAO.findDevices("controller1").size(), is(1));
+        assertThat(jasDBDAO.findThings("controller1").size(), is(1));
 
-        item = jasDBDAO.findDevice("controller1", "plugin1", "device1");
+        item = jasDBDAO.findThing("controller1", "device1");
         assertThat(item.isPresent(), is(true));
-        assertThat(item.get().getName(), is("updated name"));
     }
 
     @Test

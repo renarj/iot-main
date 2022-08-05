@@ -1,13 +1,15 @@
 package com.oberasoftware.home.service;
 
-import com.oberasoftware.home.api.managers.UIManager;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.managers.UIManager;
 import com.oberasoftware.iot.core.model.storage.Container;
 import com.oberasoftware.iot.core.model.storage.MutableItem;
 import com.oberasoftware.iot.core.model.storage.Widget;
-import com.oberasoftware.home.api.storage.CentralDatastore;
-import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.core.model.storage.ContainerImpl;
-import com.oberasoftware.home.core.model.storage.WidgetImpl;
+import com.oberasoftware.iot.core.model.storage.impl.ContainerImpl;
+import com.oberasoftware.iot.core.model.storage.impl.WidgetImpl;
+import com.oberasoftware.iot.core.storage.CentralDatastore;
+import com.oberasoftware.iot.core.storage.HomeDAO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,7 +55,7 @@ public class UIManagerImpl implements UIManager {
             return homeDAO.findContainer(containerId).get();
         } catch(Exception e) {
             LOG.error("", e);
-            throw new RuntimeHomeAutomationException("Error", e);
+            throw new RuntimeIOTException("Error", e);
         }
     }
 

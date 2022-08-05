@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * @author Renze de Vries
  */
-public interface MutableItem extends Item {
+public interface MutableItem extends PropertiesContainer {
     void setProperties(Map<String, String> properties);
 
     void setId(String id);

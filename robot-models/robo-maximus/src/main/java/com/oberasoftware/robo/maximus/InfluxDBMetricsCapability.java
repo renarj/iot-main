@@ -2,9 +2,9 @@ package com.oberasoftware.robo.maximus;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.ActivatableCapability;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.events.RobotValueEvent;
+import com.oberasoftware.iot.core.robotics.ActivatableCapability;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.events.RobotValueEvent;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;

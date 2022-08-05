@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rules.evaluators.values;
 
-import com.oberasoftware.home.core.types.ValueImpl;
 import com.oberasoftware.home.rules.api.values.StaticValue;
-import com.oberasoftware.iot.core.model.Value;
+import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;

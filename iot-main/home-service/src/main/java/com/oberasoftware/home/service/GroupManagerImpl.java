@@ -1,10 +1,10 @@
 package com.oberasoftware.home.service;
 
-import com.oberasoftware.home.api.managers.DeviceManager;
-import com.oberasoftware.home.api.managers.GroupManager;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.managers.DeviceManager;
+import com.oberasoftware.iot.core.managers.GroupManager;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
-import com.oberasoftware.home.core.model.storage.GroupItemImpl;
+import com.oberasoftware.iot.core.model.storage.impl.GroupItemImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +21,14 @@ public class GroupManagerImpl extends GenericItemManagerImpl<GroupItem> implemen
     private DeviceManager deviceManager;
 
     @Override
-    public List<DeviceItem> getDevices(String groupId) {
+    public List<IotThing> getThings(String groupId) {
         List<String> devicesIds = getItem(groupId).getDeviceIds();
-        return devicesIds.stream().map(deviceManager::findDevice).collect(Collectors.toList());
+        return devicesIds.stream().map(di -> {
+            var split = di.split("-");
+            var controller = split[0];
+            var itemId = split[1];
+            return deviceManager.findThing(controller, itemId).get();
+        }).collect(Collectors.toList());
     }
 
     @Override

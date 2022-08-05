@@ -1,8 +1,10 @@
 package com.oberasoftware.home.service.commands.converters;
 
-import com.oberasoftware.home.api.commands.SwitchCommand;
+import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.SwitchCommand;
 import com.oberasoftware.iot.core.commands.converters.CommandConverter;
 import com.oberasoftware.iot.core.commands.converters.ConverterType;
+import com.oberasoftware.iot.core.commands.impl.SwitchCommandImpl;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,13 +19,14 @@ public class SwitchCommandConverter implements CommandConverter<BasicCommand, Sw
 
         String value = source.getProperties().get("value");
         String itemId = source.getItemId();
+        String controllerId = source.getControllerId();
 
         switch(value.toLowerCase()) {
             case "on":
-                return new SwitchCommandImpl(itemId, SwitchCommand.STATE.ON);
+                return new SwitchCommandImpl(source.getControllerId(), itemId, SwitchCommand.STATE.ON);
             case "off":
             default:
-                return new SwitchCommandImpl(itemId, SwitchCommand.STATE.OFF);
+                return new SwitchCommandImpl(source.getControllerId(), itemId, SwitchCommand.STATE.OFF);
         }
 
     }

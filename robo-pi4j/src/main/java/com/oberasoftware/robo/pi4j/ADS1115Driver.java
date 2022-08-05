@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.pi4j;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.exceptions.RoboException;
-import com.oberasoftware.robo.api.sensors.AnalogPort;
-import com.oberasoftware.robo.api.sensors.SensorDriver;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
+import com.oberasoftware.iot.core.robotics.sensors.AnalogPort;
+import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
 import com.pi4j.gpio.extension.ads.ADS1115GpioProvider;
 import com.pi4j.gpio.extension.ads.ADS1115Pin;
 import com.pi4j.gpio.extension.ads.ADS1x15GpioProvider;

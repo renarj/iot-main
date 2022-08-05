@@ -2,9 +2,12 @@ package com.oberasoftware.home.service.events;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.managers.DeviceManager;
-import com.oberasoftware.home.api.managers.StateManager;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.events.DeviceValueEvent;
+import com.oberasoftware.iot.core.events.ItemValueEvent;
+import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.managers.DeviceManager;
+import com.oberasoftware.iot.core.managers.StateManager;
+import com.oberasoftware.iot.core.model.IotThing;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,7 +33,7 @@ public class ValueEventHandler implements EventHandler {
     public void receive(DeviceValueEvent event) {
         LOG.debug("Received a device value event: {}", event);
 
-        Optional<DeviceItem> optionalItem = deviceManager.findDeviceItem(event.getControllerId(), event.getPluginId(), event.getDeviceId());
+        Optional<IotThing> optionalItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
         if (optionalItem.isPresent()) {
             LOG.debug("Updating state for device: {}", optionalItem);
             stateManager.updateDeviceState(optionalItem.get(), event.getLabel(), event.getValue());

@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.dynamixel.motion;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
 import com.oberasoftware.robo.core.motion.MotionImpl;
 
 import java.util.List;

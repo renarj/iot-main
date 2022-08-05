@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.motion;
 
-import com.oberasoftware.robo.api.MotionTask;
-import com.oberasoftware.robo.api.motion.Motion;
-import com.oberasoftware.robo.api.motion.MotionUnit;
+import com.oberasoftware.iot.core.robotics.MotionTask;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
+import com.oberasoftware.iot.core.robotics.motion.MotionUnit;
 
 public class MotionTaskImpl implements MotionTask {
     public static final int DEFAULT_MAX_LOOP = 1;

@@ -2,7 +2,7 @@ package com.oberasoftware.home.client.state;
 
 import com.oberasoftware.home.client.api.StateServiceClient;
 import com.oberasoftware.home.client.api.StateServiceListener;
-import com.oberasoftware.robo.core.model.ValueTransportMessage;
+import com.oberasoftware.iot.core.model.ValueTransportMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

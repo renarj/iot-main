@@ -1,13 +1,13 @@
 package com.oberasoftware.home.hue;
 
-import com.oberasoftware.home.api.AutomationBus;
-import com.oberasoftware.home.core.ControllerConfiguration;
-import com.oberasoftware.home.core.types.ValueImpl;
+import com.oberasoftware.iot.core.AutomationBus;
+import com.oberasoftware.iot.core.ControllerConfiguration;
 import com.oberasoftware.iot.core.events.DeviceValueEvent;
 import com.oberasoftware.iot.core.events.impl.DeviceValueEventImpl;
-import com.oberasoftware.iot.core.model.OnOffValue;
-import com.oberasoftware.iot.core.model.VALUE_TYPE;
-import com.oberasoftware.iot.core.model.Value;
+import com.oberasoftware.iot.core.legacymodel.OnOffValue;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
+import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -75,13 +75,13 @@ public class HueLightMonitor {
         String deviceId = light.getLightId();
 
         bus.publish(new DeviceValueEventImpl(controllerConfiguration.getControllerId(),
-                HueExtension.HUE_ID, deviceId, light.getOnOffState(), OnOffValue.LABEL));
+                deviceId, light.getOnOffState(), OnOffValue.LABEL));
 
         int brightness = light.getBrightness();
         int correctedScale = (int)((double)brightness/255 * 100);
         Value value = new ValueImpl(VALUE_TYPE.NUMBER, correctedScale);
         DeviceValueEvent valueEvent = new DeviceValueEventImpl(controllerConfiguration.getControllerId(),
-                HueExtension.HUE_ID, deviceId, value, "value");
+                deviceId, value, "value");
         bus.publish(valueEvent);
     }
 }

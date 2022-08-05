@@ -1,11 +1,14 @@
 package com.oberasoftware.home.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oberasoftware.home.api.managers.RuleManager;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.managers.RuleManager;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
-import com.oberasoftware.home.api.storage.CentralDatastore;
-import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.core.model.storage.RuleItemImpl;
+import com.oberasoftware.iot.core.storage.CentralDatastore;
+import com.oberasoftware.iot.core.storage.HomeDAO;
+import com.oberasoftware.iot.core.model.storage.impl.RuleItemImpl;
 import com.oberasoftware.home.rules.RuleEngine;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.blockly.BlocklyParseException;
@@ -56,7 +59,7 @@ public class RuleManagerImpl implements RuleManager {
 
                 LOG.debug("Triggered rule engine start event");
                 ruleEngine.onStarted();
-            } catch (HomeAutomationException e) {
+            } catch (IOTException e) {
                 LOG.error("Could not load rule: " + r.toString(), e);
             }
         });
@@ -79,7 +82,7 @@ public class RuleManagerImpl implements RuleManager {
     }
 
     @Override
-    public RuleItem store(RuleItem ruleItem) throws HomeAutomationException {
+    public RuleItem store(RuleItem ruleItem) throws IOTException {
         RuleItem storeItem = preProcessRule(ruleItem);
 
         centralDatastore.beginTransaction();
@@ -91,7 +94,7 @@ public class RuleManagerImpl implements RuleManager {
             return item;
         } catch (DataStoreException e) {
             LOG.error("Unable to store rule", e);
-            throw new HomeAutomationException("Unable to store rule: " + ruleItem);
+            throw new IOTException("Unable to store rule: " + ruleItem);
         } finally {
             centralDatastore.commitTransaction();
         }
@@ -103,7 +106,7 @@ public class RuleManagerImpl implements RuleManager {
         try {
             centralDatastore.delete(RuleItemImpl.class, ruleId);
         } catch (DataStoreException e) {
-            throw new RuntimeHomeAutomationException("Unable to delete rule: " + ruleId);
+            throw new RuntimeIOTException("Unable to delete rule: " + ruleId);
         } finally {
             centralDatastore.commitTransaction();
 

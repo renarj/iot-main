@@ -2,8 +2,8 @@ package com.oberasoftware.robo.cloud;
 
 import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.commands.PingCommand;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.commands.PingCommand;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

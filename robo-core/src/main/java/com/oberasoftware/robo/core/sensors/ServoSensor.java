@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.sensors.DirectPort;
-import com.oberasoftware.robo.api.sensors.SensorDriver;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
+import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.sensors;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.sensors.MultiValueSensor;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.sensors.MultiValueSensor;
 import com.oberasoftware.robo.maximus.model.SensorDataImpl;
 
 import java.util.HashMap;

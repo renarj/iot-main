@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.hcontrol;
 
-import com.oberasoftware.robo.api.exceptions.RoboException;
+import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
 import com.pi4j.gpio.extension.ads.ADS1115GpioProvider;
 import com.pi4j.gpio.extension.ads.ADS1115Pin;
 import com.pi4j.gpio.extension.ads.ADS1x15GpioProvider;

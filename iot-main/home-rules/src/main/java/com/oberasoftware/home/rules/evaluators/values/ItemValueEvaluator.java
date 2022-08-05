@@ -1,12 +1,12 @@
 package com.oberasoftware.home.rules.evaluators.values;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.home.api.managers.StateManager;
+import com.oberasoftware.iot.core.managers.StateManager;
 import com.oberasoftware.home.rules.api.values.ItemValue;
 import com.oberasoftware.home.rules.evaluators.EvalException;
-import com.oberasoftware.iot.core.model.State;
-import com.oberasoftware.iot.core.model.StateItem;
-import com.oberasoftware.iot.core.model.Value;
+import com.oberasoftware.iot.core.legacymodel.State;
+import com.oberasoftware.iot.core.legacymodel.StateItem;
+import com.oberasoftware.iot.core.legacymodel.Value;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

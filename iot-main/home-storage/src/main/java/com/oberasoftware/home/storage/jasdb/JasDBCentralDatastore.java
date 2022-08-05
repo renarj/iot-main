@@ -1,7 +1,7 @@
 package com.oberasoftware.home.storage.jasdb;
 
-import com.oberasoftware.home.api.storage.CentralDatastore;
-import com.oberasoftware.home.api.storage.HomeDAO;
+import com.oberasoftware.iot.core.storage.CentralDatastore;
+import com.oberasoftware.iot.core.storage.HomeDAO;
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
 import com.oberasoftware.iot.core.model.IotBaseEntity;
 import com.oberasoftware.iot.core.model.storage.Container;

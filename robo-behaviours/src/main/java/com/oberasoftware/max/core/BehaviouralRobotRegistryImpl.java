@@ -1,7 +1,7 @@
 package com.oberasoftware.max.core;
 
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

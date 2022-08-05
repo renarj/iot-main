@@ -1,14 +1,14 @@
 package com.oberasoftware.robo.dynamixel;
 
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.robo.api.commands.PositionCommand;
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.commands.SpeedCommand;
-import com.oberasoftware.robo.api.commands.TorgueCommand;
-import com.oberasoftware.robo.api.exceptions.ServoException;
-import com.oberasoftware.robo.api.servo.Servo;
-import com.oberasoftware.robo.api.servo.ServoData;
-import com.oberasoftware.robo.api.servo.ServoDataManager;
+import com.oberasoftware.iot.core.robotics.commands.PositionCommand;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.commands.SpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.TorgueCommand;
+import com.oberasoftware.iot.core.robotics.exceptions.ServoException;
+import com.oberasoftware.iot.core.robotics.servo.Servo;
+import com.oberasoftware.iot.core.robotics.servo.ServoData;
+import com.oberasoftware.iot.core.robotics.servo.ServoDataManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

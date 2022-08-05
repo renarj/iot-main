@@ -1,10 +1,10 @@
 package com.oberasoftware.robo.core;
 
 import com.oberasoftware.base.event.EventBus;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.sensors.ListenableSensor;
-import com.oberasoftware.robo.api.sensors.Sensor;
-import com.oberasoftware.robo.api.sensors.SensorDriver;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.sensors.ListenableSensor;
+import com.oberasoftware.iot.core.robotics.sensors.Sensor;
+import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

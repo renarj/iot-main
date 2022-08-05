@@ -1,7 +1,7 @@
 package com.oberasoftware.iot.core.events;
 
 import com.oberasoftware.base.event.Event;
-import com.oberasoftware.iot.core.model.Value;
+import com.oberasoftware.iot.core.legacymodel.Value;
 
 /**
  * @author Renze de Vries

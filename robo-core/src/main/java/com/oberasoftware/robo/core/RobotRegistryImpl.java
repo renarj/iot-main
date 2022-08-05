@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.core;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

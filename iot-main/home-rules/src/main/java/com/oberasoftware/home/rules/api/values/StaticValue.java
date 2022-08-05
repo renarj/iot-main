@@ -1,6 +1,6 @@
 package com.oberasoftware.home.rules.api.values;
 
-import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
 
 /**
  * @author Renze de Vries

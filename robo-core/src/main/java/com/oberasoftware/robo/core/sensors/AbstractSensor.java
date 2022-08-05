@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.robo.api.events.SensorEvent;
-import com.oberasoftware.robo.api.sensors.ListenableSensor;
-import com.oberasoftware.robo.api.sensors.SensorListener;
-import com.oberasoftware.robo.api.sensors.SensorValue;
+import com.oberasoftware.iot.core.robotics.events.SensorEvent;
+import com.oberasoftware.iot.core.robotics.sensors.ListenableSensor;
+import com.oberasoftware.iot.core.robotics.sensors.SensorListener;
+import com.oberasoftware.iot.core.robotics.sensors.SensorValue;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

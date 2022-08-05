@@ -1,9 +1,10 @@
 package com.oberasoftware.home.rules.test;
 
-import com.oberasoftware.home.api.managers.StateManager;
-import com.oberasoftware.iot.core.model.State;
-import com.oberasoftware.home.api.model.Status;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.managers.StateManager;
+import com.oberasoftware.iot.core.legacymodel.State;
+import com.oberasoftware.iot.core.legacymodel.Status;
+import com.oberasoftware.iot.core.model.IotThing;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -23,12 +24,12 @@ public class MockStateManager implements StateManager {
     }
 
     @Override
-    public State updateDeviceState(DeviceItem item, String label, Value value) {
+    public State updateDeviceState(IotThing item, String label, Value value) {
         return null;
     }
 
     @Override
-    public State updateStatus(DeviceItem item, Status newStatus) {
+    public State updateStatus(IotThing item, Status newStatus) {
         return null;
     }
 

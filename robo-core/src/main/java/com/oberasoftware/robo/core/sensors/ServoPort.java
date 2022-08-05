@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.robo.api.sensors.DirectPort;
-import com.oberasoftware.robo.api.sensors.PortListener;
-import com.oberasoftware.robo.api.servo.ServoProperty;
-import com.oberasoftware.robo.api.servo.events.ServoUpdateEvent;
+import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
+import com.oberasoftware.iot.core.robotics.sensors.PortListener;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

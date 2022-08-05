@@ -1,6 +1,6 @@
 package com.oberasoftware.home.hue;
 
-import com.oberasoftware.home.api.extensions.SpringExtension;
+import com.oberasoftware.iot.core.extensions.SpringExtension;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 

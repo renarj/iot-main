@@ -12,7 +12,18 @@ public class BasicRestCommand implements BasicCommand {
     private String itemId;
     private String commandType;
 
+    private String controllerId;
+
     private Map<String, String> properties = new HashMap<>();
+
+    @Override
+    public String getControllerId() {
+        return controllerId;
+    }
+
+    public void setControllerId(String controllerId) {
+        this.controllerId = controllerId;
+    }
 
     @Override
     public String getItemId() {
@@ -39,6 +50,11 @@ public class BasicRestCommand implements BasicCommand {
 
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
+    }
+
+    @Override
+    public String getProperty(String property) {
+        return properties.get(property);
     }
 
     @Override

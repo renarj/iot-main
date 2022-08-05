@@ -1,10 +1,10 @@
 package com.oberasoftware.max.core.behaviours;
 
 import com.oberasoftware.max.core.behaviours.servos.impl.SingleServoBehaviour;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.Behaviour;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.commands.Scale;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;

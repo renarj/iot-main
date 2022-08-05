@@ -1,9 +1,10 @@
 package com.oberasoftware.home.service;
 
-import com.oberasoftware.home.api.managers.GenericItemManager;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.managers.GenericItemManager;
 import com.oberasoftware.iot.core.model.storage.VirtualItem;
-import com.oberasoftware.home.api.storage.CentralDatastore;
-import com.oberasoftware.home.api.storage.HomeDAO;
+import com.oberasoftware.iot.core.storage.CentralDatastore;
+import com.oberasoftware.iot.core.storage.HomeDAO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 

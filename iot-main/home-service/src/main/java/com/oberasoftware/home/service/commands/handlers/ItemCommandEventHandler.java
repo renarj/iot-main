@@ -4,17 +4,18 @@ import com.oberasoftware.base.event.Event;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.home.api.commands.handlers.DeviceCommandHandler;
-import com.oberasoftware.home.api.extensions.AutomationExtension;
-import com.oberasoftware.home.api.extensions.ExtensionManager;
-import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.api.commands.impl.GroupCommandImpl;
-import com.oberasoftware.home.core.model.storage.DeviceItemImpl;
-import com.oberasoftware.home.core.model.storage.GroupItemImpl;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.iot.core.commands.ItemValueCommand;
+import com.oberasoftware.iot.core.commands.handlers.DeviceCommandHandler;
+import com.oberasoftware.iot.core.commands.impl.GroupCommandImpl;
+import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import com.oberasoftware.iot.core.events.impl.ItemNumericValue;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.extensions.AutomationExtension;
+import com.oberasoftware.iot.core.extensions.ExtensionManager;
+import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.impl.GroupItemImpl;
+import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.storage.HomeDAO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,9 +47,9 @@ public class ItemCommandEventHandler implements EventHandler {
         ItemCommand command = event.getCommand();
         LOG.debug("Looking up device details for command: {} and itemId: {}",command, command.getItemId());
 
-        Optional<DeviceItemImpl> deviceData = homeDAO.findItem(DeviceItemImpl.class, command.getItemId());
+        Optional<IotThingImpl> deviceData = homeDAO.findItem(IotThingImpl.class, command.getItemId());
         if(deviceData.isPresent()) {
-            DeviceItem deviceItem = deviceData.get();
+            IotThing deviceItem = deviceData.get();
             String pluginId = deviceItem.getPluginId();
 
             AutomationExtension extension = extensionManager.getExtension(pluginId).get();

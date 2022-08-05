@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.robo.api.sensors.SensorValue;
+import com.oberasoftware.iot.core.robotics.sensors.SensorValue;
 
 /**
  * @author Renze de Vries

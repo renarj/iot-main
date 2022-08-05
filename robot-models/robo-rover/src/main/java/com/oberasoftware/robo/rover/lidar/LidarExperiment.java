@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.rover.lidar;
 
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.servo.Servo;
-import com.oberasoftware.robo.api.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.servo.Servo;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 import com.oberasoftware.robo.core.commands.OperationModeCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;

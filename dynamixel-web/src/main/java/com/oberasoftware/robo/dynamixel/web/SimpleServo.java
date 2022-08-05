@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.dynamixel.web;
 
-import com.oberasoftware.robo.api.servo.Servo;
-import com.oberasoftware.robo.api.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.servo.Servo;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;

@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.cloud;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.SpeechEngine;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.SpeechEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;

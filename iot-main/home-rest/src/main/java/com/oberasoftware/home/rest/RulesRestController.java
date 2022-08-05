@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rest;
 
-import com.oberasoftware.home.api.managers.RuleManager;
+import com.oberasoftware.iot.core.managers.RuleManager;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
-import com.oberasoftware.home.core.model.storage.RuleItemImpl;
+import com.oberasoftware.iot.core.model.storage.impl.RuleItemImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

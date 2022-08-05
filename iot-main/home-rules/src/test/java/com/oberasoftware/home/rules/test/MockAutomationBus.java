@@ -2,7 +2,7 @@ package com.oberasoftware.home.rules.test;
 
 import com.oberasoftware.base.event.Event;
 import com.oberasoftware.base.event.EventHandler;
-import com.oberasoftware.home.api.AutomationBus;
+import com.oberasoftware.iot.core.AutomationBus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.hexapod;
 
-import com.oberasoftware.robo.api.servo.Servo;
+import com.oberasoftware.iot.core.robotics.servo.Servo;
 
 public class Leg {
     private final String legId;

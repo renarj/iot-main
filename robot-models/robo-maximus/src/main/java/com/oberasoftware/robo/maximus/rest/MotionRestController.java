@@ -1,14 +1,14 @@
 package com.oberasoftware.robo.maximus.rest;
 
 import com.google.common.collect.Lists;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.api.humanoid.JointControl;
-import com.oberasoftware.robo.api.humanoid.MotionEngine;
-import com.oberasoftware.robo.api.humanoid.NavigationControl;
-import com.oberasoftware.robo.api.humanoid.cartesian.CartesianControl;
-import com.oberasoftware.robo.api.humanoid.cartesian.CartesianMoveInput;
-import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
+import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
+import com.oberasoftware.iot.core.robotics.humanoid.NavigationControl;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianMoveInput;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
 import com.oberasoftware.robo.core.motion.KeyFrameImpl;
 import com.oberasoftware.robo.core.motion.MotionImpl;
 import com.oberasoftware.robo.maximus.storage.MotionStorage;

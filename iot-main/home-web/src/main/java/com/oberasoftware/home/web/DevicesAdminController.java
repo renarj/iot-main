@@ -1,15 +1,12 @@
 package com.oberasoftware.home.web;
 
 import com.google.common.io.ByteStreams;
-import com.oberasoftware.home.api.extensions.AutomationExtension;
-import com.oberasoftware.home.api.extensions.ExtensionManager;
-import com.oberasoftware.home.api.managers.ItemManager;
-import com.oberasoftware.home.api.managers.UIManager;
-import com.oberasoftware.home.api.model.ExtensionResource;
+import com.oberasoftware.iot.core.extensions.AutomationExtension;
+import com.oberasoftware.iot.core.extensions.ExtensionManager;
+import com.oberasoftware.iot.core.legacymodel.ExtensionResource;
+import com.oberasoftware.iot.core.managers.ItemManager;
+import com.oberasoftware.iot.core.managers.UIManager;
 import com.oberasoftware.iot.core.model.storage.Container;
-import com.oberasoftware.iot.core.model.storage.ControllerItem;
-import com.oberasoftware.iot.core.model.storage.PluginItem;
-import com.oberasoftware.home.web.model.WebPluginItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -49,17 +45,17 @@ public class DevicesAdminController {
 
     @RequestMapping(value = "/{controllerId}")
     public String getPlugins(@PathVariable String controllerId, Model model) {
-        List<ControllerItem> controllers = itemManager.findControllers();
-        List<PluginItem> plugins = itemManager.findPlugins(controllerId);
-        List<WebPluginItem> webPluginItems = plugins.stream()
-                .map(p -> new WebPluginItem(p, itemManager.findDevices(controllerId, p.getPluginId())))
-                .collect(Collectors.toList());
+        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
+//        List<PluginItem> plugins = itemManager.findPlugins(controllerId);
+//        List<WebPluginItem> webPluginItems = plugins.stream()
+//                .map(p -> new WebPluginItem(p, itemManager.findThings(controllerId, p.getPluginId())))
+//                .collect(Collectors.toList());
         List<Container> containers = uiManager.getAllContainers();
 
-        LOG.debug("Retrieving plugins for controller: {} found plugins: {}", controllerId, plugins.size());
+//        LOG.debug("Retrieving plugins for controller: {} found plugins: {}", controllerId, plugins.size());
 
         model.addAttribute("controllers", controllers);
-        model.addAttribute("plugins", webPluginItems);
+//        model.addAttribute("plugins", webPluginItems);
         model.addAttribute("selectedController", controllerId);
         model.addAttribute("containers", containers);
 
@@ -69,7 +65,7 @@ public class DevicesAdminController {
     @RequestMapping
     public String getControllers(Model model) {
         LOG.debug("Showing admin screen - controllers");
-        List<ControllerItem> controllers = itemManager.findControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
         model.addAttribute("controllers", controllers);
 
         return "admin/devices";

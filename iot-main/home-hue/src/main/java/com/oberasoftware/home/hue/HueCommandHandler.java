@@ -1,10 +1,10 @@
 package com.oberasoftware.home.hue;
 
 import com.google.common.reflect.TypeToken;
-import com.oberasoftware.home.api.commands.handlers.GroupCommandHandler;
+import com.oberasoftware.iot.core.commands.handlers.GroupCommandHandler;
 import com.oberasoftware.home.hue.actions.HueCommandAction;
 import com.oberasoftware.iot.core.commands.Command;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class HueCommandHandler implements GroupCommandHandler {
     }
 
     @Override
-    public void receive(GroupItem groupItem, List<DeviceItem> items, Command command) {
+    public void receive(GroupItem groupItem, List<IotThing> items, Command command) {
         Optional<HueCommandAction<Command>> action = getAction(command);
         if(action.isPresent()) {
             LOG.debug("Executing group: {} action: {}", groupItem, command);
@@ -71,7 +71,7 @@ public class HueCommandHandler implements GroupCommandHandler {
     }
 
     @Override
-    public void receive(DeviceItem item, Command command) {
+    public void receive(IotThing item, Command command) {
         Optional<HueCommandAction<Command>> action = getAction(command);
         if(action.isPresent()) {
             LOG.debug("Executing device: {} action: {}", item, action.get());

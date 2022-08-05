@@ -2,10 +2,10 @@ package com.oberasoftware.robo.dynamixel.web;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.servo.ServoData;
-import com.oberasoftware.robo.api.servo.ServoProperty;
-import com.oberasoftware.robo.api.servo.events.ServoUpdateEvent;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.servo.ServoData;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

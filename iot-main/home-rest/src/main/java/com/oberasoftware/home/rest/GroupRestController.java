@@ -1,10 +1,10 @@
 package com.oberasoftware.home.rest;
 
-import com.oberasoftware.home.api.managers.DeviceManager;
-import com.oberasoftware.home.api.managers.GroupManager;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.managers.DeviceManager;
+import com.oberasoftware.iot.core.managers.GroupManager;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
-import com.oberasoftware.home.core.model.storage.GroupItemImpl;
+import com.oberasoftware.iot.core.model.storage.impl.GroupItemImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,11 +46,11 @@ public class GroupRestController {
     }
 
     @RequestMapping(value = "/groups({groupId})/devices")
-    public List<? extends DeviceItem> findDevices(@PathVariable String groupId) {
+    public List<? extends IotThing> findDevices(@PathVariable String groupId) {
         GroupItem groupItem = groupManager.getItem(groupId);
 
         return groupItem.getDeviceIds().stream()
-                .map(d -> deviceManager.findDevice(d)).collect(Collectors.toList());
+                .map(d -> deviceManager.findThing(groupItem.getControllerId(), d).get()).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")

@@ -2,12 +2,11 @@ package com.oberasoftware.robo.dynamixel.protocolv1.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.commands.BulkTorgueCommand;
-import com.oberasoftware.robo.api.commands.TorgueCommand;
-import com.oberasoftware.robo.api.commands.TorgueLimitCommand;
-import com.oberasoftware.robo.api.exceptions.RoboException;
-import com.oberasoftware.robo.api.servo.events.ServoDataReceivedEvent;
-import com.oberasoftware.robo.api.servo.events.ServoUpdateEvent;
+import com.oberasoftware.iot.core.robotics.commands.BulkTorgueCommand;
+import com.oberasoftware.iot.core.robotics.commands.TorgueCommand;
+import com.oberasoftware.iot.core.robotics.commands.TorgueLimitCommand;
+import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
+import com.oberasoftware.iot.core.robotics.servo.events.ServoDataReceivedEvent;
 import com.oberasoftware.robo.core.commands.ReadTorgueCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelAddress;
 import com.oberasoftware.robo.dynamixel.DynamixelConnector;

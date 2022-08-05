@@ -1,6 +1,6 @@
 package com.oberasoftware.iot.core.model;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author Renze de Vries
@@ -8,5 +8,7 @@ import java.util.List;
 public interface Controller extends IotBaseEntity {
     String getControllerId();
 
-    List<IotThing> getDevices();
+    Map<String, String> getProperties();
+
+    String getOrgId();
 }

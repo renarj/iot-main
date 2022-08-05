@@ -1,10 +1,12 @@
 package com.oberasoftware.home.service;
 
 import com.oberasoftware.base.BaseConfiguration;
-import com.oberasoftware.home.api.extensions.ExtensionManager;
-import com.oberasoftware.home.api.extensions.SpringExtension;
-import com.oberasoftware.home.core.ControllerConfiguration;
-import com.oberasoftware.home.core.CoreConfiguation;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.extensions.ExtensionManager;
+import com.oberasoftware.iot.core.extensions.SpringExtension;
+import com.oberasoftware.iot.core.ControllerConfiguration;
+import com.oberasoftware.iot.core.CoreConfiguation;
 import com.oberasoftware.home.rest.RestConfiguration;
 import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.storage.jasdb.JasDBConfiguration;
@@ -59,7 +61,7 @@ public class HomeAutomation {
 
             extensionManager.activateExtensions();
             LOG.info("HomeAutomation system Started and ready for duty");
-        } catch (HomeAutomationException | RuntimeHomeAutomationException e) {
+        } catch (IOTException | RuntimeIOTException e) {
             LOG.error("Could not start the HomeAutomationSystem", e);
         }
     }

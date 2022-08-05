@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.cloud.motion.controllers;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.motion.controller.MotionController;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.motion.controller.MotionController;
 
 /**
  * @author Renze de Vries

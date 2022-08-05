@@ -1,12 +1,12 @@
 package com.oberasoftware.home.rules.blockly;
 
-import com.oberasoftware.home.api.commands.SwitchCommand;
 import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.rules.api.Operator;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.api.general.SwitchItem;
 import com.oberasoftware.home.rules.builder.ConditionBuilder;
 import com.oberasoftware.home.rules.builder.RuleBuilder;
+import com.oberasoftware.iot.core.commands.SwitchCommand;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;

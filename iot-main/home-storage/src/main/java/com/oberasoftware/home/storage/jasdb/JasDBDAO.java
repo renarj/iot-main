@@ -2,10 +2,12 @@ package com.oberasoftware.home.storage.jasdb;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.core.model.storage.*;
+import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotBaseEntity;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.*;
+import com.oberasoftware.iot.core.model.storage.impl.*;
+import com.oberasoftware.iot.core.storage.HomeDAO;
 import com.oberasoftware.jasdb.api.entitymapper.EntityManager;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;
 import com.oberasoftware.jasdb.api.session.DBSession;
@@ -15,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Optional.empty;
@@ -91,52 +92,28 @@ public class JasDBDAO implements HomeDAO {
     }
 
     @Override
-    public Optional<ControllerItem> findController(String controllerId) {
-        ControllerItemImpl controllerItem = findItem(ControllerItemImpl.class, new ImmutableMap.Builder<String, String>()
+    public Optional<Controller> findController(String controllerId) {
+        ControllerImpl controllerItem = findItem(ControllerImpl.class, new ImmutableMap.Builder<String, String>()
                 .put("controllerId", controllerId).build());
         return ofNullable(controllerItem);
     }
 
     @Override
-    public Optional<PluginItem> findPlugin(String controllerId, String pluginId) {
-        PluginItemImpl pluginItem = findItem(PluginItemImpl.class, new ImmutableMap.Builder<String, String>()
+    public List<Controller> findControllers() {
+        return newArrayList(findItems(ControllerImpl.class, new ImmutableMap.Builder<String, String>().build()));
+    }
+
+    @Override
+    public Optional<IotThing> findThing(String controllerId, String deviceId) {
+        IotThingImpl deviceItem = findItem(IotThingImpl.class, new ImmutableMap.Builder<String, String>()
                 .put("controllerId", controllerId)
-                .put("pluginId", pluginId).build());
-        return ofNullable(pluginItem);
-    }
-
-    @Override
-    public List<ControllerItem> findControllers() {
-        return newArrayList(findItems(ControllerItemImpl.class, new ImmutableMap.Builder<String, String>().build()));
-    }
-
-    @Override
-    public List<PluginItem> findPlugins(String controllerId) {
-        List<PluginItemImpl> pluginItems = findItems(PluginItemImpl.class, new ImmutableMap.Builder<String, String>()
-                .put("controllerId", controllerId).build());
-
-        return pluginItems.stream().map(p -> (PluginItem) p).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<DeviceItem> findDevices(String controllerId, String pluginId) {
-        return newArrayList(findItems(DeviceItemImpl.class, new ImmutableMap.Builder<String, String>()
-                .put("controllerId", controllerId)
-                .put("pluginId", pluginId).build()));
-    }
-
-    @Override
-    public Optional<DeviceItem> findDevice(String controllerId, String pluginId, String deviceId) {
-        DeviceItemImpl deviceItem = findItem(DeviceItemImpl.class, new ImmutableMap.Builder<String, String>()
-                .put("controllerId", controllerId)
-                .put("pluginId", pluginId)
                 .put("deviceId", deviceId).build());
         return ofNullable(deviceItem);
     }
 
     @Override
-    public List<DeviceItem> findDevices(String controllerId) {
-        return newArrayList(findItems(DeviceItemImpl.class, new ImmutableMap.Builder<String, String>()
+    public List<IotThing> findThings(String controllerId) {
+        return newArrayList(findItems(IotThingImpl.class, new ImmutableMap.Builder<String, String>()
                 .put("controllerId", controllerId)
                 .build()));
     }

@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.dynamixel;
 
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.commands.PositionAndSpeedCommand;
-import com.oberasoftware.robo.api.commands.PositionCommand;
-import com.oberasoftware.robo.api.commands.SpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.PositionCommand;
+import com.oberasoftware.iot.core.robotics.commands.SpeedCommand;
 
 public interface DynamixelServoMovementHandler {
     @EventSubscribe

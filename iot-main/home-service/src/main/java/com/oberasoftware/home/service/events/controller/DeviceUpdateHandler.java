@@ -2,7 +2,8 @@ package com.oberasoftware.home.service.events.controller;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.managers.DeviceManager;
+import com.oberasoftware.iot.core.events.DeviceUpdateEvent;
+import com.oberasoftware.iot.core.managers.DeviceManager;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,6 @@ public class DeviceUpdateHandler implements EventHandler {
     @EventSubscribe
     public void receive(DeviceUpdateEvent event) throws Exception {
         LOG.debug("Received a device update for plugin: {} and device: {}", event.getPluginId(), event.getDevice());
-        deviceManager.registerDevice(event.getPluginId(), event.getDevice());
+        deviceManager.registerThing(event.getDevice());
     }
 }

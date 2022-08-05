@@ -1,11 +1,11 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.events.BumperEvent;
-import com.oberasoftware.robo.api.sensors.DirectPort;
-import com.oberasoftware.robo.api.sensors.Port;
-import com.oberasoftware.robo.api.sensors.SensorDriver;
-import com.oberasoftware.robo.api.sensors.TriggerValue;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.events.BumperEvent;
+import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
+import com.oberasoftware.iot.core.robotics.sensors.Port;
+import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
+import com.oberasoftware.iot.core.robotics.sensors.TriggerValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

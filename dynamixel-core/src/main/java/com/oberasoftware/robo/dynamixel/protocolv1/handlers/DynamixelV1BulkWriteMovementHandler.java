@@ -2,8 +2,8 @@ package com.oberasoftware.robo.dynamixel.protocolv1.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.commands.BulkPositionSpeedCommand;
-import com.oberasoftware.robo.api.commands.PositionAndSpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.robo.dynamixel.*;
 import com.oberasoftware.robo.dynamixel.protocolv1.DynamixelV1CommandPacket;
 import org.slf4j.Logger;

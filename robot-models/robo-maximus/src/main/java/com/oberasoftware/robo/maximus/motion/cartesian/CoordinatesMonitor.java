@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.maximus.motion.cartesian;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.Behaviour;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.humanoid.cartesian.CartesianControl;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
 import org.slf4j.Logger;
 
 import java.util.concurrent.ExecutorService;

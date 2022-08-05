@@ -1,18 +1,16 @@
 package com.oberasoftware.robo.maximus;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.Behaviour;
-import com.oberasoftware.robo.api.exceptions.RoboException;
-import com.oberasoftware.robo.api.humanoid.HumanoidRobot;
-import com.oberasoftware.robo.api.humanoid.components.*;
-import com.oberasoftware.robo.api.humanoid.joints.Joint;
-import com.oberasoftware.robo.api.sensors.Sensor;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.humanoid.components.*;
+import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
+import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
+import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
+import com.oberasoftware.iot.core.robotics.sensors.Sensor;
 import com.oberasoftware.robo.maximus.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.oberasoftware.robo.api.humanoid.components.ComponentNames.*;
 
 public class HumanoidRobotBuilder {
 

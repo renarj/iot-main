@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-api</artifactId>
+            <artifactId>iot-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

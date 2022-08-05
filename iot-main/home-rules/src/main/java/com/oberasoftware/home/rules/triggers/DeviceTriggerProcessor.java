@@ -2,7 +2,6 @@ package com.oberasoftware.home.rules.triggers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.managers.DeviceManager;
 import com.oberasoftware.home.rules.RuleEngine;
 import com.oberasoftware.home.rules.api.Block;
 import com.oberasoftware.home.rules.api.general.Rule;
@@ -11,7 +10,8 @@ import com.oberasoftware.home.rules.api.trigger.Trigger;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.blocks.BlockEvaluator;
 import com.oberasoftware.iot.core.events.DeviceEvent;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.managers.DeviceManager;
+import com.oberasoftware.iot.core.model.IotThing;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,7 +46,7 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
     @Override
     public void register(Trigger trigger, Rule rule) {
         if(trigger instanceof DeviceTrigger) {
-            LOG.debug("Rule: {} has an item trigger, adding dependent items");
+            LOG.debug("Rule: {} has an item trigger, adding dependent items", rule);
             Set<String> dependentItems = getDependentItems(rule.getBlock());
             LOG.debug("Adding dependent items: {} for rule: {}", dependentItems, rule);
             dependentItems.forEach(i -> addDependentItem(rule, i));
@@ -91,10 +91,8 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
     @EventSubscribe
     public void receive(DeviceEvent event) throws Exception {
         LOG.debug("Received a device event: {}", event);
-        Optional<DeviceItem> deviceItem = deviceManager.findDeviceItem(event.getControllerId(), event.getPluginId(), event.getDeviceId());
-        if(deviceItem.isPresent()) {
-            evaluateRules(deviceItem.get().getId());
-        }
+        Optional<IotThing> deviceItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
+        deviceItem.ifPresent(iotThing -> evaluateRules(iotThing.getId()));
     }
 
 }

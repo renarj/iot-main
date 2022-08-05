@@ -1,7 +1,6 @@
 package com.oberasoftware.home.hue;
 
-import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.home.api.model.Status;
+import com.oberasoftware.iot.core.legacymodel.Status;
 
 import java.util.Map;
 

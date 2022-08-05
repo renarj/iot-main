@@ -1,6 +1,6 @@
 package com.oberasoftware.home.hue;
 
-import com.oberasoftware.iot.core.model.OnOffValue;
+import com.oberasoftware.iot.core.legacymodel.OnOffValue;
 
 public class HueDeviceState {
     private final int brightness;

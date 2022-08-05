@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rest;
 
-import com.oberasoftware.home.api.managers.TimeSeriesStore;
-import com.oberasoftware.home.api.model.DataPoint;
-import com.oberasoftware.home.core.ControllerConfiguration;
+import com.oberasoftware.iot.core.managers.TimeSeriesStore;
+import com.oberasoftware.iot.core.legacymodel.DataPoint;
+import com.oberasoftware.iot.core.ControllerConfiguration;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

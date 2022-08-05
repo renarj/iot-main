@@ -1,11 +1,11 @@
 package com.oberasoftware.robo.maximus.motion;
 
-import com.oberasoftware.robo.api.MotionTask;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.humanoid.MotionEngine;
-import com.oberasoftware.robo.api.humanoid.NavigationControl;
-import com.oberasoftware.robo.api.humanoid.cartesian.CartesianControl;
+import com.oberasoftware.iot.core.robotics.MotionTask;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
+import com.oberasoftware.iot.core.robotics.humanoid.NavigationControl;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;

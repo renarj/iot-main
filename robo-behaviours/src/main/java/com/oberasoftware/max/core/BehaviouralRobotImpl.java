@@ -1,10 +1,10 @@
 package com.oberasoftware.max.core;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.Behaviour;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.gripper.GripperBehaviour;
-import com.oberasoftware.robo.api.behavioural.wheel.DriveBehaviour;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.gripper.GripperBehaviour;
+import com.oberasoftware.iot.core.robotics.behavioural.wheel.DriveBehaviour;
 
 import java.util.List;
 import java.util.Optional;

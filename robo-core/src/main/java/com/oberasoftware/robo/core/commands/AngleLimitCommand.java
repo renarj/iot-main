@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.commands;
 
-import com.oberasoftware.robo.api.servo.ServoCommand;
+import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
 
 /**
  * @author renarj

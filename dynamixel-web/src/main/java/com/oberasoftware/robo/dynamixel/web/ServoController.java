@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.dynamixel.web;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.RobotRegistry;
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.servo.ServoDriver;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import com.oberasoftware.robo.core.commands.AngleLimitCommand;
 import com.oberasoftware.robo.core.commands.OperationModeCommand;
 import com.oberasoftware.robo.dynamixel.web.commands.TorgueCommand;

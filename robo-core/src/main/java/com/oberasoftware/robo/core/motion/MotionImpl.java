@@ -2,8 +2,8 @@ package com.oberasoftware.robo.core.motion;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Lists;
-import com.oberasoftware.robo.api.motion.KeyFrame;
-import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.iot.core.robotics.motion.KeyFrame;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
 
 import java.util.List;
 

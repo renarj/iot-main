@@ -1,11 +1,13 @@
 package com.oberasoftware.home.service;
 
-import com.oberasoftware.home.api.managers.DashboardManager;
-import com.oberasoftware.home.api.managers.UIManager;
+import com.oberasoftware.iot.core.exceptions.DataStoreException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.managers.DashboardManager;
+import com.oberasoftware.iot.core.managers.UIManager;
 import com.oberasoftware.iot.core.model.storage.Dashboard;
-import com.oberasoftware.home.api.storage.CentralDatastore;
-import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.core.model.storage.DashboardImpl;
+import com.oberasoftware.iot.core.model.storage.impl.DashboardImpl;
+import com.oberasoftware.iot.core.storage.CentralDatastore;
+import com.oberasoftware.iot.core.storage.HomeDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +51,7 @@ public class DashboardManagerImpl implements DashboardManager {
     @Override
     public Dashboard findDefaultDashboard() {
         return findDashboards().stream().findFirst().orElseThrow(()
-                -> new RuntimeHomeAutomationException("Unable to determine default dashboard"));
+                -> new RuntimeIOTException("Unable to determine default dashboard"));
     }
 
     @Override

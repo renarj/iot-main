@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.dynamixel.web;
 
 import com.google.common.base.Stopwatch;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.RobotRegistry;
-import com.oberasoftware.robo.api.servo.Servo;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.servo.Servo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

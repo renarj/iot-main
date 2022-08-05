@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oberasoftware.robo.api.motion.KeyFrame;
-import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.iot.core.robotics.motion.KeyFrame;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
 import com.oberasoftware.robo.core.motion.JointTargetImpl;
 import com.oberasoftware.robo.core.motion.KeyFrameImpl;
 import com.oberasoftware.robo.core.motion.MotionImpl;

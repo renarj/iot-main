@@ -8,11 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class MainController {
-    @RequestMapping("/dash")
-    public String getIndex() {
-        return "index";
-    }
-
     @RequestMapping("/joystick")
     public String getS() {
         return "simple";

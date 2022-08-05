@@ -16,7 +16,7 @@
 package com.oberasoftware.robo.maximus;
 
 import com.oberasoftware.max.core.CoreConfiguration;
-import com.oberasoftware.robo.api.humanoid.cartesian.CartesianControl;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.SerialDynamixelConnector;

@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.robo.api.humanoid.joints.JointData;
-import com.oberasoftware.robo.api.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.JointData;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package com.oberasoftware.iot.core.events;
 
 
-import com.oberasoftware.iot.core.model.State;
+import com.oberasoftware.iot.core.legacymodel.State;
 
 /**
  * @author renarj

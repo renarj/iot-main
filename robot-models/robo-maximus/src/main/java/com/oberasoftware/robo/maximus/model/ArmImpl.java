@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.ImmutableList;
-import com.oberasoftware.robo.api.humanoid.components.Arm;
-import com.oberasoftware.robo.api.humanoid.components.Shoulder;
-import com.oberasoftware.robo.api.humanoid.joints.Joint;
+import com.oberasoftware.iot.core.robotics.humanoid.components.Arm;
+import com.oberasoftware.iot.core.robotics.humanoid.components.Shoulder;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
 
 import java.util.List;
 

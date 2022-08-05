@@ -8,7 +8,7 @@ import com.oberasoftware.home.rules.api.logic.LogicCondition;
 import com.oberasoftware.home.rules.api.values.ItemValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 import com.oberasoftware.home.rules.api.values.StaticValue;
-import com.oberasoftware.iot.core.model.VALUE_TYPE;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
 
 /**
  * @author Renze de Vries

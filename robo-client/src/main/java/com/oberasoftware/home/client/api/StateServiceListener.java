@@ -1,7 +1,7 @@
 package com.oberasoftware.home.client.api;
 
 
-import com.oberasoftware.robo.core.model.ValueTransportMessage;
+import com.oberasoftware.iot.core.model.ValueTransportMessage;
 
 /**
  * @author Renze de Vries

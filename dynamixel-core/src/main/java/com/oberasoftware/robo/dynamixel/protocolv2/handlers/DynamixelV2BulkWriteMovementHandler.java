@@ -2,9 +2,9 @@ package com.oberasoftware.robo.dynamixel.protocolv2.handlers;
 
 
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.commands.BulkPositionSpeedCommand;
-import com.oberasoftware.robo.api.commands.PositionAndSpeedCommand;
-import com.oberasoftware.robo.api.commands.Scale;
+import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.robo.dynamixel.BulkWriteMovementHandler;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2Address;

@@ -1,19 +1,19 @@
 package com.oberasoftware.robo.maximus.motion.cartesian;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.exceptions.RoboException;
-import com.oberasoftware.robo.api.humanoid.HumanoidRobot;
-import com.oberasoftware.robo.api.humanoid.JointControl;
-import com.oberasoftware.robo.api.humanoid.MotionEngine;
-import com.oberasoftware.robo.api.humanoid.cartesian.CartesianControl;
-import com.oberasoftware.robo.api.humanoid.cartesian.CartesianMoveInput;
-import com.oberasoftware.robo.api.humanoid.cartesian.Coordinates;
-import com.oberasoftware.robo.api.humanoid.cartesian.CoordinatesImpl;
-import com.oberasoftware.robo.api.humanoid.joints.Joint;
-import com.oberasoftware.robo.api.humanoid.joints.JointData;
-import com.oberasoftware.robo.api.motion.KeyFrame;
-import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
+import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
+import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianMoveInput;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.Coordinates;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CoordinatesImpl;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.JointData;
+import com.oberasoftware.iot.core.robotics.motion.KeyFrame;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
 import com.oberasoftware.robo.core.motion.MotionImpl;
 import org.slf4j.Logger;
 
@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.oberasoftware.robo.api.humanoid.components.ComponentNames.*;
 import static com.oberasoftware.robo.maximus.motion.cartesian.CartesianUtil.*;
 import static java.lang.Math.abs;
 import static org.slf4j.LoggerFactory.getLogger;

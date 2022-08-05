@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.core;
 
-import com.oberasoftware.robo.api.ActivatableCapability;
-import com.oberasoftware.robo.api.Capability;
-import com.oberasoftware.robo.api.Robot;
+import com.oberasoftware.iot.core.robotics.ActivatableCapability;
+import com.oberasoftware.iot.core.robotics.Capability;
+import com.oberasoftware.iot.core.robotics.Robot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,9 +1,9 @@
 package com.oberasoftware.max.core.behaviours.wheels.impl;
 
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.wheel.DriveTrain;
-import com.oberasoftware.robo.api.behavioural.wheel.Wheel;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.wheel.DriveTrain;
+import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
 
 import java.util.List;
 

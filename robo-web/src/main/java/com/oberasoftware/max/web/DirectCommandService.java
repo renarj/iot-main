@@ -3,12 +3,12 @@ package com.oberasoftware.max.web;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTMessageImpl;
-import com.oberasoftware.robo.core.model.BasicCommandImpl;
+import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.oberasoftware.home.util.ConverterHelper.mapToJson;
+import static com.oberasoftware.iot.core.util.ConverterHelper.mapToJson;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController

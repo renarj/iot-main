@@ -5,12 +5,12 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
-import com.oberasoftware.robo.api.navigation.DirectionalInput;
-import com.oberasoftware.robo.api.navigation.RobotNavigationController;
+import com.oberasoftware.iot.core.robotics.navigation.DirectionalInput;
+import com.oberasoftware.iot.core.robotics.navigation.RobotNavigationController;
 import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.oberasoftware.home.util.ConverterHelper.mapFromJson;
+import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component

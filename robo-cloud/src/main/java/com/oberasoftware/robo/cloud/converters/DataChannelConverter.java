@@ -1,10 +1,10 @@
 package com.oberasoftware.robo.cloud.converters;
 
-import com.oberasoftware.robo.api.converters.Converter;
-import com.oberasoftware.robo.api.converters.TypeConverter;
+import com.oberasoftware.iot.core.robotics.converters.Converter;
+import com.oberasoftware.iot.core.robotics.converters.TypeConverter;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTMessageImpl;
-import com.oberasoftware.robo.api.commands.PingCommand;
+import com.oberasoftware.iot.core.robotics.commands.PingCommand;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 

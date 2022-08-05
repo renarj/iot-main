@@ -2,14 +2,14 @@ package com.oberasoftware.home.service.commands.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.commands.GroupCommand;
-import com.oberasoftware.home.api.commands.handlers.CommandHandler;
-import com.oberasoftware.home.api.commands.handlers.DeviceCommandHandler;
-import com.oberasoftware.home.api.commands.handlers.GroupCommandHandler;
-import com.oberasoftware.home.api.extensions.AutomationExtension;
-import com.oberasoftware.home.api.extensions.ExtensionManager;
-import com.oberasoftware.home.api.managers.DeviceManager;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
+import com.oberasoftware.iot.core.commands.GroupCommand;
+import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
+import com.oberasoftware.iot.core.commands.handlers.DeviceCommandHandler;
+import com.oberasoftware.iot.core.commands.handlers.GroupCommandHandler;
+import com.oberasoftware.iot.core.extensions.AutomationExtension;
+import com.oberasoftware.iot.core.extensions.ExtensionManager;
+import com.oberasoftware.iot.core.managers.DeviceManager;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -40,9 +41,13 @@ public class GroupCommandEventHandler implements EventHandler {
 
         GroupItem groupItem = groupCommand.getGroup();
         List<String> deviceIds = groupItem.getDeviceIds();
+        String controllerId = groupItem.getControllerId();
 
-        Map<String, List<DeviceItem>> pluginDevices = deviceIds.stream().map(deviceManager::findDevice)
-                .collect(Collectors.groupingBy(DeviceItem::getPluginId));
+        Map<String, List<IotThing>> pluginDevices = deviceIds.stream()
+                .map(d -> deviceManager.findThing(controllerId, d))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.groupingBy(IotThing::getPluginId));
 
         pluginDevices.forEach((k, v) -> {
             AutomationExtension extension = extensionManager.getExtension(k).get();

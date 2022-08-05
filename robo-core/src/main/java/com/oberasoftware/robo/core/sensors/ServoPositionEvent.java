@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.robo.api.events.SensorEvent;
+import com.oberasoftware.iot.core.robotics.events.SensorEvent;
 
 /**
  * @author Renze de Vries

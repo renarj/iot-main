@@ -1,10 +1,10 @@
 package com.oberasoftware.robo.maximus.rest;
 
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobot;
-import com.oberasoftware.robo.api.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.api.humanoid.HumanoidRobot;
-import com.oberasoftware.robo.api.humanoid.joints.JointData;
-import com.oberasoftware.robo.api.motion.JointTarget;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.JointData;
+import com.oberasoftware.iot.core.robotics.motion.JointTarget;
 import com.oberasoftware.robo.core.motion.JointTargetImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

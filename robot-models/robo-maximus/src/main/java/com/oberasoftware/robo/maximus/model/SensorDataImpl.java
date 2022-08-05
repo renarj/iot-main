@@ -2,9 +2,8 @@ package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Sets;
-import com.oberasoftware.base.event.Event;
-import com.oberasoftware.robo.api.events.RobotValueEvent;
-import com.oberasoftware.robo.api.sensors.SensorValue;
+import com.oberasoftware.iot.core.robotics.events.RobotValueEvent;
+import com.oberasoftware.iot.core.robotics.sensors.SensorValue;
 
 import java.util.Map;
 import java.util.Set;

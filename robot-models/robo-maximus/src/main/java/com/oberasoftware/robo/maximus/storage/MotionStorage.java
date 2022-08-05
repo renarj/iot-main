@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.storage;
 
-import com.oberasoftware.robo.api.Capability;
-import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.iot.core.robotics.Capability;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
 
 import java.util.List;
 

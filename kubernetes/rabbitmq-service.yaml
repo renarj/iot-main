@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rbmq-svc
+  labels:
+    app: rbmq
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5672
+      targetPort: 5672
+      name: rbmq-internal-port
+  selector:
+    app: rbmq

@@ -7,10 +7,10 @@ import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
-import com.oberasoftware.robo.api.MotionEngine;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.RobotRegistry;
-import com.oberasoftware.robo.api.motion.controller.HandsController;
+import com.oberasoftware.iot.core.robotics.MotionEngine;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.motion.controller.HandsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static com.oberasoftware.home.util.ConverterHelper.mapFromJson;
+import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
 
 /**
  * @author Renze de Vries

@@ -3,12 +3,12 @@ package com.oberasoftware.robo.maximus.model;
 import com.google.common.collect.ImmutableMap;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.api.humanoid.JointControl;
-import com.oberasoftware.robo.api.humanoid.joints.Joint;
-import com.oberasoftware.robo.api.servo.ServoData;
-import com.oberasoftware.robo.api.servo.ServoProperty;
-import com.oberasoftware.robo.api.servo.events.ServoUpdateEvent;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
+import com.oberasoftware.iot.core.robotics.servo.ServoData;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
 import com.oberasoftware.robo.maximus.motion.JointControlImpl;
 import org.slf4j.Logger;
 

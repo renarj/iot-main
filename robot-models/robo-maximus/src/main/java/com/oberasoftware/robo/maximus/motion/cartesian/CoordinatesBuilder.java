@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.motion.cartesian;
 
-import com.oberasoftware.robo.api.humanoid.cartesian.Coordinates;
-import com.oberasoftware.robo.api.humanoid.cartesian.CoordinatesImpl;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.Coordinates;
+import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CoordinatesImpl;
 
 public class CoordinatesBuilder {
     private double x;

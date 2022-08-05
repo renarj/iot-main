@@ -2,8 +2,8 @@ package com.oberasoftware.robo.dynamixel;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Uninterruptibles;
-import com.oberasoftware.robo.api.servo.ServoDriver;
-import com.oberasoftware.robo.api.servo.ServoProperty;
+import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
+import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

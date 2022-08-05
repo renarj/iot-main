@@ -6,6 +6,7 @@ package com.oberasoftware.home.rules.api.values;
 public class ItemValue implements ResolvableValue {
 
     private String itemId;
+    private String controllerId;
     private String label;
 
     public ItemValue(String itemId, String label) {
@@ -22,6 +23,14 @@ public class ItemValue implements ResolvableValue {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    public String getControllerId() {
+        return controllerId;
+    }
+
+    public void setControllerId(String controllerId) {
+        this.controllerId = controllerId;
     }
 
     public String getLabel() {

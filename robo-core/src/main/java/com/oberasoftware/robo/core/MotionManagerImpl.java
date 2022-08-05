@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.core;
 
-import com.oberasoftware.robo.api.motion.MotionManager;
-import com.oberasoftware.robo.api.motion.Motion;
+import com.oberasoftware.iot.core.robotics.motion.MotionManager;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

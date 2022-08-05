@@ -1,7 +1,7 @@
 package com.oberasoftware.home.rules.evaluators.blocks;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.home.api.AutomationBus;
+import com.oberasoftware.iot.core.AutomationBus;
 import com.oberasoftware.home.rules.api.general.SetState;
 import com.oberasoftware.home.rules.api.values.ItemValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
@@ -10,7 +10,7 @@ import com.oberasoftware.home.rules.evaluators.values.ValueEvaluator;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
-import com.oberasoftware.iot.core.model.Value;
+import com.oberasoftware.iot.core.legacymodel.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +39,7 @@ public class SetStateEvaluator implements BlockEvaluator<SetState> {
         Map<String, Value> values = new HashMap<>();
         values.put(targetItem.getLabel(), valueEvaluator.eval(input.getResolvableValue()));
 
-        ItemCommand itemCommand = new ValueCommandImpl(targetItem.getItemId(), values);
+        ItemCommand itemCommand = new ValueCommandImpl(targetItem.getControllerId(), targetItem.getItemId(), values);
 
         automationBus.publish(new ItemCommandEvent(targetItem.getItemId(), itemCommand));
 

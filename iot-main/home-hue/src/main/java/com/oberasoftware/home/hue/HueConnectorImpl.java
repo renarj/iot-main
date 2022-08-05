@@ -2,12 +2,11 @@ package com.oberasoftware.home.hue;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.api.AutomationBus;
-import com.oberasoftware.home.api.storage.HomeDAO;
-import com.oberasoftware.home.core.ControllerConfiguration;
-import com.oberasoftware.home.util.IntUtils;
+import com.oberasoftware.iot.core.AutomationBus;
+import com.oberasoftware.iot.core.storage.HomeDAO;
+import com.oberasoftware.iot.core.ControllerConfiguration;
+import com.oberasoftware.iot.core.util.IntUtils;
 import com.oberasoftware.iot.core.events.impl.PluginUpdateEvent;
-import com.oberasoftware.iot.core.model.storage.PluginItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,7 +53,7 @@ public class HueConnectorImpl implements EventHandler, HueConnector {
     private HomeDAO homeDAO;
 
     @Override
-    public void connect(Optional<PluginItem> pluginItem) {
+    public void connect() {
         LOG.info("Connecting to Philips HUE bridge");
         if(pluginItem.isEmpty()) {
             LOG.info("No bridge configured");

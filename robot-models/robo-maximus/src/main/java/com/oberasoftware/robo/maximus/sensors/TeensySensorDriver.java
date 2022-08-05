@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.maximus.sensors;
 
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.exceptions.RoboException;
-import com.oberasoftware.robo.api.sensors.SensorDriver;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
+import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
 import com.oberasoftware.robo.maximus.TeensyProxySerialConnector;
 import org.json.JSONObject;
 import org.slf4j.Logger;

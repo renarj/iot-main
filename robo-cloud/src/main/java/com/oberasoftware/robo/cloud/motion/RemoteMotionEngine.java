@@ -1,14 +1,14 @@
 package com.oberasoftware.robo.cloud.motion;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.robo.api.MotionEngine;
-import com.oberasoftware.robo.api.MotionTask;
-import com.oberasoftware.robo.api.Robot;
-import com.oberasoftware.robo.api.motion.KeyFrame;
-import com.oberasoftware.robo.api.motion.Motion;
-import com.oberasoftware.robo.api.motion.MotionResource;
-import com.oberasoftware.robo.api.motion.WalkDirection;
-import com.oberasoftware.robo.api.motion.controller.MotionController;
+import com.oberasoftware.iot.core.robotics.MotionEngine;
+import com.oberasoftware.iot.core.robotics.MotionTask;
+import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.motion.KeyFrame;
+import com.oberasoftware.iot.core.robotics.motion.Motion;
+import com.oberasoftware.iot.core.robotics.motion.MotionResource;
+import com.oberasoftware.iot.core.robotics.motion.WalkDirection;
+import com.oberasoftware.iot.core.robotics.motion.controller.MotionController;
 import com.oberasoftware.robo.cloud.motion.controllers.RemoteController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

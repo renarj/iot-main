@@ -1,8 +1,13 @@
 package com.oberasoftware.home.service.commands.converters;
 
+import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.commands.converters.CommandConverter;
 import com.oberasoftware.iot.core.commands.converters.ConverterType;
-import com.oberasoftware.home.core.types.ValueImpl;
+import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
+import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +46,7 @@ public class ValueCommandConverter implements CommandConverter<BasicCommand, Ite
             values.put(k, new ValueImpl(type, decodedValue));
         });
 
-        return new ValueCommandImpl(itemId, values);
+        return new ValueCommandImpl(source.getControllerId(), itemId, values);
     }
 
     private Optional<Long> getNumber(String value) {

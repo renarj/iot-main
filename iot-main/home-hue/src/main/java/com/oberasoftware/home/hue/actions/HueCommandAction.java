@@ -1,7 +1,6 @@
 package com.oberasoftware.home.hue.actions;
 
 import com.oberasoftware.base.event.Event;
-import com.oberasoftware.iot.core.model.storage.DeviceItem;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 
 import java.util.List;

@@ -1,10 +1,8 @@
 package com.oberasoftware.robo.pi4j;
 
 import com.google.common.util.concurrent.Uninterruptibles;
-import com.oberasoftware.robo.api.sensors.AnalogPort;
 import org.slf4j.Logger;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;

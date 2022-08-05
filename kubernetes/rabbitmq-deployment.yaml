@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rbmq
+  name: rbmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rbmq
+  template:
+    metadata:
+      labels:
+        app: rbmq
+    spec:
+      containers:
+        - env:
+            - name: RBQ_HOST
+              value: "rbq-service"
+            - name: RBQ_PORT
+              value: "5672"
+            - name: PRODUCER_TOPIC
+              value: "crypto-topic"
+          image: rabbitmq:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              memory: 512Mi
+          name: rbmq
+          ports:
+            - containerPort: 5672
+              name: internal-port

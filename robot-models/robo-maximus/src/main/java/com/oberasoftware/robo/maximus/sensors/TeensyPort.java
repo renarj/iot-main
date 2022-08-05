@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.sensors;
 
-import com.oberasoftware.robo.api.sensors.DirectPort;
-import com.oberasoftware.robo.api.sensors.PortListener;
+import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
+import com.oberasoftware.iot.core.robotics.sensors.PortListener;
 import org.slf4j.Logger;
 
 import java.util.List;

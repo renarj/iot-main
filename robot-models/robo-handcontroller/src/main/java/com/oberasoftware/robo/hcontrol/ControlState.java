@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.hcontrol;
 
-import com.oberasoftware.robo.api.navigation.DirectionalInput;
+import com.oberasoftware.iot.core.robotics.navigation.DirectionalInput;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.pi4j;
 
-import com.oberasoftware.robo.api.sensors.AnalogPort;
-import com.oberasoftware.robo.api.sensors.PortListener;
-import com.oberasoftware.robo.api.sensors.VoltageValue;
+import com.oberasoftware.iot.core.robotics.sensors.AnalogPort;
+import com.oberasoftware.iot.core.robotics.sensors.PortListener;
+import com.oberasoftware.iot.core.robotics.sensors.VoltageValue;
 import com.pi4j.gpio.extension.ads.ADS1115GpioProvider;
 import com.pi4j.io.gpio.GpioPinAnalogInput;
 import com.pi4j.io.gpio.event.GpioPinListenerAnalog;

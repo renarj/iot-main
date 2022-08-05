@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.motion.cartesian;
 
-import com.oberasoftware.robo.api.humanoid.joints.Joint;
-import com.oberasoftware.robo.api.motion.KeyFrame;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
+import com.oberasoftware.iot.core.robotics.motion.KeyFrame;
 import com.oberasoftware.robo.core.motion.JointTargetImpl;
 import com.oberasoftware.robo.core.motion.KeyFrameImpl;
 

@@ -1,23 +1,21 @@
 package com.oberasoftware.home.hue;
 
 import com.google.common.collect.Maps;
-import com.oberasoftware.home.api.commands.handlers.CommandHandler;
-import com.oberasoftware.home.api.extensions.DeviceExtension;
-import com.oberasoftware.home.api.extensions.ExtensionCapability;
-import com.oberasoftware.home.api.model.Device;
-import com.oberasoftware.iot.core.model.storage.PluginItem;
+import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
+import com.oberasoftware.iot.core.extensions.ThingExtension;
+import com.oberasoftware.iot.core.extensions.ExtensionCapability;
+import com.oberasoftware.iot.core.model.IotThing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author Renze de Vries
  */
 @Component
-public class HueExtension implements DeviceExtension {
+public class HueExtension implements ThingExtension {
 
     public static final String HUE_ID = "hue";
     public static final String HUE_NAME = "Philips Hue plugin";
@@ -57,13 +55,13 @@ public class HueExtension implements DeviceExtension {
     }
 
     @Override
-    public List<Device> getDevices() {
+    public List<IotThing> getThings() {
         return hueDeviceManager.getDevices();
     }
 
     @Override
-    public void activate(Optional<PluginItem> pluginItem) {
-        hueConnector.connect(pluginItem);
+    public void activate() {
+        hueConnector.connect();
     }
 
     @Override
