@@ -42,14 +42,14 @@
         <module>robot-models/robo-maximus</module>
         <module>robot-models/robo-rover</module>
         <module>trainautomation/roco-z21-adapter</module>
-        <module>iot-main/iot-core</module>
-        <module>iot-main/iot-mqtt</module>
-        <module>iot-main/home-rules</module>
-        <module>iot-main/home-web</module>
-        <module>iot-main/home-service</module>
-        <module>iot-main/home-hue</module>
-        <module>iot-main/home-storage</module>
-        <module>iot-main/home-rest</module>
+        <module>iot-base/iot-core</module>
+        <module>iot-base/iot-mqtt</module>
+        <module>iot-base/home-rules</module>
+        <module>iot-base/home-web</module>
+        <module>iot-base/home-service</module>
+        <module>iot-base/home-hue</module>
+        <module>iot-base/home-storage</module>
+        <module>iot-base/home-rest</module>
         <module>iot-agent/agent-core</module>
         <module>backend/queue-connectors</module>
         <module>backend/command-svc</module>
