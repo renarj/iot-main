@@ -31,5 +31,5 @@ public interface AutomationExtension {
 
     void activate(IotThing pluginThing);
 
-    void activate();
+    void discoverThings(DiscoveryListener listener);
 }

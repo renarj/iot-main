@@ -1,15 +1,15 @@
 package com.oberasoftware.home.service;
 
 import com.google.common.collect.Maps;
-import com.oberasoftware.iot.core.AutomationBus;
-import com.oberasoftware.iot.core.managers.StateManager;
-import com.oberasoftware.iot.core.managers.StateStore;
-import com.oberasoftware.iot.core.legacymodel.Status;
-import com.oberasoftware.iot.core.legacymodel.impl.StateImpl;
-import com.oberasoftware.iot.core.legacymodel.impl.StateItemImpl;
+import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.events.StateUpdateEvent;
 import com.oberasoftware.iot.core.legacymodel.State;
+import com.oberasoftware.iot.core.legacymodel.Status;
 import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.legacymodel.impl.StateImpl;
+import com.oberasoftware.iot.core.legacymodel.impl.StateItemImpl;
+import com.oberasoftware.iot.core.managers.StateManager;
+import com.oberasoftware.iot.core.managers.StateStore;
 import com.oberasoftware.iot.core.model.IotThing;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class StateManagerImpl implements StateManager {
     private List<StateStore> stateStores;
 
     @Autowired
-    private AutomationBus automationBus;
+    private LocalEventBus automationBus;
 
     private boolean updateState(String itemId, String label, Value value) {
         LOG.debug("Updating state of item: {} with label: {} to value: {}", itemId, label, value);

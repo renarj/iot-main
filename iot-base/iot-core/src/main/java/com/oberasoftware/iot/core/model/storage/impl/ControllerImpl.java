@@ -26,6 +26,13 @@ public class ControllerImpl implements Controller {
         this.properties = properties;
     }
 
+    public ControllerImpl(String controllerId, String orgId, Map<String, String> properties) {
+        this.controllerId = controllerId;
+        this.orgId = orgId;
+        this.properties = properties;
+    }
+
+
     public ControllerImpl() {
     }
 

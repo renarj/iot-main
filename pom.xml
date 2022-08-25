@@ -50,6 +50,7 @@
         <module>iot-base/home-hue</module>
         <module>iot-base/home-storage</module>
         <module>iot-base/home-rest</module>
+        <module>iot-base/iot-client</module>
         <module>iot-agent/agent-core</module>
         <module>backend/queue-connectors</module>
         <module>backend/command-svc</module>

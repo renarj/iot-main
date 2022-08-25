@@ -74,7 +74,7 @@ public class HueCommandHandler implements GroupCommandHandler {
     public void receive(IotThing item, Command command) {
         Optional<HueCommandAction<Command>> action = getAction(command);
         if(action.isPresent()) {
-            LOG.debug("Executing device: {} action: {}", item, action.get());
+            LOG.info("Executing device: {} action: {}", item, action.get());
 
             action.get().receive(item, command);
         }

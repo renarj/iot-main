@@ -32,16 +32,23 @@ public class ItemManagerImpl implements ItemManager {
     private HomeDAO homeDAO;
 
     @Override
-    public Controller createOrUpdateController(String controllerId) throws IOTException {
+    public Controller createOrUpdateController(String controllerId, Map<String, String> properties) throws IOTException {
         centralDatastore.beginTransaction();
         try {
             Optional<Controller> controllerItem = homeDAO.findController(controllerId);
             if (controllerItem.isEmpty()) {
                 LOG.debug("Initial startup, new controller detected registering in central datastore");
-                return centralDatastore.store(new ControllerImpl(generateId(), controllerId, "default", new HashMap<>()));
+                return centralDatastore.store(new ControllerImpl(generateId(), controllerId, "default", properties));
             } else {
-                LOG.debug("Controller: {} was already registered", controllerId);
-                return controllerItem.get();
+                var controller = controllerItem.get();
+                if(havePropertiesChanged(controller.getProperties(), properties)) {
+                    LOG.debug("Controller: {} was already registered received new properties: {}", controllerId, properties);
+                    return centralDatastore.store(new ControllerImpl(controller.getId(), controllerId, "default",
+                            mergeProperties(controller.getProperties(), properties)));
+                } else {
+                    LOG.debug("Controller: {} was already registered and data is not updated", controllerId);
+                    return controllerItem.get();
+                }
             }
         } finally {
             centralDatastore.commitTransaction();
@@ -59,19 +66,19 @@ public class ItemManagerImpl implements ItemManager {
     }
 
     @Override
-    public IotThing createOrUpdateThing(String controllerId, String thingId, String plugin, String parent, Map<String, String> properties) throws IOTException {
+    public IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String parent, Map<String, String> properties) throws IOTException {
         centralDatastore.beginTransaction();
         try {
             Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
             if(thing.isPresent()) {
                 IotThing item = thing.get();
 
-                if(havePropertiesChanged(item.getProperties(), properties)) {
-                    LOG.debug("Thing: {} already exist, properties have changed, updating device with id: {}", thingId, item.getId());
+                if(havePropertiesChanged(item.getProperties(), properties) || (friendlyName != null && !friendlyName.equalsIgnoreCase(item.getFriendlyName()))) {
+                    LOG.info("Thing: {} already exist, properties have changed, updating device with id: {}", thingId, item.getId());
                     var mergedProperties = mergeProperties(item.getProperties(), properties);
 
-                    return centralDatastore.store(new IotThingImpl(item.getId(), controllerId, thingId, plugin,
-                            parent, mergedProperties));
+                    var t = new IotThingImpl(item.getId(), controllerId, thingId, friendlyName, plugin, parent, mergedProperties);
+                    return centralDatastore.store(t);
                 } else {
                     LOG.debug("Device: {} has not changed, not updating item: {}", thingId, item.getId());
                     return item;
@@ -79,7 +86,8 @@ public class ItemManagerImpl implements ItemManager {
             } else {
                 String id = generateId();
                 LOG.debug("Device: {} does not yet exist, creating new with id: {}", thingId, id);
-                return centralDatastore.store(new IotThingImpl(id, controllerId, thingId, plugin, parent, properties));
+                var t = new IotThingImpl(id, controllerId, thingId, friendlyName, plugin, parent, properties);
+                return centralDatastore.store(t);
             }
         } finally {
             centralDatastore.commitTransaction();

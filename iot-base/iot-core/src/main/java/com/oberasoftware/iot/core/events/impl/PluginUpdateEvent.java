@@ -9,14 +9,20 @@ import java.util.Map;
  * @author renarj
  */
 public class PluginUpdateEvent implements Event {
+    private final String controllerId;
     private final String pluginId;
     private final String name;
     private final Map<String, String> properties;
 
-    public PluginUpdateEvent(String pluginId, String name, Map<String, String> properties) {
+    public PluginUpdateEvent(String controllerId, String pluginId, String name, Map<String, String> properties) {
+        this.controllerId = controllerId;
         this.pluginId = pluginId;
         this.name = name;
         this.properties = properties;
+    }
+
+    public String getControllerId() {
+        return controllerId;
     }
 
     public String getName() {

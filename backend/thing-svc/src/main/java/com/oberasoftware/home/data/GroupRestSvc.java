@@ -1,6 +1,7 @@
-package com.oberasoftware.home.rest;
+package com.oberasoftware.home.data;
 
 import com.oberasoftware.iot.core.managers.GroupManager;
+import com.oberasoftware.iot.core.managers.ItemManager;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import com.oberasoftware.iot.core.model.storage.impl.GroupItemImpl;
@@ -19,14 +20,14 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 @RestController
 @RequestMapping("/groups")
-public class GroupRestController {
-    private static final Logger LOG = getLogger(GroupRestController.class);
+public class GroupRestSvc {
+    private static final Logger LOG = getLogger(GroupRestSvc.class);
 
     @Autowired
     private GroupManager groupManager;
 
     @Autowired
-//    private DeviceManager deviceManager;
+    private ItemManager itemManager;
 
     @RequestMapping(value = "/")
     public List<? extends GroupItem> findAllGroups() {
@@ -49,7 +50,7 @@ public class GroupRestController {
         GroupItem groupItem = groupManager.getItem(groupId);
 
         return groupItem.getDeviceIds().stream()
-                .map(d -> deviceManager.findThing(groupItem.getControllerId(), d).get()).collect(Collectors.toList());
+                .map(d -> itemManager.findThing(groupItem.getControllerId(), d).get()).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")

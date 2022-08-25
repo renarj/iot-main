@@ -36,7 +36,9 @@ public class ConverterManagerImpl implements ConverterManager {
 
     @PostConstruct
     public void initialize() {
-        messageConverters.forEach(mc -> processMethods(mc, mc.getClass().getMethods()));
+        if(messageConverters != null) {
+            messageConverters.forEach(mc -> processMethods(mc, mc.getClass().getMethods()));
+        }
     }
 
     private void processMethods(Converter converter, Method[] methods) {

@@ -1,6 +1,6 @@
 package com.oberasoftware.home.rules.evaluators.blocks;
 
-import com.oberasoftware.iot.core.AutomationBus;
+import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.rules.api.general.SwitchItem;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.iot.core.commands.impl.SwitchCommandImpl;
@@ -19,7 +19,7 @@ public class SwitchItemEvaluator implements BlockEvaluator<SwitchItem> {
     private static final Logger LOG = getLogger(SwitchItemEvaluator.class);
 
     @Autowired
-    private AutomationBus automationBus;
+    private LocalEventBus automationBus;
 
     @Override
     public Boolean eval(SwitchItem input) {

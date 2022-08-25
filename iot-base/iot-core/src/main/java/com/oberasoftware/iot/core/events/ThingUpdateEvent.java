@@ -6,28 +6,28 @@ import com.oberasoftware.iot.core.model.IotThing;
 /**
  * @author renarj
  */
-public class DeviceUpdateEvent implements Event {
+public class ThingUpdateEvent implements Event {
 
     private final String pluginId;
-    private final IotThing device;
+    private final IotThing thing;
 
-    public DeviceUpdateEvent(String pluginId, IotThing device) {
+    public ThingUpdateEvent(String pluginId, IotThing thing) {
         this.pluginId = pluginId;
-        this.device = device;
+        this.thing = thing;
     }
 
     public String getPluginId() {
         return pluginId;
     }
 
-    public IotThing getDevice() {
-        return device;
+    public IotThing getThing() {
+        return thing;
     }
 
     @Override
     public String toString() {
         return "DeviceInformationEvent{" +
-                "device=" + device +
+                "thing=" + thing +
                 ", pluginId='" + pluginId + '\'' +
                 '}';
     }

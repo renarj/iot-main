@@ -15,5 +15,7 @@ public interface ExtensionManager {
 
     List<AutomationExtension> getExtensions();
 
-    Optional<AutomationExtension> getExtension(String extensionId);
+    Optional<AutomationExtension> getExtensionById(String extensionId);
+
+    Optional<AutomationExtension> getExtensionByName(String extensionName);
 }

@@ -1,9 +1,10 @@
 package com.oberasoftware.home.hue.actions;
 
-import com.oberasoftware.iot.core.AutomationBus;
+import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.hue.HueConnector;
 import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,10 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
     private HueConnector hueConnector;
 
     @Autowired
-    private AutomationBus automationBus;
+    private LocalEventBus automationBus;
 
     @Override
-    public void receive(GroupItem groupItem, List<DeviceItem> items, ItemValueCommand command) {
+    public void receive(GroupItem groupItem, List<IotThing> items, ItemValueCommand command) {
 //        PHBridge bridge = hueConnector.getSdk().getSelectedBridge();
 //
 //        PHGroup group = GroupHelper.getOrCreateGroup(groupItem, hueConnector.getBridge(), items);
@@ -59,7 +60,7 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
     }
 
     @Override
-    public void receive(DeviceItem item, ItemValueCommand command) {
+    public void receive(IotThing item, ItemValueCommand command) {
 //        LOG.debug("Received a value command: {} for item: {}", command, item);
 //
 //        PHBridge bridge = hueConnector.getSdk().getSelectedBridge();

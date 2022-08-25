@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.Uninterruptibles;
+import com.oberasoftware.iot.core.util.HttpUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +49,7 @@ public class HueBridgeDiscoveryService {
             try {
                 String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
                 LOG.info("Posting json: {}", json);
-                HttpClient client = HttpUtils.createClient();
+                HttpClient client = HttpUtils.createClient(true);
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("https://" + bridge.getBridgeIp() + "/api"))
                         .POST(HttpRequest.BodyPublishers.ofString(json))

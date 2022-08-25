@@ -3,9 +3,13 @@ package com.oberasoftware.home.hue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.oberasoftware.iot.core.legacymodel.Status;
+import com.oberasoftware.iot.core.AgentControllerInformation;
 import com.oberasoftware.iot.core.legacymodel.OnOffValue;
+import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.util.HttpUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,15 +30,18 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
 
     private final HueConnector hueConnector;
 
+    @Autowired
+    private AgentControllerInformation agentControllerInformation;
+
     public HueDeviceManagerImpl(HueConnector hueConnector) {
         this.hueConnector = hueConnector;
     }
 
     @Override
-    public List<Device> getDevices() {
+    public List<IotThing> getDevices() {
         List<HueBridge> bridges = hueConnector.getBridges();
 
-        List<Device> devicesFound = new ArrayList<>();
+        List<IotThing> devicesFound = new ArrayList<>();
         bridges.forEach(b -> doLightRetrieval(b, light -> {
             JsonNode lightInfo = light.getValue();
             var dev = createDeviceModel(b.getBridgeId(), light.getKey(), lightInfo);
@@ -47,10 +54,10 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
 
 
     private void doLightRetrieval(HueBridge bridge, Consumer<Map.Entry<String, JsonNode>> lightNodeConsumer) {
-        HttpClient client = HttpUtils.createClient();
+        HttpClient client = HttpUtils.createClient(true);
 
         LOG.info("Getting lights for bridge: {}", bridge);
-        HttpRequest request = HttpRequest.newBuilder().uri(HttpUtils.createUri(bridge, "lights")).build();
+        HttpRequest request = HttpRequest.newBuilder().uri(UriUtils.createUri(bridge, "lights")).build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -83,12 +90,12 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
     }
 
     @Override
-    public Optional<Device> findDevice(String bridgeId, String lightId) {
-        HttpClient client = HttpUtils.createClient();
+    public Optional<IotThing> findDevice(String bridgeId, String lightId) {
+        HttpClient client = HttpUtils.createClient(true);
         var bridge = findBridge(bridgeId);
         if(bridge.isPresent()) {
             LOG.info("Getting light: {} for bridge: {}", lightId, bridge.get());
-            HttpRequest request = HttpRequest.newBuilder().uri(HttpUtils.createUri(bridge.get(), "lights/" + lightId)).build();
+            HttpRequest request = HttpRequest.newBuilder().uri(UriUtils.createUri(bridge.get(), "lights/" + lightId)).build();
 
             try {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -109,7 +116,7 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
         return Optional.empty();
     }
 
-    private HueDevice createDeviceModel(String bridgeId, String lightId, JsonNode lightInfo) {
+    private IotThing createDeviceModel(String bridgeId, String lightId, JsonNode lightInfo) {
         String lightName = lightInfo.get("name").asText();
         String lightType = lightInfo.get("productname").asText();
 
@@ -117,7 +124,7 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
         properties.put("lightType", lightType);
         properties.put("bridge", bridgeId);
 
-        return new HueDevice(lightId, lightName, Status.DISCOVERED, properties);
+        return new IotThingImpl(agentControllerInformation.getControllerId(), lightId, lightName, HueExtension.HUE_NAME, "bridge-" + bridgeId, properties);
     }
 
     private Optional<HueBridge> findBridge(String bridgeId) {
@@ -126,7 +133,7 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
 
     @Override
     public boolean switchState(String bridgeId, String lightId, OnOffValue state) {
-        HttpClient client = HttpUtils.createClient();
+        HttpClient client = HttpUtils.createClient(true);
         var bridge = findBridge(bridgeId);
 
         if(bridge.isPresent()) {
@@ -137,7 +144,7 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
                 String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
 
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(HttpUtils.createUri(bridge.get(), "lights/" + lightId + "/state"))
+                        .uri(UriUtils.createUri(bridge.get(), "lights/" + lightId + "/state"))
                         .PUT(HttpRequest.BodyPublishers.ofString(json))
                         .build();
                 HttpResponse<Void> r = client.send(request, HttpResponse.BodyHandlers.discarding());

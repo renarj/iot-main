@@ -6,7 +6,6 @@ import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.rules.RuleEngine;
 import com.oberasoftware.home.rules.TestConfiguration;
 import com.oberasoftware.home.rules.api.general.Rule;
-import com.oberasoftware.home.rules.test.MockAutomationBus;
 import com.oberasoftware.home.rules.test.MockStateManager;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.iot.core.commands.SwitchCommand;

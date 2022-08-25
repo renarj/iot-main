@@ -10,14 +10,12 @@ import com.oberasoftware.home.rules.api.trigger.Trigger;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.blocks.BlockEvaluator;
 import com.oberasoftware.iot.core.events.DeviceEvent;
-import com.oberasoftware.iot.core.model.IotThing;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,9 +31,6 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
 
     @Autowired
     private RuleEngine ruleEngine;
-
-    @Autowired
-    private DeviceManager deviceManager;
 
     @Autowired
     private EvaluatorFactory evaluatorFactory;
@@ -90,8 +85,8 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
     @EventSubscribe
     public void receive(DeviceEvent event) throws Exception {
         LOG.debug("Received a device event: {}", event);
-        Optional<IotThing> deviceItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
-        deviceItem.ifPresent(iotThing -> evaluateRules(iotThing.getId()));
+//        Optional<IotThing> deviceItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
+//        deviceItem.ifPresent(iotThing -> evaluateRules(iotThing.getId()));
     }
 
 }

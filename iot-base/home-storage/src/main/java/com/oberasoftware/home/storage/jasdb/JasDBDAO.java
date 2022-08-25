@@ -107,7 +107,7 @@ public class JasDBDAO implements HomeDAO {
     public Optional<IotThing> findThing(String controllerId, String deviceId) {
         IotThingImpl deviceItem = findItem(IotThingImpl.class, new ImmutableMap.Builder<String, String>()
                 .put("controllerId", controllerId)
-                .put("deviceId", deviceId).build());
+                .put("thingId", deviceId).build());
         return ofNullable(deviceItem);
     }
 

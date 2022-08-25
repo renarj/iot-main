@@ -1,6 +1,8 @@
-package com.oberasoftware.home.service;
+package com.oberasoftware.home.data;
 
+import com.oberasoftware.home.service.GenericItemManagerImpl;
 import com.oberasoftware.iot.core.managers.GroupManager;
+import com.oberasoftware.iot.core.managers.ItemManager;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import com.oberasoftware.iot.core.model.storage.impl.GroupItemImpl;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 public class GroupManagerImpl extends GenericItemManagerImpl<GroupItem> implements GroupManager {
 
     @Autowired
-    private DeviceManager deviceManager;
+    private ItemManager itemManager;
 
     @Override
     public List<IotThing> getThings(String groupId) {
@@ -26,7 +28,7 @@ public class GroupManagerImpl extends GenericItemManagerImpl<GroupItem> implemen
             var split = di.split("-");
             var controller = split[0];
             var itemId = split[1];
-            return deviceManager.findThing(controller, itemId).get();
+            return itemManager.findThing(controller, itemId).get();
         }).collect(Collectors.toList());
     }
 

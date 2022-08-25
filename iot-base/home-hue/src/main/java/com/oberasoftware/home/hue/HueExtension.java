@@ -2,20 +2,20 @@ package com.oberasoftware.home.hue;
 
 import com.google.common.collect.Maps;
 import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
-import com.oberasoftware.iot.core.extensions.ThingExtension;
+import com.oberasoftware.iot.core.extensions.AutomationExtension;
+import com.oberasoftware.iot.core.extensions.DiscoveryListener;
 import com.oberasoftware.iot.core.extensions.ExtensionCapability;
 import com.oberasoftware.iot.core.model.IotThing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author Renze de Vries
  */
 @Component
-public class HueExtension implements ThingExtension {
+public class HueExtension implements AutomationExtension {
 
     public static final String HUE_ID = "hue";
     public static final String HUE_NAME = "Philips Hue plugin";
@@ -55,13 +55,13 @@ public class HueExtension implements ThingExtension {
     }
 
     @Override
-    public List<IotThing> getThings() {
-        return hueDeviceManager.getDevices();
+    public void discoverThings(DiscoveryListener listener) {
+        hueDeviceManager.getDevices().forEach(listener::thingFound);
     }
 
     @Override
-    public void activate() {
-        hueConnector.connect();
+    public void activate(IotThing pluginData) {
+        hueConnector.connect(pluginData);
     }
 
     @Override

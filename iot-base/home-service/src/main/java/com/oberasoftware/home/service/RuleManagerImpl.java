@@ -60,7 +60,7 @@ public class RuleManagerImpl implements RuleManager {
                 LOG.debug("Triggered rule engine start event");
                 ruleEngine.onStarted();
             } catch (IOTException e) {
-                LOG.error("Could not load rule: " + r.toString(), e);
+                LOG.error("Could not load rule: " + r, e);
             }
         });
     }

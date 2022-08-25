@@ -1,7 +1,7 @@
 package com.oberasoftware.home.rules.evaluators.blocks;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.iot.core.AutomationBus;
+import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.rules.api.general.SetState;
 import com.oberasoftware.home.rules.api.values.ItemValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
@@ -25,7 +25,7 @@ import java.util.Set;
 public class SetStateEvaluator implements BlockEvaluator<SetState> {
 
     @Autowired
-    private AutomationBus automationBus;
+    private LocalEventBus automationBus;
 
     @Autowired
     private EvaluatorFactory evaluatorFactory;

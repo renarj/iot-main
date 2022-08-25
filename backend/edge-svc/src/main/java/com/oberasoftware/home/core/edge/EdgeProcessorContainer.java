@@ -33,6 +33,7 @@ public class EdgeProcessorContainer {
         RabbitMQTopicListener topicListener = context.getBean(RabbitMQTopicListener.class);
 
         LOG.info("Connecting to command channel");
+        topicEventBus.initialize();
         topicEventBus.connect();
         topicListener.register(message -> {
             BasicCommandImpl basicCommand = mapFromJson(message, BasicCommandImpl.class);

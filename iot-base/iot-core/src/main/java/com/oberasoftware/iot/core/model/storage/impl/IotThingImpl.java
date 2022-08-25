@@ -16,18 +16,30 @@ public class IotThingImpl implements IotThing {
     private String thingId;
     private String controllerId;
 
+    private String friendlyName;
+
     private String pluginId;
 
     private String parentId;
 
     private Map<String, String> properties;
 
-    public IotThingImpl(String id, String controllerId, String thingId, String pluginId, String parent, Map<String, String> properties) {
+    public IotThingImpl(String id, String controllerId, String thingId, String friendlyName, String pluginId, String parent, Map<String, String> properties) {
         this.controllerId = controllerId;
         this.id = id;
         this.thingId = thingId;
         this.parentId = parent;
+        this.friendlyName = friendlyName;
         this.pluginId = pluginId;
+        this.properties = properties;
+    }
+
+    public IotThingImpl(String controllerId, String thingId, String friendlyName, String pluginId, String parent, Map<String, String> properties) {
+        this.controllerId = controllerId;
+        this.thingId = thingId;
+        this.parentId = parent;
+        this.pluginId = pluginId;
+        this.friendlyName = friendlyName;
         this.properties = properties;
     }
 
@@ -43,6 +55,16 @@ public class IotThingImpl implements IotThing {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    @JasDBProperty
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    public void setFriendlyName(String friendlyName) {
+        this.friendlyName = friendlyName;
     }
 
     @JasDBProperty

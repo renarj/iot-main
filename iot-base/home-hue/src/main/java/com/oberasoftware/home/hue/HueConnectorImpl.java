@@ -2,11 +2,15 @@ package com.oberasoftware.home.hue;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.AutomationBus;
-import com.oberasoftware.iot.core.storage.HomeDAO;
-import com.oberasoftware.iot.core.ControllerConfiguration;
-import com.oberasoftware.iot.core.util.IntUtils;
+import com.oberasoftware.base.event.impl.LocalEventBus;
+import com.oberasoftware.iot.core.AgentControllerInformation;
+import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.events.ThingUpdateEvent;
 import com.oberasoftware.iot.core.events.impl.PluginUpdateEvent;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.util.IntUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,53 +31,57 @@ public class HueConnectorImpl implements EventHandler, HueConnector {
 
     private static final String APP_NAME = "HomeAutomation";
 
-    private static final String BRIDGE_TOKEN = "bridgeToken-";
-    private static final String BRIDGE_PORT = "bridgePort-";
-    private static final String BRIDGE_IP = "bridgeIp-";
+    private static final String BRIDGE_TOKEN = "bridgeToken";
+    private static final String BRIDGE_PORT = "bridgePort";
+    private static final String BRIDGE_IP = "bridgeIp";
     private static final String BRIDGE = "bridge-";
     private static final int DEFAULT_PORT = 443;
 
-    private String bridgeIp;
-    private String bridgeToken;
-
-//    private AtomicBoolean connected = new AtomicBoolean(false);
-
     private List<HueBridge> connectedBridges = new ArrayList<>();
+
+    @Autowired
+    private AgentControllerInformation agentControllerInformation;
 
     @Autowired
     private HueBridgeDiscoveryService hueBridgeDiscoveryService;
 
     @Autowired
-    private AutomationBus automationBus;
+    private ThingClient thingClient;
 
     @Autowired
-    private ControllerConfiguration controllerConfiguration;
-
-    @Autowired
-    private HomeDAO homeDAO;
+    private LocalEventBus automationBus;
 
     @Override
-    public void connect() {
+    public void connect(IotThing pluginData) {
         LOG.info("Connecting to Philips HUE bridge");
-        if(pluginItem.isEmpty()) {
+        if(pluginData.getProperties().isEmpty()) {
             LOG.info("No bridge configured");
             startSearchBridge();
         } else {
             LOG.info("Loading existing bridges");
-            Map<String, String> properties = pluginItem.get().getProperties();
+            Map<String, String> properties = pluginData.getProperties();
             Set<String> bridgeIds = properties.keySet().stream().filter(k -> k.startsWith("bridge-")).map(properties::get).collect(Collectors.toSet());
             if(bridgeIds.isEmpty()) {
                 startSearchBridge();
             } else {
                 LOG.info("We have {} previously configured Hue Bridges", bridgeIds.size());
                 bridgeIds.forEach(b -> {
-                    String bridgeToken = properties.get(BRIDGE_TOKEN + b);
-                    String bridgeIp = properties.get(BRIDGE_IP + b);
-                    int bridgePort = IntUtils.toInt(properties.get(BRIDGE_PORT + b), DEFAULT_PORT);
-                    var bridge = new HueBridge(b, bridgeIp, bridgePort, bridgeToken);
+                    try {
+                        var oThing = thingClient.getThing(agentControllerInformation.getControllerId(), BRIDGE + b);
+                        oThing.ifPresent(t -> {
+                            var tProperties = t.getProperties();
+                            String bridgeToken = tProperties.get(BRIDGE_TOKEN);
+                            String bridgeIp = tProperties.get(BRIDGE_IP);
+                            int bridgePort = IntUtils.toInt(properties.get(BRIDGE_PORT), DEFAULT_PORT);
+                            var bridge = new HueBridge(b, bridgeIp, bridgePort, bridgeToken);
 
-                    LOG.info("Loading pre-discovered bridge: {}", bridge);
-                    automationBus.publish(new HueBridgeDiscovered(bridge));
+                            LOG.info("Loading pre-discovered bridge: {}", bridge);
+                            automationBus.publish(new HueBridgeDiscovered(bridge));
+                        });
+                    } catch (IOTException e) {
+                        throw new RuntimeException(e);
+                    }
+
                 });
             }
         }
@@ -112,15 +120,28 @@ public class HueConnectorImpl implements EventHandler, HueConnector {
 
         Optional<String> bridgeToken = apiKey.get();
         if(bridgeToken.isPresent()) {
+            var controllerId = agentControllerInformation.getControllerId();
+
             Map<String, String> properties = new HashMap<>();
             properties.put(BRIDGE + targetBridge.getBridgeId(), targetBridge.getBridgeId());
-            properties.put(BRIDGE_IP + targetBridge.getBridgeId(), targetBridge.getBridgeIp());
-            properties.put(BRIDGE_PORT + targetBridge.getBridgeId(), Integer.toString(targetBridge.getBridgePort()));
-            properties.put(BRIDGE_TOKEN + targetBridge.getBridgeId(), bridgeToken.get());
-            var hueBridge = new HueBridge(targetBridge.getBridgeId(), targetBridge.getBridgeIp(), targetBridge.getBridgePort(), bridgeToken.get());
+            automationBus.publish(new PluginUpdateEvent(controllerId, HueExtension.HUE_ID, HueExtension.HUE_NAME, properties));
 
+            var thingProperties = new HashMap<String, String>();
+            thingProperties.put(BRIDGE_IP, targetBridge.getBridgeIp());
+            thingProperties.put(BRIDGE_PORT, Integer.toString(targetBridge.getBridgePort()));
+            thingProperties.put(BRIDGE_TOKEN, bridgeToken.get());
+            var hueBridge = new HueBridge(targetBridge.getBridgeId(), targetBridge.getBridgeIp(), targetBridge.getBridgePort(), bridgeToken.get());
             LOG.info("Successfully authenticated on Hue Bridge: {}", hueBridge);
-            automationBus.publish(new PluginUpdateEvent(HueExtension.HUE_ID, HueExtension.HUE_NAME, properties));
+
+            var thing = new IotThingImpl();
+            thing.setThingId(BRIDGE + targetBridge.getBridgeId());
+            thing.setFriendlyName("Philips Hue Bridge: " + targetBridge.getBridgeIp());
+            thing.setControllerId(controllerId);
+            thing.setParentId(HueExtension.HUE_ID);
+            thing.setPluginId(HueExtension.HUE_NAME);
+            thing.setProperties(thingProperties);
+            automationBus.publish(new ThingUpdateEvent(HueExtension.HUE_ID, thing));
+
             automationBus.publish(new HueBridgeDiscovered(hueBridge));
         } else {
             LOG.error("Could not authenticate to Hue Bridge: {}", targetBridge);

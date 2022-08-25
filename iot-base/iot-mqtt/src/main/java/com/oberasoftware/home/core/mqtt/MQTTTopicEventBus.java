@@ -6,10 +6,10 @@ import com.oberasoftware.base.event.Event;
 import com.oberasoftware.base.event.EventFilter;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.iot.core.robotics.converters.ConverterManager;
 import com.oberasoftware.iot.core.exceptions.ConversionException;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.robotics.converters.ConverterManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +54,21 @@ public class MQTTTopicEventBus implements DistributedTopicEventBus {
     private LocalEventBus localEventBus;
 
     @PostConstruct
-    public void initialize() throws IOTException {
-        String connectionString = String.format(CONNECTION_STRING, mqttHost, mqttPort);
-        broker = new MQTTBroker(connectionString, mqttUsername, mqttPassword);
+    public void postConstruct() {
         localEventBus.registerFilter(new MQTTPathFilter());
+    }
+
+    public void initialize() {
+        this.initialize(mqttHost, mqttPort, mqttUsername, mqttPassword);
+    }
+
+    public void initialize(String host, int port, String user, String password) {
+        String connectionString = String.format(CONNECTION_STRING, host, port);
+        broker = new MQTTBroker(connectionString, user, password);
+        this.mqttHost = host;
+        this.mqttPort = port;
+        this.mqttUsername = user;
+        this.mqttPassword = password;
     }
 
     @Override

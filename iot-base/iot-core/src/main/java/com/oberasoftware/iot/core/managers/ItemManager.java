@@ -12,9 +12,9 @@ import java.util.Optional;
  * @author renarj
  */
 public interface ItemManager {
-    Controller createOrUpdateController(String controllerId) throws IOTException;
+    Controller createOrUpdateController(String controllerId, Map<String, String> properties) throws IOTException;
 
-    IotThing createOrUpdateThing(String controllerId, String thingId, String plugin, String parent, Map<String, String> properties) throws IOTException;
+    IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String parent, Map<String, String> properties) throws IOTException;
 
     List<Controller> findControllers();
 

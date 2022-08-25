@@ -12,7 +12,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @RestController
-@RequestMapping("/command")
+@RequestMapping("/api/command")
 public class CommandRestController {
     private static final Logger LOG = getLogger(CommandRestController.class);
 

@@ -1,6 +1,6 @@
 package com.oberasoftware.home.hue;
 
-import com.oberasoftware.iot.core.AutomationBus;
+import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.ControllerConfiguration;
 import com.oberasoftware.iot.core.events.DeviceValueEvent;
 import com.oberasoftware.iot.core.events.impl.DeviceValueEventImpl;
@@ -33,13 +33,13 @@ public class HueLightMonitor {
 
     private final HueDeviceManager deviceManager;
 
-    private final AutomationBus bus;
+    private final LocalEventBus bus;
 
     private final ControllerConfiguration controllerConfiguration;
 
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
-    public HueLightMonitor(HueConnector hueConnector, HueDeviceManager deviceManager, AutomationBus bus, ControllerConfiguration controllerConfiguration) {
+    public HueLightMonitor(HueConnector hueConnector, HueDeviceManager deviceManager, LocalEventBus bus, ControllerConfiguration controllerConfiguration) {
         this.hueConnector = hueConnector;
         this.deviceManager = deviceManager;
         this.bus = bus;

@@ -13,7 +13,7 @@ import java.util.List;
  * @author Renze de Vries
  */
 @RestController
-@RequestMapping("/state")
+@RequestMapping("/api/state")
 public class StateController {
 
     @Autowired
