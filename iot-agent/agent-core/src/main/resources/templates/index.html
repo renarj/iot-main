@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>Oberasoftware IoT Agent-Configuration</title>
+    <script src="/webjars/bootstrap/5.2.0/js/bootstrap.min.js"></script>
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.2.0/css/bootstrap.min.css" />
+    <script src="/static/javascript/agent.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-default" role="navigation" th:fragment="navigation (selectTab)">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><img height="" th:src="@{/static/images/obera.png}"/></a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                Left
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Agent Configuration</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Enter Agent configuration details</h5>
+                        <form>
+                            <div class="row mb-3">
+                                <label for="controllerId" class="form-label">Controller Id</label>
+                                <input type="text" class="form-control" id="controllerId" aria-describedby="controllerHelp" th:value="${controllerId}">
+                                <div id="controllerHelp" class="form-text">Enter the unique ID of this agent controller</div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="mqttHost" class="form-label">MQTT Host</label>
+                                <input type="text" class="form-control" id="mqttHost" value="localhost" th:value="${mqttHost}">
+                            </div>
+                            <div class="row mb-3">
+                                <label for="mqttPort" class="form-label">MQTT Port</label>
+                                <input type="text" class="form-control" id="mqttPort" value="1883" th:value="${mqttPort}">
+                            </div>
+                            <div class="row mb-3">
+                                <label for="apiToken" class="form-label">API Token</label>
+                                <input type="text" class="form-control" id="apiToken" th:value="${apiToken}">
+                            </div>
+                            <div class="row mb-3">
+                                <label for="thingService" class="form-label">Thing Webservice Host</label>
+                                <input type="text" class="form-control" id="thingService" value="http://localhost:9010/api/" th:value="${baseUrl}">
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="storeConfig">Store and Restart</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                Right
+            </div>
+        </div>
+    </div>
+    <div id="version" th:fragment="footer">
+        <p class="text-center">&#169; Copyright 2022 Oberasoftware, version: <span>1.0</span></p>
+    </div>
+</body>
+</html>
