@@ -46,7 +46,7 @@ public class ValueTransportMessage {
         return thingId;
     }
 
-    public void setThingId(String channelId) {
+    public void setThingId(String thingId) {
         this.thingId = thingId;
     }
 
