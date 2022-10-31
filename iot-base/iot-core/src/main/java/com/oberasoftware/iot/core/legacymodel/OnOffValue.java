@@ -1,5 +1,7 @@
 package com.oberasoftware.iot.core.legacymodel;
 
+import com.oberasoftware.iot.core.model.states.Value;
+
 /**
  * @author Renze de Vries
  */

@@ -2,7 +2,7 @@ package com.oberasoftware.home.core.state;
 
 import com.oberasoftware.base.BaseConfiguration;
 import com.oberasoftware.iot.activemq.ActiveMQConfiguration;
-import com.oberasoftware.iot.activemq.ActiveMQTopicListener;
+import com.oberasoftware.iot.activemq.RabbitMQTopicListener;
 import com.oberasoftware.iot.core.managers.StateManager;
 import com.oberasoftware.iot.core.model.ValueTransportMessage;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class StateContainer {
     public static void main(String[] args) {
         LOG.info("Starting state service");
         ApplicationContext context = SpringApplication.run(StateContainer.class);
-        ActiveMQTopicListener topicListener = context.getBean(ActiveMQTopicListener.class);
+        RabbitMQTopicListener topicListener = context.getBean(RabbitMQTopicListener.class);
         topicListener.connect();
         StateManager stateManager = context.getBean(StateManager.class);
 
@@ -39,8 +39,8 @@ public class StateContainer {
             try {
                 ValueTransportMessage message = mapFromJson(received, ValueTransportMessage.class);
                 LOG.debug("Received value: {}", message);
-                stateManager.setState(message.getControllerId(),
-                        message.getChannelId(), message.getLabel(), message.getValue());
+                stateManager.updateItemState(message.getControllerId(),
+                        message.getThingId(), message.getAttribute(), message.getValue());
             } catch(Exception e) {
                 LOG.error("Fatal error, ignoring so we can continue processing state messages", e);
             }

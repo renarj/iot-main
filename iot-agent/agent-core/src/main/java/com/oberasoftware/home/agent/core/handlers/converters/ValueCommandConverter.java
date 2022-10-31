@@ -4,8 +4,8 @@ import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
-import com.oberasoftware.iot.core.legacymodel.Value;
-import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
+import com.oberasoftware.iot.core.model.states.Value;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 

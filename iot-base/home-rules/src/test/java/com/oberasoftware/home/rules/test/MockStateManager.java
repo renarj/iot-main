@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rules.test;
 
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.managers.StateManager;
-import com.oberasoftware.iot.core.legacymodel.State;
+import com.oberasoftware.iot.core.model.states.State;
 import com.oberasoftware.iot.core.legacymodel.Status;
 import com.oberasoftware.iot.core.model.IotThing;
 import org.springframework.stereotype.Component;

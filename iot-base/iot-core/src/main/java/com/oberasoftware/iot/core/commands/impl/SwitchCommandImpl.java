@@ -2,7 +2,7 @@ package com.oberasoftware.iot.core.commands.impl;
 
 import com.oberasoftware.iot.core.commands.SwitchCommand;
 import com.oberasoftware.iot.core.legacymodel.OnOffValue;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 
 import java.util.HashMap;
 import java.util.Map;

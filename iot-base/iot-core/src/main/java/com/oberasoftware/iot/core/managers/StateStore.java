@@ -1,7 +1,7 @@
 package com.oberasoftware.iot.core.managers;
 
-import com.oberasoftware.iot.core.legacymodel.State;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.State;
+import com.oberasoftware.iot.core.model.states.Value;
 
 import java.util.Map;
 
@@ -15,11 +15,11 @@ public interface StateStore {
         READWRITE
     }
 
-    void store(String itemId, String controllerId, String pluginId, String deviceId, String label, Value value);
+    void store(String controllerId, String thingId, String attribute, Value value);
 
     Map<String, State> getStates();
 
-    State getState(String itemId);
+    State getState(String controllerId, String thingId);
 
     SUPPORTED_OPERATIONS getSupportedOperations();
 }

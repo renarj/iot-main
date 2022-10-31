@@ -36,7 +36,7 @@ public class ServoPositionEvent implements SensorEvent<PositionValue> {
     }
 
     @Override
-    public String getLabel() {
+    public String getAttribute() {
         return servoId;
     }
 

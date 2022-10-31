@@ -47,7 +47,7 @@ public class EdgeProcessorContainer {
 
         LOG.info("Starting listening to state changes on MQTT");
         topicEventBus.registerHandler(messageListener);
-        topicEventBus.subscribe("/states/#");
+        topicEventBus.subscribe("states/#");
 
         LOG.info("Edge Processor started");
 

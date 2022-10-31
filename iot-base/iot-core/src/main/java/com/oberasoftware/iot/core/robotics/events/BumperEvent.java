@@ -16,7 +16,7 @@ public class BumperEvent implements SensorEvent<TriggerValue> {
     }
 
     @Override
-    public String getLabel() {
+    public String getAttribute() {
         return source;
     }
 
@@ -45,7 +45,7 @@ public class BumperEvent implements SensorEvent<TriggerValue> {
                 "source='" + source + '\'' +
                 ", robotId='" + robotId + '\'' +
                 ", capability='" + capability + '\'' +
-                ", label='" + getLabel() + '\'' +
+                ", label='" + getAttribute() + '\'' +
                 ", controllerId='" + getControllerId() + '\'' +
                 ", itemId='" + getItemId() + '\'' +
                 ", value=" + getValue() +

@@ -61,7 +61,7 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>home-hue</artifactId>
+            <artifactId>home-youless</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

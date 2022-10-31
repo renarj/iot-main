@@ -2,6 +2,7 @@ package com.oberasoftware.home.core.mqtt;
 
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -39,7 +40,7 @@ public class MQTTBroker {
     public synchronized void connect() throws IOTException {
         try {
             LOG.info("Connecting to host: {}", host);
-            client = new MqttClient(host, UUID.randomUUID().toString());
+            client = new MqttClient(host, UUID.randomUUID().toString(), new MqttDefaultFilePersistence("/tmp"));
             client.setTimeToWait(5000);
             client.setCallback(new MqttCallback() {
                 @Override

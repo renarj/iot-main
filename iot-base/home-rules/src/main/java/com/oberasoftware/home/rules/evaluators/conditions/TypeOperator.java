@@ -1,6 +1,6 @@
 package com.oberasoftware.home.rules.evaluators.conditions;
 
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 
 /**
  * @author Renze de Vries

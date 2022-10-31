@@ -67,7 +67,7 @@ public class ThingRestSvc {
         if(StringUtils.hasText(controllerId) && controllerId.equalsIgnoreCase(thing.getControllerId()) && validateThing(thing)) {
             LOG.info("Creating thing: {} on controller: {}", thing.getThingId(), controllerId);
             var createdThing = itemManager.createOrUpdateThing(controllerId, thing.getThingId(), thing.getFriendlyName(),
-                    thing.getPluginId(), thing.getParentId(), thing.getProperties());
+                    thing.getPluginId(), thing.getParentId(), thing.getProperties(), thing.getAttributes());
 
             return new ResponseEntity<>(createdThing, HttpStatus.CREATED);
         } else {

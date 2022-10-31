@@ -6,7 +6,7 @@ import com.oberasoftware.home.rules.evaluators.EvalException;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.conditions.NumberTypeOperator;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

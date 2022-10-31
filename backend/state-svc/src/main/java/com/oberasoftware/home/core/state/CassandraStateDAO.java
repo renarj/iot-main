@@ -4,15 +4,9 @@ import com.datastax.driver.core.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
-import com.oberasoftware.iot.core.legacymodel.State;
-import com.oberasoftware.iot.core.legacymodel.StateItem;
-import com.oberasoftware.iot.core.legacymodel.Value;
-import com.oberasoftware.iot.core.legacymodel.impl.StateImpl;
-import com.oberasoftware.iot.core.legacymodel.impl.StateItemImpl;
-import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
+import com.oberasoftware.iot.core.model.states.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -26,7 +20,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author Renze de Vries
  */
-@Component
+//@Component
 public class CassandraStateDAO implements StateDAO {
     private static final Logger LOG = LoggerFactory.getLogger(CassandraStateDAO.class);
 
@@ -155,7 +149,9 @@ public class CassandraStateDAO implements StateDAO {
                 String[] idParts = k.split("_");
                 String controllerId = idParts[0];
                 String itemId = idParts[1];
-                states.add(new StateImpl(controllerId, itemId, v));
+
+                var state = new StateImpl(controllerId, itemId);
+                v.forEach(si -> state.updateIfChanged(si.getAttribute(), si));
             });
             return states;
         }

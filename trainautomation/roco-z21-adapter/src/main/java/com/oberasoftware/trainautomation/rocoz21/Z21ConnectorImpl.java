@@ -3,6 +3,7 @@ package com.oberasoftware.trainautomation.rocoz21;
 import com.oberasoftware.base.event.EventFilter;
 import com.oberasoftware.base.event.HandlerEntry;
 import com.oberasoftware.base.event.impl.LocalEventBus;
+import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.trainautomation.rocoz21.commands.Z21Command;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,7 +73,7 @@ public class Z21ConnectorImpl implements Z21Connector {
     }
 
     @Override
-    public void connect() throws HomeAutomationException {
+    public void connect() throws IOTException {
         if(socket == null && listener == null) {
             try {
                 LOG.info("Opening socket for Z21 connection on port: {}", port);
@@ -80,7 +81,7 @@ public class Z21ConnectorImpl implements Z21Connector {
                 listener = new ConnectionListener(eventBus, socket);
                 listener.start();
             } catch (SocketException e) {
-                throw new HomeAutomationException("Unable to open socket for Z21 connection", e);
+                throw new IOTException("Unable to open socket for Z21 connection", e);
             }
         } else {
             LOG.warn("Socket for Z21 connection already open");
@@ -99,13 +100,13 @@ public class Z21ConnectorImpl implements Z21Connector {
     }
 
     @Override
-    public void send(Z21Command command) throws HomeAutomationException {
+    public void send(Z21Command command) throws IOTException {
         DatagramPacket packet = command.addHost(z21Host).addPort(port).build();
 
         try {
             socket.send(packet);
         } catch (IOException e) {
-            throw new HomeAutomationException("Unable to send Z21 command: " + command);
+            throw new IOTException("Unable to send Z21 command: " + command);
         }
     }
 

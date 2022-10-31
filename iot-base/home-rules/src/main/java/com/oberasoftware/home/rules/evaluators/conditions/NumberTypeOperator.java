@@ -3,8 +3,8 @@ package com.oberasoftware.home.rules.evaluators.conditions;
 import com.google.common.base.Preconditions;
 import com.oberasoftware.home.rules.evaluators.EvalException;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
-import com.oberasoftware.iot.core.legacymodel.Value;
-import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
+import com.oberasoftware.iot.core.model.states.Value;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 
 /**
  * @author Renze de Vries

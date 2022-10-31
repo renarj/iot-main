@@ -1,8 +1,7 @@
 package com.oberasoftware.iot.core.managers;
 
-import com.oberasoftware.iot.core.legacymodel.State;
-import com.oberasoftware.iot.core.legacymodel.Status;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.State;
+import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.IotThing;
 
 import java.util.Map;
@@ -11,13 +10,8 @@ import java.util.Map;
  * @author renarj
  */
 public interface StateManager {
-    State updateItemState(String itemId, String label, Value value);
-
-    State updateDeviceState(IotThing item, String label, Value value);
-
-    State updateStatus(IotThing item, Status newStatus);
-
-    Map<String, State> getStates();
-
-    State getState(String itemId);
+    State updateItemState(String controllerId, String thingId, String attribute, Value value);
+    State updateItemState(IotThing item, String attribute, Value value);
+    Map<String, State> getStates(String controllerId);
+    State getState(String controllerId, String itemId);
 }

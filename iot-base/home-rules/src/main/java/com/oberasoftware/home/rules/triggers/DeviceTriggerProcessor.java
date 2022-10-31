@@ -9,7 +9,7 @@ import com.oberasoftware.home.rules.api.trigger.DeviceTrigger;
 import com.oberasoftware.home.rules.api.trigger.Trigger;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.blocks.BlockEvaluator;
-import com.oberasoftware.iot.core.events.DeviceEvent;
+import com.oberasoftware.iot.core.events.ThingEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -83,7 +83,7 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
     }
 
     @EventSubscribe
-    public void receive(DeviceEvent event) throws Exception {
+    public void receive(ThingEvent event) throws Exception {
         LOG.debug("Received a device event: {}", event);
 //        Optional<IotThing> deviceItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
 //        deviceItem.ifPresent(iotThing -> evaluateRules(iotThing.getId()));

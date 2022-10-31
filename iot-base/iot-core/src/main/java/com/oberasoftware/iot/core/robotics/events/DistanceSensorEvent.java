@@ -29,7 +29,7 @@ public class DistanceSensorEvent implements SensorEvent<DistanceValue> {
     }
 
     @Override
-    public String getLabel() {
+    public String getAttribute() {
         return source;
     }
 

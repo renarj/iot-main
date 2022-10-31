@@ -1,16 +1,12 @@
 package com.oberasoftware.home.service;
 
 import com.oberasoftware.base.BaseConfiguration;
-import com.oberasoftware.iot.core.exceptions.IOTException;
-import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
-import com.oberasoftware.iot.core.extensions.ExtensionManager;
-import com.oberasoftware.iot.core.extensions.SpringExtension;
-import com.oberasoftware.iot.core.ControllerConfiguration;
-import com.oberasoftware.iot.core.CoreConfiguation;
 import com.oberasoftware.home.rest.RestConfiguration;
 import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.storage.jasdb.JasDBConfiguration;
 import com.oberasoftware.home.web.WebConfiguration;
+import com.oberasoftware.iot.core.CoreConfiguation;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,11 +14,7 @@ import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAut
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -42,26 +34,9 @@ public class HomeAutomation {
         LOG.info("Starting HomeAutomation system");
 
         try {
-            List<SpringExtension> springExtensions = ExtensionServiceLoaderUtil.getExtensions();
-            List<Class<?>> c = springExtensions.stream().map(SpringExtension::getClass).collect(Collectors.toList());
-            c.add(HomeAutomation.class);
-
-            Class<?>[] ar = new Class[c.size()];
-            for(int i=0; i<c.size(); i++) {
-                ar[i] = c.get(i);
-            }
-
-            LOG.debug("Starting spring context with configuration classes: {}", c);
-            ApplicationContext context = SpringApplication.run(ar, args);
-
-            String controllerId = context.getBean(ControllerConfiguration.class).getControllerId();
-
-            ExtensionManager extensionManager = context.getBean(ExtensionManager.class);
-            extensionManager.activateController(controllerId);
-
-            extensionManager.activateExtensions();
-            LOG.info("HomeAutomation system Started and ready for duty");
-        } catch (IOTException | RuntimeIOTException e) {
+            SpringApplication.run(HomeAutomation.class);
+            LOG.info("HomeAutomation Service started");
+        } catch (RuntimeIOTException e) {
             LOG.error("Could not start the HomeAutomationSystem", e);
         }
     }

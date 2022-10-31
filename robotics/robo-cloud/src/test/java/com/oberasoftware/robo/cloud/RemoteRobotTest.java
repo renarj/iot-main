@@ -73,7 +73,7 @@ public class RemoteRobotTest {
         @EventSubscribe
         public void receive(ValueEventImpl valueEvent) {
             LOG.info("Received a distance: {}", valueEvent.getValue().asString());
-            if(valueEvent.getControllerId().equals("max") && valueEvent.getLabel().equals("distance")) {
+            if(valueEvent.getControllerId().equals("max") && valueEvent.getAttribute().equals("distance")) {
                 int distance = valueEvent.getValue().getValue();
                 if(distance < 30) {
                     if(guard.compareAndSet(true, false)) {

@@ -10,7 +10,7 @@ import com.oberasoftware.home.rules.evaluators.values.ValueEvaluator;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

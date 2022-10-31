@@ -66,27 +66,25 @@ public class ItemManagerImpl implements ItemManager {
     }
 
     @Override
-    public IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String parent, Map<String, String> properties) throws IOTException {
+    public IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String parent, Map<String, String> properties, Set<String> attributes) throws IOTException {
         centralDatastore.beginTransaction();
         try {
             Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
             if(thing.isPresent()) {
                 IotThing item = thing.get();
 
-                if(havePropertiesChanged(item.getProperties(), properties) || (friendlyName != null && !friendlyName.equalsIgnoreCase(item.getFriendlyName()))) {
-                    LOG.info("Thing: {} already exist, properties have changed, updating device with id: {}", thingId, item.getId());
-                    var mergedProperties = mergeProperties(item.getProperties(), properties);
+                LOG.info("Thing: {} already exist, properties have changed, updating device with id: {}", thingId, item.getId());
+                var mergedProperties = mergeProperties(item.getProperties(), properties);
 
-                    var t = new IotThingImpl(item.getId(), controllerId, thingId, friendlyName, plugin, parent, mergedProperties);
-                    return centralDatastore.store(t);
-                } else {
-                    LOG.debug("Device: {} has not changed, not updating item: {}", thingId, item.getId());
-                    return item;
-                }
+                var t = new IotThingImpl(item.getId(), controllerId, thingId, friendlyName, plugin, parent, mergedProperties);
+                t.setAttributes(attributes);
+
+                return centralDatastore.store(t);
             } else {
                 String id = generateId();
                 LOG.debug("Device: {} does not yet exist, creating new with id: {}", thingId, id);
                 var t = new IotThingImpl(id, controllerId, thingId, friendlyName, plugin, parent, properties);
+                t.setAttributes(attributes);
                 return centralDatastore.store(t);
             }
         } finally {

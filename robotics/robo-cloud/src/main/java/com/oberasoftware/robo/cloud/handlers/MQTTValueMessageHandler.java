@@ -32,7 +32,7 @@ public class MQTTValueMessageHandler implements EventHandler {
         LOG.info("Received sensor value information: {}", message);
 
         Robot robot = robotRegistry.getRobot(message.getControllerId());
-        robot.publish(new ValueEventImpl(message.getControllerId(), message.getChannelId(), message.getLabel(), message.getValue()));
+        robot.publish(new ValueEventImpl(message.getControllerId(), message.getThingId(), message.getAttribute(), message.getValue()));
     }
 
     public static void main(String[] args) {

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mqtt-bridge
+  name: mqtt-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-bridge
+  template:
+    metadata:
+      labels:
+        app: mqtt-bridge
+    spec:
+      containers:
+        - image: public.ecr.aws/e1s4e3s4/mqtt-bridge:latest
+          imagePullPolicy: IfNotPresent
+          name: mqtt-bridge
+          env:
+          - name: influxToken
+            value: 1XKQ8BE0w33a0nzAFGgnwSF5LQE28X02uCM3dvQIxWEWIkAboD8gQ_kU9GY5ttbfmFjJvfMhfgSlsy4eFAg2bg==
+          - name: influxOrg
+            value: 0d5dd7b56ae83df1

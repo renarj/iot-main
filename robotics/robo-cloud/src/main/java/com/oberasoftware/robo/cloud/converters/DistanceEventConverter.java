@@ -3,8 +3,8 @@ package com.oberasoftware.robo.cloud.converters;
 import com.oberasoftware.iot.core.robotics.converters.Converter;
 import com.oberasoftware.iot.core.robotics.converters.TypeConverter;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
-import com.oberasoftware.iot.core.legacymodel.Value;
-import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
+import com.oberasoftware.iot.core.model.states.Value;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTMessageBuilder;
 import com.oberasoftware.iot.core.robotics.events.DistanceSensorEvent;
@@ -28,7 +28,7 @@ public class DistanceEventConverter implements Converter {
         MQTTMessage message = MQTTMessageBuilder.from(value)
                 .controller(event.getControllerId())
                 .channel(event.getItemId())
-                .label(event.getLabel())
+                .label(event.getAttribute())
             .build();
 
         LOG.info("Sending value: {} MQTT message: {}", value, message);

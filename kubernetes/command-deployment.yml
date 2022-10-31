@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: command-svc
+  name: command-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: command-svc
+  template:
+    metadata:
+      labels:
+        app: command-svc
+    spec:
+      containers:
+      - name: command-svc
+        image: command-svc:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9004
+        env:
+        - name: rmq_host
+          value: rbmq-svc
+        - name: rmq_port
+          value: "5672"
+        - name: rmq_producer_topic
+          value: "commands"
+        - name: SPRING_PROFILES_ACTIVE
+          value: production

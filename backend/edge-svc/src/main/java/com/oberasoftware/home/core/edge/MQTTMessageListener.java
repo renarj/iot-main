@@ -5,7 +5,7 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPathParser;
 import com.oberasoftware.home.core.mqtt.ParsedPath;
-import com.oberasoftware.iot.activemq.ActiveMQTopicSender;
+import com.oberasoftware.iot.activemq.RabbitMQTopicSender;
 import com.oberasoftware.iot.core.model.ValueTransportMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +22,20 @@ public class MQTTMessageListener implements EventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MQTTMessageListener.class);
 
     @Autowired
-    private ActiveMQTopicSender topicSender;
+    private RabbitMQTopicSender topicSender;
 
     @EventSubscribe
     public void receive(MQTTMessage message) {
-        LOG.debug("Received a MQTT message: {}", message);
+        LOG.info("Received a MQTT message: {}", message);
         ParsedPath parsedPath = MQTTPathParser.parsePath(message.getTopic());
 
         ValueTransportMessage parsedMessage = mapFromJson(message.getMessage(), ValueTransportMessage.class);
         if(validateMessage(parsedPath, parsedMessage)) {
-            LOG.info("Message is valid, forwarding to Kafka: {}", message.getMessage());
+            LOG.info("Message is valid, forwarding to Inner Queues: {}", message.getMessage());
 
             topicSender.publish(message.getMessage());
+        } else {
+            LOG.warn("Message is invalid: {}", message.getMessage());
         }
     }
 

@@ -10,5 +10,5 @@ public interface RobotEvent extends Event {
 
     String getItemId();
 
-    String getLabel();
+    String getAttribute();
 }

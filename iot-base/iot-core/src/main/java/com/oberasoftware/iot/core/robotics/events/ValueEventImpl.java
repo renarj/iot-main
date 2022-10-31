@@ -2,7 +2,7 @@ package com.oberasoftware.iot.core.robotics.events;
 
 
 import com.oberasoftware.iot.core.events.ValueEvent;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 
 /**
  * @author Renze de Vries
@@ -31,7 +31,7 @@ public class ValueEventImpl implements RobotEvent, ValueEvent {
     }
 
     @Override
-    public String getLabel() {
+    public String getAttribute() {
         return label;
     }
 

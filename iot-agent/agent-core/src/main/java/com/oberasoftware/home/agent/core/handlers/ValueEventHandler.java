@@ -2,10 +2,12 @@ package com.oberasoftware.home.agent.core.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.events.DeviceValueEvent;
+import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
+import com.oberasoftware.iot.core.events.ThingValueEvent;
 import com.oberasoftware.iot.core.events.ItemValueEvent;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -23,9 +25,14 @@ public class ValueEventHandler implements EventHandler {
 //    @Autowired
 //    private DeviceManager deviceManager;
 
+    @Autowired
+    private MQTTTopicEventBus topicEventBus;
+
     @EventSubscribe
-    public void receive(DeviceValueEvent event) {
-        LOG.debug("Received a device value event: {}", event);
+    public void receive(ThingValueEvent event) {
+        LOG.info("Received a Thing value event: {}, forwarding to state topic", event);
+
+        topicEventBus.publish(event);
 
 //        Optional<IotThing> optionalItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
 //        if (optionalItem.isPresent()) {
@@ -39,7 +46,7 @@ public class ValueEventHandler implements EventHandler {
     @EventSubscribe
     public void receive(ItemValueEvent event) {
         LOG.debug("Received an item value event: {}", event);
-        String label = event.getLabel();
+        String label = event.getAttribute();
         Value value = event.getValue();
 
         LOG.debug("Updating state of group: {}", event.getItemId());

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class MQTTPathParser {
     private static final Logger LOG = LoggerFactory.getLogger(MQTTPathParser.class);
 
-    private static final String PATH_REGEX = "/(.*)/(.*)/(.*)/(.*)";
+    private static final String PATH_REGEX = "/?(.*)/(.*)/(.*)/(.*)";
     private static final Pattern PATH_PATTERN = Pattern.compile(PATH_REGEX);
     private static final int GROUP_COUNT = 4;
 

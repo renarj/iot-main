@@ -2,7 +2,7 @@ package com.oberasoftware.home.rules.evaluators.values;
 
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 import com.oberasoftware.home.rules.evaluators.Evaluator;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 
 /**
  * @author Renze de Vries

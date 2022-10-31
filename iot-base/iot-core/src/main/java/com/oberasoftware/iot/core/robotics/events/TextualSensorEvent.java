@@ -33,7 +33,7 @@ public class TextualSensorEvent implements SensorEvent<String> {
     }
 
     @Override
-    public String getLabel() {
+    public String getAttribute() {
         return label;
     }
 

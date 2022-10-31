@@ -47,16 +47,18 @@
         <module>iot-base/home-rules</module>
         <module>iot-base/home-web</module>
         <module>iot-base/home-service</module>
-        <module>iot-base/home-hue</module>
         <module>iot-base/home-storage</module>
         <module>iot-base/home-rest</module>
         <module>iot-base/iot-client</module>
         <module>iot-agent/agent-core</module>
+        <module>integrations/home-hue</module>
+        <module>integrations/home-youless</module>
         <module>backend/queue-connectors</module>
         <module>backend/command-svc</module>
         <module>backend/edge-svc</module>
         <module>backend/state-svc</module>
         <module>backend/thing-svc</module>
+        <module>backend/influxdb-bridge-svc</module>
     </modules>
 
     <licenses>

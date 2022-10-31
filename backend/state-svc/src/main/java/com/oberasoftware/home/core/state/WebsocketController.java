@@ -2,9 +2,9 @@ package com.oberasoftware.home.core.state;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.api.model.Value;
-import com.oberasoftware.robo.core.events.devices.StateUpdateEvent;
-import com.oberasoftware.robo.core.model.ValueTransportMessage;
+import com.oberasoftware.iot.core.events.StateUpdateEvent;
+import com.oberasoftware.iot.core.model.ValueTransportMessage;
+import com.oberasoftware.iot.core.model.states.Value;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -26,10 +26,11 @@ public class WebsocketController implements EventHandler {
     public void receiveStateUpdate(StateUpdateEvent stateUpdateEvent) {
         LOG.debug("Received state: {}", stateUpdateEvent);
 
-        String label = stateUpdateEvent.getLabel();
-        Value value = stateUpdateEvent.getState().getStateItem(label).getValue();
+        var state = stateUpdateEvent.getState();
+        String label = stateUpdateEvent.getAttribute();
+        Value value = state.getStateItem(label).getValue();
 
         messagingTemplate.convertAndSend("/topic/state", new ValueTransportMessage(value,
-                stateUpdateEvent.getControllerId(), stateUpdateEvent.getItemId(), label));
+                state.getControllerId(), stateUpdateEvent.getItemId(), label));
     }
 }

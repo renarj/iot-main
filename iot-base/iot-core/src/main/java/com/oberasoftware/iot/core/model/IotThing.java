@@ -1,6 +1,7 @@
 package com.oberasoftware.iot.core.model;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author renarj
@@ -13,6 +14,8 @@ public interface IotThing extends IotBaseEntity {
     String getPluginId();
 
     String getFriendlyName();
+
+    Set<String> getAttributes();
 
     String getParentId();
 

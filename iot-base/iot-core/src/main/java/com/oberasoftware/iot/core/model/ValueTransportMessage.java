@@ -1,8 +1,8 @@
 package com.oberasoftware.iot.core.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.oberasoftware.iot.core.legacymodel.Value;
-import com.oberasoftware.iot.core.legacymodel.impl.ValueImpl;
+import com.oberasoftware.iot.core.model.states.Value;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 
 /**
  * @author Renze de Vries
@@ -13,14 +13,14 @@ public class ValueTransportMessage {
     private Value value;
 
     private String controllerId;
-    private String channelId;
-    private String label;
+    private String thingId;
+    private String attribute;
 
-    public ValueTransportMessage(Value value, String controllerId, String channelId, String label) {
+    public ValueTransportMessage(Value value, String controllerId, String thingId, String attribute) {
         this.value = value;
         this.controllerId = controllerId;
-        this.channelId = channelId;
-        this.label = label;
+        this.thingId = thingId;
+        this.attribute = attribute;
     }
 
     public ValueTransportMessage() {
@@ -42,20 +42,20 @@ public class ValueTransportMessage {
         this.controllerId = controllerId;
     }
 
-    public String getChannelId() {
-        return channelId;
+    public String getThingId() {
+        return thingId;
     }
 
-    public void setChannelId(String channelId) {
-        this.channelId = channelId;
+    public void setThingId(String channelId) {
+        this.thingId = thingId;
     }
 
-    public String getLabel() {
-        return label;
+    public String getAttribute() {
+        return attribute;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class ValueTransportMessage {
         return "ValueTransportMessage{" +
                 "value=" + value +
                 ", controllerId='" + controllerId + '\'' +
-                ", channelId='" + channelId + '\'' +
-                ", label='" + label + '\'' +
+                ", thingId='" + thingId + '\'' +
+                ", attribute='" + attribute + '\'' +
                 '}';
     }
 }

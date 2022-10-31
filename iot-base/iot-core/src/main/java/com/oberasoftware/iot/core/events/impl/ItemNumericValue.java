@@ -1,7 +1,7 @@
 package com.oberasoftware.iot.core.events.impl;
 
 import com.oberasoftware.iot.core.events.ItemValueEvent;
-import com.oberasoftware.iot.core.legacymodel.Value;
+import com.oberasoftware.iot.core.model.states.Value;
 
 /**
  * @author Renze de Vries
@@ -28,7 +28,7 @@ public class ItemNumericValue implements ItemValueEvent {
     }
 
     @Override
-    public String getLabel() {
+    public String getAttribute() {
         return label;
     }
 }

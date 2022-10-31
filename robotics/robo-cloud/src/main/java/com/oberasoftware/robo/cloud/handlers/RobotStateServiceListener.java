@@ -24,6 +24,6 @@ public class RobotStateServiceListener implements StateServiceListener {
     public void receive(ValueTransportMessage message) {
         LOG.debug("Received state message: {}", message);
         Robot robot = robotRegistry.getRobot(message.getControllerId());
-        robot.publish(new ValueEventImpl(message.getControllerId(), message.getChannelId(), message.getLabel(), message.getValue()));
+        robot.publish(new ValueEventImpl(message.getControllerId(), message.getThingId(), message.getAttribute(), message.getValue()));
     }
 }

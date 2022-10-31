@@ -75,7 +75,7 @@ public class DevicesAdminController {
     public @ResponseBody ResponseEntity<byte[]> getIcon(@PathVariable String pluginId) throws IOException {
         LOG.debug("Requesting icon for plugin: {}", pluginId);
 
-        AutomationExtension extension = extensionManager.getExtension(pluginId).get();
+        AutomationExtension extension = extensionManager.getExtensionById(pluginId).get();
         Optional<ExtensionResource> optionalResource = extension.getIcon();
         if(optionalResource.isPresent()) {
             ExtensionResource resource = optionalResource.get();
