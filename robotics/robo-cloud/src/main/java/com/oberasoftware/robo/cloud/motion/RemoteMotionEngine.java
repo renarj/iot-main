@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.oberasoftware.robo.core.model.BasicCommandBuilder.create;
+import static com.oberasoftware.iot.core.commands.BasicCommandBuilder.create;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 

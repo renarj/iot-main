@@ -3,7 +3,7 @@ package com.oberasoftware.home.client.command;
 import com.oberasoftware.home.client.api.ClientResponse;
 import com.oberasoftware.home.client.api.CommandServiceClient;
 import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.robo.core.model.BasicCommandImpl;
+import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

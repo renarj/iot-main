@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.*;
 import static com.oberasoftware.robo.maximus.motion.cartesian.CartesianUtil.*;
 import static java.lang.Math.abs;
 import static org.slf4j.LoggerFactory.getLogger;

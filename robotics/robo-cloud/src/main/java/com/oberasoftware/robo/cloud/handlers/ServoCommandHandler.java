@@ -5,13 +5,13 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
-import com.oberasoftware.iot.core.util.IntUtils;
+import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
-import com.oberasoftware.robo.api.RobotRegistry;
-import com.oberasoftware.robo.api.commands.BasicCommand;
-import com.oberasoftware.robo.api.commands.Scale;
-import com.oberasoftware.robo.core.model.BasicCommandImpl;
+import com.oberasoftware.iot.core.util.IntUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class ServoCommandHandler implements EventHandler {
     @MQTTPath(group = MessageGroup.COMMANDS, device = "servos", label = "position")
     public void convert(MQTTMessage mqttMessage) {
         LOG.debug("Executing Servo command from topic: {} {}", mqttMessage.getMessage(), mqttMessage.getTopic());
-        BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
+        BasicCommandImpl basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
         Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
         ServoDriver servoDriver = robot.getServoDriver();

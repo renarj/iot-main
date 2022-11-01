@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.*;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.ArmBuilder.createArm;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
 import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.createLeg;

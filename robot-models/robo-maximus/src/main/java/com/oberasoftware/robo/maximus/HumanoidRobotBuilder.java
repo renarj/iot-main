@@ -12,6 +12,8 @@ import com.oberasoftware.robo.maximus.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.*;
+
 public class HumanoidRobotBuilder {
 
     private static final String PITCH = "pitch";

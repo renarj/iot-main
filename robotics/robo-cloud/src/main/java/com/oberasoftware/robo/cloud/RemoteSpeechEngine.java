@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.oberasoftware.robo.core.model.BasicCommandBuilder.create;
+import static com.oberasoftware.iot.core.commands.BasicCommandBuilder.create;
+
 
 @Component
 @Scope("prototype")

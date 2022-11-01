@@ -42,5 +42,10 @@
             <artifactId>home-rules</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>iot-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

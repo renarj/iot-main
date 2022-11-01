@@ -1,7 +1,6 @@
 package com.oberasoftware.iot.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.client.ThingClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
@@ -11,11 +10,11 @@ import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
 import com.oberasoftware.iot.core.util.HttpUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -30,7 +29,10 @@ public class DefaultThingClient implements ThingClient {
 
     private HttpClient client;
 
+    @Value("${thing-svc.baseUrl:}")
     private String baseUrl;
+
+    @Value("${thing-svc.apiToken:}")
     private String apiToken;
 
     @Override
@@ -133,33 +135,6 @@ public class DefaultThingClient implements ThingClient {
             return Lists.newArrayList(things);
         } catch (IOException | InterruptedException e) {
             throw new IOTException("Unable to request things from service", e);
-        }
-    }
-
-    private static class UriBuilder {
-        private List<String> pathElements = new ArrayList<>();
-
-        private UriBuilder(String baseUrl) {
-            pathElements.add(baseUrl);
-            pathElements.add("api");
-        }
-
-        static UriBuilder create(String baseUrl) {
-            return new UriBuilder(baseUrl);
-        }
-
-        UriBuilder resource(String resourceName) {
-            pathElements.add(resourceName);
-            return this;
-        }
-
-        UriBuilder resource(String resourceName, String resourceKey) {
-            pathElements.add(resourceName + "(" + resourceKey + ")");
-            return this;
-        }
-
-        URI build() {
-            return URI.create(Joiner.on("/").join(pathElements));
         }
     }
 }

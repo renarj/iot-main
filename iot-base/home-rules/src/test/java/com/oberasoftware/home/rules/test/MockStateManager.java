@@ -1,10 +1,9 @@
 package com.oberasoftware.home.rules.test;
 
-import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.managers.StateManager;
-import com.oberasoftware.iot.core.model.states.State;
-import com.oberasoftware.iot.core.legacymodel.Status;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.states.State;
+import com.oberasoftware.iot.core.model.states.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -19,27 +18,22 @@ public class MockStateManager implements StateManager {
     private Map<String, State> stateMap = new HashMap<>();
 
     @Override
-    public State updateItemState(String itemId, String label, Value value) {
+    public State updateItemState(String controllerId, String thingId, String attribute, Value value) {
         return null;
     }
 
     @Override
-    public State updateDeviceState(IotThing item, String label, Value value) {
+    public State updateItemState(IotThing item, String attribute, Value value) {
         return null;
     }
 
     @Override
-    public State updateStatus(IotThing item, Status newStatus) {
+    public Map<String, State> getStates(String controllerId) {
         return null;
     }
 
     @Override
-    public Map<String, State> getStates() {
-        return null;
-    }
-
-    @Override
-    public State getState(String itemId) {
+    public State getState(String controllerId, String itemId) {
         return stateMap.get(itemId);
     }
 

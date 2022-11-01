@@ -28,10 +28,5 @@
             <artifactId>hola</artifactId>
             <version>0.2.3</version>
         </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-util</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 </project>

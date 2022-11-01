@@ -5,6 +5,7 @@ import com.oberasoftware.home.rest.RestConfiguration;
 import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.storage.jasdb.JasDBConfiguration;
 import com.oberasoftware.home.web.WebConfiguration;
+import com.oberasoftware.iot.client.ClientConfiguration;
 import com.oberasoftware.iot.core.CoreConfiguation;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class, SpringApplicationAdminJmxAutoConfiguration.class})
-@Import({RestConfiguration.class, JasDBConfiguration.class, CoreConfiguation.class, WebConfiguration.class, BaseConfiguration.class, RuleConfiguration.class})
+@Import({RestConfiguration.class, JasDBConfiguration.class, CoreConfiguation.class, WebConfiguration.class, BaseConfiguration.class, RuleConfiguration.class, ClientConfiguration.class})
 public class HomeAutomation {
     private static final Logger LOG = getLogger(HomeAutomation.class);
 

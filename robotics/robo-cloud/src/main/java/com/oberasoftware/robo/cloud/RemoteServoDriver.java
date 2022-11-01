@@ -1,14 +1,14 @@
 package com.oberasoftware.robo.cloud;
 
-import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.BasicCommandBuilder;
+import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.Servo;
 import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
-import com.oberasoftware.robo.core.model.BasicCommandBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;

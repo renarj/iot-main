@@ -1,5 +1,6 @@
 package com.oberasoftware.trainautomation.rocoz21.commands;
 
+import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.robo.core.ConverterUtil;
 import org.slf4j.Logger;
 
@@ -22,7 +23,7 @@ public abstract class Z21Command {
     private String host;
     private int port;
 
-    public DatagramPacket build() throws RuntimeHomeAutomationException {
+    public DatagramPacket build() throws IOTException {
         ByteBuffer buffer = ByteBuffer.allocate(parameters.size() + FIXED_PARAM_LENGTH);
 
         int length = FIXED_PARAM_LENGTH + parameters.size();
@@ -43,7 +44,7 @@ public abstract class Z21Command {
             return dg;
         } catch(UnknownHostException e) {
             LOG.error("Could not send to host: {}", host);
-            throw new RuntimeHomeAutomationException("Could not send to host: " + host, e);
+            throw new IOTException("Could not send to host: " + host, e);
         }
     }
 

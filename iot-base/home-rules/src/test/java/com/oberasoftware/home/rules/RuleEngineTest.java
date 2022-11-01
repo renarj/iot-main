@@ -2,6 +2,7 @@ package com.oberasoftware.home.rules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.oberasoftware.base.BaseConfiguration;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.rules.api.Condition;
 import com.oberasoftware.home.rules.api.Operator;
@@ -41,7 +42,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author Renze de Vries
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {RuleConfiguration.class, TestConfiguration.class})
+@ContextConfiguration(classes = {RuleConfiguration.class, TestConfiguration.class, BaseConfiguration.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class RuleEngineTest {
     private static final Logger LOG = getLogger(RuleEngineTest.class);
@@ -102,7 +103,7 @@ public class RuleEngineTest {
         String ruleId = randomUUID().toString();
         Rule rule = new Rule(ruleId, "Light after dark", new IfBlock(newArrayList(branch)), Lists.newArrayList(trigger));
 
-        StateImpl itemState = new StateImpl(MY_ITEM_ID);
+        StateImpl itemState = new StateImpl("TESTCONTROLLER", MY_ITEM_ID);
         itemState.updateIfChanged(LUMINANCE_LABEL, new StateItemImpl(LUMINANCE_LABEL, new ValueImpl(VALUE_TYPE.NUMBER, 1l)));
         mockStateManager.addState(itemState);
 
@@ -144,7 +145,7 @@ public class RuleEngineTest {
 
 
 
-        StateImpl itemState = new StateImpl(MY_ITEM_ID);
+        StateImpl itemState = new StateImpl("TESTCONTROLLER", MY_ITEM_ID);
         itemState.updateIfChanged("on-off", new StateItemImpl("on-off", new ValueImpl(VALUE_TYPE.STRING, "on")));
         mockStateManager.addState(itemState);
 

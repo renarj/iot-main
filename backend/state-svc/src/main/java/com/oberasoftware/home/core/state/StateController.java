@@ -20,12 +20,12 @@ public class StateController {
     @Autowired
     private StateManager stateManager;
 
-    @RequestMapping(value = "/({controllerId})/({thingId})", method = RequestMethod.GET)
+    @RequestMapping(value = "/controllers({controllerId})/things({thingId})", method = RequestMethod.GET)
     public State getState(@PathVariable String controllerId, @PathVariable String thingId) {
         return stateManager.getState(controllerId, thingId);
     }
 
-    @RequestMapping(value = "/({controllerId})", method = RequestMethod.GET)
+    @RequestMapping(value = "/controllers({controllerId})", method = RequestMethod.GET)
     public Map<String, State> getState(@PathVariable String controllerId) {
         return stateManager.getStates(controllerId);
     }

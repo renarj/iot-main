@@ -1,5 +1,7 @@
 package com.oberasoftware.trainautomation.rocoz21.commands;
 
+import com.oberasoftware.iot.core.legacymodel.OnOffValue;
+
 public class TrackPowerCommand extends Z21Command {
 
     private static final int COMMAND_OFF = 0x80;

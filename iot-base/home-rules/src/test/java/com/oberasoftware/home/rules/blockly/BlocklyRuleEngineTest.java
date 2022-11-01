@@ -6,6 +6,7 @@ import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.rules.RuleEngine;
 import com.oberasoftware.home.rules.TestConfiguration;
 import com.oberasoftware.home.rules.api.general.Rule;
+import com.oberasoftware.home.rules.test.MockAutomationBus;
 import com.oberasoftware.home.rules.test.MockStateManager;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.iot.core.commands.SwitchCommand;
@@ -13,9 +14,9 @@ import com.oberasoftware.iot.core.commands.impl.SwitchCommandImpl;
 import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
-import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.states.StateImpl;
 import com.oberasoftware.iot.core.model.states.StateItemImpl;
+import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.states.ValueImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,7 +61,7 @@ public class BlocklyRuleEngineTest {
         String ruleId = UUID.randomUUID().toString();
         rule.setId(ruleId);
 
-        StateImpl itemState = new StateImpl("75f1c663-b7df-4036-8a2d-5e3d95f6a596");
+        StateImpl itemState = new StateImpl("TEST", "75f1c663-b7df-4036-8a2d-5e3d95f6a596");
         itemState.updateIfChanged(LUMINANCE_LABEL, new StateItemImpl(LUMINANCE_LABEL, new ValueImpl(VALUE_TYPE.NUMBER, 1l)));
         mockStateManager.addState(itemState);
 
@@ -82,7 +83,7 @@ public class BlocklyRuleEngineTest {
         String ruleId = UUID.randomUUID().toString();
         rule.setId(ruleId);
 
-        StateImpl itemState = new StateImpl("75f1c663-b7df-4036-8a2d-5e3d95f6a596");
+        StateImpl itemState = new StateImpl("TEST","75f1c663-b7df-4036-8a2d-5e3d95f6a596");
         itemState.updateIfChanged(LUMINANCE_LABEL, new StateItemImpl(LUMINANCE_LABEL, new ValueImpl(VALUE_TYPE.NUMBER, 20l)));
         mockStateManager.addState(itemState);
 
@@ -102,7 +103,7 @@ public class BlocklyRuleEngineTest {
         String ruleId = UUID.randomUUID().toString();
         rule.setId(ruleId);
 
-        StateImpl itemState = new StateImpl("6d1a20a5-7347-41cf-bdc7-4f6df2035b24");
+        StateImpl itemState = new StateImpl("TEST","6d1a20a5-7347-41cf-bdc7-4f6df2035b24");
         itemState.updateIfChanged("KWH", new StateItemImpl("KWH", new ValueImpl(VALUE_TYPE.NUMBER, 12345)));
         mockStateManager.addState(itemState);
 
@@ -128,7 +129,7 @@ public class BlocklyRuleEngineTest {
         rule.setId(ruleId);
 
         String itemId = "6d1a20a5-7347-41cf-bdc7-4f6df2035b24";
-        StateImpl itemState = new StateImpl(itemId);
+        StateImpl itemState = new StateImpl("TEST",itemId);
         itemState.updateIfChanged("energy", new StateItemImpl("energy", new ValueImpl(VALUE_TYPE.NUMBER, 100)));
         itemState.updateIfChanged("PowerStart", new StateItemImpl("PowerStart", new ValueImpl(VALUE_TYPE.NUMBER, 55)));
         mockStateManager.addState(itemState);

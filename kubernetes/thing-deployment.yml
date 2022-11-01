@@ -20,6 +20,15 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 9010
+        volumeMounts:
+          - name: data
+            mountPath: /jasdb
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: production
+        - name: JASDB_HOME
+          value: /jasdb
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: thing-volume-claim

@@ -9,7 +9,6 @@ import com.oberasoftware.iot.core.robotics.MotionTask;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
-import com.oberasoftware.robo.api.motion.*;
 import com.oberasoftware.iot.core.robotics.servo.ServoDataManager;
 import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 import com.oberasoftware.robo.core.motion.MotionImpl;

@@ -2,11 +2,11 @@ package com.oberasoftware.robo.cloud.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.robo.core.model.BasicCommandImpl;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
+import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import com.oberasoftware.iot.core.robotics.MotionEngine;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
