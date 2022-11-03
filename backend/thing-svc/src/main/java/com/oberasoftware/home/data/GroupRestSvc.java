@@ -19,7 +19,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author Renze de Vries
  */
 @RestController
-@RequestMapping("/groups")
+@RequestMapping("/api")
 public class GroupRestSvc {
     private static final Logger LOG = getLogger(GroupRestSvc.class);
 
@@ -29,23 +29,23 @@ public class GroupRestSvc {
     @Autowired
     private ItemManager itemManager;
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/groups")
     public List<? extends GroupItem> findAllGroups() {
         return groupManager.getItems();
     }
 
-    @RequestMapping(value = "/groups(groupId)")
+    @RequestMapping(value = "/groups({groupId})")
     public GroupItem findGroup(@PathVariable String groupId) {
         return groupManager.getItem(groupId);
     }
 
 
-    @RequestMapping(value = "/controller({controllerId})")
+    @RequestMapping(value = "/groups/controller({controllerId})")
     public List<? extends GroupItem> findGroupsByController(@PathVariable String controllerId) {
         return groupManager.getItems(controllerId);
     }
 
-    @RequestMapping(value = "/groups({groupId})/devices")
+    @RequestMapping(value = "/groups({groupId})/things")
     public List<? extends IotThing> findDevices(@PathVariable String groupId) {
         GroupItem groupItem = groupManager.getItem(groupId);
 
@@ -53,7 +53,7 @@ public class GroupRestSvc {
                 .map(d -> itemManager.findThing(groupItem.getControllerId(), d).get()).collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/groups", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public GroupItem createGroup(@RequestBody GroupItemImpl item) {
         return groupManager.store(item);
     }

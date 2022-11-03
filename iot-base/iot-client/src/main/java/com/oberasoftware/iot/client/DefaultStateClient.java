@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -31,9 +32,13 @@ public class DefaultStateClient implements StateClient {
     @Value("${state-svc.apiToken:}")
     private String apiToken;
 
+    @PostConstruct
+    public void postConstruct() {
+        this.client = HttpUtils.createClient(false);
+    }
+
     @Override
     public void configure(String baseUrl, String apiToken) {
-        this.client = HttpUtils.createClient(false);
         this.baseUrl = baseUrl;
         this.apiToken = apiToken;
     }
@@ -41,7 +46,7 @@ public class DefaultStateClient implements StateClient {
     @Override
     public Optional<State> getState(String controllerId, String thingId) throws IOTException {
         var request = HttpRequest.newBuilder()
-                .uri(UriBuilder.create(baseUrl).resource("controllers", controllerId).resource("things", thingId).build())
+                .uri(UriBuilder.create(baseUrl).resource("state").resource("controllers", controllerId).resource("things", thingId).build())
                 .build();
         LOG.info("Doing HTTP Request: {}", request);
         try {
@@ -57,6 +62,7 @@ public class DefaultStateClient implements StateClient {
                 return Optional.empty();
             }
         } catch (IOException | InterruptedException e) {
+            LOG.error("", e);
             throw new IOTException("Unable to request State from service", e);
         }
 

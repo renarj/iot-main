@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -35,9 +36,13 @@ public class DefaultThingClient implements ThingClient {
     @Value("${thing-svc.apiToken:}")
     private String apiToken;
 
+    @PostConstruct
+    public void postConstruct() {
+        this.client = HttpUtils.createClient(false);
+    }
+
     @Override
     public void configure(String baseUrl, String apiToken) {
-        this.client = HttpUtils.createClient(false);
         this.baseUrl = baseUrl;
         this.apiToken = apiToken;
     }
@@ -93,6 +98,25 @@ public class DefaultThingClient implements ThingClient {
             }
         } catch (IOException | InterruptedException e) {
             throw new IOTException("Unable to create controller", e);
+        }
+    }
+
+    @Override
+    public List<Controller> getControllers() throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl).resource("controllers").build())
+                .build();
+        LOG.info("Doing HTTP Request to retrieve controllers: {}", request);
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            var body = response.body();
+            ObjectMapper mapper = new ObjectMapper();
+            ControllerImpl[] controllers = mapper.readValue(body, ControllerImpl[].class);
+
+            return Lists.newArrayList(controllers);
+        } catch (IOException | InterruptedException e) {
+            throw new IOTException("Unable to request Controllers from service", e);
         }
     }
 

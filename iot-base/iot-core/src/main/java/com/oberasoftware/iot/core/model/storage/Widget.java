@@ -12,5 +12,7 @@ public interface Widget extends MutableItem {
 
     String getWidgetType();
 
-    String getItemId();
+    String getThingId();
+
+    String getControllerId();
 }

@@ -1,6 +1,7 @@
 package com.oberasoftware.home.web;
 
-import com.oberasoftware.iot.core.managers.ItemManager;
+import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.managers.RuleManager;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +21,22 @@ import java.util.Optional;
 public class RulesAdminController {
 
     @Autowired
-    private ItemManager itemManager;
+    private ThingClient thingClient;
 
     @Autowired
     private RuleManager ruleManager;
 
     @RequestMapping
-    public String getRules(Model model) {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
+    public String getRules(Model model) throws IOTException {
+        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
         model.addAttribute("controllers", controllers);
 
         return "admin/rules";
     }
 
     @RequestMapping("/{controllerId}")
-    public String getRules(@PathVariable String controllerId, Model model) {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
+    public String getRules(@PathVariable String controllerId, Model model) throws IOTException {
+        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
         List<RuleItem> ruleItems = ruleManager.getRules(controllerId);
 
         model.addAttribute("controllers", controllers);
@@ -46,8 +47,8 @@ public class RulesAdminController {
     }
 
     @RequestMapping("/{controllerId}/{ruleId}")
-    public String editRule(@PathVariable String controllerId, @PathVariable String ruleId, Model model) {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
+    public String editRule(@PathVariable String controllerId, @PathVariable String ruleId, Model model) throws IOTException {
+        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
         List<RuleItem> ruleItems = ruleManager.getRules(controllerId);
         Optional<RuleItem> selectedRule = ruleManager.getRule(ruleId);
 
@@ -63,8 +64,8 @@ public class RulesAdminController {
     }
 
     @RequestMapping("/{controllerId}/new")
-    public String newRule(@PathVariable String controllerId, Model model) {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = itemManager.findControllers();
+    public String newRule(@PathVariable String controllerId, Model model) throws IOTException {
+        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
         List<RuleItem> ruleItems = ruleManager.getRules(controllerId);
 
         model.addAttribute("controllers", controllers);

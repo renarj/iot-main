@@ -127,7 +127,7 @@ public class CassandraStateDAO implements StateDAO {
             Statement statement = build();
             ResultSet resultSet = session.execute(statement);
 
-            Map<String, List<StateItem>> stateMap = new HashMap<>();
+            Map<String, List<StateItemImpl>> stateMap = new HashMap<>();
             resultSet.all().forEach(r -> {
                 String controllerId = r.get("controller_id", String.class);
                 String itemId = r.get("item_id", String.class);

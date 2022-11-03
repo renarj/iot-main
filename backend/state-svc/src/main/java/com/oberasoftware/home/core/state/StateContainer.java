@@ -38,7 +38,7 @@ public class StateContainer {
         topicListener.register(received -> {
             try {
                 ValueTransportMessage message = mapFromJson(received, ValueTransportMessage.class);
-                LOG.debug("Received value: {}", message);
+                LOG.info("Received value: {}", message);
                 stateManager.updateItemState(message.getControllerId(),
                         message.getThingId(), message.getAttribute(), message.getValue());
             } catch(Exception e) {

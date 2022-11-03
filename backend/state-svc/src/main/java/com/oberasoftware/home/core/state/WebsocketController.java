@@ -24,7 +24,7 @@ public class WebsocketController implements EventHandler {
 
     @EventSubscribe
     public void receiveStateUpdate(StateUpdateEvent stateUpdateEvent) {
-        LOG.debug("Received state: {}", stateUpdateEvent);
+        LOG.info("Received state: {}", stateUpdateEvent);
 
         var state = stateUpdateEvent.getState();
         String label = stateUpdateEvent.getAttribute();

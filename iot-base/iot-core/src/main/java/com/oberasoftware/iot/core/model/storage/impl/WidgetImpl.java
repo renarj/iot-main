@@ -19,18 +19,21 @@ public class WidgetImpl implements Widget {
 
     private String containerId;
 
-    private String itemId;
+    private String thingId;
+
+    private String controllerId;
 
     private long weight = 0;
 
     private Map<String, String> properties = new HashMap<>();
 
-    public WidgetImpl(String id, String name, String containerId, String widgetType, String itemId, Map<String, String> properties, long weight) {
+    public WidgetImpl(String id, String name, String containerId, String widgetType, String thingId, String controllerId, Map<String, String> properties, long weight) {
         this.id = id;
         this.name = name;
         this.containerId = containerId;
         this.widgetType = widgetType;
-        this.itemId = itemId;
+        this.thingId = thingId;
+        this.controllerId = controllerId;
         this.properties = properties;
         this.weight = weight;
     }
@@ -91,12 +94,22 @@ public class WidgetImpl implements Widget {
 
     @Override
     @JasDBProperty
-    public String getItemId() {
-        return itemId;
+    public String getThingId() {
+        return thingId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setThingId(String thingId) {
+        this.thingId = thingId;
+    }
+
+    @Override
+    @JasDBProperty
+    public String getControllerId() {
+        return controllerId;
+    }
+
+    public void setControllerId(String controllerId) {
+        this.controllerId = controllerId;
     }
 
     @Override
@@ -115,12 +128,15 @@ public class WidgetImpl implements Widget {
 
     @Override
     public String toString() {
-        return "Widget{" +
+        return "WidgetImpl{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", widgetType='" + widgetType + '\'' +
                 ", containerId='" + containerId + '\'' +
-                ", itemId='" + itemId + '\'' +
+                ", thingId='" + thingId + '\'' +
+                ", controllerId='" + controllerId + '\'' +
+                ", weight=" + weight +
+                ", properties=" + properties +
                 '}';
     }
 }

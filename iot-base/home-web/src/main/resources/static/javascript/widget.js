@@ -22,23 +22,24 @@ function handleStateUpdate(state) {
     console.log("Received a state update: " + state);
 
     var itemId = state.itemId;
+    var controllerId = state.controllerId;
     var stateItems = state.stateItems;
     $.each(stateItems, function (i, stateItem) {
-        var label = stateItem.label;
-        if(label == "on-off") {
+        var label = stateItem.attribute;
+        if(label === "on-off") {
             console.log("Received an on-off event: " + stateItem.value.value);
 
             var iSwitch = $("input[name=" + itemId + "_switch]");
 
             var value = stateItem.value.value;
-            if(value == "off") {
+            if(value === "off") {
                 //set switch to off and not trigger event
                 iSwitch.bootstrapSwitch("state", false, true);
             } else {
                 //set switch to on and not trigger event
                 iSwitch.bootstrapSwitch("state", true, true);
             }
-        } else if(label == "value") {
+        } else if(label === "value") {
             //slider value potentially
             var iDimmer = $("input[name=" + itemId + "_slider]");
             if (iDimmer.length) {
@@ -47,7 +48,7 @@ function handleStateUpdate(state) {
             } else {
                 setLabelValue(itemId, label, stateItem);
             }
-        } else if(label == "rgb") {
+        } else if(label === "rgb") {
             console.log("Setting rgb: " + stateItem.value.value + " for device: " + itemId);
 
             var colorPicker = $("input[name=" + itemId + "_color]");
@@ -55,14 +56,14 @@ function handleStateUpdate(state) {
 
         } else {
             //most likely a raw value on a label
-            setLabelValue(itemId, label, stateItem)
+            setLabelValue(controllerId, itemId, label, stateItem)
         }
     })
 }
 
-function setLabelValue(itemId, label, stateItem) {
-    console.log("Checking for label for item: " + itemId + " with label: " + label);
-    var valueLabel = $("label[itemId=" + itemId + "][labelId=" + label + "]");
+function setLabelValue(controllerId, thingId, label, stateItem) {
+    console.log("Checking for label for item: " + thingId + " controller: " + controllerId + " with label: " + label);
+    var valueLabel = $("label[thingId='" + thingId + "'][labelId='" + label + "'][controllerId='" + controllerId + "']");
 
     var rawValue = stateItem.value.value;
     if(isNumeric(rawValue)) {
@@ -72,7 +73,7 @@ function setLabelValue(itemId, label, stateItem) {
         valueLabel.text(rawValue);
     }
 
-    var graphs = $("li.graph[itemId=" + itemId + "][labelId=" + label + "]");
+    var graphs = $("li.graph[thingId='" + thingId + "'][labelId='" + label + "'][controllerId='" + controllerId + "']");
     if(graphs.length > 0) {
         $.each(graphs, function(i, graph) {
             var widgetId = graph.getAttribute("id");
@@ -482,7 +483,8 @@ function renderLabel(item, containerId) {
         "widgetId": item.id,
         "name": item.name,
         "value": 0,
-        "itemId": item.itemId,
+        "thingId": item.thingId,
+        "controllerId": item.controllerId,
         "label": label,
         "unit": unit,
         "index" : item.properties.index
@@ -491,7 +493,7 @@ function renderLabel(item, containerId) {
     renderWidgetTemplate("labelTemplate", data, item, containerId);
 
     //lets get the initial state for the widget
-    forceUpdateDeviceState(item.itemId);
+    forceUpdateDeviceState(item.controllerId, item.thingId);
 }
 
 function renderWidgetTemplate(templateName, data, item, containerId) {
@@ -499,11 +501,13 @@ function renderWidgetTemplate(templateName, data, item, containerId) {
     appendContainer(rendered, item.id, item.properties.column, item.properties.index, containerId)
 }
 
-function forceUpdateDeviceState(itemId) {
-    $.get("/data/state(" + itemId + ")", function(data){
+function forceUpdateDeviceState(controllerId, thingId) {
+    $.get("/data/controllers(" + controllerId + ")/things(" + thingId + ")/state", function(data){
         if(!isEmpty(data)) {
             handleStateUpdate(data);
         }
+    }).fail(function (jqXHR, textStatus, error) {
+        console.log("Could not retrieve state update: " + textStatus + " and error: " + error);
     });
 }
 
@@ -513,14 +517,14 @@ function appendContainer(widgetHtml, index, columnId, widgetId, containerId) {
     } else {
         var container = $("div[containerId=" + containerId + "]");
         var mode = container.attr("mode");
-        if(mode == "list") {
+        if(mode === "list") {
             var list = $("ul[containerId=" + containerId + "]");
 
             console.log("Drawing a list widget");
             //list.append(widgetHtml);
 
             insertInColumn(widgetHtml, index, list);
-        } else if(mode == "grid") {
+        } else if(mode === "grid") {
             console.log("Drawing in a grid");
 
             //var currentColumn = container.attr("currentColumn");

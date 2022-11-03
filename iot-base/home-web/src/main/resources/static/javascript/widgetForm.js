@@ -77,7 +77,8 @@ $(document).ready(function() {
                 })
 
                 var selectedController = list.find('option:selected').val();
-                loadPlugins(selectedController);
+                loadThings(selectedController);
+                // loadPlugins(selectedController);
             }
         });
     }
@@ -128,48 +129,56 @@ $(document).ready(function() {
 
     }
 
-    $("#controllerList").change(function() {
-        var selectedController = $("#controllerList").find('option:selected').val();
-        loadPlugins(selectedController);
+    // $("#controllerList").change(function() {
+    //     var selectedController = $("#controllerList").find('option:selected').val();
+    //     loadPlugins(selectedController);
+    // });
+
+    // function loadPlugins(controllerId) {
+    //     console.log("Retrieving plugins for controller: " + controllerId);
+    //     $.get("/data/controllers(" + controllerId + ")/plugins", function(data){
+    //         if(!isEmpty(data)) {
+    //             var list = $("#pluginList");
+    //             list.empty();
+    //             list.append(new Option("", ""));
+    //
+    //             $.each(data, function (i, ci) {
+    //                 list.append(new Option(ci.name, ci.pluginId));
+    //             })
+    //         }
+    //     })
+    // }
+
+    function getSelectedController() {
+        return $("#controllerList").find('option:selected').val();
+    }
+
+    function getSelectedThing() {
+        return $("#thingList").find('option:selected').val();
+    }
+
+    $('#controllerList').change(function() {
+        loadThings(getSelectedController());
     });
 
-    function loadPlugins(controllerId) {
-        console.log("Retrieving plugins for controller: " + controllerId);
-        $.get("/data/controllers(" + controllerId + ")/plugins", function(data){
+    function loadThings(selectedController) {
+        console.log("Retrieving Things for controller: " + selectedController);
+        $.get("/data/controllers(" + selectedController + ")/things", function(data){
+            console.log("Received data: " + JSON.stringify(data))
             if(!isEmpty(data)) {
-                var list = $("#pluginList");
+                var list = $("#thingList");
                 list.empty();
                 list.append(new Option("", ""));
 
-                $.each(data, function (i, ci) {
-                    list.append(new Option(ci.name, ci.pluginId));
+                $.each(data, function (i, thing) {
+                    list.append(new Option(thing.friendlyName, thing.thingId));
                 })
             }
         })
     }
 
-    $("#pluginList").change(function() {
-        var selectedController = $("#controllerList").find('option:selected').val();
-        var selectedPlugin = $("#pluginList").find('option:selected').val();
-
-        console.log("Retrieving devices for controller: " + selectedController + " and plugin: " + selectedPlugin);
-        $.get("/data/controllers(" + selectedController + ")/plugins("+selectedPlugin+")/devices", function(data){
-            if(!isEmpty(data)) {
-                var list = $("#deviceList");
-                list.empty();
-                list.append(new Option("", ""));
-
-                $.each(data, function (i, deviceRow) {
-                    var item = deviceRow.item;
-                    list.append(new Option(item.name, item.id));
-                })
-            }
-        })
-    });
-
-    $("#deviceList").change(function() {
-        var selectedDevice = $("#deviceList").find('option:selected').val();
-        loadLabels(selectedDevice);
+    $('#thingList').change(function() {
+        loadLabels(getSelectedController(), getSelectedThing());
     });
 
     $("#virtualList").change(function() {
@@ -177,19 +186,17 @@ $(document).ready(function() {
         loadLabels(selectedVirtual);
     });
 
-    function loadLabels(itemId) {
+    function loadLabels(controllerId, itemId) {
         $('#widgetList').attr('disabled', false);
 
-        $.get("/data/state(" + itemId + ")", function(data){
+        $.get("/data/controllers(" + controllerId + ")/things(" + itemId + ")", function(data){
             var list = $("#widgetLabel");
             list.empty();
             list.append(new Option("Custom", "custom"));
 
             if(!isEmpty(data)) {
-                $.each(data.stateItems, function (i, stateItem) {
-                    var label = stateItem.label;
-
-                    list.append(new Option(label, label));
+                $.each(data.attributes, function (i, attribute) {
+                    list.append(new Option(attribute, attribute));
                 })
             }
         })
@@ -229,16 +236,16 @@ $(document).ready(function() {
         var name = $("#itemName").val();
         var container = $("#containerId").val();
         var widget = $("#widgetList").find('option:selected').val();
-        var deviceId = $("#deviceList").find('option:selected').val();
+        var controllerId = getSelectedController();
+        var thingId = getSelectedThing();
         var virtualItemId = $("#virtualList").find('option:selected').val();
         var selectedSource = $("#sourceItem").find('option:selected').val();
 
         var column = getCurrentColumn(container);
         var widgetIndex = getCurrentWidgetSize(container, column) + 1;
 
-        var itemId = deviceId;
         if(selectedSource == "group" || selectedSource == "virtual") {
-            itemId = virtualItemId;
+            thingId = virtualItemId;
         }
 
         console.log("Creating ui item name: " + name);
@@ -249,15 +256,16 @@ $(document).ready(function() {
             "name" : name,
             "widgetType" : widget,
             "containerId" : container,
-            "itemId" : itemId,
+            "thingId" : thingId,
+            "controllerId": controllerId,
             "properties" : {
                 "column" : column,
                 "index" : widgetIndex
             }
         };
-        if(widget == "label" || widget == "graph") {
+        if(widget === "label" || widget === "graph") {
             var label = $("#widgetLabel").find('option:selected').val();
-            if(label == "custom") {
+            if(label === "custom") {
                 label = $("#customLabel").val();
             }
 
@@ -267,7 +275,7 @@ $(document).ready(function() {
             item.properties.label = label;
             item.properties.unit = unit;
 
-            if(widget == "graph") {
+            if(widget === "graph") {
                 var period = $("#graphTime").find('option:selected').val();
                 var aggregation = $("#graphGrouping").find('option:selected').val();
 
