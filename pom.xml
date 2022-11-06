@@ -29,7 +29,6 @@
 
     <modules>
         <module>robotics/robo-core</module>
-        <module>robotics/robo-client</module>
         <module>robotics/robo-cloud</module>
         <module>robotics/dynamixel-core</module>
         <module>robotics/dynamixel-web</module>
@@ -151,11 +150,17 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <compilerArgs>
+                        --enable-preview
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <additionalOptions>--enable-preview</additionalOptions>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

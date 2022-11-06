@@ -38,11 +38,12 @@ public class StateContainer {
         topicListener.register(received -> {
             try {
                 ValueTransportMessage message = mapFromJson(received, ValueTransportMessage.class);
-                LOG.info("Received value: {}", message);
+                LOG.debug("Received value: {}", message);
                 stateManager.updateItemState(message.getControllerId(),
                         message.getThingId(), message.getAttribute(), message.getValue());
             } catch(Exception e) {
-                LOG.error("Fatal error, ignoring so we can continue processing state messages", e);
+                LOG.error("Fatal error, ignoring so we can continue processing state messages: {}", e.getMessage());
+                LOG.debug("Full stacktrace", e);
             }
         });
 

@@ -14,5 +14,7 @@ public interface ConverterManager {
      * @param <S>        The source type
      * @return The converted source into a target message type
      */
-    <T, S> T convert(S source, Class<T> targetType);
+    <T, S> ConverterResult<T> convert(S source, Class<T> targetType);
+
+
 }

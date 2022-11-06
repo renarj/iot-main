@@ -3,21 +3,25 @@ package com.oberasoftware.robo.cloud;
 import com.oberasoftware.base.event.Event;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.client.api.CommandServiceClient;
-import com.oberasoftware.home.client.api.StateServiceClient;
-import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
+import com.oberasoftware.iot.core.client.CommandServiceClient;
+import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.robotics.RemoteDriver;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.commands.CommandListener;
 import com.oberasoftware.iot.core.robotics.commands.RobotCommand;
-import com.oberasoftware.robo.cloud.handlers.RobotStateServiceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,13 +38,10 @@ public class RemoteCloudDriver implements RemoteDriver, EventHandler {
     private MQTTTopicEventBus mqttTopicEventBus;
 
     @Autowired
-    private StateServiceClient stateServiceClient;
+    private ThingClient thingClient;
 
     @Autowired
     private CommandServiceClient commandServiceClient;
-
-    @Autowired
-    private RobotStateServiceListener stateServiceListener;
 
     @Autowired
     private KeepAliveHandler keepAliveHandler;
@@ -52,15 +53,21 @@ public class RemoteCloudDriver implements RemoteDriver, EventHandler {
         LOG.info("Connecting to remote Robot Cloud");
 
         if (robot.isRemote()) {
-            stateServiceClient.listen(stateServiceListener);
-            stateServiceClient.connect();
+//            stateServiceClient.listen(stateServiceListener);
+//            stateServiceClient.connect();
         } else {
             LOG.info("Listening to remote commands");
             mqttTopicEventBus.connect();
 
             mqttTopicEventBus.registerHandler(this);
-            mqttTopicEventBus.subscribe("/commands/" + robot.getName() + "/#");
+            mqttTopicEventBus.subscribe("commands/" + robot.getName() + "/#");
             keepAliveHandler.start(robot);
+        }
+
+        try {
+            thingClient.createOrUpdate(new ControllerImpl(robot.getName(), null, new HashMap<>()));
+        } catch (IOTException e) {
+            throw new RuntimeIOTException("Could not create controller in remote registry", e);
         }
     }
 
@@ -86,6 +93,16 @@ public class RemoteCloudDriver implements RemoteDriver, EventHandler {
         LOG.info("Registering command listener");
 
         commandListeners.add(commandListener);
+    }
+
+    @Override
+    public void registerThing(IotThing thing) {
+        LOG.info("Registering robot component to IoT Thing Service: {}", thing);
+        try {
+            thingClient.createOrUpdate(thing);
+        } catch (IOTException e) {
+            LOG.error("Could not register thing", e);
+        }
     }
 
     @EventSubscribe

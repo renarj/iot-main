@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-client</artifactId>
+            <artifactId>iot-client</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

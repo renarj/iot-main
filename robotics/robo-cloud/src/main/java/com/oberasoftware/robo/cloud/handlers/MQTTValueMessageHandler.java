@@ -2,14 +2,14 @@ package com.oberasoftware.robo.cloud.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.model.ValueTransportMessage;
 import com.oberasoftware.home.core.mqtt.MQTTMessage;
 import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
-import com.oberasoftware.iot.core.util.ConverterHelper;
+import com.oberasoftware.iot.core.events.impl.ThingValueEventImpl;
+import com.oberasoftware.iot.core.model.ValueTransportMessage;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.events.ValueEventImpl;
+import com.oberasoftware.iot.core.util.ConverterHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +32,6 @@ public class MQTTValueMessageHandler implements EventHandler {
         LOG.info("Received sensor value information: {}", message);
 
         Robot robot = robotRegistry.getRobot(message.getControllerId());
-        robot.publish(new ValueEventImpl(message.getControllerId(), message.getThingId(), message.getAttribute(), message.getValue()));
-    }
-
-    public static void main(String[] args) {
-        String j = "{\"value\":{\"value\":520,\"type\":\"NUMBER\"},\"controllerId\":\"max\",\"channelId\":\"Hand\",\"label\":\"5\"}";
-        ValueTransportMessage t = ConverterHelper.mapFromJson(j, ValueTransportMessage.class);
-        t.getValue();
-
+        robot.publish(new ThingValueEventImpl(message.getControllerId(), message.getThingId(), message.getValue(), message.getAttribute()));
     }
 }

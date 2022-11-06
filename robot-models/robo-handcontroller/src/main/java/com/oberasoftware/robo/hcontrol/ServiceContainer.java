@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.hcontrol;
 
-import com.oberasoftware.home.client.command.CommandClientConfiguration;
+import com.oberasoftware.iot.client.ClientConfiguration;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Import;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @SpringBootApplication
-@ComponentScan
-@Import(CommandClientConfiguration.class)
+@Import(ClientConfiguration.class)
 public class ServiceContainer {
     private static final Logger LOG = getLogger(ServiceContainer.class);
 

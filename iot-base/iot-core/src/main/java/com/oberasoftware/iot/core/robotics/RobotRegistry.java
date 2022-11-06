@@ -10,5 +10,7 @@ public interface RobotRegistry {
 
     List<Robot> getRobots();
 
+    Robot getDefaultRobot();
+
     void register(Robot robot);
 }

@@ -9,7 +9,7 @@ import com.oberasoftware.iot.core.robotics.RemoteDriver;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.commands.CommandListener;
 import com.oberasoftware.iot.core.robotics.commands.RobotCommand;
-import com.oberasoftware.iot.core.robotics.events.RobotEvent;
+import com.oberasoftware.iot.core.robotics.events.RobotValueEvent;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +32,7 @@ public class RemoteEnabledRobot implements Robot, CommandListener, EventHandler 
         this.isRemote = isRemote;
         remoteDriver.register(this);
 
-        if(!isRemote) {
-            //to ensure we can send remote events to the cloud
-            this.localRobot.listen(this);
-        }
+        this.localRobot.listen(this);
     }
 
     @Override
@@ -94,7 +91,7 @@ public class RemoteEnabledRobot implements Robot, CommandListener, EventHandler 
     }
 
     @EventSubscribe
-    public void receiveRobotEvent(RobotEvent robotEvent) {
+    public void receiveRobotEvent(RobotValueEvent robotEvent) {
         LOG.debug("Received a robot event: {}", robotEvent);
         remoteDriver.publish(robotEvent);
     }

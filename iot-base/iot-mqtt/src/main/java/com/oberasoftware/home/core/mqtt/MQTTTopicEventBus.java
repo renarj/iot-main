@@ -134,12 +134,19 @@ public class MQTTTopicEventBus implements DistributedTopicEventBus {
     @Override
     public void publish(Event event, Object... objects) {
         LOG.debug("Incoming event: {}", event);
-        MQTTMessage message = convertManager.convert(event, MQTTMessage.class);
-        if(message != null) {
-            LOG.debug("Converted to MQTT message: {}", message);
-            broker.publish(message);
+
+        if(broker != null && broker.isConnected()) {
+            var conversionResult = convertManager.convert(event, MQTTMessage.class);
+            if (conversionResult.isEmpty()) {
+                throw new ConversionException("Unable to convert event: " + event);
+            }
+
+            conversionResult.getResults().forEach(cr -> {
+                LOG.debug("Converted to MQTT message: {}", cr);
+                broker.publish(cr);
+            });
         } else {
-            throw new ConversionException("Unable to convert event: " + event);
+            LOG.warn("Broker is not connected cannot send event: {}", event);
         }
     }
 

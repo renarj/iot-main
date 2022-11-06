@@ -3,9 +3,9 @@ package com.oberasoftware.robo.cloud;
 import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
+import com.oberasoftware.iot.core.events.ThingValueEvent;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.SpeechEngine;
-import com.oberasoftware.iot.core.robotics.events.ValueEventImpl;
 import com.oberasoftware.robo.cloud.motion.RemoteMotionEngine;
 import com.oberasoftware.robo.core.CoreConfiguration;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
@@ -71,7 +71,7 @@ public class RemoteRobotTest {
         }
 
         @EventSubscribe
-        public void receive(ValueEventImpl valueEvent) {
+        public void receive(ThingValueEvent valueEvent) {
             LOG.info("Received a distance: {}", valueEvent.getValue().asString());
             if(valueEvent.getControllerId().equals("max") && valueEvent.getAttribute().equals("distance")) {
                 int distance = valueEvent.getValue().getValue();
@@ -97,9 +97,9 @@ public class RemoteRobotTest {
         }
 
         @EventSubscribe
-        public void receive(ValueEventImpl valueEvent) {
+        public void receive(ThingValueEvent valueEvent) {
             LOG.info("Received an event for pep: {}", valueEvent);
-            if(valueEvent.getControllerId().equals("peppy") && valueEvent.getItemId().equals("head")) {
+            if(valueEvent.getControllerId().equals("peppy") && valueEvent.getThingId().equals("head")) {
                 if(valueEvent.getValue().asString().equals("true")) {
 
                     max.getMotionEngine().runMotion("Bravo");

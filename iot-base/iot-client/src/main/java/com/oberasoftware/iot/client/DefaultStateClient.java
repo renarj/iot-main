@@ -53,11 +53,16 @@ public class DefaultStateClient implements StateClient {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if(response.statusCode() == HttpStatus.OK.value()) {
                 var body = response.body();
-                ObjectMapper mapper = new ObjectMapper();
-                StateImpl state = mapper.readValue(body, StateImpl.class);
+                if(body.contains("stateItems")) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    StateImpl state = mapper.readValue(body, StateImpl.class);
 
-                LOG.info("Found State: {}", state);
-                return Optional.of(state);
+                    LOG.info("Found State: {}", state);
+                    return Optional.of(state);
+                } else {
+                    LOG.info("No state was found for controller: {} thing: {}", controllerId, thingId);
+                    return Optional.empty();
+                }
             } else {
                 return Optional.empty();
             }

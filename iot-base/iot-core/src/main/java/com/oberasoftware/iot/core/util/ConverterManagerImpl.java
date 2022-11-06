@@ -3,6 +3,7 @@ package com.oberasoftware.iot.core.util;
 import com.google.common.reflect.TypeToken;
 import com.oberasoftware.iot.core.robotics.converters.ConverterManager;
 import com.oberasoftware.iot.core.robotics.converters.Converter;
+import com.oberasoftware.iot.core.robotics.converters.ConverterResult;
 import com.oberasoftware.iot.core.robotics.converters.TypeConverter;
 import com.oberasoftware.iot.core.exceptions.ConversionException;
 import org.slf4j.Logger;
@@ -13,9 +14,11 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -48,10 +51,14 @@ public class ConverterManagerImpl implements ConverterManager {
                 Class<?>[] params = m.getParameterTypes();
                 if(params.length == 1) {
                     Class<?> sourceType = params[0];
-                    Class<?> returnType = m.getReturnType();
+
+                    var returnType = m.getReturnType();
+                    if(!tc.targetClass().equals(Object.class)) {
+                        returnType = tc.targetClass();
+                    }
 
                     String key = format(KEY_FORMAT, sourceType, returnType);
-                    LOG.debug("Registered a converted: {} with method: {} in converter: {}", key, m.getName(), converter);
+                    LOG.info("Registered a converted: {} with method: {} in converter: {}", key, m.getName(), converter);
 
                     mappedConverters.put(key, new ConverterPlaceHolder(converter, m));
                 }
@@ -60,7 +67,7 @@ public class ConverterManagerImpl implements ConverterManager {
     }
 
     @Override
-    public <T, S> T convert(S s, Class<T> targetClass) {
+    public <T, S> ConverterResult<T> convert(S s, Class<T> targetClass) {
         String targetType = targetClass.toString();
 
         ConverterPlaceHolder placeHolder = findConverter(s, targetType);
@@ -68,7 +75,12 @@ public class ConverterManagerImpl implements ConverterManager {
             Method convertMethod = placeHolder.getMethod();
             try {
                 Object result = convertMethod.invoke(placeHolder.getConverter(), s);
-                return targetClass.cast(result);
+                if(result instanceof Collection<?>) {
+                    var list = ((Collection<?>)result).stream().map(targetClass::cast).collect(Collectors.toList());
+                    return new ConverterResult<>(list);
+                } else {
+                    return new ConverterResult<>(targetClass.cast(result));
+                }
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new ConversionException("Unable to convert type: " + s, e);
             }

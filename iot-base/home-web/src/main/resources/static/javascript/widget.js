@@ -8,7 +8,7 @@ Highcharts.setOptions({
 
 function connect() {
     console.log("Connecting to websocket");
-    var socket = new SockJS('/ws');
+    var socket = new SockJS('http://localhost:9006/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame) {
         console.log('Connected: ' + frame);
@@ -19,13 +19,14 @@ function connect() {
 }
 
 function handleStateUpdate(state) {
-    console.log("Received a state update: " + state);
+    console.log("Received a state update: " + JSON.stringify(state));
 
     var itemId = state.itemId;
     var controllerId = state.controllerId;
-    var stateItems = state.stateItems;
-    $.each(stateItems, function (i, stateItem) {
+
+    $.each(state.stateItems, function (i, stateItem) {
         var label = stateItem.attribute;
+
         if(label === "on-off") {
             console.log("Received an on-off event: " + stateItem.value.value);
 
@@ -46,7 +47,7 @@ function handleStateUpdate(state) {
                 console.log("Setting slider value: " + stateItem.value.value + " for device: " + itemId)
                 iDimmer.slider('setValue', stateItem.value.value);
             } else {
-                setLabelValue(itemId, label, stateItem);
+                setLabelValue(controllerId, itemId, label, stateItem);
             }
         } else if(label === "rgb") {
             console.log("Setting rgb: " + stateItem.value.value + " for device: " + itemId);
@@ -73,7 +74,7 @@ function setLabelValue(controllerId, thingId, label, stateItem) {
         valueLabel.text(rawValue);
     }
 
-    var graphs = $("li.graph[thingId='" + thingId + "'][labelId='" + label + "'][controllerId='" + controllerId + "']");
+    var graphs = $("div.graph[thingId='" + thingId + "'][labelId='" + label + "'][controllerId='" + controllerId + "']");
     if(graphs.length > 0) {
         $.each(graphs, function(i, graph) {
             var widgetId = graph.getAttribute("id");
@@ -309,7 +310,8 @@ function renderGraph(containerId, item) {
 
     var data = {
         "widgetId": item.id,
-        "itemId": item.itemId,
+        "thingId": item.thingId,
+        "controllerId": item.controllerId,
         "name": item.name,
         "label": label,
         "index" : item.properties.index
@@ -366,14 +368,14 @@ function renderGraph(containerId, item) {
     });
 
     periodBox.change(function() {
-        loadGraphData(item.itemId, label, groupingBox.val(), periodBox.val(), widget);
+        // loadGraphData(item.itemId, label, groupingBox.val(), periodBox.val(), widget);
     });
     groupingBox.change(function() {
         console.log("GRoup change")
-        loadGraphData(item.itemId, label, groupingBox.val(), periodBox.val(), widget);
+        // loadGraphData(item.itemId, label, groupingBox.val(), periodBox.val(), widget);
     });
 
-    loadGraphData(item.itemId, label, grouping, period, widget);
+    // loadGraphData(item.itemId, label, grouping, period, widget);
 }
 
 function loadGraphData(itemId, label, grouping, period, widget) {

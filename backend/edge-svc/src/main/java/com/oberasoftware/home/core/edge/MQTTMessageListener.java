@@ -26,16 +26,21 @@ public class MQTTMessageListener implements EventHandler {
 
     @EventSubscribe
     public void receive(MQTTMessage message) {
-        LOG.info("Received a MQTT message: {}", message);
+        LOG.debug("Received a MQTT message: {}", message);
         ParsedPath parsedPath = MQTTPathParser.parsePath(message.getTopic());
 
-        ValueTransportMessage parsedMessage = mapFromJson(message.getMessage(), ValueTransportMessage.class);
-        if(validateMessage(parsedPath, parsedMessage)) {
-            LOG.info("Message is valid, forwarding to Inner Queues: {}", message.getMessage());
+        try {
+            ValueTransportMessage parsedMessage = mapFromJson(message.getMessage(), ValueTransportMessage.class);
+            if (validateMessage(parsedPath, parsedMessage)) {
+                LOG.debug("Message is valid, forwarding to Inner Queues: {}", message.getMessage());
 
-            topicSender.publish(message.getMessage());
-        } else {
-            LOG.warn("Message is invalid: {}", message.getMessage());
+                topicSender.publish(message.getMessage());
+            } else {
+                LOG.warn("Message is invalid: {}", message.getMessage());
+            }
+        } catch(Exception e) {
+            LOG.error("Fatal error deserializing, ignoring so we can continue processing state messages: {}", e.getMessage());
+            LOG.debug("Full stacktrace", e);
         }
     }
 

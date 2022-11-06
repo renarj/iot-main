@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.hcontrol;
 
 import com.google.common.base.Stopwatch;
-import com.oberasoftware.home.client.api.CommandServiceClient;
+import com.oberasoftware.iot.core.client.CommandServiceClient;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.BasicCommandBuilder;
 import org.slf4j.Logger;

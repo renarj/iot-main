@@ -1,7 +1,7 @@
-package com.oberasoftware.home.client.command;
+package com.oberasoftware.iot.client;
 
-import com.oberasoftware.home.client.api.ClientResponse;
-import com.oberasoftware.home.client.api.CommandServiceClient;
+import com.oberasoftware.iot.core.client.ClientResponse;
+import com.oberasoftware.iot.core.client.CommandServiceClient;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import org.slf4j.Logger;

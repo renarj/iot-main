@@ -15,7 +15,7 @@ import static com.oberasoftware.iot.core.util.ConverterHelper.mapToJson;
  * @author Renze de Vries
  */
 @Component
-public class DeviceValueToMQTTConverter implements Converter {
+public class ThingValueToMQTTConverter implements Converter {
 
     //controller/device/label
     private static final String TOPIC_FORMAT = "states/%s/%s/%s";

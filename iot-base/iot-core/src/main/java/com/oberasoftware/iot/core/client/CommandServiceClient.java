@@ -1,4 +1,4 @@
-package com.oberasoftware.home.client.api;
+package com.oberasoftware.iot.core.client;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
 

@@ -1,13 +1,12 @@
 package com.oberasoftware.robo.core;
 
+import com.google.common.collect.Lists;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Renze de Vries
@@ -15,20 +14,29 @@ import java.util.concurrent.ConcurrentMap;
 @Component
 public class RobotRegistryImpl implements RobotRegistry {
 
-    private ConcurrentMap<String, Robot> robotConcurrentMap = new ConcurrentHashMap<>();
+    private Robot robot;
 
     @Override
     public Robot getRobot(String name) {
-        return robotConcurrentMap.get(name);
+        if(robot.getName().equalsIgnoreCase(name)) {
+            return robot;
+        } else {
+            throw new RuntimeIOTException("This is a singleton robot registry, no robot with name: " + name + " registered");
+        }
+    }
+
+    @Override
+    public Robot getDefaultRobot() {
+        return robot;
     }
 
     @Override
     public List<Robot> getRobots() {
-        return new ArrayList<>(robotConcurrentMap.values());
+        return Lists.newArrayList(robot);
     }
 
     @Override
     public void register(Robot robot) {
-        robotConcurrentMap.putIfAbsent(robot.getName(), robot);
+        this.robot = robot;
     }
 }

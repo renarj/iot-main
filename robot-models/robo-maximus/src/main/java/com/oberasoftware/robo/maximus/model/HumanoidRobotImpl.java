@@ -3,6 +3,8 @@ package com.oberasoftware.robo.maximus.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.model.storage.impl.ThingBuilder;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
@@ -20,6 +22,7 @@ import com.oberasoftware.robo.maximus.motion.MotionEngineImpl;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,6 +87,36 @@ public class HumanoidRobotImpl implements HumanoidRobot {
         this.sensors.forEach(s -> {
             s.activate(robotCore);
         });
+
+        registerRemoteCapabilities(robotCore, motionControl);
+    }
+
+    private void registerRemoteCapabilities(Robot robotCore, JointControl motionControl) {
+        if(robotCore.isRemote()) {
+            var controllerId = robot.getName();
+            robotCore.getRemoteDriver().registerThing(new IotThingImpl(robot.getName(), "joints", "joints", "JointControl", null, new HashMap<>()));
+            robotCore.getRemoteDriver().registerThing(new IotThingImpl(robot.getName(), "servos", "servos", "ServoDriver", null, new HashMap<>()));
+
+            motionControl.getJoints().forEach(j -> {
+                var joint = new IotThingImpl(robot.getName(), "joints." + j.getID(), j.getName(), "joints", "joints", new HashMap<>());
+                joint.addAttribute("degrees");
+                joint.addAttribute("position");
+                robotCore.getRemoteDriver().registerThing(joint);
+            });
+
+            robotCore.getServoDriver().getServos().forEach(s -> {
+                var builder = ThingBuilder.create("servos." + s.getId(), controllerId)
+                        .parent("servos")
+                        .friendlyName("servo-" + s.getId())
+                        .plugin("servos");
+                s.getData().getKeys().forEach(k -> builder.addAttribute(k.name()));
+                robotCore.getRemoteDriver().registerThing(builder.build());
+            });
+
+            this.sensors.forEach(s -> {
+
+            });
+        }
     }
 
     @Override
