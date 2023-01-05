@@ -29,7 +29,7 @@ public class Z21ReturnPacket implements Event {
             this.data = Arrays.copyOfRange(data, FIXED_PARAM_START_OFFSET, (FIXED_PARAM_START_OFFSET + (length - FIXED_PARAM_START_OFFSET)));
 
             if(this.responseHeader == X_HEADER) {
-                this.xHeader = this.data[0];
+                this.xHeader = this.data[0] & 0xff;
             }
         } else {
             LOG.error("Invalid Z21 package received");

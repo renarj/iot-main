@@ -23,7 +23,7 @@ public abstract class Z21Command {
     private String host;
     private int port;
 
-    public DatagramPacket build() throws IOTException {
+    public byte[] buildData() {
         ByteBuffer buffer = ByteBuffer.allocate(parameters.size() + FIXED_PARAM_LENGTH);
 
         int length = FIXED_PARAM_LENGTH + parameters.size();
@@ -33,7 +33,11 @@ public abstract class Z21Command {
 
         parameters.forEach(buffer::put);
 
-        var data = buffer.array();
+        return buffer.array();
+    }
+
+    public DatagramPacket build() throws IOTException {
+        var data = buildData();
         LOG.info("Sending package: {}", bytesToHex(data));
 
         var dg = new DatagramPacket(data, data.length);
@@ -62,10 +66,14 @@ public abstract class Z21Command {
         add(header);
     }
 
+    protected void addXHeader(int xHeader) {
+        this.parameters.add((byte)xHeader);
+    }
+
     protected void addXHeader(int xHeader, int DB0) {
         this.parameters.add((byte)xHeader);
         this.parameters.add((byte)DB0);
-        this.parameters.add((byte)(xHeader ^ DB0));
+//        this.parameters.add((byte)(xHeader ^ DB0));
     }
 
     protected void add(int param) {
@@ -98,4 +106,24 @@ public abstract class Z21Command {
                 .collect(Collectors.joining(" "));
     }
 
+
+    protected int getLowAddress(int address) {
+        if (address >= 100) {
+            var t = address + 0xC000;
+            return t & 0x00FF;
+        }
+
+        return address;
+    }
+
+    protected int getHighAddress(int address) {
+        if (address >= 100) {
+            var t = address + 0xC000;
+            t &= 0xFF00;
+            t /= 256;
+            return t;
+        }
+
+        return 0x00;
+    }
 }

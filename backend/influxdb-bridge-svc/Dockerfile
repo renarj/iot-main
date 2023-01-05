@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17.0.4_8-jre
+FROM eclipse-temurin:19.0.1_10-jre
 VOLUME /tmp
 
 RUN apt-get update

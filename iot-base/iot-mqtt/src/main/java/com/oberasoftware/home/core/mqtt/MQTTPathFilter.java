@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 /**
  * @author Renze de Vries
  */
-public class MQTTPathFilter implements EventFilter {
+public class  MQTTPathFilter implements EventFilter {
     private static final Logger LOG = LoggerFactory.getLogger(MQTTPathFilter.class);
 
     private static final String WILD_CARD = "*";

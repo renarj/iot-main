@@ -10,22 +10,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>roco-z21-adapter</artifactId>
+    <artifactId>train-service</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>iot-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
-            <artifactId>iot-client</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

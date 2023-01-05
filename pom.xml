@@ -17,7 +17,7 @@
 
     <properties>
         <jasdb.version>2.0-SNAPSHOT</jasdb.version>
-        <java.version>17</java.version>
+        <java.version>19</java.version>
         <jssc.version>2.8.0</jssc.version>
         <guava.version>31.1-jre</guava.version>
 
@@ -41,6 +41,7 @@
         <module>robot-models/robo-maximus</module>
         <module>robot-models/robo-rover</module>
         <module>trainautomation/roco-z21-adapter</module>
+        <module>trainautomation/train-service</module>
         <module>iot-base/iot-core</module>
         <module>iot-base/iot-mqtt</module>
         <module>iot-base/home-rules</module>
