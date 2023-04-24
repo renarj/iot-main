@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class BasicCommandImpl implements BasicCommand {
     private String controllerId;
-    private String itemId;
+    private String thingId;
     private String commandType;
 
     private Map<String, String> properties = new HashMap<>();
@@ -25,12 +25,12 @@ public class BasicCommandImpl implements BasicCommand {
     }
 
     @Override
-    public String getItemId() {
-        return itemId;
+    public String getThingId() {
+        return thingId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setThingId(String thingId) {
+        this.thingId = thingId;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class BasicCommandImpl implements BasicCommand {
     public String toString() {
         return "BasicCommandImpl{" +
                 "controllerId='" + controllerId + '\'' +
-                ", itemId='" + itemId + '\'' +
+                ", thingId='" + thingId + '\'' +
                 ", commandType='" + commandType + '\'' +
                 ", properties=" + properties +
                 '}';

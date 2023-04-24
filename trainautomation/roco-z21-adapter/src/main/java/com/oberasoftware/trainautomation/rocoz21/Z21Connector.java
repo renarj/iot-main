@@ -4,6 +4,8 @@ import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.trainautomation.rocoz21.commands.Z21Command;
 
 public interface Z21Connector {
+    void connect(String host, int port) throws IOTException;
+
     void connect() throws IOTException;
 
     void disconnect() throws IOTException;

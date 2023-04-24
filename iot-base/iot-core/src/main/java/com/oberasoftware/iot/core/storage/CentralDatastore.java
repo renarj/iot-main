@@ -17,6 +17,4 @@ public interface CentralDatastore {
     <T extends IotBaseEntity> T store(IotBaseEntity entity) throws DataStoreException;
 
     Container store(Container container) throws DataStoreException;
-
-    HomeDAO getDAO();
 }

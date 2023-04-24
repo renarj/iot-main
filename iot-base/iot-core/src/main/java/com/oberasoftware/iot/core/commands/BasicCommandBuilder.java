@@ -43,7 +43,7 @@ public class BasicCommandBuilder {
         BasicCommandImpl command = new BasicCommandImpl();
         command.setControllerId(controllerId);
         command.setCommandType(label);
-        command.setItemId(item);
+        command.setThingId(item);
         command.setProperties(properties);
 
         return command;

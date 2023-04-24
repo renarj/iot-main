@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: command-svc
-        image: command-svc:latest
-        imagePullPolicy: Never
+        image: localhost:32000/command-svc:0.1
+        imagePullPolicy: Always
         ports:
         - containerPort: 9004
         env:

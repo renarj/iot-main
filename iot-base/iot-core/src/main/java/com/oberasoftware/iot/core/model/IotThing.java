@@ -17,6 +17,8 @@ public interface IotThing extends IotBaseEntity {
 
     Set<String> getAttributes();
 
+    String getProperty(String key);
+
     String getParentId();
 
     Map<String, String> getProperties();

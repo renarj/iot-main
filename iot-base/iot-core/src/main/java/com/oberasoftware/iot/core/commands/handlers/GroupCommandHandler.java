@@ -9,6 +9,6 @@ import java.util.List;
 /**
  * @author Renze de Vries
  */
-public interface GroupCommandHandler extends DeviceCommandHandler {
+public interface GroupCommandHandler extends ThingCommandHandler {
     void receive(GroupItem groupItem, List<IotThing> items, Command command);
 }

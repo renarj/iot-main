@@ -13,12 +13,12 @@ import java.util.Map;
 public class SwitchCommandImpl implements SwitchCommand {
 
     private final String controllerId;
-    private final String itemId;
+    private final String thingId;
     private final STATE state;
 
-    public SwitchCommandImpl(String controllerId, String itemId, STATE state) {
+    public SwitchCommandImpl(String controllerId, String thingId, STATE state) {
         this.controllerId = controllerId;
-        this.itemId = itemId;
+        this.thingId = thingId;
         this.state = state;
     }
 
@@ -33,15 +33,15 @@ public class SwitchCommandImpl implements SwitchCommand {
     }
 
     @Override
-    public String getItemId() {
-        return itemId;
+    public String getThingId() {
+        return thingId;
     }
 
     @Override
     public String toString() {
         return "SwitchCommandImpl{" +
                 "state=" + state +
-                ", itemId='" + itemId + '\'' +
+                ", thingId='" + thingId + '\'' +
                 '}';
     }
 
@@ -65,14 +65,14 @@ public class SwitchCommandImpl implements SwitchCommand {
 
         SwitchCommandImpl that = (SwitchCommandImpl) o;
 
-        if (!itemId.equals(that.itemId)) return false;
+        if (!thingId.equals(that.thingId)) return false;
         return state == that.state;
 
     }
 
     @Override
     public int hashCode() {
-        int result = itemId.hashCode();
+        int result = thingId.hashCode();
         result = 31 * result + state.hashCode();
         return result;
     }

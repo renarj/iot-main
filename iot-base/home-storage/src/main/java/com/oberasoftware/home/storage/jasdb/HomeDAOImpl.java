@@ -1,19 +1,14 @@
 package com.oberasoftware.home.storage.jasdb;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotBaseEntity;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.*;
 import com.oberasoftware.iot.core.model.storage.impl.*;
 import com.oberasoftware.iot.core.storage.HomeDAO;
-import com.oberasoftware.jasdb.api.entitymapper.EntityManager;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;
-import com.oberasoftware.jasdb.api.session.DBSession;
-import com.oberasoftware.jasdb.api.session.query.QueryBuilder;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -27,19 +22,13 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-public class JasDBDAO implements HomeDAO {
-    private static final Logger LOG = getLogger(JasDBDAO.class);
-
-    @Autowired
-    private JasDBSessionFactory sessionFactory;
+public class HomeDAOImpl extends BaseDAO implements HomeDAO {
+    private static final Logger LOG = getLogger(HomeDAOImpl.class);
 
     @Override
     public <T extends IotBaseEntity> Optional<T> findItem(Class<T> type, String id) {
         try {
-            DBSession session = sessionFactory.createSession();
-            EntityManager entityManager = session.getEntityManager();
-
-            T result = entityManager.findEntity(type, id);
+            T result = getEntityManager().findEntity(type, id);
             return Optional.ofNullable(result);
         } catch(JasDBException e) {
             LOG.error("Unable to load item", e);
@@ -50,10 +39,7 @@ public class JasDBDAO implements HomeDAO {
     @Override
     public Optional<Container> findContainer(String id) {
         try {
-            DBSession session = sessionFactory.createSession();
-            EntityManager entityManager = session.getEntityManager();
-
-            ContainerImpl container = entityManager.findEntity(ContainerImpl.class, id);
+            ContainerImpl container = getEntityManager().findEntity(ContainerImpl.class, id);
             return Optional.of(container);
         } catch(JasDBException e) {
             LOG.error("Unable to load container", e);
@@ -142,30 +128,4 @@ public class JasDBDAO implements HomeDAO {
         return newArrayList(findItems(RuleItemImpl.class, new HashMap<>()));
     }
 
-    private <T> T findItem(Class<T> type, Map<String, String> properties) {
-        List<T> items = findItems(type, properties);
-        return Iterables.getFirst(items, null);
-    }
-
-    private <T> List<T> findItems(Class<T> type, Map<String, String> properties) {
-        return findItems(type, properties, new ArrayList<>());
-    }
-
-    private <T> List<T> findItems(Class<T> type, Map<String, String> properties, List<String> orderedBy) {
-        List<T> results = new ArrayList<>();
-
-        try {
-            DBSession session = sessionFactory.createSession();
-            EntityManager entityManager = session.getEntityManager();
-
-            QueryBuilder queryBuilder = QueryBuilder.createBuilder();
-            properties.forEach((k, v) -> queryBuilder.field(k).value(v));
-            orderedBy.forEach(queryBuilder::sortBy);
-
-            return entityManager.findEntities(type, queryBuilder);
-        } catch (JasDBException e) {
-            LOG.error("Unable to query JasDB", e);
-        }
-        return results;
-    }
 }

@@ -22,7 +22,7 @@ public class BasicCommandConverter implements Converter {
 
     @TypeConverter
     public MQTTMessage convert(BasicCommand basicCommand) {
-        String topic = String.format(TOPIC_PATH, basicCommand.getControllerId(), basicCommand.getItemId(), basicCommand.getCommandType());
+        String topic = String.format(TOPIC_PATH, basicCommand.getControllerId(), basicCommand.getThingId(), basicCommand.getCommandType());
         LOG.info("Forward basic command: {} to topic: {}", basicCommand, topic);
         return new MQTTMessageImpl(topic, mapToJson(basicCommand));
     }

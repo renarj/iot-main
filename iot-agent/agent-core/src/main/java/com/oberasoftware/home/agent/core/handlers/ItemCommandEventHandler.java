@@ -7,7 +7,7 @@ import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.client.ThingClient;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.iot.core.commands.ItemValueCommand;
-import com.oberasoftware.iot.core.commands.handlers.DeviceCommandHandler;
+import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import com.oberasoftware.iot.core.events.impl.ItemNumericValue;
 import com.oberasoftware.iot.core.exceptions.IOTException;
@@ -42,9 +42,9 @@ public class ItemCommandEventHandler implements EventHandler {
         LOG.debug("Received a device command event: {}", event);
 
         ItemCommand command = event.getCommand();
-        LOG.debug("Looking up device details for command: {} and itemId: {}",command, command.getItemId());
+        LOG.debug("Looking up device details for command: {} and itemId: {}",command, command.getThingId());
 
-        Optional<IotThing> deviceData = thingClient.getThing(command.getControllerId(), command.getItemId());
+        Optional<IotThing> deviceData = thingClient.getThing(command.getControllerId(), command.getThingId());
         if(deviceData.isPresent()) {
             IotThing deviceItem = deviceData.get();
             String pluginId = deviceItem.getPluginId();
@@ -54,7 +54,7 @@ public class ItemCommandEventHandler implements EventHandler {
             var plugin = byPluginId.isPresent() ? byPluginId : byPluginName;
 
             plugin.ifPresent(p -> {
-                DeviceCommandHandler commandHandler = (DeviceCommandHandler) p.getCommandHandler();
+                ThingCommandHandler commandHandler = (ThingCommandHandler) p.getCommandHandler();
 
                 LOG.debug("Executing command: {} on extension: {}", command, p);
                 commandHandler.receive(deviceItem, command);
@@ -83,8 +83,8 @@ public class ItemCommandEventHandler implements EventHandler {
             ItemValueCommand valueCommand = (ItemValueCommand) command;
 
             valueCommand.getValues().forEach((k, v) -> {
-                LOG.debug("Publishing item: {} value: {} label: {}", valueCommand.getItemId(), v, k);
-                automationBus.publish(new ItemNumericValue(valueCommand.getItemId(), v, k));
+                LOG.debug("Publishing item: {} value: {} label: {}", valueCommand.getThingId(), v, k);
+                automationBus.publish(new ItemNumericValue(valueCommand.getThingId(), v, k));
             });
         }
     }

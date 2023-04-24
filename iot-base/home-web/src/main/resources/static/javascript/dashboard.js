@@ -5,6 +5,8 @@ $(document).ready(function() {
 
         var parentContainerId = $(this).data('id');
         $(".modal-body #parentContainerId").val( parentContainerId );
+
+        new bootstrap.Modal("#containerModal").show();
     });
 
     $("#createContainerForm").submit(function(event){

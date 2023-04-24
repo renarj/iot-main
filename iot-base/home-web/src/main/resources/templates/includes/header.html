@@ -5,64 +5,62 @@
 
     <link th:href="@{/images/favicon.ico}" rel="shortcut icon" href="/static/images/favicon.ico" title="Favicon"/>
 
-    <script th:src="@{/javascript/ext/jquery-2.1.0.min.js}" src="/static/javascript/ext/jquery-2.1.0.min.js"></script>
-    <script th:src="@{/javascript/ext/jquery-ui.min.js}" src="/static/javascript/ext/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
 
+<!--    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css"/>-->
 
-    <link th:href="@{/css/jquery-ui.min.css}" href="/static/css/jquery-ui.min.css" rel="stylesheet"/>
-    <link th:href="@{/bootstrap/css/bootstrap.min.css}" href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-    <link th:href="@{/bootstrap/css/bootstrap-switch.min.css}" href="/static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet"/>
-    <link th:href="@{/bootstrap/css/bootstrap-slider.min.css}" href="/static/bootstrap/css/bootstrap-slider.min.css" rel="stylesheet"/>
-    <link th:href="@{/css/spectrum.css}" href="/static/css/spectrum.css" rel="stylesheet"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
 
     <script th:src="@{/javascript/ext/mustache.min.js}" src="/static/javascript/ext/mustache.min.js"></script>
     <script th:src="@{/javascript/ext/stomp.min.js}" src="/static/javascript/ext/stomp.min.js"></script>
     <script th:src="@{/javascript/ext/sockjs-0.3.4.min.js}" src="/static/javascript/ext/sockjs-0.3.4.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
     <script th:src="@{/javascript/global.js}" src="/static/javascript/global.js"></script>
-
-    <script th:src="@{/bootstrap/js/bootstrap.min.js}" src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script th:src="@{/bootstrap/js/bootstrap-switch.min.js}" src="/static/bootstrap/js/bootstrap-switch.min.js"></script>
-    <script th:src="@{/bootstrap/js/bootstrap-slider.min.js}" src="/static/bootstrap/js/bootstrap-slider.min.js"></script>
-    <script th:src="@{/javascript/ext/spectrum.js}" src="/static/javascript/ext/spectrum.js"></script>
-
-    <script th:src="@{/javascript/ext/highcharts.js}" src="/static/javascript/ext/highcharts.js"></script>
 </head>
 
 
-    <nav class="navbar navbar-default" role="navigation" th:fragment="navigation (selectTab)">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" role="navigation" th:fragment="navigation (selectTab)">
         <div class="container-fluid">
-            <div class="navbar-header">
+<!--            <div class="navbar-header">-->
                 <a class="navbar-brand" href="#"><img height="" th:src="@{/images/obera.png}"/></a>
-            </div>
+<!--            </div>-->
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li th:classappend="${selectTab == 'dashboard'} ? 'active'"><a th:href="@{'/web/'}">DashBoard</a></li>
-                    <li th:classappend="${selectTab == 'admin'} ? 'active'"><a th:href="@{'/web/admin/devices'}">Administration</a></li>
-                    <li th:classappend="${selectTab == 'train'} ? 'active'"><a th:href="@{'/web/admin/devices'}">Model Train</a></li>
+                <ul class="navbar-nav me-auto my-2 my-lg-0">
+                    <li class="nav-item"><a th:classappend="${selectTab == 'dashboard'} ? 'active'" class="nav-link" th:href="@{'/web/'}">DashBoard</a></li>
+                    <li class="nav-item"><a th:classappend="${selectTab == 'admin'} ? 'active'" class="nav-link" th:href="@{'/web/admin/things'}">Administration</a></li>
+                    <li class="nav-item"><a th:classappend="${selectTab == 'trains'} ? 'active'" class="nav-link" th:href="@{'/web/trains'}">Model Trains</a></li>
                 </ul>
-                <form class="navbar-form navbar-left" role="search">
-                    <div class="form-group">
-                        <input type="text" disabled="true" class="form-control" placeholder="Search"/>
-                    </div>
-                    <button type="submit" disabled="true" class="btn btn-default">Submit</button>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
         </div>
     </nav>
 
     <ul class="nav nav-tabs" th:fragment="adminTabs (selectTab)">
-        <li role="presentation" th:classappend="${selectTab == 'devices'} ? 'active'"><a href="#" th:href="@{'/web/admin/devices'}">Devices</a></li>
-        <li role="presentation" th:classappend="${selectTab == 'groups'} ? 'active'"><a href="#" th:href="@{'/web/admin/groups'}">Groups</a></li>
-        <li role="presentation" th:classappend="${selectTab == 'rules'} ? 'active'"><a href="#" th:href="@{'/web/admin/rules'}">Rules</a></li>
-        <li role="presentation" th:classappend="${selectTab == 'virtualitems'} ? 'active'"><a href="#" th:href="@{'/web/admin/virtualitems'}">Virtual Items</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'things'} ? 'active'" href="#" th:href="@{'/web/admin/things'}">Things</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'groups'} ? 'active'" href="#" th:href="@{'/web/admin/groups'}">Groups</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'rules'} ? 'active'" href="#" th:href="@{'/web/admin/rules'}">Rules</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'virtualitems'} ? 'active'" href="#" th:href="@{'/web/admin/virtualitems'}">Virtual Items</a></li>
     </ul>
 
+    <ul class="nav nav-tabs" th:fragment="trainTabs (selectTab)">
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'locomotives'} ? 'active'" href="#" th:href="@{'/web/trains/locomotives'}">Locomotives</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'turnouts'} ? 'active'" href="#" th:href="@{'/web/trains/turnouts'}">Turnouts</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'sensors'} ? 'active'" href="#" th:href="@{'/web/trains/sensors'}">Sensors</a></li>
+    </ul>
 
 <div id="version" th:fragment="footer">
-    <p class="text-center">&#169; Copyright 2022 Oberasoftware, version: <span>1.0</span></p>
+    <p class="text-center">&#169; Copyright 2023 Oberasoftware, version: <span>1.0</span></p>
+
+
 </div>
 
 </html>

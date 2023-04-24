@@ -11,14 +11,14 @@ import java.util.Map;
  */
 public class ValueCommandImpl implements ItemValueCommand {
 
-    private final String itemId;
+    private final String thingId;
     private final String controllerId;
 
     private Map<String, Value> values = new HashMap<>();
 
-    public ValueCommandImpl(String controllerId, String itemId, Map<String, Value> values) {
+    public ValueCommandImpl(String controllerId, String thingId, Map<String, Value> values) {
         this.controllerId = controllerId;
-        this.itemId = itemId;
+        this.thingId = thingId;
         this.values = values;
     }
 
@@ -28,8 +28,8 @@ public class ValueCommandImpl implements ItemValueCommand {
     }
 
     @Override
-    public String getItemId() {
-        return itemId;
+    public String getThingId() {
+        return thingId;
     }
 
     @Override
@@ -49,14 +49,14 @@ public class ValueCommandImpl implements ItemValueCommand {
 
         ValueCommandImpl that = (ValueCommandImpl) o;
 
-        if (!itemId.equals(that.itemId)) return false;
+        if (!thingId.equals(that.thingId)) return false;
         return values.equals(that.values);
 
     }
 
     @Override
     public int hashCode() {
-        int result = itemId.hashCode();
+        int result = thingId.hashCode();
         result = 31 * result + values.hashCode();
         return result;
     }
@@ -64,7 +64,7 @@ public class ValueCommandImpl implements ItemValueCommand {
     @Override
     public String toString() {
         return "ValueCommandImpl{" +
-                "itemId='" + itemId + '\'' +
+                "thingId='" + thingId + '\'' +
                 ", values=" + values +
                 '}';
     }

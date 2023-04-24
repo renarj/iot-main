@@ -67,7 +67,7 @@ public class ActiveMQTopicSender implements TopicSender<String> {
     }
 
     @Override
-    public void publish(String message) {
+    public void publish(String topic, String message) {
         LOG.debug("Publishing: {} to topic: {}", message, amqTopic);
 
         try {

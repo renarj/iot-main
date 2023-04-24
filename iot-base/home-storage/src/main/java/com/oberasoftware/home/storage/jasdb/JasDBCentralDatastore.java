@@ -1,10 +1,9 @@
 package com.oberasoftware.home.storage.jasdb;
 
-import com.oberasoftware.iot.core.storage.CentralDatastore;
-import com.oberasoftware.iot.core.storage.HomeDAO;
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
 import com.oberasoftware.iot.core.model.IotBaseEntity;
 import com.oberasoftware.iot.core.model.storage.Container;
+import com.oberasoftware.iot.core.storage.CentralDatastore;
 import com.oberasoftware.jasdb.api.entitymapper.EntityManager;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;
 import com.oberasoftware.jasdb.api.session.DBSession;
@@ -33,10 +32,7 @@ public class JasDBCentralDatastore implements CentralDatastore {
     @Autowired
     private JasDBSessionFactory jasDBSessionFactory;
 
-    @Autowired
-    private JasDBDAO jasDBDAO;
-
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
     @Override
     public void beginTransaction() {
@@ -107,10 +103,5 @@ public class JasDBCentralDatastore implements CentralDatastore {
         } catch(RuntimeException e) {
             LOG.error("", e);
         }
-    }
-
-    @Override
-    public HomeDAO getDAO() {
-        return jasDBDAO;
     }
 }

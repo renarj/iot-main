@@ -34,11 +34,11 @@ public class RabbitMQTopicSender extends AbstractRMQConnector implements TopicSe
     }
 
     @Override
-    public void publish(String message) {
+    public void publish(String topic, String message) {
         LOG.debug("Publishing: {} to topic: {}", message, rmqTopic);
 
         try {
-            channel.basicPublish(rmqTopic, "", null, message.getBytes(StandardCharsets.UTF_8));
+            channel.basicPublish(topic, "", null, message.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             LOG.error("Unable to send message to RMQ: " + rmqHost + " on topic: " + rmqTopic, e);
         }

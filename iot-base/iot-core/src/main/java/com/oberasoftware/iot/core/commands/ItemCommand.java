@@ -6,5 +6,5 @@ package com.oberasoftware.iot.core.commands;
 public interface ItemCommand extends Command {
     String getControllerId();
 
-    String getItemId();
+    String getThingId();
 }

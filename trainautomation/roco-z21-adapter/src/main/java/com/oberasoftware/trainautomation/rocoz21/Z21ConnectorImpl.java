@@ -1,7 +1,5 @@
 package com.oberasoftware.trainautomation.rocoz21;
 
-import com.oberasoftware.base.event.EventFilter;
-import com.oberasoftware.base.event.HandlerEntry;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.trainautomation.rocoz21.commands.Z21Command;
@@ -26,7 +24,7 @@ public class Z21ConnectorImpl implements Z21Connector {
 
     @Value("${z21.port:21106}")
     private int port;
-    @Value("${z21.host}")
+    @Value("${z21.host:localhost}")
     private String z21Host;
 
     private final LocalEventBus eventBus;
@@ -41,39 +39,45 @@ public class Z21ConnectorImpl implements Z21Connector {
 
     @PostConstruct
     public void initFilter() {
-        eventBus.registerFilter(new EventFilter() {
-            @Override
-            public boolean isFiltered(Object event, HandlerEntry handler) {
-                Method eventMethod = handler.getEventMethod();
-                Z21ResponseFilter responseFilter = eventMethod.getAnnotation(Z21ResponseFilter.class);
-                if(responseFilter != null && event instanceof Z21ReturnPacket pkg) {
-                    int packageHeader = responseFilter.packageHeader();
-                    int xHeader = responseFilter.xHeader();
-                    int firstDataByte = responseFilter.firstDataByte();
-                    byte[] data = pkg.getData();
+        eventBus.registerFilter((event, handler) -> {
+            Method eventMethod = handler.getEventMethod();
+            Z21ResponseFilter responseFilter = eventMethod.getAnnotation(Z21ResponseFilter.class);
+            if(responseFilter != null && event instanceof Z21ReturnPacket pkg) {
+                int packageHeader = responseFilter.packageHeader();
+                int xHeader = responseFilter.xHeader();
+                int firstDataByte = responseFilter.firstDataByte();
+                byte[] data = pkg.getData();
 
-                    boolean matching = true;
-                    if(packageHeader != NOT_SET) {
-                        matching = packageHeader == pkg.getResponseHeader();
-                    }
-
-                    if(xHeader != NOT_SET) {
-                        matching = matching & xHeader == pkg.getxHeader();
-                    }
-
-                    if(firstDataByte != NOT_SET && data.length >= 2) {
-                        matching = matching & firstDataByte == data[1];
-                    }
-
-                    return !matching;
+                boolean matching = true;
+                if(packageHeader != NOT_SET) {
+                    matching = packageHeader == pkg.getResponseHeader();
                 }
-                return false;
+
+                if(xHeader != NOT_SET) {
+                    matching = matching & xHeader == pkg.getxHeader();
+                }
+
+                if(firstDataByte != NOT_SET && data.length >= 2) {
+                    matching = matching & firstDataByte == data[1];
+                }
+
+                return !matching;
             }
+            return false;
         });
     }
 
     @Override
     public void connect() throws IOTException {
+        connect(this.z21Host, this.port);
+    }
+
+    @Override
+    public void connect(String host, int port) throws IOTException {
+        LOG.info("Connecting to Z21 command center on host: {} and port: {}", host, port);
+        this.z21Host = host;
+        this.port = port;
+
         if(socket == null && listener == null) {
             try {
                 LOG.info("Opening socket for Z21 connection on port: {}", port);

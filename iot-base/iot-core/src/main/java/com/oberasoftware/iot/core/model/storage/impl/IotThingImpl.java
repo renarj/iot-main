@@ -117,6 +117,11 @@ public class IotThingImpl implements IotThing {
         this.properties = properties;
     }
 
+    @Override
+    public String getProperty(String key) {
+        return this.properties.get(key);
+    }
+
     @JasDBProperty
     @Override
     public String getParentId() {

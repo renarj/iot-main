@@ -1,10 +1,10 @@
 var stompClient = null;
 
-Highcharts.setOptions({
-    global: {
-        useUTC: false
-    }
-});
+// Highcharts.setOptions({
+//     global: {
+//         useUTC: false
+//     }
+// });
 
 function connect() {
     console.log("Connecting to websocket");
@@ -114,7 +114,8 @@ function tabAdd(e) {
     $("#createContainerForm").attr("mode", "dashboard");
     $("#addContainerLabel").text("Add a dashboard");
 
-    $("#containerModal").modal('show');
+    // $("#containerModal").modal('show');
+    new bootstrap.Modal("#containerModal").show();
 
     console.log("Adding tab");
 }
@@ -134,7 +135,7 @@ function renderDashboardsLinks() {
             dashboardTabs.append(renderTemplate("tabTemplate", data));
         });
 
-        dashboardTabs.append("<li role=\"presentation\"><a class=\"addTab\" href=\"#add\"><span class=\"glyphicon glyphicon-plus\"></span></a></li>");
+        dashboardTabs.append("<li role=\"nav-item\"><a class=\"nav-link addTab\" href=\"#add\"><i class=\"bi bi-file-earmark-plus-fill\"></i>\n</a></li>");
 
         $(".tab").click(tabChange);
         $(".addTab").click(tabAdd);

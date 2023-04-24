@@ -39,7 +39,7 @@ public class JasDBCentralDataStoreTest {
     private JasDBCentralDatastore centralDatastore;
 
     @Autowired
-    private JasDBDAO jasDBDAO;
+    private HomeDAOImpl homeDAOImpl;
 
     @ClassRule
     public static TemporaryFolder folder = new TemporaryFolder();
@@ -60,14 +60,14 @@ public class JasDBCentralDataStoreTest {
 
         centralDatastore.store(new IotThingImpl(id, "controller1", "device1", "plugin1", null, new HashMap<>()));
 
-        Optional<IotThing> item = jasDBDAO.findThing("controller1",  "device1");
+        Optional<IotThing> item = homeDAOImpl.findThing("controller1",  "device1");
         assertThat(item.isPresent(), is(true));
 
         centralDatastore.store(new IotThingImpl(id, "controller1", "plugin1", "device1", "updated name", new HashMap<>()));
 
-        assertThat(jasDBDAO.findThings("controller1").size(), is(1));
+        assertThat(homeDAOImpl.findThings("controller1").size(), is(1));
 
-        item = jasDBDAO.findThing("controller1", "device1");
+        item = homeDAOImpl.findThing("controller1", "device1");
         assertThat(item.isPresent(), is(true));
     }
 
@@ -79,6 +79,6 @@ public class JasDBCentralDataStoreTest {
         centralDatastore.store(new WidgetImpl(id1, "UI Item 1", "container1", "switch", "jsdlfjsd", "randomControllerId", new HashMap<>(), 0));
         centralDatastore.store(new WidgetImpl(id2, "UI Item 2", "container1", "switch", "jsdlfjsd", "randomControllerId", new HashMap<>(), 0));
 
-        assertThat(jasDBDAO.findWidgets("container1").size(), is(2));
+        assertThat(homeDAOImpl.findWidgets("container1").size(), is(2));
     }
 }

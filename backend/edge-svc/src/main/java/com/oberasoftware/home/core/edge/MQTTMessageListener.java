@@ -10,6 +10,7 @@ import com.oberasoftware.iot.core.model.ValueTransportMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
@@ -24,6 +25,9 @@ public class MQTTMessageListener implements EventHandler {
     @Autowired
     private RabbitMQTopicSender topicSender;
 
+    @Value("${states.producer.topic:}")
+    private String eventProductTopic;
+
     @EventSubscribe
     public void receive(MQTTMessage message) {
         LOG.debug("Received a MQTT message: {}", message);
@@ -34,7 +38,7 @@ public class MQTTMessageListener implements EventHandler {
             if (validateMessage(parsedPath, parsedMessage)) {
                 LOG.debug("Message is valid, forwarding to Inner Queues: {}", message.getMessage());
 
-                topicSender.publish(message.getMessage());
+                topicSender.publish(eventProductTopic, message.getMessage());
             } else {
                 LOG.warn("Message is invalid: {}", message.getMessage());
             }

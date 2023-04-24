@@ -26,7 +26,7 @@ public class DirectCommandService {
     BasicCommandImpl sendCommand(@RequestBody BasicCommandImpl command) {
         LOG.info("Received a command: {} dispatching to eventbus", command);
 
-        String topic = String.format(TOPIC_PATH, command.getControllerId(), command.getItemId(), command.getCommandType());
+        String topic = String.format(TOPIC_PATH, command.getControllerId(), command.getThingId(), command.getCommandType());
         LOG.info("Received a direct basic command: {} to topic: {}", command, topic);
         MQTTMessage message = new MQTTMessageImpl(topic, mapToJson(command));
 

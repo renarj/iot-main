@@ -9,7 +9,7 @@ import java.util.Map;
  * @author renarj
  */
 public class BasicRestCommand implements BasicCommand {
-    private String itemId;
+    private String thingId;
     private String commandType;
 
     private String controllerId;
@@ -26,12 +26,12 @@ public class BasicRestCommand implements BasicCommand {
     }
 
     @Override
-    public String getItemId() {
-        return itemId;
+    public String getThingId() {
+        return thingId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setThingId(String thingId) {
+        this.thingId = thingId;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class BasicRestCommand implements BasicCommand {
     @Override
     public String toString() {
         return "BasicRESTCommand{" +
-                "itemId='" + itemId + '\'' +
+                "thingId='" + thingId + '\'' +
                 ", commandType='" + commandType + '\'' +
                 ", properties=" + properties +
                 '}';

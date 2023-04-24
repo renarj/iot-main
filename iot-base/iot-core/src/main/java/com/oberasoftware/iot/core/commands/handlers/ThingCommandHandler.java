@@ -5,5 +5,5 @@ import com.oberasoftware.iot.core.model.IotThing;
 /**
  * @author Renze de Vries
  */
-public interface DeviceCommandHandler extends CommandHandler<IotThing> {
+public interface ThingCommandHandler extends CommandHandler<IotThing> {
 }

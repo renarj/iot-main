@@ -1,10 +1,14 @@
 $(document).ready(function() {
     $(document).on("click", ".addWidget", function () {
+        console.log("Opening widget form");
+
         var containerId = $(this).data('id');
         $(".modal-body #containerId").val( containerId );
 
         showDevice();
         loadControllers();
+
+        new bootstrap.Modal("#dataModal").show();
     });
 
     function showVirtual(labelText) {

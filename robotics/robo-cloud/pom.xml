@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>iot-core</artifactId>
+            <artifactId>robo-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

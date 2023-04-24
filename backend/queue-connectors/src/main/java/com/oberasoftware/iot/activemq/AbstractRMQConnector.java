@@ -27,7 +27,11 @@ public abstract class AbstractRMQConnector {
                 LOG.info("Connecting to RabbitMQ Host: {}:{} on topic: {}", rmqHost, rmqPort, rmqTopic);
                 this.connection = factory.newConnection();
                 this.channel = connection.createChannel();
-                this.channel.exchangeDeclare(rmqTopic, "fanout");
+
+                for (String topic : rmqTopic.split(",")) {
+                    LOG.info("Registering topic: {} to RMQ", topic);
+                    this.channel.exchangeDeclare(topic, "fanout");
+                }
             } catch (IOException | TimeoutException e) {
                 throw new RuntimeIOTException("Could not connect to RabbitMQ on Host: " + rmqHost, e);
             }

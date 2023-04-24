@@ -5,5 +5,5 @@ public interface TopicSender<T> {
 
     void close();
 
-    void publish(T message);
+    void publish(String topic, T message);
 }

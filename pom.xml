@@ -42,6 +42,7 @@
         <module>robot-models/robo-rover</module>
         <module>trainautomation/roco-z21-adapter</module>
         <module>trainautomation/train-service</module>
+        <module>trainautomation/integrated-service</module>
         <module>iot-base/iot-core</module>
         <module>iot-base/iot-mqtt</module>
         <module>iot-base/home-rules</module>
@@ -149,11 +150,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <compilerArgs>
-                        --enable-preview
-                    </compilerArgs>
+                    <source>19</source>
+                    <target>19</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

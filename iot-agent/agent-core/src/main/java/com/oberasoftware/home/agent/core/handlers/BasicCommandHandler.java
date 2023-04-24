@@ -62,7 +62,7 @@ public class BasicCommandHandler implements EventHandler {
             ItemCommand command = converter.map(basicCommand);
             LOG.info("Converted: {} to command: {} sending to automation bus", basicCommand, command);
 
-            return new ItemCommandEvent(command.getItemId(), command);
+            return new ItemCommandEvent(command.getThingId(), command);
         } else {
             LOG.info("No converter available for command type: {} on command: {}", commandType, basicCommand);
             return null;

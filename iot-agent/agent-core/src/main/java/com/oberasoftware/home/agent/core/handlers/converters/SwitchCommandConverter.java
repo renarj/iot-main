@@ -21,7 +21,7 @@ public class SwitchCommandConverter implements CommandConverter<BasicCommand, Sw
 
         if(source.getProperties().containsKey("value")) {
             String value = source.getProperties().get("value");
-            String itemId = source.getItemId();
+            String itemId = source.getThingId();
             String controllerId = source.getControllerId();
 
             switch (value.toLowerCase()) {

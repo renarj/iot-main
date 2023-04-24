@@ -5,7 +5,7 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.client.ThingClient;
 import com.oberasoftware.iot.core.commands.GroupCommand;
 import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
-import com.oberasoftware.iot.core.commands.handlers.DeviceCommandHandler;
+import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
 import com.oberasoftware.iot.core.commands.handlers.GroupCommandHandler;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
@@ -68,11 +68,11 @@ public class GroupCommandEventHandler implements EventHandler {
                 GroupCommandHandler groupCommandHandler = (GroupCommandHandler) commandHandler;
 
                 groupCommandHandler.receive(groupItem, pluginDevices.get(k), groupCommand.getCommand());
-            } else if(commandHandler instanceof DeviceCommandHandler) {
+            } else if(commandHandler instanceof ThingCommandHandler) {
                 LOG.debug("CommandHandler not able to support group command, sending individual commands: {}", groupCommand);
-                DeviceCommandHandler deviceCommandHandler = (DeviceCommandHandler) commandHandler;
+                ThingCommandHandler thingCommandHandler = (ThingCommandHandler) commandHandler;
 
-                pluginDevices.get(k).forEach(d -> deviceCommandHandler.receive(d, groupCommand.getCommand()));
+                pluginDevices.get(k).forEach(d -> thingCommandHandler.receive(d, groupCommand.getCommand()));
             }
         });
 

@@ -1,7 +1,5 @@
 package com.oberasoftware.home.core.state;
 
-import org.springframework.stereotype.Component;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -9,7 +7,7 @@ import java.io.IOException;
 /**
  * @author Renze de Vries
  */
-@Component
+//@Component
 public class CorsFilter implements Filter {
 
     @Override

@@ -57,7 +57,7 @@ public class ThingRestSvc {
             LOG.info("Creating or updating controller: {} data", controllerId);
             return new ResponseEntity<>(itemManager.createOrUpdateController(controllerId, controller.getProperties()), HttpStatus.CREATED);
         } else {
-            LOG.warn("Invalid entity controllerId: {} not matching API controllerId: {}", controller.getControllerId(), controllerId);
+            LOG.warn("Invalid entity controllerId: '{}' not matching API controllerId: '{}'", controller.getControllerId(), controllerId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -65,13 +65,13 @@ public class ThingRestSvc {
     @RequestMapping(value = "/controllers({controllerId})/things", method = RequestMethod.POST)
     public ResponseEntity<Object> createThing(@PathVariable String controllerId, @RequestBody IotThingImpl thing) throws IOTException {
         if(StringUtils.hasText(controllerId) && controllerId.equalsIgnoreCase(thing.getControllerId()) && validateThing(thing)) {
-            LOG.info("Creating thing: {} on controller: {}", thing.getThingId(), controllerId);
+            LOG.info("Creating thing: '{}' on controller: '{}'", thing.getThingId(), controllerId);
             var createdThing = itemManager.createOrUpdateThing(controllerId, thing.getThingId(), thing.getFriendlyName(),
                     thing.getPluginId(), thing.getParentId(), thing.getProperties(), thing.getAttributes());
 
             return new ResponseEntity<>(createdThing, HttpStatus.CREATED);
         } else {
-            LOG.warn("Invalid entity controllerId: {} not matching API controllerId: {}", thing.getControllerId(), controllerId);
+            LOG.warn("Invalid entity controllerId: '{}' not matching API controllerId: '{}' or missing attributes", thing.getControllerId(), controllerId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
