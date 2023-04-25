@@ -38,6 +38,7 @@ public class TrainManagerImpl implements TrainManager {
                         .friendlyName(loc.getName())
                         .addAttributes("speed", "direction")
                         .addProperty("locAddress", Integer.toString(loc.getLocAddress()))
+                        .addProperty("dccMode", loc.getStepMode().name())
                         .build();
                 var persistedThing = thingClient.createOrUpdate(thing);
             }

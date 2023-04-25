@@ -1,6 +1,7 @@
 package com.oberasoftware.iot.core.train.model;
 
 import com.oberasoftware.iot.core.model.IotBaseEntity;
+import com.oberasoftware.iot.core.train.StepMode;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
@@ -21,6 +22,8 @@ public class Locomotive implements IotBaseEntity {
     private String thingId;
 
     private String name;
+
+    private StepMode stepMode;
 
     private Map<String, String> attributes = new HashMap<>();
 
@@ -107,6 +110,15 @@ public class Locomotive implements IotBaseEntity {
 
     public void addFunction(LocFunction function) {
         this.functions.add(function);
+    }
+
+    @JasDBProperty
+    public StepMode getStepMode() {
+        return stepMode;
+    }
+
+    public void setStepMode(StepMode stepMode) {
+        this.stepMode = stepMode;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.oberasoftware.trainautomation;
 
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.model.IotThing;
 
 public interface CommandCenter {
@@ -8,5 +7,5 @@ public interface CommandCenter {
 
     void connect(IotThing commandCenter);
 
-    void handleCommand(ItemValueCommand command);
+    void handleCommand(TrainCommand command);
 }

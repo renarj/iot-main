@@ -1,9 +1,9 @@
 package com.oberasoftware.trainautomation.rocoz21.commandhandlers;
 
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
+import com.oberasoftware.trainautomation.TrainCommand;
 
 public interface Z21CommandHandler {
-    boolean supportsCommand(ItemValueCommand command);
+    boolean supportsCommand(TrainCommand command);
 
-    void action(ItemValueCommand command);
+    void action(TrainCommand command);
 }

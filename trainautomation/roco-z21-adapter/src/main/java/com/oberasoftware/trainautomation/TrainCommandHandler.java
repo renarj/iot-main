@@ -6,10 +6,13 @@ import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.train.StepMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class TrainCommandHandler implements ThingCommandHandler {
@@ -34,7 +37,8 @@ public class TrainCommandHandler implements ThingCommandHandler {
                 commandCenterFactory.getCommandCenter(commandCenterType).ifPresentOrElse(c -> {
                     LOG.info("We will do an action on command center: {}", c);
 
-                    c.handleCommand((ItemValueCommand) command);
+                    var enrichedCommand = translate(item, command);
+                    enrichedCommand.ifPresent(c::handleCommand);
                 }, () -> {
                     LOG.error("Could not find command center with id: {} for command: {}", commandCenterType, command);
                 });
@@ -45,5 +49,22 @@ public class TrainCommandHandler implements ThingCommandHandler {
         } catch (IOTException e) {
             LOG.error("Could not retrieve command center information", e);
         }
+    }
+
+    private Optional<TrainCommand> translate(IotThing thing, Command receivedCommand) {
+        if(receivedCommand instanceof ItemValueCommand itvC) {
+            return Optional.of(new TrainCommand(thing.getControllerId(), thing.getThingId(), itvC.getValues(), getLocAddress(thing), getStepMode(thing)));
+        } else {
+            LOG.error("Could not convert command: {} to train command, incorrect command type", receivedCommand);
+            return Optional.empty();
+        }
+    }
+
+    private int getLocAddress(IotThing thing) {
+        return Integer.parseInt(thing.getProperty("locAddress"));
+    }
+
+    private StepMode getStepMode(IotThing thing) {
+        return StepMode.valueOf(thing.getProperty("dccMode"));
     }
 }

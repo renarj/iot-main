@@ -1,9 +1,9 @@
 package com.oberasoftware.trainautomation.rocoz21.commands;
 
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.train.DirectionEnum;
 import com.oberasoftware.iot.core.train.StepMode;
+import com.oberasoftware.trainautomation.TrainCommand;
 import com.oberasoftware.trainautomation.rocoz21.Z21Connector;
 import com.oberasoftware.trainautomation.rocoz21.commandhandlers.Z21CommandHandler;
 import org.slf4j.Logger;
@@ -18,31 +18,25 @@ public class LocoSpeedCommandHandler extends Z21Command implements Z21CommandHan
     private static final Logger LOG = LoggerFactory.getLogger(LocoSpeedCommandHandler.class);
     private static final String SPEED = "speed";
     private static final String DIRECTION = "direction";
-    private static final String DCC_MODE = "dccMode";
-    private static final String LOC_ADDRESS = "locAddress";
 
     @Autowired
     private Z21Connector connector;
 
     @Override
-    public boolean supportsCommand(ItemValueCommand command) {
+    public boolean supportsCommand(TrainCommand command) {
         var properties = command.getValues();
 
         return properties.containsKey(SPEED)
-                && properties.containsKey(DIRECTION)
-                && properties.containsKey(DCC_MODE)
-                && properties.containsKey(LOC_ADDRESS);
+                && properties.containsKey(DIRECTION);
     }
 
     @Override
-    public void action(ItemValueCommand command) {
-        var locAddress = (Long)command.getValue(LOC_ADDRESS).getValue();
-        var stepMode = StepMode.valueOf(command.getValue(DCC_MODE).getValue());
+    public void action(TrainCommand command) {
         var direction = findDirection(command.getValue(DIRECTION).getValue());
         var speed = (Long)command.getValue(SPEED).getValue();
 
-        var z21Command = new LocoSpeedCommand(locAddress.intValue(), stepMode, speed.intValue(), direction);
-        LOG.info("Sending loco speed command to loc: {} stepMode: {} direction: {} speed: {}", locAddress, stepMode, direction, speed);
+        var z21Command = new LocoSpeedCommand(command.getLocAddress(), command.getStepMode(), speed.intValue(), direction);
+        LOG.info("Sending loco speed command to loc: {} stepMode: {} direction: {} speed: {}", command.getLocAddress(), command.getStepMode(), direction, speed);
         try {
             connector.send(z21Command);
         } catch (IOTException e) {

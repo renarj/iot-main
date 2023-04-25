@@ -1,10 +1,10 @@
 package com.oberasoftware.trainautomation.rocoz21;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.trainautomation.CommandCenter;
+import com.oberasoftware.trainautomation.TrainCommand;
 import com.oberasoftware.trainautomation.rocoz21.commandhandlers.Z21CommandHandler;
 import com.oberasoftware.trainautomation.rocoz21.commands.RegisterBroadcastCommand;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class Z21CommandCenter implements CommandCenter {
     }
 
     @Override
-    public void handleCommand(ItemValueCommand command) {
+    public void handleCommand(TrainCommand command) {
         var commandHandler = commandHandlers.stream().filter(ch -> ch.supportsCommand(command)).findFirst();
         commandHandler.ifPresentOrElse(ch -> {
             ch.action(command);
