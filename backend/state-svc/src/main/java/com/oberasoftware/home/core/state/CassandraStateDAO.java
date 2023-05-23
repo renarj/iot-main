@@ -39,8 +39,6 @@ public class CassandraStateDAO implements StateDAO {
 
     private Session session;
 
-    private Cluster cluster;
-
     private PreparedStatement insertStatement;
 
     private ConcurrentMap<String, PreparedStatement> statementMap = new ConcurrentHashMap<>();
@@ -48,7 +46,7 @@ public class CassandraStateDAO implements StateDAO {
     @PostConstruct
     public void connect() {
         LOG.info("Connecting to cassandra cluster on: {}", cassandraHost);
-        cluster = Cluster.builder()
+        Cluster cluster = Cluster.builder()
                 .addContactPoint(cassandraHost)
                 .build();
         session = cluster.connect();

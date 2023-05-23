@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -32,7 +33,7 @@ public class ThingRestSvc {
 
     @RequestMapping(value = "/controllers({controllerId})/things", method = RequestMethod.GET)
     public List<IotThing> getThings(@PathVariable String controllerId) {
-        LOG.debug("Requested list of all devices");
+        LOG.debug("Requested list of all things on controller: {}", controllerId);
 
         return itemManager.findThings(controllerId);
     }
@@ -41,6 +42,24 @@ public class ThingRestSvc {
     public List<Controller> getControllers() {
         LOG.debug("Requested a list of all controllers");
         return itemManager.findControllers();
+    }
+
+    @RequestMapping("/controllers({controllerId})")
+    public ResponseEntity<Controller> getController(@PathVariable String controllerId) {
+        LOG.info("Requesting controller: {}", controllerId);
+        var oController = itemManager.findController(controllerId);
+        return oController.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @RequestMapping(value = "/controllers({controllerId})/plugins({pluginId})/things", method = RequestMethod.GET)
+    public List<IotThing> getThings(@PathVariable String controllerId, @PathVariable String pluginId, @RequestParam Optional<String> type) {
+        LOG.debug("Requested list of all things on controller: {} and plugin: {} and type: {}", controllerId, pluginId, type);
+
+        if(type.isPresent()) {
+            return itemManager.findThings(controllerId, pluginId, type.get());
+        } else {
+            return itemManager.findThings(controllerId, pluginId);
+        }
     }
 
     @RequestMapping("/controllers({controllerId})/things({thingId})")
@@ -66,13 +85,25 @@ public class ThingRestSvc {
     public ResponseEntity<Object> createThing(@PathVariable String controllerId, @RequestBody IotThingImpl thing) throws IOTException {
         if(StringUtils.hasText(controllerId) && controllerId.equalsIgnoreCase(thing.getControllerId()) && validateThing(thing)) {
             LOG.info("Creating thing: '{}' on controller: '{}'", thing.getThingId(), controllerId);
+            LOG.info("Thing: {}", thing);
             var createdThing = itemManager.createOrUpdateThing(controllerId, thing.getThingId(), thing.getFriendlyName(),
-                    thing.getPluginId(), thing.getParentId(), thing.getProperties(), thing.getAttributes());
+                    thing.getPluginId(), thing.getType(), thing.getParentId(), thing.getProperties(), thing.getAttributes());
 
             return new ResponseEntity<>(createdThing, HttpStatus.CREATED);
         } else {
             LOG.warn("Invalid entity controllerId: '{}' not matching API controllerId: '{}' or missing attributes", thing.getControllerId(), controllerId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/controllers({controllerId})/things({thingId})", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> removeThing(@PathVariable String controllerId, @PathVariable String thingId) throws IOTException {
+        LOG.info("Received remove thing request for controller: {} and thing: {}", controllerId, thingId);
+        boolean result = itemManager.removeThing(controllerId, thingId);
+        if(result) {
+            return ResponseEntity.accepted().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

@@ -1,10 +1,6 @@
 package com.oberasoftware.robo.maximus.model;
 
-import com.oberasoftware.iot.core.robotics.Robot;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
-import com.oberasoftware.iot.core.robotics.servo.Servo;
-import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 
 public class JointImpl implements Joint {
 
@@ -18,9 +14,6 @@ public class JointImpl implements Joint {
 
     private final int minDegrees;
     private final int maxDegrees;
-
-    private Servo servo;
-    private ServoDriver servoDriver;
 
     public JointImpl(String id, String name, String type, boolean inverted) {
         this.id = id;
@@ -38,12 +31,6 @@ public class JointImpl implements Joint {
         this.minDegrees = minDegrees;
         this.maxDegrees = maxDegrees;
         this.inverted = inverted;
-    }
-
-    @Override
-    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
-        this.servoDriver = robotCore.getServoDriver();
-        this.servo = this.servoDriver.getServo(id);
     }
 
     @Override

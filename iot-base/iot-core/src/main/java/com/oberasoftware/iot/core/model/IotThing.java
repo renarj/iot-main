@@ -13,6 +13,8 @@ public interface IotThing extends IotBaseEntity {
 
     String getPluginId();
 
+    String getType();
+
     String getFriendlyName();
 
     Set<String> getAttributes();

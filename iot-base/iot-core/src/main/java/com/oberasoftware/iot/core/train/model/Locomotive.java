@@ -13,6 +13,12 @@ import java.util.Map;
 @JasDBEntity(bagName = "locomotives")
 public class Locomotive implements IotBaseEntity {
 
+    public static final String LOC_ADDRESS = "locAddress";
+    public static final String DCC_MODE = "dccMode";
+    public static final String SPEED_ATTR = "speed";
+    public static final String DIRECTION_ATTR = "direction";
+    public static final String LOCOMOTIVE_TYPE = "locomotive";
+
     private String entityId;
 
     private int locAddress;
@@ -20,6 +26,8 @@ public class Locomotive implements IotBaseEntity {
     private String controllerId;
 
     private String thingId;
+
+    private String commandStation;
 
     private String name;
 
@@ -46,7 +54,7 @@ public class Locomotive implements IotBaseEntity {
         return this.entityId;
     }
 
-    public void setEntityId(String entityId) {
+    public void setId(String entityId) {
         this.entityId = entityId;
     }
 
@@ -58,6 +66,8 @@ public class Locomotive implements IotBaseEntity {
     public void setControllerId(String controllerId) {
         this.controllerId = controllerId;
     }
+
+
 
     @JasDBProperty
     public String getThingId() {
@@ -113,6 +123,15 @@ public class Locomotive implements IotBaseEntity {
     }
 
     @JasDBProperty
+    public String getCommandStation() {
+        return commandStation;
+    }
+
+    public void setCommandStation(String commandStation) {
+        this.commandStation = commandStation;
+    }
+
+    @JasDBProperty
     public StepMode getStepMode() {
         return stepMode;
     }
@@ -128,6 +147,7 @@ public class Locomotive implements IotBaseEntity {
                 ", locAddress=" + locAddress +
                 ", controllerId='" + controllerId + '\'' +
                 ", thingId='" + thingId + '\'' +
+                ", commandStation='" + commandStation + '\'' +
                 ", name='" + name + '\'' +
                 ", attributes=" + attributes +
                 ", functions=" + functions +

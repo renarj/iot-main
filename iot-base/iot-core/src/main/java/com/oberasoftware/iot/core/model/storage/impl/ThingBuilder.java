@@ -25,6 +25,11 @@ public class ThingBuilder {
         return this;
     }
 
+    public ThingBuilder type(String type) {
+        this.thing.setType(type);
+        return this;
+    }
+
     public ThingBuilder plugin(String pluginId) {
         this.thing.setPluginId(pluginId);
         return this;

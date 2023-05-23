@@ -113,9 +113,9 @@ public class HumanoidRobotImpl implements HumanoidRobot {
                 robotCore.getRemoteDriver().registerThing(builder.build());
             });
 
-            this.sensors.forEach(s -> {
-
-            });
+//            this.sensors.forEach(s -> {
+//
+//            });
         }
     }
 

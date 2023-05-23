@@ -48,6 +48,7 @@ public class MQTTBroker {
                     LOG.warn("Connection lost to host: {}", host);
                     try {
                         client.reconnect();
+                        LOG.info("Reconnected to broker: {}", host);
                     } catch (MqttException e) {
                         LOG.error("Could not reconnect", e);
                     }

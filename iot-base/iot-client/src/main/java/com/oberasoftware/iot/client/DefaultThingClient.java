@@ -102,6 +102,32 @@ public class DefaultThingClient implements ThingClient {
     }
 
     @Override
+    public boolean remove(String controllerId, String thingId) throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl)
+                        .resource("controllers", controllerId)
+                        .resource("things", thingId)
+                        .build())
+                .DELETE()
+                .headers("Content-Type", "application/json")
+                .build();
+        LOG.info("Doing HTTP Request: {}", request);
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == HttpStatus.ACCEPTED.value()) {
+                LOG.info("Succesfully removed thing: {} on controller: {}", thingId, controllerId);
+                return true;
+            } else {
+                LOG.warn("Could not remove thing: {} on controller: {}", thingId, controllerId);
+                return false;
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new IOTException("Unable to remove thing", e);
+        }
+    }
+
+    @Override
     public List<Controller> getControllers() throws IOTException {
         var request = HttpRequest.newBuilder()
                 .uri(UriBuilder.create(baseUrl).resource("controllers").build())
@@ -144,12 +170,67 @@ public class DefaultThingClient implements ThingClient {
     }
 
     @Override
+    public Optional<Controller> getController(String controllerId) throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl).resource("controllers", controllerId).build())
+                .build();
+        LOG.info("Doing Controller HTTP Request: {}", request);
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == HttpStatus.OK.value()) {
+                var body = response.body();
+                ObjectMapper mapper = new ObjectMapper();
+                Controller controller = mapper.readValue(body, ControllerImpl.class);
+
+                LOG.info("Found Controller: {}", controller);
+                return Optional.of(controller);
+            } else {
+                return Optional.empty();
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new IOTException("Unable to request Controller from service", e);
+        }
+    }
+
+    @Override
     public List<IotThing> getThings(String controllerId) throws IOTException {
         var request = HttpRequest.newBuilder()
                 .uri(UriBuilder.create(baseUrl).resource("controllers", controllerId).resource("things").build())
                 .build();
-        LOG.info("Doing HTTP Request: {}", request);
+        LOG.info("Doing HTTP Request to retrieve things for controller: {} request: {}", controllerId, request);
+        return doListRequest(request);
+    }
 
+    @Override
+    public List<IotThing> getThings(String controllerId, String pluginId) throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl)
+                        .resource("controllers", controllerId)
+                        .resource("plugins", pluginId)
+                        .resource("things")
+                        .build())
+                .build();
+        LOG.info("Doing HTTP Request to retrieve things for controller: {} and plugin: {} request: {}", controllerId, pluginId, request);
+
+        return doListRequest(request);
+    }
+
+    @Override
+    public List<IotThing> getThings(String controllerId, String pluginId, String type) throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl)
+                        .resource("controllers", controllerId)
+                        .resource("plugins", pluginId)
+                        .resource("things")
+                        .param("type", type)
+                        .build())
+                .build();
+        LOG.info("Doing HTTP Request to retrieve things for controller: {} and plugin: {} request: {}", controllerId, pluginId, request);
+
+        return doListRequest(request);
+    }
+
+    private List<IotThing> doListRequest(HttpRequest request) throws IOTException {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             var body = response.body();
@@ -161,4 +242,5 @@ public class DefaultThingClient implements ThingClient {
             throw new IOTException("Unable to request things from service", e);
         }
     }
+
 }

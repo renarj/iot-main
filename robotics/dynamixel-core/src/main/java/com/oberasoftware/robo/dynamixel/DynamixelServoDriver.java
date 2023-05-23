@@ -65,13 +65,11 @@ public class DynamixelServoDriver implements ServoDriver {
     @Autowired
     private LocalEventBus eventBus;
 
-    private Map<String, Servo> servos = new HashMap<>();
-
-    private String portName;
+    private final Map<String, Servo> servos = new HashMap<>();
 
     @Override
     public void activate(Robot robot, Map<String, String> properties) {
-        this.portName = properties.get(PORT);
+        String portName = properties.get(PORT);
         connector.connect(portName);
 
         boolean motorsFound;

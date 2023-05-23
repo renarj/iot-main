@@ -8,7 +8,7 @@ var stompClient = null;
 
 function connect() {
     console.log("Connecting to websocket");
-    var socket = new SockJS('http://localhost:9006/ws');
+    var socket = new SockJS('http://localhost:9999/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame) {
         console.log('Connected: ' + frame);
@@ -448,12 +448,12 @@ function renderSwitch(item, containerId) {
 
     renderWidgetTemplate("switchTemplate", data, item, containerId);
 
-    var iSwitch = $("input[name=" + item.itemId + "_switch]");
-    iSwitch.bootstrapSwitch();
-    iSwitch.on('switchChange.bootstrapSwitch', handleSwitchEvent);
+    // var iSwitch = $("input[name=" + item.itemId + "_switch]");
+    // iSwitch.bootstrapSwitch();
+    // iSwitch.on('switchChange.bootstrapSwitch', handleSwitchEvent);
 
     //lets get the initial state for the widget
-    forceUpdateDeviceState(item.itemId);
+    // forceUpdateDeviceState(item.itemId);
 }
 
 function handleSwitchEvent(event, state) {

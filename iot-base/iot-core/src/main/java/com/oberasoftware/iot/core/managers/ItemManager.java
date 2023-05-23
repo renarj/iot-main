@@ -15,11 +15,19 @@ import java.util.Set;
 public interface ItemManager {
     Controller createOrUpdateController(String controllerId, Map<String, String> properties) throws IOTException;
 
-    IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String parent, Map<String, String> properties, Set<String> attribute) throws IOTException;
+    IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String type, String parent, Map<String, String> properties, Set<String> attribute) throws IOTException;
+
+    boolean removeThing(String controllerId, String thingId) throws IOTException;
 
     List<Controller> findControllers();
 
+    Optional<Controller> findController(String controllerId);
+
     List<IotThing> findThings(String controllerId);
+
+    List<IotThing> findThings(String controlerId, String pluginId);
+
+    List<IotThing> findThings(String controlerId, String pluginId, String type);
 
     Optional<IotThing> findThing(String controllerId, String id);
 }

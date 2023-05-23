@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/state")
-public class StateController {
+public class StateRestSvc {
 
     @Autowired
     private StateManager stateManager;

@@ -98,9 +98,30 @@ public class HomeDAOImpl extends BaseDAO implements HomeDAO {
     }
 
     @Override
+    public List<IotThing> findThings(String controllerId, String pluginId, String type) {
+        return findThings(controllerId, new ImmutableMap.Builder<String, String>()
+                .put("pluginId", pluginId)
+                .put("type", type)
+                .build());
+    }
+
+    @Override
+    public List<IotThing> findThings(String controllerId, String pluginId) {
+        return findThings(controllerId, new ImmutableMap.Builder<String, String>()
+                .put("pluginId", pluginId)
+                .build());
+    }
+
+    @Override
     public List<IotThing> findThings(String controllerId) {
+        return findThings(controllerId, new HashMap<>());
+    }
+
+    @Override
+    public List<IotThing> findThings(String controllerId, Map<String, String> queryParams) {
         return newArrayList(findItems(IotThingImpl.class, new ImmutableMap.Builder<String, String>()
                 .put("controllerId", controllerId)
+                .putAll(queryParams)
                 .build()));
     }
 

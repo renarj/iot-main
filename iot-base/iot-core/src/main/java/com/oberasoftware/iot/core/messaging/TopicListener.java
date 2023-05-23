@@ -5,5 +5,5 @@ public interface TopicListener<T> {
 
     void close();
 
-    void register(TopicConsumer<T> topicConsumer);
+    void register(String topic, TopicConsumer<T> topicConsumer);
 }

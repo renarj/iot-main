@@ -16,8 +16,10 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication(exclude = {SpringApplicationAdminJmxAutoConfiguration.class, SecurityAutoConfiguration.class})
-@Import({HomeAutomation.class, DataServiceContainer.class, CommandContainer.class,
-        EdgeProcessorContainer.class, StateContainer.class, TrainServiceContainer.class})
+@Import({HomeAutomation.class, DataServiceContainer.class,
+        CommandContainer.class,
+        EdgeProcessorContainer.class, StateContainer.class,
+        TrainServiceContainer.class})
 //@Import({TrainServiceContainer.class, ClientConfiguration.class, JasDBConfiguration.class})
 public class TrainAutomationService {
     private static final Logger LOG = LoggerFactory.getLogger(TrainAutomationService.class);

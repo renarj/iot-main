@@ -4,10 +4,14 @@ import com.google.common.base.Joiner;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UriBuilder {
     private final List<String> pathElements = new ArrayList<>();
+
+    private final Map<String, String> queryParam = new HashMap<>();
 
     private UriBuilder(String baseUrl) {
         pathElements.add(baseUrl);
@@ -28,7 +32,15 @@ public class UriBuilder {
         return this;
     }
 
+    public UriBuilder param(String key, String value) {
+        this.queryParam.put(key, value);
+        return this;
+    }
+
     public URI build() {
-        return URI.create(Joiner.on("/").join(pathElements));
+        String base = Joiner.on("/").join(pathElements);
+
+        var queryParams = Joiner.on("&").withKeyValueSeparator("=").join(queryParam);
+        return URI.create(base + "?" + queryParams);
     }
 }

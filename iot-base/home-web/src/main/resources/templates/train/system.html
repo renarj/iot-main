@@ -1,0 +1,139 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head th:replace="includes/header :: header">
+</head>
+<body style="height:100%;">
+<script th:src="@{/javascript/system.js}" src="/static/javascript/system.js"></script>
+
+<div th:replace="includes/header :: navigation (selectTab='trains')"></div>
+
+<div th:replace="includes/header :: trainTabs (selectTab='system')"></div>
+
+<script id="controllerTemplate" type="text/x-handlebars-template">
+    <a class="list-group-item list-group-item-action controllerButton" controllerId="{{controllerId}}" href="#">{{controllerId}}</a>
+</script>
+<script id="commandStationTemplate" type="text/x-handlebars-template">
+    <a class="list-group-item list-group-item-action commandStationButton" controllerId="{{controllerId}}" thingId="{{thingId}}" href="#">{{name}}</a>
+</script>
+<script id="commandStationDetailTemplate" type="text/x-handlebars-template">
+    <div class="card">
+        <div class="card-header d-flex justify-content-start">
+            <h5 class="card-title flex-grow-1">Command Station: {{thingId}}</h5>
+            <a class="removeStation" href="#" thingId="{{thingId}}" controllerId="{{controllerId}}"><i class="bi bi-trash"></i></a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">ThingId:</div>
+                <div class="col-8">{{thingId}}</div>
+            </div>
+            <div class="row">
+                <div class="col-4">Controller:</div>
+                <div class="col-8">{{controllerId}}</div>
+            </div>
+            <div class="row">
+                <div class="col-4">Name:</div>
+                <div class="col-8">{{name}}</div>
+            </div>
+            {{#each properties}}
+                <div class="row">
+                    <div class="col-4">{{@key}}</div>
+                    <div class="col-8">{{this}}</div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</script>
+
+<div class="modal fade" id="commandStationForm" tabindex="-1" aria-labelledby="newCSLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newCSLabel">New Command Station</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="uniqueId" class="col-form-label">Unique ID of Station:</label>
+                        <input type="text" class="form-control" id="uniqueId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="stationName" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="stationName"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formControllerList" class="col-form-label">Controller:</label>
+                        <select class="form-select" aria-label="Select Controller" id="formControllerList">
+                            <option selected>Open this select menu</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="csType" class="col-form-label">Command Center Type:</label>
+                        <select class="form-select" aria-label="Select Command Center Type" id="csType">
+                            <option selected>Open this select menu</option>
+                            <option value="z21">Roco Z21</option>
+                            <option value="z21">DR 5000 with Z21 Protocol</option>
+                            <option value="demo">Demo Command Station</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dcIp" class="col-form-label">IP:</label>
+                        <input type="text" class="form-control" id="dcIp"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dcPort" class="col-form-label">Port:</label>
+                        <input type="text" class="form-control" id="dcPort"/>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addCSBtn">Add Command Station</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid" style="height:100%;">
+    <div class="row p-1">
+        <div class="col-2" id="actionMenu">
+            <ul class="list-group">
+                <li class="list-group-item active">Command Stations</li>
+                <li class="list-group-item">General Settings</li>
+            </ul>
+        </div>
+        <div class="col-3" id="commandListPanel">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    <h5 class="card-title">Controllers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="controllerList">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card fade" style="width: 18rem;" id="commandStationPanel">
+                <div class="card-header">
+                    <h5 class="card-title">Command Stations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="stationList">
+
+                    </div>
+                    <div class="row p-2">
+                        <button type="button" class="btn btn-primary" id="openModalStation" data-bs-toggle="modal" data-bs-target="#commandStationForm" data-bs-whatever="@mdo">Add Station</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-7" id="contentPanel">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

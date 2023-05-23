@@ -5,19 +5,25 @@ import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
 
 @JasDBEntity(bagName = "locFunction")
 public class LocFunction {
-    enum FUNCTION_TYPES {
-        LIGHT,
-        FRONT_REAR_LIGHT,
-        CABIN_LIGHT
-    }
-
     private int functionNumber;
 
-    private FUNCTION_TYPES functionType;
+    private String functionType;
 
-    public LocFunction(int functionNumber, FUNCTION_TYPES functionType) {
+    private String description;
+
+    private boolean toggle;
+
+    private boolean enabled;
+
+    public LocFunction(int functionNumber, String functionType, String description, boolean toggle, boolean enabled) {
         this.functionNumber = functionNumber;
         this.functionType = functionType;
+        this.description = description;
+        this.toggle = toggle;
+        this.enabled = enabled;
+    }
+
+    public LocFunction() {
     }
 
     @JasDBProperty
@@ -30,11 +36,38 @@ public class LocFunction {
     }
 
     @JasDBProperty
-    public FUNCTION_TYPES getFunctionType() {
+    public String getFunctionType() {
         return functionType;
     }
 
-    public void setFunctionType(FUNCTION_TYPES functionType) {
+    public void setFunctionType(String functionType) {
         this.functionType = functionType;
+    }
+
+    @JasDBProperty
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @JasDBProperty
+    public boolean isToggle() {
+        return toggle;
+    }
+
+    public void setToggle(boolean toggle) {
+        this.toggle = toggle;
+    }
+
+    @JasDBProperty
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

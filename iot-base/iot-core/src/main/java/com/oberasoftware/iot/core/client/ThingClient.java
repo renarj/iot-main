@@ -14,9 +14,17 @@ public interface ThingClient {
 
     Controller createOrUpdate(Controller controller) throws IOTException;
 
+    boolean remove(String controllerId, String thingId) throws IOTException;
+
     List<Controller> getControllers() throws IOTException;
+
+    Optional<Controller> getController(String controller) throws IOTException;
 
     Optional<IotThing> getThing(String controllerId, String thingId) throws IOTException;
 
     List<IotThing> getThings(String controllerId) throws IOTException;
+
+    List<IotThing> getThings(String controllerId, String pluginId) throws IOTException;
+
+    List<IotThing> getThings(String controllerId, String pluginId, String type) throws IOTException;
 }

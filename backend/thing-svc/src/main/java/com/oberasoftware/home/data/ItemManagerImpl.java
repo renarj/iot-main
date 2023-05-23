@@ -66,7 +66,7 @@ public class ItemManagerImpl implements ItemManager {
     }
 
     @Override
-    public IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String parent, Map<String, String> properties, Set<String> attributes) throws IOTException {
+    public IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String type, String parent, Map<String, String> properties, Set<String> attributes) throws IOTException {
         centralDatastore.beginTransaction();
         try {
             Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
@@ -78,14 +78,34 @@ public class ItemManagerImpl implements ItemManager {
 
                 var t = new IotThingImpl(item.getId(), controllerId, thingId, friendlyName, plugin, parent, mergedProperties);
                 t.setAttributes(attributes);
+                t.setType(type);
 
                 return centralDatastore.store(t);
             } else {
                 String id = generateId();
                 LOG.debug("Device: {} does not yet exist, creating new with id: {}", thingId, id);
                 var t = new IotThingImpl(id, controllerId, thingId, friendlyName, plugin, parent, properties);
+                t.setType(type);
                 t.setAttributes(attributes);
                 return centralDatastore.store(t);
+            }
+        } finally {
+            centralDatastore.commitTransaction();
+        }
+    }
+
+    @Override
+    public boolean removeThing(String controllerId, String thingId) throws IOTException {
+        centralDatastore.beginTransaction();
+        try {
+            Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
+            if(thing.isPresent()) {
+                LOG.debug("Deleted thing: {} on controller: {}", thingId, controllerId);
+                centralDatastore.delete(IotThingImpl.class, thing.get().getId());
+                return true;
+            } else {
+                LOG.warn("Tried to remove thing: {} on controller: {} but was not found", thingId, controllerId);
+                return false;
             }
         } finally {
             centralDatastore.commitTransaction();
@@ -98,8 +118,23 @@ public class ItemManagerImpl implements ItemManager {
     }
 
     @Override
+    public Optional<Controller> findController(String controllerId) {
+        return homeDAO.findController(controllerId);
+    }
+
+    @Override
     public List<IotThing> findThings(String controllerId) {
         return homeDAO.findThings(controllerId);
+    }
+
+    @Override
+    public List<IotThing> findThings(String controlerId, String pluginId) {
+        return homeDAO.findThings(controlerId, pluginId);
+    }
+
+    @Override
+    public List<IotThing> findThings(String controlerId, String pluginId, String type) {
+        return homeDAO.findThings(controlerId, pluginId, type);
     }
 
     @Override

@@ -11,15 +11,71 @@
 <script src="/javascript/holder.min.js"></script>
 <script src="/javascript/gauge.min.js"></script>
 
+<script id="light" type="text/x-handlebars-template">
+    <button type="button" class="btn btn-outline-secondary fun-button" thingId="{{thingId}}" controllerId="{{controllerId}}" functionId="{{functionId}}" data-toggle="tooltip" data-placement="top" title="{{description}}" mode="{{mode}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
+            <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z"></path>
+        </svg>
+    </button>
+</script>
+
+<script id="sound" type="text/x-handlebars-template">
+    <button type="button" class="btn btn-outline-secondary fun-button" thingId="{{thingId}}" controllerId="{{controllerId}}" functionId="{{functionId}}" data-toggle="tooltip" data-placement="top" title="{{description}}" mode="{{mode}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-volume-down-fill" viewBox="0 0 16 16">
+            <path d="M9 4a.5.5 0 0 0-.812-.39L5.825 5.5H3.5A.5.5 0 0 0 3 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 9 12V4zm3.025 4a4.486 4.486 0 0 1-1.318 3.182L10 10.475A3.489 3.489 0 0 0 11.025 8 3.49 3.49 0 0 0 10 5.525l.707-.707A4.486 4.486 0 0 1 12.025 8z"></path>
+        </svg>
+    </button>
+</script>
+
+<script id="volume" type="text/x-handlebars-template">
+    <button type="button" class="btn btn-outline-secondary fun-button" thingId="{{thingId}}" controllerId="{{controllerId}}" functionId="{{functionId}}" data-toggle="tooltip" data-placement="top" title="{{description}}" mode="{{mode}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-speaker-fill" viewBox="0 0 16 16">
+            <path d="M9 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-2.5 6.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"></path>
+            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm6 4a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 7a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7z"></path>
+        </svg>
+    </button>
+</script>
+<script id="smoke" type="text/x-handlebars-template">
+    <button type="button" class="btn btn-outline-secondary fun-button" thingId="{{thingId}}" controllerId="{{controllerId}}" functionId="{{functionId}}" data-toggle="tooltip" data-placement="top" title="{{description}}" mode="{{mode}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312V4.002Z"></path>
+        </svg>
+    </button>
+</script>
+
+<script id="functionTemplate" type="text/x-handlebars-template">
+    <tr functionId="{{functionNr}}">
+        <th scope="row" class="align-middle">F{{functionNr}}</th>
+        <td class="align-middle"><input type="checkbox" id="{{functionNr}}_enabled"/></td>
+        <td class="align-middle">
+            <select class="form-select" id="{{functionNr}}_type">
+                <option value="default">Default</option>
+                <option value="light">Light</option>
+                <option value="sound">Sound</option>
+                <option value="front/rear">Light Front/Rear</option>
+                <option value="smoke">Smoke</option>
+            </select>
+        </td>
+        <td class="align-middle">
+            <input type="text" value="{{description}}" placeholder="Description..." id="{{functionNr}}_description"/>
+        </td>
+        <td class="align-middle">
+            <input type="checkbox" id="{{functionNr}}_toggle"/>
+        </td>
+    </tr>
+</script>
+
 <script id="locTemplate" type="text/x-handlebars-template">
     <a class="list-group-item list-group-item-action locButton" id="{{thingId}}" controllerId="{{controllerId}}" href="#">{{name}}</a>
 </script>
 
 <script id="locControlTemplate" type="text/x-handlebars-template">
-    <div class="col-2" id="locControl">
+    <div class="col-2" id="locControl" thingId="{{thingId}}" controllerId="{{controllerId}}">
         <div class="card" style="width: 18rem;">
-            <div class="card-header">
-                <h5 class="card-title">Locomotive Control</h5>
+            <div class="card-header d-flex justify-content-start">
+                <h5 class="card-title flex-grow-1">Locomotive: {{name}}</h5>
+                <a class="removeLoc" href="#" thingId="{{thingId}}" controllerId="{{controllerId}}"><i class="bi bi-trash"></i></a>&nbsp;
+                <a class="editLoc" href="#" thingId="{{thingId}}" controllerId="{{controllerId}}"><i class="bi bi-pencil-fill"></i></a>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -32,8 +88,38 @@
                     </canvas>
                 </div>
                 <div class="row p-2">
-                    <label for="customRange2" class="form-label">Locomotive speed: 0</label>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-outline-secondary" id="rev-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"></path>
+                            </svg>
+                            Reverse
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-outline-secondary" id="fwd-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                            </svg>
+                            Forward
+                        </button>
+                    </div>
+                </div>
+                <div class="row p-2">
+                    <div class="col-8">Locomotive speed:</div>
+                    <div class="col-4" id="speed">0</div>
+                </div>
+                <div class="row p-2">
+                    <div class="col-8">Direction: </div>
+                    <div class="col-4" id="direction">forward</div>
+                </div>
+                <div class="row p-2">
                     <input type="range" class="form-range locSpeedControl" min="0" max="300" step="1" id="locSpeedControl" thingId="{{thingId}}" controllerId="{{controllerId}}" value="0"/>
+                </div>
+                <div class="row p2 d-flex justify-content-start">
+                    <div class="col-12" id="functionButtons">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,42 +127,78 @@
 </script>
 
 
-<div class="modal fade" id="locomotiveForm" tabindex="-1" aria-labelledby="newLocLabel" aria-hidden="true">
+<div class="modal fade modal-lg" id="locomotiveForm" tabindex="-1" aria-labelledby="newLocLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="newLocLabel">New Locomotive</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <ul class="nav nav-tabs" role="tablist" id="tabList">
+                <li class="nav-item" role="presentation"><a class="nav-link active" data-bs-toggle="tab" data-bs-target="#locDetail" aria-controls="locDetail" aria-selected="true" role="tab" href="#details" id="detail-tab">Details</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="#functions" data-bs-toggle="tab" data-bs-target="#locFunctions" aria-controls="locFunctions" aria-selected="false" role="tab" id="function-tab">Functions</a></li>
+            </ul>
             <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="uniqueId" class="col-form-label">Unique ID:</label>
-                        <input type="text" class="form-control" id="uniqueId">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="locDetail" role="tabpanel" aria-labelledby="detail-tab">
+                        <form>
+                            <div class="mb-3">
+                                <label for="uniqueId" class="col-form-label">Unique ID:</label>
+                                <input type="text" class="form-control" id="uniqueId">
+                            </div>
+                            <div class="mb-3">
+                                <label for="locId" class="col-form-label">DCC - Locomotive ID (number):</label>
+                                <input type="text" class="form-control" id="locId"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="locName" class="col-form-label">Loc Name:</label>
+                                <input type="text" class="form-control" id="locName"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="controllerList" class="col-form-label">Controller:</label>
+                                <select class="form-select" aria-label="Select Controller" id="controllerList">
+                                    <option selected>Open this select menu</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="commandStationList" class="col-form-label">Command Station:</label>
+                                <select class="form-select" aria-label="Select Command Station" id="commandStationList">
+                                    <option selected value="">Open this select menu</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="controllerList" class="col-form-label">DCC Mode:</label>
+                                <select class="form-select" aria-label="Select DCC Mode" id="dccMode">
+                                    <option selected value="DCC_128">DCC 128</option>
+                                    <option value="DCC_28">DCC 28</option>
+                                    <option value="DCC_27">DCC 27</option>
+                                    <option value="DCC_14">DCC 14</option>
+                                </select>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="locId" class="col-form-label">DCC - Locomotive ID (number):</label>
-                        <input type="text" class="form-control" id="locId"/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="locName" class="col-form-label">Loc Name:</label>
-                        <input type="text" class="form-control" id="locName"/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="controllerList" class="col-form-label">Controller:</label>
-                        <select class="form-select" aria-label="Select Controller" id="controllerList">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
+                    <div class="tab-pane fade" id="locFunctions" role="tabpanel" aria-labelledby="function-tab">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Function</th>
+                                    <th scope="col">Enabled</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Push</th>
+                                </tr>
+                            </thead>
+                            <tbody id="functionList">
 
-                </form>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="addLocBtn">Add Locomotive</button>
+                <button type="button" class="btn btn-primary" id="addLocBtn">Save Locomotive</button>
             </div>
         </div>
     </div>

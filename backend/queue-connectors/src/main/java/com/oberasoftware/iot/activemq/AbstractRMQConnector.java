@@ -18,34 +18,42 @@ public abstract class AbstractRMQConnector {
     protected Connection connection;
     protected Channel channel;
 
-    protected void connect(String rmqHost, int rmqPort, String rmqTopic) {
-        if(StringUtils.hasText(rmqHost)) {
-            var factory = new ConnectionFactory();
-            factory.setHost(rmqHost);
-            factory.setPort(rmqPort);
-            try {
-                LOG.info("Connecting to RabbitMQ Host: {}:{} on topic: {}", rmqHost, rmqPort, rmqTopic);
-                this.connection = factory.newConnection();
-                this.channel = connection.createChannel();
+    protected synchronized void connect(String rmqHost, int rmqPort, String rmqTopic) {
+        if(channel == null) {
+            if (StringUtils.hasText(rmqHost)) {
+                var factory = new ConnectionFactory();
+                factory.setHost(rmqHost);
+                factory.setPort(rmqPort);
+                try {
+                    LOG.info("Connecting to RabbitMQ Host: {}:{} on topic: {}", rmqHost, rmqPort, rmqTopic);
+                    this.connection = factory.newConnection();
+                    this.channel = connection.createChannel();
 
-                for (String topic : rmqTopic.split(",")) {
-                    LOG.info("Registering topic: {} to RMQ", topic);
-                    this.channel.exchangeDeclare(topic, "fanout");
+                    for (String topic : rmqTopic.split(",")) {
+                        LOG.info("Registering topic: {} to RMQ", topic);
+                        this.channel.exchangeDeclare(topic, "fanout");
+                    }
+                } catch (IOException | TimeoutException e) {
+                    throw new RuntimeIOTException("Could not connect to RabbitMQ on Host: " + rmqHost, e);
                 }
-            } catch (IOException | TimeoutException e) {
-                throw new RuntimeIOTException("Could not connect to RabbitMQ on Host: " + rmqHost, e);
+            } else {
+                LOG.warn("No RabbitMQ host is configured");
             }
         } else {
-            LOG.warn("No RabbitMQ host is configured");
+            LOG.warn("Channel is already configured");
         }
     }
 
-    protected void close(String rmqHost) {
-        try {
-            channel.close();
-            connection.close();
-        } catch (IOException | TimeoutException e) {
-            throw new RuntimeIOTException("Could not cleanly close the RMQ connection to host: " + rmqHost, e);
+    protected synchronized void close(String rmqHost) {
+        if(channel != null && channel.isOpen()) {
+            try {
+                channel.close();
+                connection.close();
+            } catch (IOException | TimeoutException e) {
+                throw new RuntimeIOTException("Could not cleanly close the RMQ connection to host: " + rmqHost, e);
+            }
+        } else {
+            LOG.warn("Channel already closed, or not initialized");
         }
     }
 }

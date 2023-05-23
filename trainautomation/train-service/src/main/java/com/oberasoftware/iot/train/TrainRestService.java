@@ -20,7 +20,7 @@ public class TrainRestService {
     private TrainManager trainManager;
 
     @RequestMapping(value = "/locomotives", method = RequestMethod.POST)
-    public ResponseEntity<Object> createController(@RequestBody Locomotive locomotive) throws IOTException {
+    public ResponseEntity<Object> createLoc(@RequestBody Locomotive locomotive) throws IOTException {
         LOG.info("Stored locomotive: {}", locomotive);
         trainManager.store(locomotive);
 
@@ -33,15 +33,35 @@ public class TrainRestService {
         }
     }
 
+    @RequestMapping(value = "/controllers({controllerId})/locomotives({thingId})", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteLocomotive(@PathVariable String controllerId, @PathVariable String thingId) {
+        LOG.info("Received locomotive removal request on controller: {} for loc: {}", controllerId, thingId);
+        boolean result = trainManager.remove(controllerId, thingId);
+        if(result) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @RequestMapping("/locomotives")
     public List<Locomotive> getLocomotives() {
         LOG.info("Requesting all locomotives stored");
         return trainManager.findAllLocs();
     }
 
-    @RequestMapping("/locomotives({controllerId})")
+    @RequestMapping("/controllers({controllerId})/locomotives")
     public List<Locomotive> getLocomotives(@PathVariable String controllerId) {
         LOG.info("Requesting all locomotives for controller: {}", controllerId);
         return trainManager.findLocs(controllerId);
+    }
+
+    @RequestMapping("/controllers({controllerId})/locomotives({thingId})")
+    public ResponseEntity<Object> getLocomotive(@PathVariable String controllerId, @PathVariable String thingId) {
+        LOG.info("Requesting locomotive for controller: {} and thingId: {}", controllerId, thingId);
+        var foundLoc = trainManager.findLoc(controllerId, thingId);
+        return foundLoc.<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

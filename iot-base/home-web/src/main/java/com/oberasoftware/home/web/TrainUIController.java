@@ -19,4 +19,9 @@ public class TrainUIController {
         return "train/index";
     }
 
+    @RequestMapping("/system")
+    public String getAdmin() {
+        return "train/system";
+    }
+
 }

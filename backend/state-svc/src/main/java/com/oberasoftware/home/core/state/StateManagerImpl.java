@@ -37,6 +37,8 @@ public class StateManagerImpl implements StateManager {
 
     @Override
     public State updateItemState(String controllerId, String thingId, String attribute, Value value) {
+        LOG.info("Update state for controller: {} and thing: {} attribute: {} and value: {}", controllerId, thingId, attribute, value);
+
         boolean updated = updateState(controllerId, thingId, attribute, value);
 
         State state = getState(controllerId, thingId);
@@ -63,6 +65,7 @@ public class StateManagerImpl implements StateManager {
 
     @Override
     public State getState(String controllerId, String thingId) {
+        LOG.info("Retrieving item state for controller: {} and thing: {}", controllerId, thingId);
         return itemStates.get(key(controllerId, thingId));
     }
 

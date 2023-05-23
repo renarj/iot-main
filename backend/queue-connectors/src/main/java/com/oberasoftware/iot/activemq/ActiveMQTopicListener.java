@@ -95,7 +95,7 @@ public class ActiveMQTopicListener implements TopicListener<String>, ExceptionLi
     }
 
     @Override
-    public void register(TopicConsumer<String> topicConsumer) {
+    public void register(String topic, TopicConsumer<String> topicConsumer) {
         LOG.info("Registering topicConsumer: {}", topicConsumer);
         topicConsumers.add(topicConsumer);
     }

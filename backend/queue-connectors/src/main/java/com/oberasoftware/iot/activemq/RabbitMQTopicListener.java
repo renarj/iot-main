@@ -1,5 +1,7 @@
 package com.oberasoftware.iot.activemq;
 
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimaps;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.messaging.TopicConsumer;
 import com.oberasoftware.iot.core.messaging.TopicListener;
@@ -9,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -27,25 +29,12 @@ public class RabbitMQTopicListener extends AbstractRMQConnector implements Topic
     @Value("${rmq.port}")
     private Integer rmqPort;
 
-    private List<TopicConsumer<String>> topicConsumers = new CopyOnWriteArrayList<>();
-
+    private final ListMultimap<String, TopicConsumer<String>> topicConsumers =
+            Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new);
 
     @Override
     public void connect() {
         super.connect(rmqHost, rmqPort, rmqTopic);
-
-        try {
-            var queueName = channel.queueDeclare().getQueue();
-            channel.queueBind(queueName, rmqTopic, "");
-
-            channel.basicConsume(queueName, true, (consumerTag, message) -> {
-                var msg = new String(message.getBody(), 0, message.getBody().length, Charset.defaultCharset());
-                LOG.info("Received RMQ message: {} from topic: {}", msg, rmqTopic);
-                notifyListeners(msg);
-            }, consumerTag -> {});
-        } catch (IOException e) {
-            throw new RuntimeIOTException("Unable to bind to queue on RMQ: " + rmqHost, e);
-        }
     }
 
     @Override
@@ -54,15 +43,29 @@ public class RabbitMQTopicListener extends AbstractRMQConnector implements Topic
     }
 
     @Override
-    public void register(TopicConsumer<String> topicConsumer) {
+    public void register(String topic, TopicConsumer<String> topicConsumer) {
+        try {
+            var queueName = channel.queueDeclare().getQueue();
+            channel.queueBind(queueName, topic, "");
+
+            channel.basicConsume(queueName, true, (consumerTag, message) -> {
+                var msg = new String(message.getBody(), 0, message.getBody().length, Charset.defaultCharset());
+                LOG.info("Received RMQ message: {} from topic: {}", msg, rmqTopic);
+                notifyListeners(message.getEnvelope().getExchange(), msg);
+            }, consumerTag -> {});
+        } catch (IOException e) {
+            throw new RuntimeIOTException("Unable to bind to queue on RMQ: " + rmqHost, e);
+        }
+
+
         LOG.info("Registering topicConsumer: {}", topicConsumer);
-        topicConsumers.add(topicConsumer);
+        topicConsumers.put(topic, topicConsumer);
     }
 
 
-    private void notifyListeners(String message) {
-        topicConsumers.forEach(c -> {
-            LOG.info("Notifying consumer: {} with message: {}", c, message);
+    private void notifyListeners(String topic, String message) {
+        topicConsumers.get(topic).forEach(c -> {
+            LOG.info("Notifying topic: {} consumer: {} with message: {}", topic, c, message);
             c.receive(message);
         });
     }

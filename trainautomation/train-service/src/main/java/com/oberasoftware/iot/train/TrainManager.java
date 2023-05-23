@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface TrainManager {
     void store(Locomotive loc);
 
-    void remove(Locomotive loc);
+    boolean remove(String controllerId, String thingId);
 
     List<Locomotive> findLocs(String controllerId);
 

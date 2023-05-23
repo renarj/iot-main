@@ -8,6 +8,7 @@ import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.extensions.AutomationExtension;
 import com.oberasoftware.iot.core.extensions.DiscoveryListener;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.train.TrainConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 public class TrainAutomationExtension implements AutomationExtension {
     private static final Logger LOG = LoggerFactory.getLogger(TrainAutomationExtension.class);
 
-    private static final String EXTENSION_ID = "trainAutomationExtension";
     private static final String EXTENSION_NAME = "Train Automation Plugin";
     public static final String COMMAND_CENTER_TYPE = "commandCenterType";
 
@@ -32,16 +32,19 @@ public class TrainAutomationExtension implements AutomationExtension {
 
     private final TrainCommandHandler commandHandler;
 
-    public TrainAutomationExtension(ThingClient thingClient, AgentControllerInformation agentControllerInformation, CommandCenterFactory commandCenterFactory, TrainCommandHandler commandHandler) {
+    private final LocThingRepository locRepository;
+
+    public TrainAutomationExtension(ThingClient thingClient, AgentControllerInformation agentControllerInformation, CommandCenterFactory commandCenterFactory, TrainCommandHandler commandHandler, LocThingRepository locRepository) {
         this.thingClient = thingClient;
         this.agentControllerInformation = agentControllerInformation;
         this.commandCenterFactory = commandCenterFactory;
         this.commandHandler = commandHandler;
+        this.locRepository = locRepository;
     }
 
     @Override
     public String getId() {
-        return EXTENSION_ID;
+        return TrainConstants.EXTENSION_ID;
     }
 
     @Override
@@ -67,6 +70,8 @@ public class TrainAutomationExtension implements AutomationExtension {
     @Override
     public void activate(IotThing pluginThing) {
         var properties = pluginThing.getProperties();
+
+
         Set<String> commandCenterIds = properties.keySet().stream().filter(k -> k.startsWith("cc-")).map(properties::get).collect(Collectors.toSet());
         LOG.info("Activating command centers: {}", commandCenterIds);
         commandCenterIds.forEach(cc -> {
@@ -91,6 +96,9 @@ public class TrainAutomationExtension implements AutomationExtension {
         }, () -> {
             LOG.error("Could not find the command center for: {} for thing: {}", commandCenterType, commandCenter);
         });
+
+        LOG.info("Initialization complete, starting loc sync");
+        locRepository.startSync();
     }
 
     @Override

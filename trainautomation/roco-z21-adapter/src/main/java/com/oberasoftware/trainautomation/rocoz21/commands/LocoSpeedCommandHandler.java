@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-public class LocoSpeedCommandHandler extends Z21Command implements Z21CommandHandler {
+public class LocoSpeedCommandHandler implements Z21CommandHandler {
     private static final Logger LOG = LoggerFactory.getLogger(LocoSpeedCommandHandler.class);
     private static final String SPEED = "speed";
     private static final String DIRECTION = "direction";

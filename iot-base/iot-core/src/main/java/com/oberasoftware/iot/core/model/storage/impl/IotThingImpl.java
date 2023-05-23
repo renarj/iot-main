@@ -19,6 +19,8 @@ public class IotThingImpl implements IotThing {
     private String controllerId;
     private String friendlyName;
 
+    private String type = "default";
+
     private String pluginId;
 
     private String parentId;
@@ -88,6 +90,16 @@ public class IotThingImpl implements IotThing {
         this.friendlyName = friendlyName;
     }
 
+    @Override
+    @JasDBProperty
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @JasDBProperty
     public String getThingId() {
         return thingId;
@@ -144,12 +156,15 @@ public class IotThingImpl implements IotThing {
 
     @Override
     public String toString() {
-        return "DeviceItemImpl{" +
+        return "IotThingImpl{" +
                 "id='" + id + '\'' +
                 ", thingId='" + thingId + '\'' +
                 ", controllerId='" + controllerId + '\'' +
+                ", friendlyName='" + friendlyName + '\'' +
+                ", type='" + type + '\'' +
                 ", pluginId='" + pluginId + '\'' +
                 ", parentId='" + parentId + '\'' +
+                ", attributes=" + attributes +
                 ", properties=" + properties +
                 '}';
     }

@@ -6,6 +6,7 @@ import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -32,7 +33,13 @@ public interface HomeDAO {
 
     List<IotThing> findThings(String controllerId);
 
-    Optional<IotThing> findThing(String controllerId, String deviceId);
+    Optional<IotThing> findThing(String controllerId, String thingId);
+
+    List<IotThing> findThings(String controllerId, String pluginId);
+
+    List<IotThing> findThings(String controllerId, String pluginId, String type);
+
+    List<IotThing> findThings(String controllerId, Map<String, String> queryParams);
 
     <T extends VirtualItem> List<T> findVirtualItems(Class<T> type);
 
