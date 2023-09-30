@@ -1,7 +1,7 @@
 package com.oberasoftware.home.data;
 
 import com.oberasoftware.iot.core.exceptions.IOTException;
-import com.oberasoftware.iot.core.managers.ItemManager;
+import com.oberasoftware.iot.core.managers.ThingManager;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
@@ -29,25 +29,25 @@ public class ThingRestSvc {
     private static final String ERROR_FORMAT = "{\"error\":\"%s\"}";
 
     @Autowired
-    private ItemManager itemManager;
+    private ThingManager thingManager;
 
     @RequestMapping(value = "/controllers({controllerId})/things", method = RequestMethod.GET)
     public List<IotThing> getThings(@PathVariable String controllerId) {
         LOG.debug("Requested list of all things on controller: {}", controllerId);
 
-        return itemManager.findThings(controllerId);
+        return thingManager.findThings(controllerId);
     }
 
     @RequestMapping("/controllers")
     public List<Controller> getControllers() {
         LOG.debug("Requested a list of all controllers");
-        return itemManager.findControllers();
+        return thingManager.findControllers();
     }
 
     @RequestMapping("/controllers({controllerId})")
     public ResponseEntity<Controller> getController(@PathVariable String controllerId) {
         LOG.info("Requesting controller: {}", controllerId);
-        var oController = itemManager.findController(controllerId);
+        var oController = thingManager.findController(controllerId);
         return oController.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -56,16 +56,30 @@ public class ThingRestSvc {
         LOG.debug("Requested list of all things on controller: {} and plugin: {} and type: {}", controllerId, pluginId, type);
 
         if(type.isPresent()) {
-            return itemManager.findThings(controllerId, pluginId, type.get());
+            return thingManager.findThings(controllerId, pluginId, type.get());
         } else {
-            return itemManager.findThings(controllerId, pluginId);
+            return thingManager.findThings(controllerId, pluginId);
         }
+    }
+
+    @RequestMapping(value = "/controllers({controllerId})/children({thingId})", method = RequestMethod.GET)
+    public List<IotThing> getChildren(@PathVariable String controllerId, @PathVariable String thingId) {
+        LOG.debug("Requested list of all children on controller: {} of thing: {}", controllerId, thingId);
+
+        return thingManager.findChildren(controllerId, thingId);
+    }
+
+    @RequestMapping(value = "/controllers({controllerId})/children", method = RequestMethod.GET)
+    public List<IotThing> getChildren(@PathVariable String controllerId) {
+        LOG.debug("Requested list of all children on controller: {}", controllerId);
+
+        return thingManager.findChildren(controllerId, controllerId);
     }
 
     @RequestMapping("/controllers({controllerId})/things({thingId})")
     public ResponseEntity<Object> getThing(@PathVariable String controllerId, @PathVariable String thingId) {
         LOG.info("Doing lookup for Thing: {} on controller: {}", thingId, controllerId);
-        var item = itemManager.findThing(controllerId, thingId);
+        var item = thingManager.findThing(controllerId, thingId);
         return item.<ResponseEntity<Object>>map(iotThing -> new ResponseEntity<>(iotThing, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(String.format(ERROR_FORMAT, "Could not find Thing"), HttpStatus.NOT_FOUND));
     }
@@ -74,7 +88,7 @@ public class ThingRestSvc {
     public ResponseEntity<Object> createController(@PathVariable String controllerId, @RequestBody ControllerImpl controller) throws IOTException {
         if(StringUtils.hasText(controllerId) && controllerId.equalsIgnoreCase(controller.getControllerId())) {
             LOG.info("Creating or updating controller: {} data", controllerId);
-            return new ResponseEntity<>(itemManager.createOrUpdateController(controllerId, controller.getProperties()), HttpStatus.CREATED);
+            return new ResponseEntity<>(thingManager.createOrUpdateController(controllerId, controller.getProperties()), HttpStatus.CREATED);
         } else {
             LOG.warn("Invalid entity controllerId: '{}' not matching API controllerId: '{}'", controller.getControllerId(), controllerId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -82,14 +96,18 @@ public class ThingRestSvc {
     }
 
     @RequestMapping(value = "/controllers({controllerId})/things", method = RequestMethod.POST)
-    public ResponseEntity<Object> createThing(@PathVariable String controllerId, @RequestBody IotThingImpl thing) throws IOTException {
+    public ResponseEntity<Object> createThing(@PathVariable String controllerId, @RequestBody IotThingImpl thing) {
         if(StringUtils.hasText(controllerId) && controllerId.equalsIgnoreCase(thing.getControllerId()) && validateThing(thing)) {
             LOG.info("Creating thing: '{}' on controller: '{}'", thing.getThingId(), controllerId);
             LOG.info("Thing: {}", thing);
-            var createdThing = itemManager.createOrUpdateThing(controllerId, thing.getThingId(), thing.getFriendlyName(),
-                    thing.getPluginId(), thing.getType(), thing.getParentId(), thing.getProperties(), thing.getAttributes());
+            try {
+                var createdThing = thingManager.createOrUpdateThing(controllerId, thing.getThingId(), thing.getFriendlyName(),
+                        thing.getPluginId(), thing.getType(), thing.getParentId(), thing.getProperties(), thing.getAttributes());
 
-            return new ResponseEntity<>(createdThing, HttpStatus.CREATED);
+                return new ResponseEntity<>(createdThing, HttpStatus.CREATED);
+            } catch(IOTException e) {
+                return new ResponseEntity<>("{\"errorReason\":\"Invalid Thing provided\", \"detail\":\"" + e.getMessage() + "\"}", HttpStatus.BAD_REQUEST);
+            }
         } else {
             LOG.warn("Invalid entity controllerId: '{}' not matching API controllerId: '{}' or missing attributes", thing.getControllerId(), controllerId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -99,7 +117,7 @@ public class ThingRestSvc {
     @RequestMapping(value = "/controllers({controllerId})/things({thingId})", method = RequestMethod.DELETE)
     public ResponseEntity<Object> removeThing(@PathVariable String controllerId, @PathVariable String thingId) throws IOTException {
         LOG.info("Received remove thing request for controller: {} and thing: {}", controllerId, thingId);
-        boolean result = itemManager.removeThing(controllerId, thingId);
+        boolean result = thingManager.removeThing(controllerId, thingId);
         if(result) {
             return ResponseEntity.accepted().build();
         } else {

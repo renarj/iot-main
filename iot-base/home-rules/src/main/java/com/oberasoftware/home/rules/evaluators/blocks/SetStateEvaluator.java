@@ -39,19 +39,19 @@ public class SetStateEvaluator implements BlockEvaluator<SetState> {
         Map<String, Value> values = new HashMap<>();
         values.put(targetItem.getLabel(), valueEvaluator.eval(input.getResolvableValue()));
 
-        ItemCommand itemCommand = new ValueCommandImpl(targetItem.getControllerId(), targetItem.getItemId(), values);
+        ItemCommand itemCommand = new ValueCommandImpl(targetItem.getControllerId(), targetItem.getThingId(), values);
 
-        automationBus.publish(new ItemCommandEvent(targetItem.getItemId(), itemCommand));
+        automationBus.publish(new ItemCommandEvent(targetItem.getThingId(), itemCommand));
 
         return true;
     }
 
     @Override
     public Set<String> getDependentItems(SetState input) {
-        input.getItemValue().getItemId();
+        input.getItemValue().getThingId();
 
         Set<String> dependentItems = Sets.newHashSet(evaluatorFactory.getEvaluator(input.getResolvableValue()).getDependentItems(input.getResolvableValue()));
-        dependentItems.add(input.getItemValue().getItemId());
+        dependentItems.add(input.getItemValue().getThingId());
         return dependentItems;
     }
 }

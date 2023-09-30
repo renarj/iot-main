@@ -19,6 +19,11 @@ public class TrainUIController {
         return "train/index";
     }
 
+    @RequestMapping("/sensors")
+    public String getSensors() {
+        return "train/sensors";
+    }
+
     @RequestMapping("/system")
     public String getAdmin() {
         return "train/system";

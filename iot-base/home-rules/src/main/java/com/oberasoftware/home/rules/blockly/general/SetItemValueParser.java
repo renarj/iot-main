@@ -47,8 +47,9 @@ public class SetItemValueParser implements BlockParser<SetState> {
         Element itemBlock = findFirstBlock(itemElement)
                 .orElseThrow(() -> new BlocklyParseException("No item specified"));
         String itemDescriptor = itemBlock.getAttribute("type");
-        String itemId = itemDescriptor.substring(itemDescriptor.indexOf(".") + 1);
-        LOG.debug("Found itemId: {}", itemId);
+        String controllerId = itemDescriptor.substring(0, itemDescriptor.indexOf("."));
+        String thingId = itemDescriptor.substring(itemDescriptor.indexOf(".") + 1);
+        LOG.debug("Found itemId: {}/{}", controllerId, thingId);
 
 
         Element valueElement = findElementWithAttribute(node, "value", "name", "value")
@@ -59,6 +60,6 @@ public class SetItemValueParser implements BlockParser<SetState> {
         BlockParser<ResolvableValue> valueBlockParser = blockParserFactory.getParser(valueType);
         ResolvableValue value = valueBlockParser.parse(valueBlock);
 
-        return new SetState(new ItemValue(itemId, label), value);
+        return new SetState(new ItemValue(controllerId, thingId, label), value);
     }
 }

@@ -5,11 +5,17 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.AgentControllerInformation;
 import com.oberasoftware.iot.core.events.impl.ThingValueEventImpl;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.trainautomation.api.LocEvent;
+import com.oberasoftware.trainautomation.api.SensorEvent;
+import com.oberasoftware.trainautomation.api.TrainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 @Component
 public class LocEventListener implements EventHandler {
@@ -25,18 +31,30 @@ public class LocEventListener implements EventHandler {
     private AgentControllerInformation agentControllerInformation;
 
     @EventSubscribe
-    public void receive(LocEvent locEvent) {
-        LOG.info("Received loc event: {}", locEvent);
+    public void receive(LocEvent event) {
+        LOG.debug("Received loc event: {}", event);
 
-        int locAddress = locEvent.getLocAddress();
-        String controllerId = agentControllerInformation.getControllerId();
+        translateEvents(agentControllerInformation.getControllerId(), event,
+                () -> locThingRepository.getLocomotiveForLocAddress(agentControllerInformation.getControllerId(), event.getEventAddress()));
+    }
 
-        var thingList = locThingRepository.getLocomotiveForLocAddress(controllerId, locAddress);
+    @EventSubscribe
+    public void receive(SensorEvent event) {
+        LOG.debug("Received sensor event: {}", event);
+        translateEvents(agentControllerInformation.getControllerId(), event,
+                () -> locThingRepository.getSensors(agentControllerInformation.getControllerId(), event.getEventAddress()));
+    }
 
-        thingList.forEach(t -> {
-            var thingEvent = new ThingValueEventImpl(controllerId, t.getThingId(), locEvent.getValue(), locEvent.getAttribute());
-            LOG.debug("Publishing thing event: {}", thingEvent);
-            eventBus.publish(thingEvent);
-        });
+    private void translateEvents(String controllerId, TrainEvent event, Supplier<List<IotThing>> supplier) {
+        if(!supplier.get().isEmpty()) {
+            supplier.get().forEach(t -> {
+                var thingEvent = new ThingValueEventImpl(controllerId, t.getThingId(), event.getValue(), event.getAttribute());
+                LOG.debug("Publishing thing event: {}", thingEvent);
+                eventBus.publish(thingEvent);
+            });
+        } else {
+            LOG.debug("Cannot map event: {} to a known thing", event);
+        }
+
     }
 }

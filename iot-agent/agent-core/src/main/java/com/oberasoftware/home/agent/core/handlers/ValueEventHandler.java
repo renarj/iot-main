@@ -3,6 +3,7 @@ package com.oberasoftware.home.agent.core.handlers;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
+import com.oberasoftware.iot.core.events.ThingMultiValueEvent;
 import com.oberasoftware.iot.core.events.ThingValueEvent;
 import com.oberasoftware.iot.core.events.ItemValueEvent;
 import com.oberasoftware.iot.core.model.states.Value;
@@ -19,28 +20,21 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ValueEventHandler implements EventHandler {
     private static final Logger LOG = getLogger(ValueEventHandler.class);
 
-//    @Autowired
-//    private StateManager stateManager;
-
-//    @Autowired
-//    private DeviceManager deviceManager;
-
     @Autowired
     private MQTTTopicEventBus topicEventBus;
 
     @EventSubscribe
     public void receive(ThingValueEvent event) {
-        LOG.info("Received a Thing value event: {}, forwarding to state topic", event);
+        LOG.debug("Received a Thing value event: {}, forwarding to state topic", event);
 
         topicEventBus.publish(event);
+    }
 
-//        Optional<IotThing> optionalItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
-//        if (optionalItem.isPresent()) {
-//            LOG.debug("Updating state for device: {}", optionalItem);
-//            stateManager.updateDeviceState(optionalItem.get(), event.getLabel(), event.getValue());
-//        } else {
-//            LOG.warn("Received state for unknow device: {}", event);
-//        }
+    @EventSubscribe
+    public void receive(ThingMultiValueEvent event) {
+        LOG.info("Received a Thing Multi Value event: {}, forwarding to state topic", event);
+
+        topicEventBus.publish(event);
     }
 
     @EventSubscribe

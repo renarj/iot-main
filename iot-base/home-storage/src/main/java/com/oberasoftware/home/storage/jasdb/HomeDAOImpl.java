@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotBaseEntity;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.ThingTemplate;
 import com.oberasoftware.iot.core.model.storage.*;
 import com.oberasoftware.iot.core.model.storage.impl.*;
 import com.oberasoftware.iot.core.storage.HomeDAO;
@@ -113,6 +114,13 @@ public class HomeDAOImpl extends BaseDAO implements HomeDAO {
     }
 
     @Override
+    public List<IotThing> findChildren(String controllerId, String parentId) {
+        return findThings(controllerId, new ImmutableMap.Builder<String, String>()
+                .put("parentId", parentId)
+                .build());
+    }
+
+    @Override
     public List<IotThing> findThings(String controllerId) {
         return findThings(controllerId, new HashMap<>());
     }
@@ -149,4 +157,24 @@ public class HomeDAOImpl extends BaseDAO implements HomeDAO {
         return newArrayList(findItems(RuleItemImpl.class, new HashMap<>()));
     }
 
+
+    @Override
+    public List<ThingTemplate> findTemplates() {
+        return newArrayList(findItems(ThingTemplateImpl.class, new HashMap<>()));
+    }
+
+    @Override
+    public List<ThingTemplate> findTemplates(String pluginId) {
+        return newArrayList(findItems(ThingTemplateImpl.class, new ImmutableMap.Builder<String, String>()
+                .put("pluginId", pluginId)
+                .build()));
+    }
+
+    @Override
+    public Optional<ThingTemplate> findTemplate(String pluginId, String templateId) {
+        ThingTemplateImpl templateItem = findItem(ThingTemplateImpl.class, new ImmutableMap.Builder<String, String>()
+                .put("templateId", templateId)
+                .put("pluginId", pluginId).build());
+        return ofNullable(templateItem);
+    }
 }

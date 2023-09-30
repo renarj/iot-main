@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
  * @author Renze de Vries
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = RuleConfiguration.class)
+@ContextConfiguration(classes = {RuleConfiguration.class})
 public class BlocklyParserTest {
 
     @Autowired
@@ -38,7 +38,7 @@ public class BlocklyParserTest {
         Rule expectedRule = RuleBuilder.create("Activate Lights After Dark")
                 .triggerOnDeviceChange()
                 .when(ConditionBuilder.create()
-                        .itemValue("75f1c663-b7df-4036-8a2d-5e3d95f6a596", "luminance")
+                        .itemValue("Device", "75f1c663-b7df-4036-8a2d-5e3d95f6a596", "luminance")
                         .compare(Operator.SMALLER_THAN, 10))
                 .thenDo(new SwitchItem("0000001e-0661-7a39-0000-014e5fa2231e", SwitchCommand.STATE.ON))
                 .build();
@@ -53,7 +53,7 @@ public class BlocklyParserTest {
         Rule expectedRule = RuleBuilder.create("testRule")
                 .triggerOnDeviceChange()
                 .when(ConditionBuilder.create()
-                        .itemValue("4407eace-7bb1-43ac-aefd-da4cae9fc97a", "temperature")
+                        .itemValue("Device", "4407eace-7bb1-43ac-aefd-da4cae9fc97a", "temperature")
                         .compare(Operator.SMALLER_THAN_EQUALS, 20l))
                 .thenDo(new SwitchItem("486fd173-b3ea-417f-b46c-e7d3579f59e1", SwitchCommand.STATE.ON))
                 .orElseDo(new SwitchItem("486fd173-b3ea-417f-b46c-e7d3579f59e1", SwitchCommand.STATE.OFF)).build();
@@ -68,9 +68,9 @@ public class BlocklyParserTest {
                 .triggerOnDeviceChange()
                     .when(ConditionBuilder.create().and(
                             ConditionBuilder.create()
-                                    .itemValue("1a950cf2-b721-418b-8744-11b7d1c476ca", "luminance")
+                                    .itemValue("Device", "1a950cf2-b721-418b-8744-11b7d1c476ca", "luminance")
                                     .compare(Operator.SMALLER_THAN_EQUALS, 10)
-                            , ConditionBuilder.create().itemValue("1a950cf2-b721-418b-8744-11b7d1c476ca", "on-off")
+                            , ConditionBuilder.create().itemValue("Device", "1a950cf2-b721-418b-8744-11b7d1c476ca", "on-off")
                                     .compare(Operator.EQUALS, "on")
                     )).thenDo(
                         new SwitchItem("28da1433-f601-4b8d-a0f9-7dae61e83ad9", SwitchCommand.STATE.ON),
@@ -88,8 +88,8 @@ public class BlocklyParserTest {
         Rule expectedRule = RuleBuilder.create("Update Power Start")
                 .triggerAtTime(0, 0)
                 .triggerOnSystemChange()
-                .setItemState("6d1a20a5-7347-41cf-bdc7-4f6df2035b24", "PowerStart")
-                .fromItem("6d1a20a5-7347-41cf-bdc7-4f6df2035b24", "KWH")
+                .setItemState("Device", "6d1a20a5-7347-41cf-bdc7-4f6df2035b24", "PowerStart")
+                .fromItem("Device", "6d1a20a5-7347-41cf-bdc7-4f6df2035b24", "KWH")
                 .build();
         assertRule(actual, expectedRule);
     }

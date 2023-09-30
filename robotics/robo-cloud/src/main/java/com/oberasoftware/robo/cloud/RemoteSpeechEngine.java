@@ -1,6 +1,7 @@
 package com.oberasoftware.robo.cloud;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.SpeechEngine;
 import org.slf4j.Logger;
@@ -23,8 +24,9 @@ public class RemoteSpeechEngine implements SpeechEngine {
     @Override
     public void say(String text, String language) {
         BasicCommand command = create(robot.getName())
-                .item("tts")
-                .label("say")
+                .thing("tts")
+                .attribute("say")
+                .type(CommandType.SET_STATE)
                 .property("text", text)
                 .property("language", language)
                 .build();

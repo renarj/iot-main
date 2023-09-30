@@ -1,6 +1,7 @@
 package com.oberasoftware.home.rest.model;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Map;
  */
 public class BasicRestCommand implements BasicCommand {
     private String thingId;
-    private String commandType;
+    private CommandType commandType;
 
     private String controllerId;
 
@@ -35,11 +36,11 @@ public class BasicRestCommand implements BasicCommand {
     }
 
     @Override
-    public String getCommandType() {
+    public CommandType getCommandType() {
         return commandType;
     }
 
-    public void setCommandType(String commandType) {
+    public void setCommandType(CommandType commandType) {
         this.commandType = commandType;
     }
 

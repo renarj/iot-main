@@ -2,6 +2,7 @@ package com.oberasoftware.home.agent.core.handlers.converters;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.ItemValueCommand;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
 import com.oberasoftware.iot.core.model.states.Value;
@@ -27,7 +28,7 @@ public class ValueCommandConverter implements CommandConverter<BasicCommand, Ite
     private static final Logger LOG = getLogger(ValueCommandConverter.class);
 
     @Override
-    @ConverterType(commandType = "value")
+    @ConverterType(commandType = CommandType.VALUE)
     public ItemValueCommand map(BasicCommand source) {
         Map<String, String> properties = source.getProperties();
         String itemId = source.getThingId();

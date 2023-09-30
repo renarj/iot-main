@@ -6,6 +6,7 @@ import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.ItemCommand;
 import com.oberasoftware.home.agent.core.handlers.converters.CommandConverter;
 import com.oberasoftware.home.agent.core.handlers.converters.ConverterType;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,10 @@ public class BasicCommandHandler implements EventHandler {
 
                 if(annotatedMethod.isPresent()) {
                     Method method = annotatedMethod.get();
-                    String commandType = method.getAnnotation(ConverterType.class).commandType();
+                    CommandType commandType = method.getAnnotation(ConverterType.class).commandType();
 
                     LOG.info("Mapper found for commandType: {} on method: {}", commandType, method.getName());
-                    commandConverterMap.put(commandType, c);
+                    commandConverterMap.put(commandType.name(), c);
                 }
             });
 
@@ -54,7 +55,7 @@ public class BasicCommandHandler implements EventHandler {
     public ItemCommandEvent receive(BasicCommand basicCommand) {
         LOG.info("Received a basic command: {}", basicCommand);
 
-        String commandType = basicCommand.getCommandType();
+        String commandType = basicCommand.getCommandType().name();
 
         if(commandConverterMap.containsKey(commandType)) {
             CommandConverter<BasicCommand, ? extends ItemCommand> converter = commandConverterMap.get(commandType);

@@ -37,15 +37,13 @@ public class StateContainer {
             topicListener.connect();
 
             topicListener.register(topic, received -> {
-                try {
-                    ValueTransportMessage message = mapFromJson(received, ValueTransportMessage.class);
-                    LOG.debug("Received value: {}", message);
+                ValueTransportMessage message = mapFromJson(received, ValueTransportMessage.class);
+                LOG.debug("Received value: {}", message);
+
+                message.getValues().forEach((k, v) -> {
                     stateManager.updateItemState(message.getControllerId(),
-                            message.getThingId(), message.getAttribute(), message.getValue());
-                } catch (Exception e) {
-                    LOG.error("Fatal error, ignoring so we can continue processing state messages: {}", e.getMessage());
-                    LOG.debug("Full stacktrace", e);
-                }
+                            message.getThingId(), k, v);
+                });
             });
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {

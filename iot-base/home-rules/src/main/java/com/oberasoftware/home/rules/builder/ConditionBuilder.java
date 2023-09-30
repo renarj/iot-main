@@ -35,8 +35,8 @@ public class ConditionBuilder {
         return this;
     }
 
-    public ConditionBuilder itemValue(String itemId, String label) {
-        this.leftValue = new ItemValue(itemId, label);
+    public ConditionBuilder itemValue(String controllerId, String itemId, String label) {
+        this.leftValue = new ItemValue(controllerId, itemId, label);
         return this;
     }
 

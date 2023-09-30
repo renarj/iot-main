@@ -64,10 +64,36 @@ Blockly.Blocks['onoff'] = {
     }
 };
 
+Blockly.Blocks['trainFunction'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("Function Nr")
+            .appendField(new Blockly.FieldTextInput("0"), "functionNr");
+        this.appendDummyInput()
+            .appendField("State")
+            .appendField(new Blockly.FieldDropdown([["On","On"], ["Off","Off"], ["Toggle","Toggle"]]), "functionState");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+
 Blockly.Blocks['label'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["power", "power"], ["energy", "energy"], ["temperature", "temperature"], ["movement", "movement"], ["luminance", "luminance"]]), "label");
+            .appendField(new Blockly.FieldDropdown([
+                ["power", "power"],
+                ["energy", "energy"],
+                ["temperature", "temperature"],
+                ["movement", "movement"],
+                ["occupancy", "occupancy"],
+                ["locomotive", "locomotive"],
+                ["luminance", "luminance"],
+                ["speed", "speed"],
+                ["direction", "direction"]
+            ]), "label");
         this.setInputsInline(true);
         this.setOutput(true, "String");
         this.setColour(330);
@@ -103,7 +129,12 @@ Blockly.Blocks['text_value'] = {
 Blockly.Blocks['movement'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["detected", "detected"], ["not detected", "not detected"]]), "NAME");
+            .appendField(new Blockly.FieldDropdown([
+                ["detected", "detected"],
+                ["not detected", "not detected"],
+                ["occupied", "occupied"],
+                ["free", "free"]
+            ]), "NAME");
         this.setInputsInline(true);
         this.setOutput(true, "String");
         this.setColour(330);
@@ -144,6 +175,35 @@ Blockly.Blocks['setItemValue'] = {
     }
 };
 
+Blockly.Blocks['setThingValues'] = {
+    init: function() {
+        this.appendValueInput("thing")
+            .setCheck("String")
+            .appendField("Set Item:");
+        this.appendStatementInput("Values")
+            .setCheck(null);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setInputsInline(true);
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+Blockly.Blocks['setLabelValue'] = {
+    init: function() {
+        this.appendValueInput("attribute")
+            .appendField("Attribute:");
+        this.appendValueInput("Value")
+            .appendField("to Value:");
+
+        this.setInputsInline(true);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setColour(165);
+        this.setTooltip('Sets the attribute of a Thing to a Value');
+    }
+};
 
 Blockly.Blocks['switch_item'] = {
     init: function() {

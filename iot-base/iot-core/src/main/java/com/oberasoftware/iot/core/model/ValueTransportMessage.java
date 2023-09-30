@@ -4,35 +4,36 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.states.ValueImpl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Renze de Vries
  */
 public class ValueTransportMessage {
 
-    @JsonDeserialize(as = ValueImpl.class)
-    private Value value;
+    @JsonDeserialize(contentAs = ValueImpl.class)
+    private Map<String, Value> values;
 
     private String controllerId;
     private String thingId;
-    private String attribute;
 
     public ValueTransportMessage(Value value, String controllerId, String thingId, String attribute) {
-        this.value = value;
+        this.values = new HashMap<>();
+        this.values.put(attribute, value);
         this.controllerId = controllerId;
         this.thingId = thingId;
-        this.attribute = attribute;
+    }
+
+    public ValueTransportMessage(Map<String, Value> values, String controllerId, String thingId) {
+        this.values = values;
+        this.controllerId = controllerId;
+        this.thingId = thingId;
     }
 
     public ValueTransportMessage() {
     }
 
-    public Value getValue() {
-        return value;
-    }
-
-    public void setValue(Value value) {
-        this.value = value;
-    }
 
     public String getControllerId() {
         return controllerId;
@@ -50,21 +51,20 @@ public class ValueTransportMessage {
         this.thingId = thingId;
     }
 
-    public String getAttribute() {
-        return attribute;
+    public Map<String, Value> getValues() {
+        return values;
     }
 
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
+    public void setValues(Map<String, Value> values) {
+        this.values = values;
     }
 
     @Override
     public String toString() {
         return "ValueTransportMessage{" +
-                "value=" + value +
+                "values=" + values +
                 ", controllerId='" + controllerId + '\'' +
                 ", thingId='" + thingId + '\'' +
-                ", attribute='" + attribute + '\'' +
                 '}';
     }
 }

@@ -14,7 +14,7 @@ public class Z21PackageHandler implements EventHandler {
 
     @EventSubscribe
     public void receive(Z21ReturnPacket returnPacket) {
-        LOG.info("Received a return package from the Z21: {}", returnPacket);
+        LOG.debug("Received a return package from the Z21: {}", returnPacket);
     }
 
 

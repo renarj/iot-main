@@ -10,7 +10,6 @@ import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
 import com.oberasoftware.iot.core.robotics.servo.DynamixelDevice;
-import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
@@ -88,7 +87,7 @@ public class RobotInitializer {
                 .capability(TeensySensorDriver.class)
 //                .capability(InfluxDBMetricsCapability.class)
                 .capability(DynamixelTorgueManager.class)
-                .remote(RemoteCloudDriver.class, true)
+//                .remote(RemoteCloudDriver.class, true)
                 .build();
 
         robotRegistry.register(robot);

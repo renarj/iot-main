@@ -1,0 +1,126 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head th:replace="includes/header :: header">
+</head>
+<body style="height:100%;">
+<script th:src="@{/javascript/loc-sensors.js}" src="/static/javascript/loc-sensors.js"></script>
+
+<div th:replace="includes/header :: navigation (selectTab='trains')"></div>
+
+<div th:replace="includes/header :: trainTabs (selectTab='sensors')"></div>
+
+<script id="controllerTemplate" type="text/x-handlebars-template">
+    <a class="list-group-item list-group-item-action controllerButton" controllerId="{{controllerId}}" href="#">{{controllerId}}</a>
+</script>
+
+<script id="sensorTemplate" type="text/x-handlebars-template">
+    <tr thingId="{{thingId}}" controllerId="{{controllerId}}">
+        <th scope="row" class="align-middle">{{thingId}}</th>
+        <td class="align-middle">{{name}}</td>
+        <td class="align-middle">{{address}}</td>
+        <td class="align-middle">{{commandStation}}</td>
+        <td class="align-middle">{{type}}</td>
+        <td class="align-middle">{{type}}</td>
+    </tr>
+</script>
+
+<div class="modal fade" id="sensorForm" tabindex="-1" aria-labelledby="newSensorLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newSensorLabel">Modify or Create Sensor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="uniqueId" class="col-form-label">Sensor ID:</label>
+                        <input type="text" class="form-control" id="uniqueId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sensorName" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="sensorName"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formControllerList" class="col-form-label">Controller:</label>
+                        <select class="form-select" aria-label="Select Controller" id="formControllerList">
+                            <option selected>Open this select menu</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stationList" class="col-form-label">Command Center:</label>
+                        <select class="form-select" aria-label="Select Command Center Type" id="stationList">
+                            <option selected>Open this select menu</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sensorType" class="col-form-label">Sensor Type:</label>
+                        <select class="form-select" aria-label="Select Command Center Type" id="sensorType">
+                            <option value="occupancy" selected>Occupancy</option>
+                            <option value="reed">Reed</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sensorAddress" class="col-form-label">Sensor Address:</label>
+                        <input type="text" class="form-control" id="sensorAddress"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sensorLength" class="col-form-label">Sensor Length:</label>
+                        <input type="text" class="form-control" id="sensorLength"/>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addSensorBtnForm">Save Sensor</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid" style="height:100%;">
+    <div class="row p-1">
+        <div class="col-2" id="actionMenu">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    <h5 class="card-title">Controllers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="controllerList">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-10" id="sensorListTable">
+            <div class="row justify-content-md-end">
+                <div class="col-2 float-right justify-content-md-end">
+                    <button type="button" class="btn btn-primary" id="addSensorBtn" data-bs-toggle="modal" data-bs-target="#sensorForm" data-bs-whatever="@mdo">Add Sensor</button>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Command Station</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Length</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sensorList">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

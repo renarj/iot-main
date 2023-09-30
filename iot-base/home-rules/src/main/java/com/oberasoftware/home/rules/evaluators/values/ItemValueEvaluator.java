@@ -29,13 +29,13 @@ public class ItemValueEvaluator implements ValueEvaluator<ItemValue> {
 
     @Override
     public Value eval(ItemValue input) {
-        String itemId = input.getItemId();
+        String thingId = input.getThingId();
         String label = input.getLabel();
 
-        LOG.debug("Retrieving item: {} state value for label: {}", itemId, label);
+        LOG.debug("Retrieving item: {} state value for label: {}", thingId, label);
 
         try {
-            Optional<State> state = stateClient.getState(input.getControllerId(), itemId);
+            Optional<State> state = stateClient.getState(input.getControllerId(), thingId);
             if (state.isPresent()) {
                 StateItem stateItem = state.get().getStateItem(label);
 
@@ -44,14 +44,14 @@ public class ItemValueEvaluator implements ValueEvaluator<ItemValue> {
                 }
             }
 
-            throw new EvalException("Could not evaluate item: " + itemId + " label: " + label + " no values present");
+            throw new EvalException("Could not evaluate item: " + thingId + " label: " + label + " no values present");
         } catch(IOTException e) {
-            throw new EvalException("Could not evaluate item: " + itemId + " label: " + label + " could not get State", e);
+            throw new EvalException("Could not evaluate item: " + thingId + " label: " + label + " could not get State", e);
         }
     }
 
     @Override
     public Set<String> getDependentItems(ItemValue input) {
-        return Sets.newHashSet(input.getItemId());
+        return Sets.newHashSet(input.getThingId());
     }
 }

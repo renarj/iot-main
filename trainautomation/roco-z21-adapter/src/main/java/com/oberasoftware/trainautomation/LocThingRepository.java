@@ -8,4 +8,6 @@ public interface LocThingRepository {
     void startSync();
 
     List<IotThing> getLocomotiveForLocAddress(String controllerId, int locAddress);
+
+    List<IotThing> getSensors(String controllerId, int sensorPort);
 }

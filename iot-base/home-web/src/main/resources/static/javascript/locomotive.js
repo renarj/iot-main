@@ -339,8 +339,6 @@ function reloadLocs() {
         $(".locButton, .active").removeClass('active');
     }
 
-
-
     function renderLocControl(controllerId, thingId, name, functions) {
         let data = {
             "thingId": thingId,

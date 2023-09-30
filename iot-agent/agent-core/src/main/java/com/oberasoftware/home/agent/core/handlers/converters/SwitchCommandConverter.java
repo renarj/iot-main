@@ -2,6 +2,7 @@ package com.oberasoftware.home.agent.core.handlers.converters;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.SwitchCommand;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.commands.impl.SwitchCommandImpl;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class SwitchCommandConverter implements CommandConverter<BasicCommand, Sw
     private static final Logger LOG = getLogger( SwitchCommandConverter.class );
 
     @Override
-    @ConverterType(commandType = "switch")
+    @ConverterType(commandType = CommandType.SWITCH)
     public SwitchCommand map(BasicCommand source) {
 
         if(source.getProperties().containsKey("value")) {

@@ -32,6 +32,11 @@ public class MQTTValueMessageHandler implements EventHandler {
         LOG.info("Received sensor value information: {}", message);
 
         Robot robot = robotRegistry.getRobot(message.getControllerId());
-        robot.publish(new ThingValueEventImpl(message.getControllerId(), message.getThingId(), message.getValue(), message.getAttribute()));
+
+        message.getValues().forEach((k, v) -> {
+            robot.publish(new ThingValueEventImpl(message.getControllerId(), message.getThingId(), v, k));
+        });
+
+
     }
 }

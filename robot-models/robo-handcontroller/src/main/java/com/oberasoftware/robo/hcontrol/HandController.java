@@ -4,6 +4,7 @@ import com.google.common.base.Stopwatch;
 import com.oberasoftware.iot.core.client.CommandServiceClient;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.BasicCommandBuilder;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,8 +56,8 @@ public class HandController {
             LOG.info("Received a value: {} for axis: {}", scaled, p.getAxis());
 
             BasicCommandBuilder commandBuilder = BasicCommandBuilder.create(robotId)
-                    .item("navigation")
-                    .label("input")
+                    .thing("navigation")
+                    .type(CommandType.VALUE)
                     .property("cameraMode", mode ? "1.0" : "0.0");
 
             for(String axis : state.getInput().getInputAxis()) {

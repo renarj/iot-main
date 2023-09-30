@@ -1,11 +1,6 @@
 package com.oberasoftware.home.web;
 
-import com.oberasoftware.iot.core.client.ThingClient;
-import com.oberasoftware.iot.core.exceptions.IOTException;
-import com.oberasoftware.iot.core.managers.UIManager;
-import com.oberasoftware.iot.core.model.storage.Container;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -27,38 +21,24 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ThingAdminController {
     private static final Logger LOG = getLogger(ThingAdminController.class);
 
-    @Autowired
-    private ThingClient thingClient;
+    @RequestMapping
+    public String showIndex() {
+        LOG.debug("Showing admin screen - controllers");
 
-    @Autowired
-    private UIManager uiManager;
-
-    @RequestMapping(value = "/{controllerId}")
-    public String getPlugins(@PathVariable String controllerId, Model model) throws IOTException {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
-//        List<PluginItem> plugins = itemManager.findPlugins(controllerId);
-//        List<WebPluginItem> webPluginItems = plugins.stream()
-//                .map(p -> new WebPluginItem(p, itemManager.findThings(controllerId, p.getPluginId())))
-//                .collect(Collectors.toList());
-        List<Container> containers = uiManager.getAllContainers();
-
-//        LOG.debug("Retrieving plugins for controller: {} found plugins: {}", controllerId, plugins.size());
-
-        model.addAttribute("controllers", controllers);
-//        model.addAttribute("plugins", webPluginItems);
-        model.addAttribute("selectedController", controllerId);
-        model.addAttribute("containers", containers);
-
-        return "admin/devices";
+        return "admin/things";
     }
 
-    @RequestMapping
-    public String getControllers(Model model) throws IOTException {
-        LOG.debug("Showing admin screen - controllers");
-        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
-        model.addAttribute("controllers", controllers);
+    @RequestMapping("/controllers({controllerId})")
+    public String showController(@PathVariable String controllerId, Model model) {
+        model.addAttribute("controllerId", controllerId);
+        return "admin/things";
+    }
 
-        return "admin/devices";
+    @RequestMapping("/controllers({controllerId})/things({thingId})")
+    public String showThing(@PathVariable String controllerId, @PathVariable String thingId, Model model) {
+        model.addAttribute("controllerId", controllerId);
+        model.addAttribute("thingId", thingId);
+        return "admin/things";
     }
 
     @RequestMapping(value = "/icon/plugin/{pluginId}")

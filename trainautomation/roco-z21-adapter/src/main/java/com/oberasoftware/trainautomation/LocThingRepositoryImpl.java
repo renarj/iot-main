@@ -38,7 +38,9 @@ public class LocThingRepositoryImpl implements LocThingRepository {
 
     private final Lock lock = new ReentrantLock();
 
-    private final ListMultimap<String, IotThing> mappedThings = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
+    private final ListMultimap<String, IotThing> mappedLocs = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
+
+    private final ListMultimap<String, IotThing> mappedSensors = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -50,9 +52,18 @@ public class LocThingRepositoryImpl implements LocThingRepository {
 
     @Override
     public List<IotThing> getLocomotiveForLocAddress(String controllerId, int locAddress) {
+        return filter(mappedLocs, controllerId, locAddress);
+    }
+
+    @Override
+    public List<IotThing> getSensors(String controllerId, int sensorPort) {
+        return filter(mappedSensors, controllerId, sensorPort);
+    }
+
+    private List<IotThing> filter(ListMultimap<String, IotThing> collection, String controllerId, int id) {
         lock.lock();
         try {
-            return mappedThings.get(getKey(controllerId, locAddress));
+            return collection.get(getKey(controllerId, id));
         } finally {
             lock.unlock();
         }
@@ -68,7 +79,8 @@ public class LocThingRepositoryImpl implements LocThingRepository {
                     LOG.info("Syncing: {} things from remote", things);
                     lock.lock();
                     try {
-                        mappedThings.clear();
+                        mappedLocs.clear();
+                        mappedSensors.clear();
                         things.forEach(this::mapIfPresent);
                     } finally {
                         lock.unlock();
@@ -86,15 +98,28 @@ public class LocThingRepositoryImpl implements LocThingRepository {
         }
 
         private void mapIfPresent(IotThing t) {
-            if(t.getProperties().containsKey(Locomotive.LOC_ADDRESS)) {
-                var oLocAddress = IntUtils.toInt(t.getProperty(Locomotive.LOC_ADDRESS));
-                LOG.info("Mapping thing: {} to locomotives map with loc address: {}", t, oLocAddress);
-                oLocAddress.ifPresent(la -> mappedThings.put(getKey(t.getControllerId(), la), t));
+            switch (t.getType()) {
+                case "sensor" -> {
+                    var sensorPort = IntUtils.toInt(t.getProperty("address"));
+                    sensorPort.ifPresent(sp -> mappedSensors.put(getKey(t.getControllerId(), sp), t));
+                    LOG.info("Mapping thing: {} to sensor map with loc address: {}", t, sensorPort);
+                }
+                case "locomotive" -> {
+                    var oLocAddress = IntUtils.toInt(t.getProperty(Locomotive.LOC_ADDRESS));
+                    LOG.info("Mapping thing: {} to locomotives map with loc address: {}", t, oLocAddress);
+                    oLocAddress.ifPresent(la -> mappedLocs.put(getKey(t.getControllerId(), la), t));
+                }
+                case null -> {
+                    LOG.error("Invalid thing presented, no type defined: {}", t);
+                }
+                default -> {
+                    LOG.debug("We have an unmapped thing, or no type specifier: {}", t);
+                }
             }
         }
     }
 
-    private static String getKey(String controllerId, int locAddress) {
-        return controllerId + "-" + locAddress;
+    private static String getKey(String controllerId, int id) {
+        return controllerId + "-" + id;
     }
 }

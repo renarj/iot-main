@@ -47,10 +47,11 @@ public class ItemValueParser implements BlockParser<ResolvableValue> {
         Element itemBlock = findFirstBlock(itemElement)
                 .orElseThrow(() -> new BlocklyParseException("No item specified"));
         String itemDescriptor = itemBlock.getAttribute("type");
-        String itemId = itemDescriptor.substring(itemDescriptor.indexOf(".") + 1);
-        LOG.debug("Found itemId: {}", itemId);
+        String controllerId = itemDescriptor.substring(0, itemDescriptor.indexOf("."));
+        String thingId = itemDescriptor.substring(itemDescriptor.indexOf(".") + 1);
+        LOG.debug("Found itemId: {}/{}", controllerId, thingId);
 
-        return new ItemValue(itemId, label);
+        return new ItemValue(controllerId, thingId, label);
     }
 
     public static String getLabelValue(ResolvableValue resolvableValue) throws BlocklyParseException {

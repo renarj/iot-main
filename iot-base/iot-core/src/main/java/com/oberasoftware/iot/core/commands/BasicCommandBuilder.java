@@ -1,6 +1,7 @@
 package com.oberasoftware.iot.core.commands;
 
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,10 @@ public class BasicCommandBuilder {
     private final Map<String, String> properties = new HashMap<>();
     private final String controllerId;
 
-    private String item;
-    private String label;
+    private String thing;
+    private CommandType type;
+
+    private String attribute;
 
     private BasicCommandBuilder(String controllerId) {
         this.controllerId = controllerId;
@@ -24,13 +27,13 @@ public class BasicCommandBuilder {
         return new BasicCommandBuilder(controllerId);
     }
 
-    public BasicCommandBuilder item(String itemId) {
-        this.item = itemId;
+    public BasicCommandBuilder thing(String thingId) {
+        this.thing = thing;
         return this;
     }
 
-    public BasicCommandBuilder label(String label) {
-        this.label = label;
+    public BasicCommandBuilder type(CommandType type) {
+        this.type = type;
         return this;
     }
 
@@ -39,11 +42,16 @@ public class BasicCommandBuilder {
         return this;
     }
 
+    public BasicCommandBuilder attribute(String attribute) {
+        this.attribute = attribute;
+        return this;
+    }
+
     public BasicCommand build() {
         BasicCommandImpl command = new BasicCommandImpl();
         command.setControllerId(controllerId);
-        command.setCommandType(label);
-        command.setThingId(item);
+        command.setCommandType(type);
+        command.setThingId(thing);
         command.setProperties(properties);
 
         return command;

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  data-bs-theme="dark">
+<head th:replace="includes/header :: header">
+</head>
+<body>
+<script th:src="@{/javascript/things.js}" src="/static/javascript/things.js"></script>
+<div class="container-fluid" th:attr="controllerId=${controllerId},thingId=${thingId}" id="root">
+    <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
+
+    <div th:replace="includes/header :: adminTabs (selectTab='things')"></div>
+    <script id="controllerTemplate" type="text/x-handlebars-template">
+        <a class="list-group-item list-group-item-action controllerButton" controllerId="{{controllerId}}" href="/web/admin/things/controllers({{controllerId}})">{{controllerId}}</a>
+    </script>
+
+    <script id="thingTemplate" type="text/x-handlebars-template">
+        <a class="list-group-item list-group-item-action thingButton" controllerId="{{controllerId}}" thingId="{{thingId}}" href="/web/admin/things/controllers({{controllerId}})/things({{thingId}})">{{thingId}}</a>
+    </script>
+    <script id="breadCrumbTemplate" type="text/x-handlebars-template">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/web/admin/things/controllers({{controllerId}})" class="breadcrumb-controller-item" controllerId="{{controllerId}}">{{controllerId}}</a></li>
+                {{#if parentId}}
+                    <li class="breadcrumb-item"><a href="/web/admin/things/controllers({{controllerId}})/things({{parentId}})" class="breadcrumb-item" controllerId="{{controllerId}}" parentId="{{parentId}}">{{parentId}}</a></li>
+                {{/if}}
+                <li class="breadcrumb-item active" aria-current="page">{{thingId}}</li>
+            </ol>
+        </nav>
+    </script>
+    <script id="controllerDetailTemplate" type="text/x-handlebars-template">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Property</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody id="functionList">
+                <tr>
+                    <td>ControllerId:</td>
+                    <td>{{controllerId}}</td>
+                </tr>
+                <tr>
+                    <td>OrgId:</td>
+                    <td>{{orgId}}</td>
+                </tr>
+                {{#each properties}}
+                    <tr>
+                        <td>properties.{{@key}}</td>
+                        <td>{{this}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+    <script id="stateDetailTemplate" type="text/x-handlebars-template">
+        <tr>
+            <td>{{a}}</td>
+            <td>{{v}}</td>
+        </tr>
+    </script>
+    <script id="thingDetailTemplate" type="text/x-handlebars-template">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Property</th>
+                <th scope="col">Value</th>
+            </tr>
+            </thead>
+            <tbody id="functionList">
+                <tr>
+                    <td>ControllerId:</td>
+                    <td>{{controllerId}}</td>
+                </tr>
+                <tr>
+                    <td>ThingId:</td>
+                    <td>{{thingId}}</td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td>{{name}}</td>
+                </tr>
+                <tr>
+                    <td>Type:</td>
+                    <td>{{type}}</td>
+                </tr>
+                <tr>
+                    <td>Attributes</td>
+                    <td>
+                        {{#each attributes}}
+                            <label>{{this}};</label>
+                        {{/each}}
+                    </td>
+                </tr>
+                {{#each properties}}
+                    <tr>
+                        <td>properties.{{@key}}</td>
+                        <td>{{this}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+    <div class="container-fluid" style="height:100%;">
+        <div class="row p-1 justify-content-start" id="renderThing">
+            <div class="col-2" id="actionMenu">
+                <div class="card px-0">
+                    <div class="card-header">
+                        <h5 class="card-title">Controllers</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group" id="controllerList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="row" id="breadCrumb">
+
+                </div>
+                <div class="row">
+                    <div class="col-8" id="thingDetail">
+                        <div class="card px-0">
+                            <div class="card-header">
+                                <h5 class="card-title">Detail of: <label id="thingListDetailLabel">Default</label></h5>
+                            </div>
+                            <div class="card-body" id="thingDetails">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card px-0">
+                            <div class="card-header">
+                                <h5 class="card-title">Children of: <label id="thingListLabel">default</label></h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group" id="thingList">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="card px-0">
+                            <div class="card-header">
+                                <h5 class="card-title">Thing State</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Attribute</th>
+                                            <th scope="col">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="stateList">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="includes/header :: footer"></div>
+</div>
+
+</body>
+</html>

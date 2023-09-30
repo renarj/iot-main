@@ -1,7 +1,7 @@
 package com.oberasoftware.home.data;
 
 import com.oberasoftware.iot.core.managers.GroupManager;
-import com.oberasoftware.iot.core.managers.ItemManager;
+import com.oberasoftware.iot.core.managers.ThingManager;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import com.oberasoftware.iot.core.model.storage.impl.GroupItemImpl;
@@ -27,7 +27,7 @@ public class GroupRestSvc {
     private GroupManager groupManager;
 
     @Autowired
-    private ItemManager itemManager;
+    private ThingManager thingManager;
 
     @RequestMapping(value = "/groups")
     public List<? extends GroupItem> findAllGroups() {
@@ -50,7 +50,7 @@ public class GroupRestSvc {
         GroupItem groupItem = groupManager.getItem(groupId);
 
         return groupItem.getDeviceIds().stream()
-                .map(d -> itemManager.findThing(groupItem.getControllerId(), d).get()).collect(Collectors.toList());
+                .map(d -> thingManager.findThing(groupItem.getControllerId(), d).get()).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/groups", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")

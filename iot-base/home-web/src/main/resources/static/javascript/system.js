@@ -80,6 +80,8 @@ function loadControllers() {
         $(".controllerButton").on('click', function(event) {
             event.preventDefault();
 
+            $(".controllerButton").removeClass('active');
+
             let controllerId = this.getAttribute('controllerId');
             this.classList.add('active');
             console.log("Clicked on controller: " + controllerId);

@@ -2,10 +2,16 @@ package com.oberasoftware.trainautomation.rocoz21.responsehandlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
+import com.oberasoftware.base.event.impl.LocalEventBus;
+import com.oberasoftware.iot.core.events.impl.ThingMultiValueEventImpl;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.robo.core.ConverterUtil;
+import com.oberasoftware.trainautomation.api.SensorEvent;
 import com.oberasoftware.trainautomation.rocoz21.Z21ResponseFilter;
 import com.oberasoftware.trainautomation.rocoz21.Z21ReturnPacket;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -13,6 +19,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Component
 public class LoconetHandler implements EventHandler {
     private static final Logger LOG = getLogger( LoconetHandler.class );
+
+    @Autowired
+    private LocalEventBus localEventBus;
 
     @EventSubscribe
     @Z21ResponseFilter(packageHeader = 0xA4)
@@ -45,5 +54,9 @@ public class LoconetHandler implements EventHandler {
                 break;
         }
         LOG.info("Received a feedback type: {} on Loconet port: {} state: {} for Loc: {}", String.format("%02X", feedbackType), port, o, locAddress);
+        localEventBus.publish(new SensorEvent(port, "occupancy", new ValueImpl(VALUE_TYPE.STRING, o.toString().toLowerCase())));
+        localEventBus.publish(new SensorEvent(port, "locomotive", new ValueImpl(VALUE_TYPE.NUMBER, locAddress)));
+
+
     }
 }

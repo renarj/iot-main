@@ -5,7 +5,6 @@ import com.oberasoftware.iot.core.client.ThingClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.extensions.AutomationExtension;
-import com.oberasoftware.iot.core.extensions.DiscoveryListener;
 import com.oberasoftware.iot.core.extensions.ExtensionManager;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
@@ -84,33 +83,29 @@ public class ExtensionManagerImpl implements ExtensionManager {
 
         executorService.submit(() -> {
             LOG.info("Registering extension: {}", extension);
-            IotThing pluginThing = thingClient.createOrUpdate(new IotThingImpl(controllerId, extension.getId(),
-                    extension.getName(), extension.getId(), null, extension.getProperties()));
+            try {
+                IotThing pluginThing = thingClient.createOrUpdate(new IotThingImpl(controllerId, extension.getId(),
+                        extension.getName(), extension.getId(), controllerId, extension.getProperties()));
 
-//            itemManager.createOrUpdateThing(controllerConfiguration.getControllerId(), extension.getId(), extension.getName(), controllerConfiguration.getControllerId(), extension.getProperties());
+                LOG.info("Activating plugin: {}", pluginThing);
+                extension.activate(pluginThing);
 
-//            Optional<IotThing> thing = homeDAO.findThing(controllerConfiguration.getControllerId(), extension.getId());
-            LOG.info("Activating plugin: {}", pluginThing);
-            extension.activate(pluginThing);
+                while (!extension.isReady()) {
+                    LOG.debug("Extension: {} is not ready yet", extension.getId());
+                    sleepUninterruptibly(1, TimeUnit.SECONDS);
+                }
 
-            while (!extension.isReady()) {
-                LOG.debug("Extension: {} is not ready yet", extension.getId());
-                sleepUninterruptibly(1, TimeUnit.SECONDS);
-            }
-
-            extension.discoverThings(new DiscoveryListener() {
-                @Override
-                public void thingFound(IotThing thing) {
+                extension.discoverThings(thing -> {
                     try {
                         thingClient.createOrUpdate(thing);
                     } catch (IOTException e) {
                         throw new RuntimeIOTException("Unable to store Thing: " + thing, e);
                     }
 
-                }
-            });
-
-            return null;
+                });
+            } catch(IOTException e) {
+                LOG.error("Unable to active extension", e);
+            }
         });
     }
 }

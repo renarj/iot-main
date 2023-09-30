@@ -1,6 +1,7 @@
 package com.oberasoftware.robo.cloud.motion;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.robotics.MotionEngine;
 import com.oberasoftware.iot.core.robotics.MotionTask;
 import com.oberasoftware.iot.core.robotics.Robot;
@@ -40,8 +41,9 @@ public class RemoteMotionEngine implements MotionEngine {
     @Override
     public boolean prepareWalk() {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("prepare")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .property("motion", "stand")
                 .build();
 
         robot.getRemoteDriver().publish(command);
@@ -52,8 +54,9 @@ public class RemoteMotionEngine implements MotionEngine {
     @Override
     public boolean rest() {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("rest")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .property("motion", "rest")
                 .build();
 
         robot.getRemoteDriver().publish(command);
@@ -95,9 +98,10 @@ public class RemoteMotionEngine implements MotionEngine {
     @Override
     public MotionTask walk(WalkDirection direction) {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("walk")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
                 .property("direction", direction.name())
+                .property("motion", "walk")
                 .build();
 
         robot.getRemoteDriver().publish(command);
@@ -113,8 +117,9 @@ public class RemoteMotionEngine implements MotionEngine {
     @Override
     public MotionTask runMotion(String motionName) {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("run")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .property("motion", "run")
                 .property("motion", motionName)
                 .build();
 
@@ -135,8 +140,8 @@ public class RemoteMotionEngine implements MotionEngine {
     @Override
     public MotionTask goToPosture(String posture) {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("set")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
                 .property("posture", posture)
                 .build();
 
@@ -158,8 +163,9 @@ public class RemoteMotionEngine implements MotionEngine {
     @Override
     public boolean stopAllTasks() {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("stop")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .property("motion", "stop")
                 .build();
         robot.getRemoteDriver().publish(command);
 

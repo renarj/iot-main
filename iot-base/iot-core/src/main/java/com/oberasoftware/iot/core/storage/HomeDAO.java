@@ -3,6 +3,7 @@ package com.oberasoftware.iot.core.storage;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotBaseEntity;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.ThingTemplate;
 import com.oberasoftware.iot.core.model.storage.*;
 
 import java.util.List;
@@ -37,9 +38,17 @@ public interface HomeDAO {
 
     List<IotThing> findThings(String controllerId, String pluginId);
 
+    List<IotThing> findChildren(String controllerId, String parentId);
+
     List<IotThing> findThings(String controllerId, String pluginId, String type);
 
     List<IotThing> findThings(String controllerId, Map<String, String> queryParams);
+
+    List<ThingTemplate> findTemplates();
+
+    List<ThingTemplate> findTemplates(String pluginId);
+
+    Optional<ThingTemplate> findTemplate(String pluginId, String templateId);
 
     <T extends VirtualItem> List<T> findVirtualItems(Class<T> type);
 

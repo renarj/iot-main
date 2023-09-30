@@ -146,10 +146,10 @@ public class Z21ConnectorImpl implements Z21Connector {
                     socket.receive(packet);
 
                     byte [] data = packet.getData();
-                    LOG.info("Received data from Z21: {} socket: {}", bytesToHex(data), socket.getLocalPort());
+                    LOG.debug("Received data from Z21: {} socket: {}", bytesToHex(data), socket.getLocalPort());
 
                     Z21ReturnPacket dataPacket = new Z21ReturnPacket(data);
-                    LOG.info("Parsed return data: {}", dataPacket);
+                    LOG.debug("Parsed return data: {}", dataPacket);
 
                     //check if multiple packages arrived
                     if(data[dataPacket.getLength()] != 0x00) {

@@ -59,7 +59,7 @@ public class MQTTMessageListener implements EventHandler {
 
     @EventSubscribe
     public void receive(MQTTMessage message) {
-        LOG.debug("Received a MQTT message: {}", message);
+        LOG.info("Received a MQTT message: {}", message);
         ParsedPath parsedPath = MQTTPathParser.parsePath(message.getTopic());
 
         if(parsedPath != null) {
@@ -77,7 +77,7 @@ public class MQTTMessageListener implements EventHandler {
 
             influxWriter.write(parsedPath.getControllerId(), parsedPath.getDeviceId(), parsedPath.getLabel(), val);
         } catch(NumberFormatException e) {
-            LOG.debug("Not a Number value, ignoring message: " + message, e);
+            LOG.error("Not a Number value, ignoring message: " + message, e);
         }
     }
 }

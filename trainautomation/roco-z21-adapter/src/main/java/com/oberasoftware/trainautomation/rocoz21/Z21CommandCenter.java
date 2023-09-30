@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.oberasoftware.trainautomation.rocoz21.commands.BroadcastCommand.INFO_MESSAGES;
-import static com.oberasoftware.trainautomation.rocoz21.commands.BroadcastCommand.LOCO_INFO_SUBSCRIBE_MODIFIED;
+import static com.oberasoftware.trainautomation.rocoz21.commands.BroadcastCommand.*;
 
 @Component
 public class Z21CommandCenter implements CommandCenter {
@@ -51,7 +50,8 @@ public class Z21CommandCenter implements CommandCenter {
             z21Connector.connect(z21Host, z21Port);
 
             LOG.info("Registering to Z21 for broadcast messages");
-            z21Connector.send(new RegisterBroadcastCommand(Sets.newHashSet(INFO_MESSAGES, LOCO_INFO_SUBSCRIBE_MODIFIED)));
+            z21Connector.send(new RegisterBroadcastCommand(Sets.newHashSet(INFO_MESSAGES, LOCO_INFO_SUBSCRIBE_MODIFIED,
+                    LAN_CAN_MESSAGES, LOCONET_MESSAGES)));
 
             LOG.info("Starting keep alive for Z21");
             executorService.submit(z21KeepAlive);

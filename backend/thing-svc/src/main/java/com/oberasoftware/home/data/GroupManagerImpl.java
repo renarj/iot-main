@@ -1,11 +1,9 @@
 package com.oberasoftware.home.data;
 
-import com.oberasoftware.home.service.GenericItemManagerImpl;
 import com.oberasoftware.iot.core.managers.GroupManager;
-import com.oberasoftware.iot.core.managers.ItemManager;
+import com.oberasoftware.iot.core.managers.ThingManager;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
-import com.oberasoftware.iot.core.model.storage.impl.GroupItemImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +14,35 @@ import java.util.stream.Collectors;
  * @author Renze de Vries
  */
 @Component
-public class GroupManagerImpl extends GenericItemManagerImpl<GroupItem> implements GroupManager {
+public class GroupManagerImpl implements GroupManager {
 
     @Autowired
-    private ItemManager itemManager;
+    private ThingManager thingManager;
+
+    @Override
+    public List<? extends GroupItem> getItems() {
+        return null;
+    }
+
+    @Override
+    public List<? extends GroupItem> getItems(String controllerId) {
+        return null;
+    }
+
+    @Override
+    public GroupItem getItem(String itemId) {
+        return null;
+    }
+
+    @Override
+    public GroupItem store(GroupItem item) {
+        return null;
+    }
+
+    @Override
+    public void delete(String itemId) {
+
+    }
 
     @Override
     public List<IotThing> getThings(String groupId) {
@@ -28,12 +51,7 @@ public class GroupManagerImpl extends GenericItemManagerImpl<GroupItem> implemen
             var split = di.split("-");
             var controller = split[0];
             var itemId = split[1];
-            return itemManager.findThing(controller, itemId).get();
+            return thingManager.findThing(controller, itemId).get();
         }).collect(Collectors.toList());
-    }
-
-    @Override
-    protected Class<? extends GroupItem> getType() {
-        return GroupItemImpl.class;
     }
 }

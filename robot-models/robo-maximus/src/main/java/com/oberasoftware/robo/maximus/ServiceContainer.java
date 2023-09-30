@@ -15,10 +15,9 @@
  */
 package com.oberasoftware.robo.maximus;
 
-import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
 import com.oberasoftware.iot.client.ClientConfiguration;
-import com.oberasoftware.max.core.CoreConfiguration;
 import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
+import com.oberasoftware.max.core.CoreConfiguration;
 import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.SerialDynamixelConnector;
@@ -66,9 +65,9 @@ public class ServiceContainer {
         ConfigurableApplicationContext context = springApplication.run(args);
         RobotInitializer initializer = context.getBean(RobotInitializer.class);
         SerialDynamixelConnector d = context.getBean(SerialDynamixelConnector.class);
-        var topicBus = context.getBean(MQTTTopicEventBus.class);
-        topicBus.initialize();
-        topicBus.connect();
+//        var topicBus = context.getBean(MQTTTopicEventBus.class);
+//        topicBus.initialize();
+//        topicBus.connect();
 
 //        initializer.initialize();
 

@@ -2,6 +2,7 @@ package com.oberasoftware.robo.cloud;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.BasicCommandBuilder;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
@@ -46,7 +47,7 @@ public class RemoteServoDriver implements ServoDriver {
     @Override
     public boolean setTargetPosition(String servoId, int targetPosition, Scale scale) {
         BasicCommand command = BasicCommandBuilder.create(robot.getName())
-                .item("servos").label("position")
+                .thing("servos").attribute("position")
                 .property("servoId", servoId)
                 .property("position", Integer.toString(targetPosition))
                 .build();
@@ -69,7 +70,8 @@ public class RemoteServoDriver implements ServoDriver {
     @Override
     public boolean setPositionAndSpeed(String servoId, int speed, Scale speedScale, int targetPosition, Scale positionScale) {
         BasicCommand command = BasicCommandBuilder.create(robot.getName())
-                .item("servos").label("position")
+                .thing("servos").attribute("position")
+                .type(CommandType.SET_STATE)
                 .property("servoId", servoId)
                 .property("position", Integer.toString(targetPosition))
                 .property("speed", Integer.toString(speed))
@@ -93,7 +95,8 @@ public class RemoteServoDriver implements ServoDriver {
     @Override
     public boolean setTorgue(String servoId, int limit) {
         BasicCommand command = BasicCommandBuilder.create(robot.getName())
-                .item("servos").label("torgue")
+                .thing("servos").attribute("torgue")
+                .type(CommandType.SET_STATE)
                 .property("servoId", servoId)
                 .property("torgue", Boolean.toString(true))
                 .property("torgueLimit", Integer.toString(limit))
@@ -107,7 +110,8 @@ public class RemoteServoDriver implements ServoDriver {
     @Override
     public boolean setTorgue(String servoId, boolean state) {
         BasicCommand command = BasicCommandBuilder.create(robot.getName())
-                .item("servos").label("torgue")
+                .thing("servos").attribute("torgue")
+                .type(CommandType.SET_STATE)
                 .property("servoId", servoId)
                 .property("torgue", Boolean.toString(state))
                 .build();
@@ -120,7 +124,8 @@ public class RemoteServoDriver implements ServoDriver {
     @Override
     public boolean setTorgueAll(boolean state) {
         BasicCommand command = BasicCommandBuilder.create(robot.getName())
-                .item("servos").label("torgue")
+                .thing("servos").attribute("torgue")
+                .type(CommandType.SET_STATE)
                 .property("torgue", Boolean.toString(state))
                 .build();
 
@@ -132,7 +137,8 @@ public class RemoteServoDriver implements ServoDriver {
     @Override
     public boolean setTorgueAll(boolean state, List<String> servos) {
         BasicCommand command = BasicCommandBuilder.create(robot.getName())
-                .item("servos").label("torgue")
+                .thing("servos").attribute("torgue")
+                .type(CommandType.SET_STATE)
                 .property("torgue", Boolean.toString(state))
                 .property("servos", String.join(",", servos))
                 .build();

@@ -26,5 +26,7 @@ public interface ThingClient {
 
     List<IotThing> getThings(String controllerId, String pluginId) throws IOTException;
 
+    List<IotThing> getChildren(String controllerId, String thingId) throws IOTException;
+
     List<IotThing> getThings(String controllerId, String pluginId, String type) throws IOTException;
 }

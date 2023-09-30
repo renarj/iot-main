@@ -13,15 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class TrainAutomationExtension implements AutomationExtension {
     private static final Logger LOG = LoggerFactory.getLogger(TrainAutomationExtension.class);
 
-    private static final String EXTENSION_NAME = "Train Automation Plugin";
     public static final String COMMAND_CENTER_TYPE = "commandCenterType";
 
     private final ThingClient thingClient;
@@ -49,7 +47,7 @@ public class TrainAutomationExtension implements AutomationExtension {
 
     @Override
     public String getName() {
-        return EXTENSION_NAME;
+        return TrainConstants.EXTENSION_NAME;
     }
 
     @Override
@@ -69,19 +67,15 @@ public class TrainAutomationExtension implements AutomationExtension {
 
     @Override
     public void activate(IotThing pluginThing) {
-        var properties = pluginThing.getProperties();
+        try {
+            List<IotThing> commandCenters = thingClient.getThings(agentControllerInformation.getControllerId(),
+                    TrainConstants.EXTENSION_ID, "commandstation");
 
-
-        Set<String> commandCenterIds = properties.keySet().stream().filter(k -> k.startsWith("cc-")).map(properties::get).collect(Collectors.toSet());
-        LOG.info("Activating command centers: {}", commandCenterIds);
-        commandCenterIds.forEach(cc -> {
-            try {
-                var oThing = thingClient.getThing(agentControllerInformation.getControllerId(), cc);
-                oThing.ifPresent(this::activateCommandCenter);
-            } catch (IOTException e) {
-                LOG.error("Could not retrieve thing information for CommandCenter: " + cc, e);
-            }
-        });
+            LOG.info("Activating command centers: {}", commandCenters);
+            commandCenters.forEach(this::activateCommandCenter);
+        } catch (IOTException e) {
+            LOG.error("Could not retrieve command centers", e);
+        }
         LOG.info("Finished activating command centers");
     }
 

@@ -24,14 +24,14 @@ public class AgentControllerInformationImpl implements AgentControllerInformatio
     public String getControllerId() {
         var storedControllerId = agentStorage.getValue("controllerId");
         if(storedControllerId != null) {
-            LOG.info("Controller Id: {} is found in stored configuration", storedControllerId);
+            LOG.debug("Controller Id: {} is found in stored configuration", storedControllerId);
             return storedControllerId;
         } else {
             if(!StringUtils.hasText(controllerId)) {
                 LOG.warn("No controllerId has been configured, please configure your Agent first");
                 return null;
             } else {
-                LOG.info("ControllerId: {} was statically configured, storing in local configuration store", controllerId);
+                LOG.debug("ControllerId: {} was statically configured, storing in local configuration store", controllerId);
                 agentStorage.putValue("controllerId", controllerId);
                 return controllerId;
             }

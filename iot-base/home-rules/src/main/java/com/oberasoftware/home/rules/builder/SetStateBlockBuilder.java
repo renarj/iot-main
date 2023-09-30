@@ -19,8 +19,8 @@ public class SetStateBlockBuilder implements BlockBuilder {
         this.itemValue = itemValue;
     }
 
-    public RuleBuilder fromItem(String itemId, String label) {
-        sourceValue = new ItemValue(itemId, label);
+    public RuleBuilder fromItem(String controllerId, String itemId, String label) {
+        sourceValue = new ItemValue(controllerId, itemId, label);
 
         return ruleBuilder;
     }

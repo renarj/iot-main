@@ -17,8 +17,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ThingUpdateHandler implements EventHandler {
     private static final Logger LOG = getLogger(ThingUpdateHandler.class);
 
-//    @Autowired
-//    private DeviceManager deviceManager;
     @Autowired
     private ThingClient thingClient;
 

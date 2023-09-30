@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Renze de Vries
@@ -33,8 +34,8 @@ public class MockStateManager implements StateManager {
     }
 
     @Override
-    public State getState(String controllerId, String itemId) {
-        return stateMap.get(itemId);
+    public Optional<State> getState(String controllerId, String itemId) {
+        return Optional.of(stateMap.get(itemId));
     }
 
     public void addState(State state) {

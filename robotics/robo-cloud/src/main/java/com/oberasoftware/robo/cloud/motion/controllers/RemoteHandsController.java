@@ -1,6 +1,7 @@
 package com.oberasoftware.robo.cloud.motion.controllers;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
+import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.motion.controller.HandsController;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,9 @@ public class RemoteHandsController implements HandsController, RemoteController 
     @Override
     public void openHands() {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("hands")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .attribute("hands")
                 .property("position", "open")
                 .build();
 
@@ -30,8 +32,9 @@ public class RemoteHandsController implements HandsController, RemoteController 
     @Override
     public void openHand(HAND_ID hand) {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("hands")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .attribute("hands")
                 .property("position", "open")
                 .property("hand", hand.name())
                 .build();
@@ -43,8 +46,9 @@ public class RemoteHandsController implements HandsController, RemoteController 
     @Override
     public void closeHand(HAND_ID hand) {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("hands")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .attribute("hands")
                 .property("position", "closed")
                 .property("hand", hand.name())
                 .build();
@@ -55,8 +59,9 @@ public class RemoteHandsController implements HandsController, RemoteController 
     @Override
     public void closeHands() {
         BasicCommand command = create(robot.getName())
-                .item("motion")
-                .label("hands")
+                .thing("motion")
+                .type(CommandType.SET_STATE)
+                .attribute("hands")
                 .property("position", "closed")
                 .build();
 

@@ -57,8 +57,8 @@ public class RuleBuilder {
         return ifBlockBuilder;
     }
 
-    public SetStateBlockBuilder setItemState(String itemId, String label) {
-        SetStateBlockBuilder setStateBlockBuilder = new SetStateBlockBuilder(this, new ItemValue(itemId, label));
+    public SetStateBlockBuilder setItemState(String controllerId, String itemId, String label) {
+        SetStateBlockBuilder setStateBlockBuilder = new SetStateBlockBuilder(this, new ItemValue(controllerId, itemId, label));
 
         blockBuilders.add(setStateBlockBuilder);
 
