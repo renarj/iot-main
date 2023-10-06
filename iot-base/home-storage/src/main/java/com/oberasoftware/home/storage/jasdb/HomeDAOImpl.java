@@ -1,10 +1,7 @@
 package com.oberasoftware.home.storage.jasdb;
 
 import com.google.common.collect.ImmutableMap;
-import com.oberasoftware.iot.core.model.Controller;
-import com.oberasoftware.iot.core.model.IotBaseEntity;
-import com.oberasoftware.iot.core.model.IotThing;
-import com.oberasoftware.iot.core.model.ThingTemplate;
+import com.oberasoftware.iot.core.model.*;
 import com.oberasoftware.iot.core.model.storage.*;
 import com.oberasoftware.iot.core.model.storage.impl.*;
 import com.oberasoftware.iot.core.storage.HomeDAO;
@@ -159,21 +156,34 @@ public class HomeDAOImpl extends BaseDAO implements HomeDAO {
 
 
     @Override
-    public List<ThingTemplate> findTemplates() {
-        return newArrayList(findItems(ThingTemplateImpl.class, new HashMap<>()));
+    public List<ThingSchema> findSchemas() {
+        return newArrayList(findItems(ThingSchemaImpl.class, new HashMap<>()));
     }
 
     @Override
-    public List<ThingTemplate> findTemplates(String pluginId) {
-        return newArrayList(findItems(ThingTemplateImpl.class, new ImmutableMap.Builder<String, String>()
+    public List<Plugin> findPlugins() {
+        return newArrayList(findItems(PluginImpl.class, new HashMap<>()));
+    }
+
+    @Override
+    public Optional<Plugin> findPlugin(String pluginId) {
+        PluginImpl pluginItem = findItem(PluginImpl.class, new ImmutableMap.Builder<String, String>()
+                .put("pluginId", pluginId)
+                .build());
+        return ofNullable(pluginItem);
+    }
+
+    @Override
+    public List<ThingSchema> findSchemas(String pluginId) {
+        return newArrayList(findItems(ThingSchemaImpl.class, new ImmutableMap.Builder<String, String>()
                 .put("pluginId", pluginId)
                 .build()));
     }
 
     @Override
-    public Optional<ThingTemplate> findTemplate(String pluginId, String templateId) {
-        ThingTemplateImpl templateItem = findItem(ThingTemplateImpl.class, new ImmutableMap.Builder<String, String>()
-                .put("templateId", templateId)
+    public Optional<ThingSchema> findSchema(String pluginId, String templateId) {
+        ThingSchemaImpl templateItem = findItem(ThingSchemaImpl.class, new ImmutableMap.Builder<String, String>()
+                .put("schemaId", templateId)
                 .put("pluginId", pluginId).build());
         return ofNullable(templateItem);
     }

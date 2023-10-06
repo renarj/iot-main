@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  data-bs-theme="dark">
+<head th:replace="includes/header :: header">
+</head>
+<body>
+<script th:src="@{/javascript/sysconfig.js}" src="/static/javascript/sysconfig.js"></script>
+
+<div class="modal fade modal-lg" id="pluginForm" tabindex="-1" aria-labelledby="newPluginLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newPluginLabel">New Plugin</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content" id="nav-tabContent">
+                    <form>
+                        <div class="mb-3">
+                            <label for="pluginId" class="col-form-label">Plugin ID:</label>
+                            <input type="text" class="form-control" id="pluginId">
+                        </div>
+                        <div class="mb-3">
+                            <label for="pluginName" class="col-form-label">Friendly Name:</label>
+                            <input type="text" class="form-control" id="pluginName"/>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addPlugin">Save Plugin</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-lg" id="schemaForm" tabindex="-1" aria-labelledby="newSchemaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newSchemaLabel">New Schema</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <ul class="nav nav-tabs" role="tablist" id="tabList">
+                <li class="nav-item" role="presentation"><a class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabDetail" aria-controls="tabDetail" aria-selected="true" role="tab" href="#details" id="detail-tab">Details</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="#functions" data-bs-toggle="tab" data-bs-target="#propertiesTab" aria-controls="propertiesTab" aria-selected="false" role="tab" id="properties-tab">Properties</a></li>
+            </ul>
+            <div class="modal-body">
+                <div class="tab-content" id="nav-tabContent-Schema">
+                    <div class="tab-pane show active" id="tabDetail" role="tabpanel" aria-labelledby="detail-tab">
+                        <form>
+                            <div class="mb-3">
+                                <label for="schemaId" class="col-form-label">Schema ID:</label>
+                                <input type="text" class="form-control" id="schemaId">
+                            </div>
+                            <div class="mb-3">
+                                <label for="instructionText" class="col-form-label">Instruction Text:</label>
+                                <input type="text" class="form-control" id="instructionText"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="schemaType" class="col-form-label">Type:</label>
+                                <input type="text" class="form-control" id="schemaType"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="propertiesTab" role="tabpanel" aria-labelledby="properties-tab">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Property</th>
+                                <th scope="col">Field Type</th>
+                            </tr>
+                            </thead>
+                            <tbody id="propertyList">
+
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-secondary" id="addRow">Add row</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addSchema">Save Schema</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" id="root" th:attr="pluginId=${pluginId},schemaId=${schemaId}">
+    <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
+
+    <div th:replace="includes/header :: adminTabs (selectTab='sysconfig')"></div>
+    <script id="pluginTemplate" type="text/x-handlebars-template">
+        <a class="list-group-item list-group-item-action pluginButton" pluginId="{{pluginId}}" href="/web/admin/sysconfig/plugins({{pluginId}})">{{pluginId}} ({{name}})</a>
+    </script>
+    <script id="schemaTemplate" type="text/x-handlebars-template">
+        <a class="list-group-item list-group-item-action schemaButton" schemaId="{{schemaId}}" href="/web/admin/sysconfig/plugins({{pluginId}})/schemas({{schemaId}})">{{schemaId}}</a>
+    </script>
+    <script id="propertyTemplate" type="text/x-handlebars-template">
+        <tr functionId="{{functionNr}}">
+            <td class="align-middle">
+                <input type="text" value="{{description}}" placeholder="Property Name..." class="description"/>
+            </td>
+            <td class="align-middle">
+                <select class="form-select field_type">
+                    <option value="default">Text</option>
+                    <option value="link">Link</option>
+                </select>
+            </td>
+        </tr>
+    </script>
+    <script id="schemaDetails" type="text/x-handlebars-template">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Property</th>
+                <th scope="col">Value</th>
+            </tr>
+            </thead>
+            <tbody id="functionList">
+            <tr>
+                <td>SchemaId:</td>
+                <td>{{schemaId}}</td>
+            </tr>
+            <tr>
+                <td>pluginId:</td>
+                <td>{{pluginId}}</td>
+            </tr>
+            <tr>
+                <td>Type:</td>
+                <td>{{type}}</td>
+            </tr>
+            <tr>
+                <td>Template Text:</td>
+                <td>{{template}}</td>
+            </tr>
+            {{#each properties}}
+                <tr>
+                    <td>properties.{{@key}}</td>
+                    <td>{{this}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+
+    <div class="row p-1 justify-content-start" id="renderThing">
+        <div class="col-2" id="actionMenu">
+            <div class="card px-0">
+                <div class="card-header">
+                    <h5 class="card-title">Plugins</h5>
+
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="pluginList">
+
+                    </div>
+                    <div class="row p-2">
+                        <button type="button" class="btn btn-primary" id="openPluginModal" data-bs-toggle="modal" data-bs-target="#pluginForm" data-bs-whatever="@mdo">Add Plugin</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card fade" style="width: 18rem;" id="schemaPanel">
+                <div class="card-header d-flex justify-content-start">
+                    <h5 class="card-title flex-grow-1">Schemas for: <label id="labelPlugin"></label></h5>
+                    <a class="removePlugin" href="#" id="removePluginButton"><i class="bi bi-trash"></i></a>
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="schemaList">
+
+                    </div>
+                    <div class="row p-2">
+                        <button type="button" class="btn btn-primary" id="openSchemaModal" data-bs-toggle="modal" data-bs-target="#schemaForm" data-bs-whatever="@mdo">Add Schema</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="card fade" id="detailPanel" >
+                <div class="card-header d-flex justify-content-start">
+                    <h5 class="card-title flex-grow-1">Schema Details for: <label id="schemaLabel"></label></h5>
+                    <a class="removeSchema" href="#" id="removeSchemaButton"><i class="bi bi-trash"></i></a>
+                </div>
+                <div class="card-body" id="schemaDetailPanel">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

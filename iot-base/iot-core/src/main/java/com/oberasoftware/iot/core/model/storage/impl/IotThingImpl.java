@@ -21,6 +21,8 @@ public class IotThingImpl implements IotThing {
 
     private String type = "default";
 
+    private String templateId;
+
     private String pluginId;
 
     private String parentId;
@@ -88,6 +90,16 @@ public class IotThingImpl implements IotThing {
 
     public void setFriendlyName(String friendlyName) {
         this.friendlyName = friendlyName;
+    }
+
+    @Override
+    @JasDBProperty
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 
     @Override
@@ -162,6 +174,7 @@ public class IotThingImpl implements IotThing {
                 ", controllerId='" + controllerId + '\'' +
                 ", friendlyName='" + friendlyName + '\'' +
                 ", type='" + type + '\'' +
+                ", templateId='" + templateId + '\'' +
                 ", pluginId='" + pluginId + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", attributes=" + attributes +

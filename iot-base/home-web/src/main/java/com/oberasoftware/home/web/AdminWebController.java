@@ -17,31 +17,56 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Controller
-@RequestMapping("/web/admin/things")
-public class ThingAdminController {
-    private static final Logger LOG = getLogger(ThingAdminController.class);
+@RequestMapping("/web/admin")
+public class AdminWebController {
+    private static final Logger LOG = getLogger(AdminWebController.class);
 
-    @RequestMapping
-    public String showIndex() {
-        LOG.debug("Showing admin screen - controllers");
+    @RequestMapping("/groups/")
+    public String getGroups() {
+        return "admin/groups";
+    }
+
+    @RequestMapping("/things")
+    public String showThingIndex() {
+        LOG.debug("Showing admin screen - things");
 
         return "admin/things";
     }
 
-    @RequestMapping("/controllers({controllerId})")
+    @RequestMapping("/sysconfig")
+    public String showSysConfig() {
+        LOG.debug("Showing Config admin screen");
+
+        return "admin/sysconfig";
+    }
+
+    @RequestMapping("/sysconfig/plugins({pluginId})")
+    public String showSysConfig(@PathVariable String pluginId, Model model) {
+        model.addAttribute("pluginId", pluginId);
+        return "admin/sysconfig";
+    }
+
+    @RequestMapping("/sysconfig/plugins({pluginId})/schemas({schemaId})")
+    public String showSysConfig(@PathVariable String pluginId, @PathVariable String schemaId, Model model) {
+        model.addAttribute("pluginId", pluginId);
+        model.addAttribute("schemaId", schemaId);
+        return "admin/sysconfig";
+    }
+
+    @RequestMapping("/things/controllers({controllerId})")
     public String showController(@PathVariable String controllerId, Model model) {
         model.addAttribute("controllerId", controllerId);
         return "admin/things";
     }
 
-    @RequestMapping("/controllers({controllerId})/things({thingId})")
+    @RequestMapping("/things/controllers({controllerId})/things({thingId})")
     public String showThing(@PathVariable String controllerId, @PathVariable String thingId, Model model) {
         model.addAttribute("controllerId", controllerId);
         model.addAttribute("thingId", thingId);
         return "admin/things";
     }
 
-    @RequestMapping(value = "/icon/plugin/{pluginId}")
+    @RequestMapping(value = "/things/icon/plugin/{pluginId}")
     public @ResponseBody ResponseEntity<byte[]> getIcon(@PathVariable String pluginId) throws IOException {
         LOG.debug("Requesting icon for plugin: {}", pluginId);
 
