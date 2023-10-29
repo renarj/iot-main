@@ -169,14 +169,25 @@
         <a dashboardId="{{dashboardId}}" class="tab nav-link {{tabClass}}" weight="{{weight}}" href="#">{{dashboardName}}</a>
     </li>
 </script>
-
+<script id="addDashButtonTemplate" type="text/x-handlebars-template">
+    <li role="nav-item">
+        <a class="nav-link addTab" href="#add"><i class="bi bi-file-earmark-plus-fill"></i></a>
+    </li>
+</script>
 
 <div class="container-fluid">
 
     <div th:replace="includes/header :: navigation (selectTab='dashboard')"></div>
 
-    <ul class="nav nav-tabs" id="dashboards">
-    </ul>
+    <div class="row">
+        <div class="col-md-11">
+            <ul class="nav nav-tabs" id="dashboards">
+            </ul>
+        </div>
+        <div class="col-md-1">
+            <a type="button" class="btn btn-sm btn-primary" href="/web/admin/setup">Add Thing</a>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-12">

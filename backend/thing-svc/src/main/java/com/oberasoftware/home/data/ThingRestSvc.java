@@ -101,8 +101,7 @@ public class ThingRestSvc {
             LOG.info("Creating thing: '{}' on controller: '{}'", thing.getThingId(), controllerId);
             LOG.info("Thing: {}", thing);
             try {
-                var createdThing = thingManager.createOrUpdateThing(controllerId, thing.getThingId(), thing.getFriendlyName(),
-                        thing.getPluginId(), thing.getType(), thing.getParentId(), thing.getProperties(), thing.getAttributes());
+                var createdThing = thingManager.createOrUpdateThing(controllerId, thing.getThingId(), thing);
 
                 return new ResponseEntity<>(createdThing, HttpStatus.CREATED);
             } catch(IOTException e) {

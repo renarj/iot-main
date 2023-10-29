@@ -1,5 +1,6 @@
 package com.oberasoftware.home.core.mqtt;
 
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
@@ -7,9 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -19,17 +23,15 @@ public class MQTTBroker {
     private static final Logger LOG = LoggerFactory.getLogger(MQTTBroker.class);
 
     private final String host;
-    private String username = null;
-    private String password = null;
+    private final String username;
+    private final String password;
 
     private MqttClient client;
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
-    private List<MQTTListener> listeners = new CopyOnWriteArrayList<>();
+    private final List<MQTTListener> listeners = new CopyOnWriteArrayList<>();
 
-    public MQTTBroker(String host) {
-        this.host = host;
-    }
+    private final Set<String> subscribedTopics = new HashSet<>();
 
     public MQTTBroker(String host, String username, String password) {
         this.host = host;
@@ -48,14 +50,23 @@ public class MQTTBroker {
                     LOG.warn("Connection lost to host: {}", host);
                     try {
                         client.reconnect();
+                        LOG.info("Waiting for reconnect");
+                        connected.set(false);
+                        while(!client.isConnected()) {
+                            Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
+                        }
+                        connected.set(true);
                         LOG.info("Reconnected to broker: {}", host);
+
+                        LOG.debug("Resubscribing to topics: {}", subscribedTopics);
+                        subscribedTopics.forEach(t -> subscribeTopic(t));
                     } catch (MqttException e) {
                         LOG.error("Could not reconnect", e);
                     }
                 }
 
                 @Override
-                public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+                public void messageArrived(String s, MqttMessage mqttMessage) {
                     LOG.debug("Message arrived: {}", s);
                     listeners.forEach(l -> l.receive(s, new String(mqttMessage.getPayload())));
                 }
@@ -71,7 +82,7 @@ public class MQTTBroker {
             options.setAutomaticReconnect(true);
             options.setConnectionTimeout(5);
 
-            if(!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
+            if(StringUtils.hasText(username) && StringUtils.hasText(password)) {
                 LOG.info("Authentication details specified, using for connection");
                 options.setUserName(username);
                 options.setPassword(password.toCharArray());
@@ -106,6 +117,7 @@ public class MQTTBroker {
     public void subscribeTopic(String topic) {
         if(connected.get()) {
             try {
+                subscribedTopics.add(topic);
                 client.subscribe(topic, 1);
             } catch (MqttException e) {
                 LOG.error("Could not subscribe to topic: " + topic, e);

@@ -69,14 +69,25 @@
                             <thead>
                             <tr>
                                 <th scope="col">Property</th>
+                                <th scope="col">Default/Static Value</th>
                                 <th scope="col">Field Type</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody id="propertyList">
 
                             </tbody>
                         </table>
-                        <button type="button" class="btn btn-secondary" id="addRow">Add row</button>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary" id="addRow">Add row</button>
+                            </div>
+                            <div class="col-md-8">
+                                <i class="align-right">In case of enum, please comma seperate the values</i>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -100,15 +111,23 @@
         <a class="list-group-item list-group-item-action schemaButton" schemaId="{{schemaId}}" href="/web/admin/sysconfig/plugins({{pluginId}})/schemas({{schemaId}})">{{schemaId}}</a>
     </script>
     <script id="propertyTemplate" type="text/x-handlebars-template">
-        <tr functionId="{{functionNr}}">
+        <tr id="{{uniqueId}}" class="propertyRow">
             <td class="align-middle">
-                <input type="text" value="{{description}}" placeholder="Property Name..." class="description"/>
+                <input type="text" value="{{description}}" id="{{uniqueId}}-property" placeholder="Property Name..." class="description"/>
             </td>
             <td class="align-middle">
-                <select class="form-select field_type">
-                    <option value="default">Text</option>
-                    <option value="link">Link</option>
+                <input type="text" value="{{defaultValue}}" id="{{uniqueId}}-default" placeholder="Default/Static Value..." class="description"/>
+            </td>
+            <td class="align-middle">
+                <select class="form-select field_type" id="{{uniqueId}}-type" >
+                    <option value="TEXT">Text</option>
+                    <option value="LINK">Link</option>
+                    <option value="ENUM">Enum</option>
+                    <option value="STATIC_DEFAULT">Static Value</option>
                 </select>
+            </td>
+            <td class="align-middle">
+                <a class="removeRow" href="#" rowId="{{uniqueId}}"><i class="bi bi-trash"></i></a>
             </td>
         </tr>
     </script>
@@ -140,7 +159,7 @@
             {{#each properties}}
                 <tr>
                     <td>properties.{{@key}}</td>
-                    <td>{{this}}</td>
+                    <td>FieldType: {{this.fieldType}} - valueConfig: {{this.defaultValue}}</td>
                 </tr>
             {{/each}}
             </tbody>
@@ -186,6 +205,7 @@
                 <div class="card-header d-flex justify-content-start">
                     <h5 class="card-title flex-grow-1">Schema Details for: <label id="schemaLabel"></label></h5>
                     <a class="removeSchema" href="#" id="removeSchemaButton"><i class="bi bi-trash"></i></a>
+                    <a class="editSchema" href="#" id="editSchemaButton"><i class="bi bi-pencil-fill"></i></a>
                 </div>
                 <div class="card-body" id="schemaDetailPanel">
                 </div>

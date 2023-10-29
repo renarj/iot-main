@@ -100,9 +100,19 @@ public class LocThingRepositoryImpl implements LocThingRepository {
         private void mapIfPresent(IotThing t) {
             switch (t.getType()) {
                 case "sensor" -> {
-                    var sensorPort = IntUtils.toInt(t.getProperty("address"));
-                    sensorPort.ifPresent(sp -> mappedSensors.put(getKey(t.getControllerId(), sp), t));
-                    LOG.info("Mapping thing: {} to sensor map with loc address: {}", t, sensorPort);
+                    int nrPorts = IntUtils.toInt(t.getProperty("ports")).orElse(1);
+                    LOG.info("Configuring sensor: {} with {} nr of ports", t.getThingId(), nrPorts);
+                    var properties = t.getProperties();
+                    for(int i=0; i<nrPorts; i++) {
+                        var key = "port" + (i+1);
+                        if(properties.containsKey(key)) {
+                            var oAddress = IntUtils.toInt(properties.get(key));
+                            oAddress.ifPresent(sp -> mappedSensors.put(getKey(t.getControllerId(), sp), t));
+                            LOG.info("Mapping thing: {} to sensor map with loc address: {}", t, oAddress);
+                        } else {
+                            LOG.warn("Invalid Sensor configuration, no port: {} configured on thing: {}", key, t.getThingId());
+                        }
+                    }
                 }
                 case "locomotive" -> {
                     var oLocAddress = IntUtils.toInt(t.getProperty(Locomotive.LOC_ADDRESS));

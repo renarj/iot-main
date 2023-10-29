@@ -1,6 +1,34 @@
 $(document).ready(function() {
     loadControllers();
+
+    $("#editThing").click(function() {
+        let controllerId = getControllerId();
+        let thingId = getThingId();
+
+        location.href = "/web/admin/setup/controllers(" + controllerId + ")/things(" + thingId + ")";
+    })
+
+    $("#removeThing").click(function() {
+        let controllerId = getControllerId();
+        let thingId = getThingId();
+
+        console.log("Deleting Thing: '" + thingId + "' on Controller: " + controllerId);
+        $.ajax({url: "/api/controllers(" + controllerId + ")/things(" + thingId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
+            console.log("Removed Thing successfully from controller");
+            location.href = "/web/admin/things/controllers(" + controllerId + ")";
+        }});
+    })
 });
+
+function getControllerId() {
+    let root = $("#root")
+    return root.attr("controllerId");
+}
+
+function getThingId() {
+    let root = $("#root")
+    return root.attr("thingId");
+}
 
 function loadControllers() {
     $.get("/api/controllers", function(data) {
@@ -12,9 +40,8 @@ function loadControllers() {
             renderAndAppend("controllerTemplate", data, "controllerList");
         })
 
-        let root = $("#root")
-        let controllerId = root.attr("controllerId");
-        let thingId = root.attr("thingId");
+        let controllerId = getControllerId();
+        let thingId = getThingId();
         if(controllerId !== undefined) {
             $(".controllerButton[controllerId=" + controllerId + "]").addClass('active');
 
@@ -83,6 +110,7 @@ function loadThing(controllerId, thingId) {
         let thingData = {
             "controllerId" : data.controllerId,
             "thingId" : data.thingId,
+            "pluginId" : data.pluginId,
             "type": data.type,
             "name": data.friendlyName,
             "attributes": data.attributes,

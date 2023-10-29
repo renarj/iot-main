@@ -1,6 +1,6 @@
 package com.oberasoftware.iot.core.model;
 
-import com.oberasoftware.iot.core.model.storage.TemplateFieldType;
+import com.oberasoftware.iot.core.model.storage.impl.SchemaFieldDescriptor;
 
 import java.util.Map;
 
@@ -13,5 +13,5 @@ public interface ThingSchema extends IotBaseEntity {
 
     String getTemplate();
 
-    Map<String, TemplateFieldType> getProperties();
+    Map<String, SchemaFieldDescriptor> getProperties();
 }

@@ -77,7 +77,7 @@ public class ThingManagerImpl implements ThingManager {
     }
 
     @Override
-    public IotThing createOrUpdateThing(String controllerId, String thingId, String friendlyName, String plugin, String type, String parent, Map<String, String> properties, Set<String> attributes) throws IOTException {
+    public IotThing createOrUpdateThing(String controllerId, String thingId, IotThingImpl updatedThing) throws IOTException {
         centralDatastore.beginTransaction();
         try {
             Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
@@ -86,22 +86,19 @@ public class ThingManagerImpl implements ThingManager {
                 IotThing item = thing.get();
 
                 LOG.info("Thing: {} already exist, properties have changed, updating device with id: {}", thingId, item.getId());
-                var mergedProperties = mergeProperties(item.getProperties(), properties);
+                var mergedProperties = mergeProperties(item.getProperties(), updatedThing.getProperties());
+                updatedThing.setId(item.getId());
+                updatedThing.setProperties(mergedProperties);
+                ensureValid(updatedThing);
 
-                var t = new IotThingImpl(item.getId(), controllerId, thingId, friendlyName, plugin, parent, mergedProperties);
-                t.setAttributes(attributes);
-                t.setType(type);
-                t = ensureValid(t);
-
-                result = centralDatastore.store(t);
+                result = centralDatastore.store(updatedThing);
             } else {
                 String id = generateId();
                 LOG.debug("Device: {} does not yet exist, creating new with id: {}", thingId, id);
-                var t = new IotThingImpl(id, controllerId, thingId, friendlyName, plugin, parent, properties);
-                t.setType(type);
-                t.setAttributes(attributes);
-                t = ensureValid(t);
-                result = centralDatastore.store(t);
+                updatedThing.setId(id);
+                ensureValid(updatedThing);
+
+                result = centralDatastore.store(updatedThing);
             }
 
             var command = new BasicCommandImpl();
@@ -116,20 +113,23 @@ public class ThingManagerImpl implements ThingManager {
         }
     }
 
-    private IotThingImpl ensureValid(IotThingImpl thing) throws IOTException {
+    private void ensureValid(IotThingImpl thing) throws IOTException {
         if(thing.getThingId() == null || thing.getThingId().isEmpty()) {
             throw new IOTException("Invalid Thing, missing thingId");
         }
         if(thing.getControllerId() == null || thing.getControllerId().isEmpty()) {
             throw new IOTException("Invalid ControllerId is specified");
         }
+        if(thing.getPluginId() == null || thing.getPluginId().isEmpty()) {
+            throw new IOTException("No PluginId defined for Thing");
+        }
         if(homeDAO.findController(thing.getControllerId()).isEmpty()) {
             throw new IOTException("Controller: " + thing.getControllerId() + " does not exist");
         }
-        return ensureLinked(thing);
+        ensureLinked(thing);
     }
 
-    private IotThingImpl ensureLinked(IotThingImpl thing) throws IOTException {
+    private void ensureLinked(IotThingImpl thing) throws IOTException {
         if(thing.getParentId() == null) {
             throw new IOTException("No parent link was specified for thing: " + thing.getThingId());
         }
@@ -138,7 +138,6 @@ public class ThingManagerImpl implements ThingManager {
                 throw new IOTException("Specified parent link: " + thing.getParentId() + " is not valid");
             }
         }
-        return thing;
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.extensions.AutomationExtension;
 import com.oberasoftware.iot.core.extensions.ExtensionManager;
-import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
 import org.slf4j.Logger;
@@ -84,8 +83,10 @@ public class ExtensionManagerImpl implements ExtensionManager {
         executorService.submit(() -> {
             LOG.info("Registering extension: {}", extension);
             try {
-                IotThing pluginThing = thingClient.createOrUpdate(new IotThingImpl(controllerId, extension.getId(),
-                        extension.getName(), extension.getId(), controllerId, extension.getProperties()));
+                var pThing = new IotThingImpl(controllerId, extension.getId(),
+                        extension.getName(), extension.getId(), controllerId, extension.getProperties());
+                pThing.setType("plugin");
+                var pluginThing = thingClient.createOrUpdate(pThing);
 
                 LOG.info("Activating plugin: {}", pluginThing);
                 extension.activate(pluginThing);

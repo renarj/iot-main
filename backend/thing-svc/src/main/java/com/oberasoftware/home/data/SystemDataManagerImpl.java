@@ -39,6 +39,9 @@ public class SystemDataManagerImpl implements SystemDataManager {
     public PluginImpl storePlugin(PluginImpl plugin) {
         centralDatastore.beginTransaction();
         try {
+            var oPlugin = homeDAO.findPlugin(plugin.getPluginId());
+            oPlugin.ifPresent(value -> plugin.setId(value.getId()));
+
             return centralDatastore.store(plugin);
         } catch (DataStoreException e) {
             throw new RuntimeException(e);
@@ -51,6 +54,8 @@ public class SystemDataManagerImpl implements SystemDataManager {
     public ThingSchemaImpl storeScheme(ThingSchemaImpl schema) {
         centralDatastore.beginTransaction();
         try {
+            var oSchema = homeDAO.findSchema(schema.getPluginId(), schema.getSchemaId());
+            oSchema.ifPresent(thingSchema -> schema.setId(thingSchema.getId()));
             return centralDatastore.store(schema);
         } catch (DataStoreException e) {
             throw new RuntimeException(e);

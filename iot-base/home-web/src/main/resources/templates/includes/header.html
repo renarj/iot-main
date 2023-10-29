@@ -48,6 +48,7 @@
 
     <ul class="nav nav-tabs" th:fragment="adminTabs (selectTab)">
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'things'} ? 'active'" href="#" th:href="@{'/web/admin/things'}">Things</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'setup'} ? 'active'" href="#" th:href="@{'/web/admin/setup'}">Setup A Thing</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'sysconfig'} ? 'active'" href="#" th:href="@{'/web/admin/sysconfig'}">System Config</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'groups'} ? 'active'" href="#" th:href="@{'/web/admin/groups'}">Groups</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'rules'} ? 'active'" href="#" th:href="@{'/web/admin/rules'}">Rules</a></li>

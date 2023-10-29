@@ -1,12 +1,11 @@
 package com.oberasoftware.iot.core.model.storage.impl;
 
 import com.oberasoftware.iot.core.model.ThingSchema;
-import com.oberasoftware.iot.core.model.storage.TemplateFieldType;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JasDBEntity(bagName = "templates")
@@ -19,7 +18,7 @@ public class ThingSchemaImpl implements ThingSchema {
 
     private String type;
 
-    private Map<String, TemplateFieldType> properties = new HashMap<>();
+    private Map<String, SchemaFieldDescriptor> properties = new LinkedHashMap<>();
 
     private String id;
 
@@ -76,15 +75,15 @@ public class ThingSchemaImpl implements ThingSchema {
 
     @Override
     @JasDBProperty
-    public Map<String, TemplateFieldType> getProperties() {
+    public Map<String, SchemaFieldDescriptor> getProperties() {
         return properties;
     }
 
-    public void setProperties(Map<String, TemplateFieldType> properties) {
+    public void setProperties(Map<String, SchemaFieldDescriptor> properties) {
         this.properties = properties;
     }
 
-    public void addProperty(String field, TemplateFieldType type) {
+    public void addProperty(String field, SchemaFieldDescriptor type) {
         this.properties.put(field, type);
     }
 

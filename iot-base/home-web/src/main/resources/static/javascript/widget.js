@@ -135,7 +135,7 @@ function renderDashboardsLinks() {
             dashboardTabs.append(renderTemplate("tabTemplate", data));
         });
 
-        dashboardTabs.append("<li role=\"nav-item\"><a class=\"nav-link addTab\" href=\"#add\"><i class=\"bi bi-file-earmark-plus-fill\"></i>\n</a></li>");
+        dashboardTabs.append(renderTemplate("addDashButtonTemplate", {}));
 
         $(".tab").click(tabChange);
         $(".addTab").click(tabAdd);

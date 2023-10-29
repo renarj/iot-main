@@ -67,7 +67,7 @@ $(document).ready(function() {
 
     function loadControllers() {
         $('#widgetList').attr('disabled', true);
-        $.get("/data/controllers", function(data){
+        $.get("/api/controllers", function(data){
             if(!isEmpty(data)) {
                 var list = $("#controllerList");
                 list.empty();

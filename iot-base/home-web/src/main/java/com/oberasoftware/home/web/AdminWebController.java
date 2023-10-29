@@ -26,10 +26,53 @@ public class AdminWebController {
         return "admin/groups";
     }
 
+    @RequestMapping("/setup")
+    public String setupThing() {
+        LOG.debug("Showing Config admin screen");
+
+        return "admin/thingsetup";
+    }
+
+    @RequestMapping("/setup/plugins({pluginId})")
+    public String setupThingForPlugin(@PathVariable String pluginId, Model model) {
+        LOG.debug("Showing Config admin screen for specific plugin: {}", pluginId);
+        model.addAttribute("pluginId", pluginId);
+        return "admin/thingsetup";
+    }
+
+    @RequestMapping("/setup/plugins({pluginId})/schemas({schemaId})")
+    public String setupThingForPluginAndTemplate(@PathVariable String pluginId, @PathVariable String schemaId, Model model) {
+        LOG.debug("Showing Config admin screen for specific plugin: {} and schema: {}", pluginId, schemaId);
+        model.addAttribute("pluginId", pluginId);
+        model.addAttribute("schemaId", schemaId);
+        return "admin/thingsetup";
+    }
+
+    @RequestMapping("/setup/controllers({controllerId})/things({thingId})")
+    public String editThing(@PathVariable String controllerId, @PathVariable String thingId, Model model) {
+        LOG.debug("Editing existing Thing: {} on controller: {}", thingId, controllerId);
+        model.addAttribute("thingId", thingId);
+        model.addAttribute("controllerId", controllerId);
+        return "admin/thingsetup";
+    }
+
     @RequestMapping("/things")
     public String showThingIndex() {
         LOG.debug("Showing admin screen - things");
 
+        return "admin/things";
+    }
+
+    @RequestMapping("/things/controllers({controllerId})")
+    public String showController(@PathVariable String controllerId, Model model) {
+        model.addAttribute("controllerId", controllerId);
+        return "admin/things";
+    }
+
+    @RequestMapping("/things/controllers({controllerId})/things({thingId})")
+    public String showThing(@PathVariable String controllerId, @PathVariable String thingId, Model model) {
+        model.addAttribute("controllerId", controllerId);
+        model.addAttribute("thingId", thingId);
         return "admin/things";
     }
 
@@ -53,18 +96,7 @@ public class AdminWebController {
         return "admin/sysconfig";
     }
 
-    @RequestMapping("/things/controllers({controllerId})")
-    public String showController(@PathVariable String controllerId, Model model) {
-        model.addAttribute("controllerId", controllerId);
-        return "admin/things";
-    }
 
-    @RequestMapping("/things/controllers({controllerId})/things({thingId})")
-    public String showThing(@PathVariable String controllerId, @PathVariable String thingId, Model model) {
-        model.addAttribute("controllerId", controllerId);
-        model.addAttribute("thingId", thingId);
-        return "admin/things";
-    }
 
     @RequestMapping(value = "/things/icon/plugin/{pluginId}")
     public @ResponseBody ResponseEntity<byte[]> getIcon(@PathVariable String pluginId) throws IOException {
