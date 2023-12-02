@@ -1,14 +1,23 @@
-node {
-    stage ('checkout') {
-        git credentialsId: 'github-ssh', url: 'git@github.com:renarj/iot-main.git'
+pipeline {
+    agent any
+
+    tools {
+        maven "MVN3"
     }
 
-    stage ('build') {
-        withMaven(maven: 'M3', jdk: 'JDK21') {
-            sh "mvn clean install"
+    stages {
+        stage('Build') {
+            steps {
+                git 'git@github.com:renarj/iot-main.git'
+
+                sh "mvn clean install -Dmaven.test.skip=true"
+            }
+
+            post {
+                success {
+                    archiveArtifacts '**/target/*.jar'
+                }
+            }
         }
     }
-
-    stage 'archive'
-    step([$class: 'ArtifactArchiver', artifacts: '**/target/*.jar', fingerprint: true])
 }
