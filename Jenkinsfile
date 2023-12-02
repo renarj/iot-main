@@ -1,10 +1,10 @@
 node {
     stage ('checkout') {
-        git credentialsId: 'github-ssh', url: 'git@github.com:renarj/robo-max.git'
+        git credentialsId: 'github-ssh', url: 'git@github.com:renarj/iot-main.git'
     }
 
     stage ('build') {
-        withMaven(maven: 'M3', jdk: 'JDK10') {
+        withMaven(maven: 'M3', jdk: 'JDK21') {
             sh "mvn clean install"
         }
     }

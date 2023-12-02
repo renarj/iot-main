@@ -167,7 +167,7 @@ $(document).ready(function() {
 
     function loadThings(selectedController) {
         console.log("Retrieving Things for controller: " + selectedController);
-        $.get("/data/controllers(" + selectedController + ")/things", function(data){
+        $.get("/api/controllers(" + selectedController + ")/things", function(data){
             console.log("Received data: " + JSON.stringify(data))
             if(!isEmpty(data)) {
                 var list = $("#thingList");
