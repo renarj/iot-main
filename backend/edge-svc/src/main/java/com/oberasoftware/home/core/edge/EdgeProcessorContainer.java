@@ -34,7 +34,8 @@ public class EdgeProcessorContainer {
     @Bean
     ApplicationRunner runEdge(@Autowired MQTTTopicEventBus topicEventBus, @Autowired RabbitMQTopicListener topicListener,
                               @Autowired RabbitMQTopicSender topicSender, @Autowired MQTTMessageListener messageListener,
-                              @Value("${command.consumer.topic}") String commandTopic) {
+                              @Value("${command.consumer.topic}") String commandTopic,
+                              @Value("${mqtt_subscribe:iot_states/#") String mqttSubscribe) {
         return args -> {
             LOG.info("Connecting to command channel");
             topicEventBus.initialize();
@@ -50,9 +51,9 @@ public class EdgeProcessorContainer {
             LOG.info("Connecting to topic sender for forwarding states");
             topicSender.connect();
 
-            LOG.info("Starting listening to state changes on MQTT");
+            LOG.info("Starting listening to state changes on MQTT on channel: {}", mqttSubscribe);
             topicEventBus.registerHandler(messageListener);
-            topicEventBus.subscribe("states/#");
+            topicEventBus.subscribe(mqttSubscribe);
 
             LOG.info("Edge Processor started");
 
