@@ -2,7 +2,7 @@ package com.oberasoftware.home.core.edge;
 
 import com.oberasoftware.home.core.mqtt.MQTTConfiguration;
 import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
-import com.oberasoftware.iot.activemq.ActiveMQConfiguration;
+import com.oberasoftware.iot.activemq.QueueConfiguration;
 import com.oberasoftware.iot.activemq.RabbitMQTopicListener;
 import com.oberasoftware.iot.activemq.RabbitMQTopicSender;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
@@ -22,7 +22,7 @@ import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
  * @author Renze de Vries
  */
 @SpringBootApplication
-@Import({MQTTConfiguration.class, ActiveMQConfiguration.class})
+@Import({MQTTConfiguration.class, QueueConfiguration.class})
 public class EdgeProcessorContainer {
     private static final Logger LOG = LoggerFactory.getLogger(EdgeProcessorContainer.class);
 

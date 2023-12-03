@@ -1,6 +1,7 @@
 package com.oberasoftware.home.data;
 
 import com.oberasoftware.home.storage.jasdb.JasDBConfiguration;
+import com.oberasoftware.iot.activemq.QueueConfiguration;
 import com.oberasoftware.iot.core.CoreConfiguation;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +17,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author Renze de Vries
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, SpringApplicationAdminJmxAutoConfiguration.class})
-@Import({CoreConfiguation.class, JasDBConfiguration.class})
+@Import({CoreConfiguation.class, JasDBConfiguration.class, QueueConfiguration.class})
 public class DataServiceContainer {
     private static final Logger LOG = getLogger( DataServiceContainer.class );
 

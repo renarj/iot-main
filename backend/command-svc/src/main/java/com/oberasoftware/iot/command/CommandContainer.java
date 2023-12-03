@@ -1,7 +1,7 @@
 package com.oberasoftware.iot.command;
 
 import com.oberasoftware.base.BaseConfiguration;
-import com.oberasoftware.iot.activemq.ActiveMQConfiguration;
+import com.oberasoftware.iot.activemq.QueueConfiguration;
 import com.oberasoftware.iot.activemq.RabbitMQTopicSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
  * @author Renze de Vries
  */
 @SpringBootApplication
-@Import({ActiveMQConfiguration.class, BaseConfiguration.class})
+@Import({QueueConfiguration.class, BaseConfiguration.class})
 public class CommandContainer {
     private static final Logger LOG = LoggerFactory.getLogger(CommandContainer.class);
 
