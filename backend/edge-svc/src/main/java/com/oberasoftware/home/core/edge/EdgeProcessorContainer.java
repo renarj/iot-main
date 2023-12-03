@@ -35,7 +35,7 @@ public class EdgeProcessorContainer {
     ApplicationRunner runEdge(@Autowired MQTTTopicEventBus topicEventBus, @Autowired RabbitMQTopicListener topicListener,
                               @Autowired RabbitMQTopicSender topicSender, @Autowired MQTTMessageListener messageListener,
                               @Value("${command.consumer.topic}") String commandTopic,
-                              @Value("${mqtt_subscribe:iot_states/#") String mqttSubscribe) {
+                              @Value("${mqtt_subscribe:iot_states/#}") String mqttSubscribe) {
         return args -> {
             LOG.info("Connecting to command channel");
             topicEventBus.initialize();
