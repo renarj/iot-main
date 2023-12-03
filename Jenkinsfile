@@ -29,6 +29,7 @@ pipeline {
         }
         stage("Publish Docker") {
             steps {
+                sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/e1s4e3s4"
                 sh "docker tag command-svc:latest public.ecr.aws/e1s4e3s4/command-svc:latest"
                 sh "docker push public.ecr.aws/e1s4e3s4/command-svc:latest"
 
