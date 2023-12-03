@@ -17,21 +17,25 @@
             <groupId>com.oberasoftware</groupId>
             <artifactId>state-svc</artifactId>
             <version>${project.version}</version>
+            <classifier>original</classifier>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>thing-svc</artifactId>
             <version>${project.version}</version>
+            <classifier>original</classifier>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>edge-svc</artifactId>
             <version>${project.version}</version>
+            <classifier>original</classifier>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
             <artifactId>command-svc</artifactId>
             <version>${project.version}</version>
+            <classifier>original</classifier>
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
