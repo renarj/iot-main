@@ -16,21 +16,21 @@ spec:
     spec:
       containers:
       - name: edge-svc
-        image: edge-svc:latest
-        imagePullPolicy: Never
+        image: public.ecr.aws/e1s4e3s4/edge-svc:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 9003
         env:
         - name: rmq_host
-          value: rbmq-svc
+          value: "10.1.0.2"
         - name: rmq_port
-          value: "5672"
+          value: "35672"
         - name: rmq_producer_topic
           value: "states"
         - name: rmq_consumer_topic
           value: "commands"
         - name: mqtthost
-          value: mqtt-svc
+          value: "10.1.0.2"
         - name: mqttport
           value: "1883"
         - name: SPRING_PROFILES_ACTIVE
