@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    retrieveServiceUrls(pageInit);
+});
+function pageInit() {
     loadControllers();
 
     $("#editThing").click(function() {
@@ -13,12 +16,12 @@ $(document).ready(function() {
         let thingId = getThingId();
 
         console.log("Deleting Thing: '" + thingId + "' on Controller: " + controllerId);
-        $.ajax({url: "/api/controllers(" + controllerId + ")/things(" + thingId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
+        $.ajax({url: thingSvcUrl + "/api/controllers(" + controllerId + ")/things(" + thingId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
             console.log("Removed Thing successfully from controller");
             location.href = "/web/admin/things/controllers(" + controllerId + ")";
         }});
     })
-});
+}
 
 function getControllerId() {
     let root = $("#root")
@@ -31,7 +34,7 @@ function getThingId() {
 }
 
 function loadControllers() {
-    $.get("/api/controllers", function(data) {
+    $.get(thingSvcUrl + "/api/controllers", function(data) {
         $.each(data, function (i, controller) {
             let data = {
                 "controllerId": controller.controllerId
@@ -59,7 +62,7 @@ function loadControllerThings(controllerId) {
     $("#thingList").empty();
     loadSelectedControllerDetail(controllerId);
 
-    $.get("/api/controllers(" + controllerId + ")/children", function(data) {
+    $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/children", function(data) {
         $.each(data, function (i, child) {
             let data = {
                 "controllerId": controllerId,
@@ -75,7 +78,7 @@ function loadSelectedControllerDetail(controllerId) {
     $("#thingDetails").empty();
     $("#breadCrumb").empty();
     $("#thingListDetailLabel").html(controllerId);
-    $.get("/api/controllers(" + controllerId + ")", function(data) {
+    $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")", function(data) {
         let thingData = {
             "controllerId" : data.controllerId,
             "orgId": data.orgId,
@@ -103,7 +106,7 @@ function loadThing(controllerId, thingId) {
     $("#thingListDetailLabel").html(thingId);
     $("#thingList").empty();
 
-    $.get("/api/controllers(" + controllerId + ")/things(" + thingId + ")", function(data) {
+    $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/things(" + thingId + ")", function(data) {
         renderBreadCrumb(controllerId, data.parentId, data.thingId);
 
         $("#thingDetails").empty();
@@ -119,7 +122,7 @@ function loadThing(controllerId, thingId) {
         renderAndAppend("thingDetailTemplate", thingData,"thingDetails");
 
         $("#stateTemplate").empty();
-        $.get("/api/state/controllers(" + controllerId + ")/things(" + thingId + ")", function (stateData) {
+        $.get(stateSvcUrl + "/api/state/controllers(" + controllerId + ")/things(" + thingId + ")", function (stateData) {
             $.each(stateData.stateItems, function (i, stateItem) {
                 console.log("Render stateItem: " + stateItem.attribute);
                 let stateData = {
@@ -133,7 +136,7 @@ function loadThing(controllerId, thingId) {
             $("#stateList").html("No known State");
         });
 
-        $.get("/api/controllers(" + controllerId + ")/children(" + thingId + ")", function(data) {
+        $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/children(" + thingId + ")", function(data) {
             $.each(data, function (i, child) {
                 let data = {
                     "controllerId": controllerId,

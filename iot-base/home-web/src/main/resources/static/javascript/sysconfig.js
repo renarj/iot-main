@@ -1,8 +1,12 @@
 $(document).ready(function() {
+    retrieveServiceUrls(function() {
+        initPage();
+    })
+});
+
+function initPage() {
     console.log("Document loaded");
-
     loadPlugins();
-
 
     $("#addPlugin").click(function() {
         let pluginId = $("#pluginId").val()
@@ -15,7 +19,7 @@ $(document).ready(function() {
 
         let jsonData = JSON.stringify(locData);
         console.log("Posting data: " + jsonData)
-        $.ajax({url: "/api/system/plugins", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function() {
+        $.ajax({url: thingSvcUrl + "/api/system/plugins", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function() {
                 console.log("Posted Plugin successfully")
 
                 $('#pluginForm').modal('hide');
@@ -27,7 +31,7 @@ $(document).ready(function() {
         let pluginId = this.getAttribute('pluginId');
         console.log("Removing plugin: " + pluginId);
 
-        $.ajax({url: "/api/system/plugins(" + pluginId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
+        $.ajax({url: thingSvcUrl + "/api/system/plugins(" + pluginId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
                 console.log("Removed Plugin successfully");
                 loadPlugins();
                 $("#schemaList").empty();
@@ -53,7 +57,7 @@ $(document).ready(function() {
 
         $('#schemaForm').modal('show');
 
-        $.get("/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", function(sData) {
+        $.get(thingSvcUrl + "/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", function(sData) {
             $("#schemaId").val(schemaId);
             $("#instructionText").val(sData.template);
             $("#schemaType").val(sData.type);
@@ -102,7 +106,7 @@ $(document).ready(function() {
         }
         let jsonData = JSON.stringify(schemaData);
         console.log("Posting data: " + jsonData)
-        $.ajax({url: "/api/system/schemas", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function() {
+        $.ajax({url: thingSvcUrl + "/api/system/schemas", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function() {
             console.log("Posted Schema successfully")
                 loadPlugins();
                 $('#schemaForm').modal('hide');
@@ -114,7 +118,7 @@ $(document).ready(function() {
         let schemaId = getSchemaId();
 
         console.log("Deleting schema: '" + schemaId + "' on plugin: " + pluginId);
-        $.ajax({url: "/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
+        $.ajax({url: thingSvcUrl + "/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
                 console.log("Removed Schema successfully");
                 loadPlugins();
                 $("#schemaList").empty();
@@ -122,12 +126,12 @@ $(document).ready(function() {
                 $("#root").removeAttr("schemaId")
             }});
     })
-});
+}
 
 function loadPlugins() {
     $("#pluginList").empty();
 
-    $.get("/api/system/plugins", function(data){
+    $.get(thingSvcUrl + "/api/system/plugins", function(data){
         $.each(data, function (i, pi) {
             let data = {
                 "pluginId" : pi.pluginId,
@@ -162,7 +166,7 @@ function getSchemaId() {
 function loadSchemas(pluginId) {
     $("#schemaList").empty();
     $("#schemaDetailPanel").empty();
-    $.get("/api/system/plugins(" + pluginId + ")/schemas", function(data) {
+    $.get(thingSvcUrl + "/api/system/plugins(" + pluginId + ")/schemas", function(data) {
         $.each(data, function (i, si) {
             let data = {
                 "pluginId": si.pluginId,
@@ -185,7 +189,7 @@ function loadSchemas(pluginId) {
 }
 
 function loadSchema(pluginId, schemaId) {
-    $.get("/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", function(sData) {
+    $.get(thingSvcUrl + "/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", function(sData) {
         let data = {
             "schemaId" : sData.schemaId,
             "pluginId" : sData.pluginId,
