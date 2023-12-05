@@ -9,6 +9,7 @@
     </appender>
 
     <logger name="com.oberasoftware.home" level="info"/>
+    <logger name="com.oberasoftware.iot" level="info"/>
     <logger name="org.springframework" level="info"/>
 
     <root level="OFF">

@@ -34,6 +34,7 @@ public class StateContainer {
     @Bean
     ApplicationRunner runStateSvc(@Autowired RabbitMQTopicListener topicListener, @Autowired StateManager stateManager, @Value("${states.consumer.topic}") String topic) {
         return args -> {
+            LOG.info("Trying to connect to listener on topic: {}", topic);
             topicListener.connect();
 
             topicListener.register(topic, received -> {
