@@ -1,10 +1,14 @@
 $(document).ready(function() {
+    retrieveServiceUrls(pageInit);
+});
+
+function pageInit() {
     console.log("Document loaded");
 
     let controllerId = getControllerId();
     let thingId = getThingId();
     if(controllerId !== undefined && thingId !== undefined) {
-        $.get("/api/controllers(" + controllerId + ")/things(" + thingId + ")", function(data) {
+        $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/things(" + thingId + ")", function(data) {
             let root = $("#root");
             root.attr("schemaId", data.templateId);
             root.attr("pluginId", data.pluginId);
@@ -21,7 +25,7 @@ $(document).ready(function() {
         initPluginAndSchema();
     }
 
-});
+}
 
 function initPluginAndSchema() {
     loadPlugins();
@@ -69,7 +73,7 @@ function saveThing() {
     }
     let jsonData = JSON.stringify(data);
     console.log("Posting data: " + jsonData);
-    $.ajax({url: "/api/controllers(" + controllerId + ")/things", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function() {
+    $.ajax({url: thingSvcUrl + "/api/controllers(" + controllerId + ")/things", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function() {
             console.log("Posted Thing successfully")
 
             location.href = "/web/admin/things/controllers(" + controllerId + ")/things(" + thingId + ")";
@@ -79,9 +83,9 @@ function saveThing() {
 function loadSetupDialog(schemaId, thingData) {
     let pluginId = getPluginId();
 
-    $.get("/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", function(data) {
+    $.get(thingSvcUrl + "/api/system/plugins(" + pluginId + ")/schemas(" + schemaId + ")", function(data) {
         $("#detailPanel").removeClass("fade");
-        loadControllers();
+        loadControllers(pluginId, getControllerId());
 
         $("#thingForm").attr("schemaId", data.schemaId)
 
@@ -113,8 +117,9 @@ function loadSetupDialog(schemaId, thingData) {
 }
 
 function loadParentList(controllerId, pluginId, selectedParent) {
+    console.log("Loading parents")
     let parentList = $("#parentList");
-    $.get("/api/controllers("+controllerId+")/things(" + pluginId + ")", function(data) {
+    $.get(thingSvcUrl + "/api/controllers("+controllerId+")/things(" + pluginId + ")", function(data) {
         if(data.thingId === pluginId && data.type === "plugin") {
             if(selectedParent && selectedParent === data.thingId) {
                 parentList.append(new Option(data.thingId, data.thingId, true, true));
@@ -132,7 +137,7 @@ function loadExistingData(data) {
     $("#friendlyName").val(data.friendlyName);
     $("#controllerList").val(data.controllerId);
     $("#pluginid").val(data.pluginId);
-    loadControllers(data.controllerId);
+    loadControllers(data.pluginId, data.controllerId);
     loadParentList(data.controllerId, data.pluginId, data.parentId);
 
     $.each(data.properties, function (key, val) {
@@ -148,8 +153,8 @@ function getSelectedParent() {
     return $("#parentList").find('option:selected').val();
 }
 
-function loadControllers(selectedController) {
-    $.get("/api/controllers", function(data){
+function loadControllers(pluginId, selectedController) {
+    $.get(thingSvcUrl + "/api/controllers", function(data){
         if(!isEmpty(data)) {
             let list = $("#controllerList");
             list.empty();
@@ -166,6 +171,8 @@ function loadControllers(selectedController) {
                 }
 
             })
+
+            loadParentList(getSelectedController(), pluginId);
         }
     });
 }
@@ -174,7 +181,7 @@ function loadControllers(selectedController) {
 function loadPlugins() {
     $("#pluginList").empty();
 
-    $.get("/api/system/plugins", function(data){
+    $.get(thingSvcUrl + "/api/system/plugins", function(data){
         $.each(data, function (i, pi) {
             let data = {
                 "pluginId" : pi.pluginId,
@@ -195,7 +202,7 @@ function loadPlugins() {
 
 function loadSchemas(pluginId) {
     $("#schemaList").empty();
-    $.get("/api/system/plugins(" + pluginId + ")/schemas", function(data) {
+    $.get(thingSvcUrl + "/api/system/plugins(" + pluginId + ")/schemas", function(data) {
         $.each(data, function (i, si) {
             let data = {
                 "pluginId": si.pluginId,

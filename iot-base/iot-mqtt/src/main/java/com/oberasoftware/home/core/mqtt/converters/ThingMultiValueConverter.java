@@ -12,7 +12,7 @@ import static com.oberasoftware.iot.core.util.ConverterHelper.mapToJson;
 
 @Component
 public class ThingMultiValueConverter implements Converter {
-    private static final String TOPIC_FORMAT = "states/%s/%s";
+    private static final String TOPIC_FORMAT = "iot_states/%s/%s";
 
     @TypeConverter
     public MQTTMessage convert(ThingMultiValueEvent multiValueEvent) {
