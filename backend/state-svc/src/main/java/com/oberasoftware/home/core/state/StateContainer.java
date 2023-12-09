@@ -3,6 +3,7 @@ package com.oberasoftware.home.core.state;
 import com.oberasoftware.base.BaseConfiguration;
 import com.oberasoftware.iot.activemq.QueueConfiguration;
 import com.oberasoftware.iot.activemq.RabbitMQTopicListener;
+import com.oberasoftware.iot.core.CoreConfiguation;
 import com.oberasoftware.iot.core.managers.StateManager;
 import com.oberasoftware.iot.core.model.ValueTransportMessage;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
  * @author Renze de Vries
  */
 @SpringBootApplication
-@Import({StateConfiguration.class, BaseConfiguration.class, QueueConfiguration.class})
+@Import({StateConfiguration.class, BaseConfiguration.class, QueueConfiguration.class, CoreConfiguation.class})
 public class StateContainer {
     private static final Logger LOG = LoggerFactory.getLogger(StateContainer.class);
 
