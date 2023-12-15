@@ -3,6 +3,7 @@ package com.oberasoftware.robo.maximus.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
 import com.oberasoftware.iot.core.model.storage.impl.ThingBuilder;
 import com.oberasoftware.iot.core.robotics.Robot;
@@ -99,8 +100,8 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
             motionControl.getJoints().forEach(j -> {
                 var joint = new IotThingImpl(robot.getName(), "joints." + j.getID(), j.getName(), "joints", "joints", new HashMap<>());
-                joint.addAttribute("degrees");
-                joint.addAttribute("position");
+                joint.addAttribute("degrees", AttributeType.DEGREES);
+                joint.addAttribute("position", AttributeType.ABS_POSITION);
                 robotCore.getRemoteDriver().registerThing(joint);
             });
 
@@ -109,7 +110,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
                         .parent("servos")
                         .friendlyName("servo-" + s.getId())
                         .plugin("servos");
-                s.getData().getKeys().forEach(k -> builder.addAttribute(k.name()));
+                s.getData().getKeys().forEach(k -> builder.addAttribute(k.name(), AttributeType.LABEL));
                 robotCore.getRemoteDriver().registerThing(builder.build());
             });
 
