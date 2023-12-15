@@ -50,13 +50,13 @@ public class ThingBuilder {
         return this;
     }
 
-    public ThingBuilder addAttribute(String attribute) {
-        this.thing.addAttribute(attribute);
+    public ThingBuilder addAttribute(String attribute, AttributeType type) {
+        this.thing.addAttribute(attribute, type);
         return this;
     }
 
     public ThingBuilder addAttributes(String... attributes) {
-        Arrays.stream(attributes).forEach(a -> this.thing.addAttribute(a));
+        Arrays.stream(attributes).forEach(a -> this.thing.addAttribute(a, AttributeType.LABEL));
         return this;
     }
 

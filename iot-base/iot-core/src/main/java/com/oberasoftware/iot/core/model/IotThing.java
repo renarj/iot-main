@@ -1,7 +1,8 @@
 package com.oberasoftware.iot.core.model;
 
+import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
+
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author renarj
@@ -19,7 +20,7 @@ public interface IotThing extends IotBaseEntity {
 
     String getFriendlyName();
 
-    Set<String> getAttributes();
+    Map<String, AttributeType> getAttributes();
 
     String getProperty(String key);
 

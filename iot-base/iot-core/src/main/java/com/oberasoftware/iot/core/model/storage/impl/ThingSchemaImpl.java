@@ -22,6 +22,8 @@ public class ThingSchemaImpl implements ThingSchema {
 
     private String id;
 
+    private Map<String, AttributeType> attributes = new LinkedHashMap<>();
+
     @Override
     @Id
     @JasDBProperty
@@ -85,6 +87,16 @@ public class ThingSchemaImpl implements ThingSchema {
 
     public void addProperty(String field, SchemaFieldDescriptor type) {
         this.properties.put(field, type);
+    }
+
+    @Override
+    @JasDBProperty
+    public Map<String, AttributeType> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, AttributeType> attributes) {
+        this.attributes = attributes;
     }
 
     @Override

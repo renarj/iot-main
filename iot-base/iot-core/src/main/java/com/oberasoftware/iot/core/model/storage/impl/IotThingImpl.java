@@ -5,9 +5,7 @@ import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author renarj
@@ -27,9 +25,11 @@ public class IotThingImpl implements IotThing {
 
     private String parentId;
 
-    private Set<String> attributes = new HashSet<>();
+    private Map<String, AttributeType> attributes = new LinkedHashMap<>();
 
     private Map<String, String> properties;
+
+
 
     protected IotThingImpl(String thingId, String controllerId) {
         this.thingId = thingId;
@@ -68,18 +68,18 @@ public class IotThingImpl implements IotThing {
         this.id = id;
     }
 
-    @JasDBProperty
     @Override
-    public Set<String> getAttributes() {
+    @JasDBProperty
+    public Map<String, AttributeType> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Set<String> attributes) {
+    public void setAttributes(Map<String, AttributeType> attributes) {
         this.attributes = attributes;
     }
 
-    public void addAttribute(String attribute) {
-        this.attributes.add(attribute);
+    public void addAttribute(String attribute, AttributeType type) {
+        this.attributes.put(attribute, type);
     }
 
     @Override

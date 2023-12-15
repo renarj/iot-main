@@ -9,6 +9,8 @@ import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.managers.ThingManager;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.ThingSchema;
+import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
 import com.oberasoftware.iot.core.storage.CentralDatastore;
@@ -17,8 +19,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static com.oberasoftware.iot.core.util.ConverterHelper.mapToJson;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -81,7 +85,7 @@ public class ThingManagerImpl implements ThingManager {
         centralDatastore.beginTransaction();
         try {
             Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
-            IotThing result = null;
+            IotThing result;
             if(thing.isPresent()) {
                 IotThing item = thing.get();
 
@@ -89,17 +93,18 @@ public class ThingManagerImpl implements ThingManager {
                 var mergedProperties = mergeProperties(item.getProperties(), updatedThing.getProperties());
                 updatedThing.setId(item.getId());
                 updatedThing.setProperties(mergedProperties);
+                var attr = mergeAttributesWithSchema(updatedThing);
+                updatedThing.setAttributes(attr);
                 ensureValid(updatedThing);
-
-                result = centralDatastore.store(updatedThing);
             } else {
                 String id = generateId();
                 LOG.debug("Device: {} does not yet exist, creating new with id: {}", thingId, id);
                 updatedThing.setId(id);
                 ensureValid(updatedThing);
-
-                result = centralDatastore.store(updatedThing);
+                var attr = mergeAttributesWithSchema(updatedThing);
+                updatedThing.setAttributes(attr);
             }
+            result = centralDatastore.store(updatedThing);
 
             var command = new BasicCommandImpl();
             command.setControllerId(controllerId);
@@ -110,6 +115,21 @@ public class ThingManagerImpl implements ThingManager {
             return result;
         } finally {
             centralDatastore.commitTransaction();
+        }
+    }
+
+    private Map<String, AttributeType> mergeAttributesWithSchema(IotThingImpl thing) {
+        var pluginId = thing.getPluginId();
+        var schemaId = thing.getTemplateId();
+        if(StringUtils.hasText(pluginId) && StringUtils.hasText(schemaId)) {
+            var oSchema = homeDAO.findSchema(pluginId, schemaId);
+            return oSchema.map((Function<ThingSchema, Map<String, AttributeType>>) ts -> {
+                var mergedMap = Maps.newHashMap(ts.getAttributes());
+                mergedMap.putAll(thing.getAttributes());
+                return mergedMap;
+            }).orElseGet(thing::getAttributes);
+        } else {
+            return thing.getAttributes();
         }
     }
 

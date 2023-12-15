@@ -50,6 +50,18 @@ function initPage() {
             $("#" + rowId).remove();
         })
     });
+    $("#addAttributeRow").click(function() {
+        console.log("Adding attribute row to list")
+        renderAndAppend("attributeTemplate", {
+            "uniqueId": Math.floor(Math.random() * Date.now())
+        }, "attributeList");
+
+        $(".removeAttrRow").click(function() {
+            let rowId = $(this).attr("rowId");
+            console.log("Removing row: " + rowId + " from list");
+            $("#" + rowId).remove();
+        })
+    });
 
     $("#editSchemaButton").click(function() {
         let pluginId = getPluginId();
@@ -97,12 +109,20 @@ function initPage() {
                 "defaultValue":propertyDefault
             };
         });
+        let attributes = {}
+        $(".attributeRow").each(function(index) {
+            let attrId = $(this).attr("id");
+            let attr = $("#" + attrId + "-attribute").val();
+            let attrType = $("#" + attrId + "-type").val();
+            attributes[attr] = attrType
+        });
         let schemaData = {
             "schemaId" : schemaId,
             "pluginId" : pluginId,
             "template" : template,
             "type": type,
-            "properties" : properties
+            "properties" : properties,
+            "attributes" : attributes
         }
         let jsonData = JSON.stringify(schemaData);
         console.log("Posting data: " + jsonData)
@@ -195,7 +215,8 @@ function loadSchema(pluginId, schemaId) {
             "pluginId" : sData.pluginId,
             "type" : sData.type,
             "template" : sData.template,
-            "properties" : sData.properties
+            "properties" : sData.properties,
+            "attributes" : sData.attributes
         }
 
         renderAndAppend("schemaDetails", data, "schemaDetailPanel");

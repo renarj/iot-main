@@ -45,6 +45,7 @@
             <ul class="nav nav-tabs" role="tablist" id="tabList">
                 <li class="nav-item" role="presentation"><a class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabDetail" aria-controls="tabDetail" aria-selected="true" role="tab" href="#details" id="detail-tab">Details</a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" href="#functions" data-bs-toggle="tab" data-bs-target="#propertiesTab" aria-controls="propertiesTab" aria-selected="false" role="tab" id="properties-tab">Properties</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="#attributes" data-bs-toggle="tab" data-bs-target="#attributesTab" aria-controls="attributesTab" aria-selected="false" role="tab" id="attributes-tab">Attributes</a></li>
             </ul>
             <div class="modal-body">
                 <div class="tab-content" id="nav-tabContent-Schema">
@@ -86,8 +87,28 @@
                                 <i class="align-right">In case of enum, please comma seperate the values</i>
                             </div>
                         </div>
+                    </div>
+                    <div class="tab-pane fade" id="attributesTab" role="tabpanel" aria-labelledby="attributes-tab">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Attribute</th>
+                                <th scope="col">Attribute Type</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="attributeList">
 
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary" id="addAttributeRow">Add row</button>
+                            </div>
+                            <div class="col-md-8">
 
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -110,6 +131,28 @@
     <script id="schemaTemplate" type="text/x-handlebars-template">
         <a class="list-group-item list-group-item-action schemaButton" schemaId="{{schemaId}}" href="/web/admin/sysconfig/plugins({{pluginId}})/schemas({{schemaId}})">{{schemaId}}</a>
     </script>
+    <script id="attributeTemplate" type="text/x-handlebars-template">
+        <tr id="{{uniqueId}}" class="attributeRow">
+            <td class="align-middle">
+                <input type="text" value="{{description}}" id="{{uniqueId}}-attribute" placeholder="Attribute Name..." class="description"/>
+            </td>
+            <td class="align-middle">
+                <select class="form-select field_type" id="{{uniqueId}}-type" >
+                    <option value="SWITCH">Switch</option>
+                    <option value="POWER">Power</option>
+                    <option value="VOLTAGE">Voltage</option>
+                    <option value="TEMPERATURE">Temperature</option>
+                    <option value="DEGREES">Degrees</option>
+                    <option value="ABS_POSITION">Position</option>
+                    <option value="LABEL">Custom</option>
+                </select>
+            </td>
+            <td class="align-middle">
+                <a class="removeAttrRow" href="#" rowId="{{uniqueId}}"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+    </script>
+
     <script id="propertyTemplate" type="text/x-handlebars-template">
         <tr id="{{uniqueId}}" class="propertyRow">
             <td class="align-middle">
@@ -160,6 +203,12 @@
                 <tr>
                     <td>properties.{{@key}}</td>
                     <td>FieldType: {{this.fieldType}} - valueConfig: {{this.defaultValue}}</td>
+                </tr>
+            {{/each}}
+            {{#each attributes}}
+                <tr>
+                    <td>Attribute.{{@key}}</td>
+                    <td>Type: {{this}}</td>
                 </tr>
             {{/each}}
             </tbody>
