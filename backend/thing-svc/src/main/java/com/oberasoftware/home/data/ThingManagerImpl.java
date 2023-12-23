@@ -9,7 +9,6 @@ import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.managers.ThingManager;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
-import com.oberasoftware.iot.core.model.ThingSchema;
 import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static com.oberasoftware.iot.core.util.ConverterHelper.mapToJson;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -93,15 +91,17 @@ public class ThingManagerImpl implements ThingManager {
                 var mergedProperties = mergeProperties(item.getProperties(), updatedThing.getProperties());
                 updatedThing.setId(item.getId());
                 updatedThing.setProperties(mergedProperties);
-                var attr = mergeAttributesWithSchema(updatedThing);
+                var attr = mergeAttributesWithSchema(item.getAttributes(), updatedThing);
                 updatedThing.setAttributes(attr);
+
+                mergeValues(item, updatedThing);
                 ensureValid(updatedThing);
             } else {
                 String id = generateId();
                 LOG.debug("Device: {} does not yet exist, creating new with id: {}", thingId, id);
                 updatedThing.setId(id);
                 ensureValid(updatedThing);
-                var attr = mergeAttributesWithSchema(updatedThing);
+                var attr = mergeAttributesWithSchema(Maps.newHashMap(), updatedThing);
                 updatedThing.setAttributes(attr);
             }
             result = centralDatastore.store(updatedThing);
@@ -118,19 +118,42 @@ public class ThingManagerImpl implements ThingManager {
         }
     }
 
-    private Map<String, AttributeType> mergeAttributesWithSchema(IotThingImpl thing) {
-        var pluginId = thing.getPluginId();
-        var schemaId = thing.getTemplateId();
+    /**
+     * This is to merge existing values into the updated entity
+     * @param existing
+     * @param updated
+     */
+    private void mergeValues(IotThing existing, IotThingImpl updated) {
+        //ensure we keep the templateId/Schema if we have it, we should not unlink
+        if(updated.getTemplateId() == null && existing.getTemplateId() != null) {
+            updated.setTemplateId(existing.getTemplateId());
+        }
+        if(updated.getFriendlyName() == null && existing.getFriendlyName() != null) {
+            updated.setFriendlyName(existing.getFriendlyName());
+        }
+        if(updated.getType() == null && existing.getType() != null) {
+            updated.setType(existing.getType());
+        }
+        if(updated.getParentId() == null && existing.getParentId() != null) {
+            updated.setParentId(existing.getParentId());
+        }
+    }
+
+    private Map<String, AttributeType> mergeAttributesWithSchema(Map<String, AttributeType> existingAttributes, IotThingImpl updatedThing) {
+        var pluginId = updatedThing.getPluginId();
+        var schemaId = updatedThing.getTemplateId();
+        Map<String, AttributeType> mergedMap = new HashMap<>(existingAttributes);
+        if(updatedThing.getAttributes() != null && !updatedThing.getAttributes().isEmpty()) {
+            mergedMap.putAll(updatedThing.getAttributes());
+        }
+
         if(StringUtils.hasText(pluginId) && StringUtils.hasText(schemaId)) {
             var oSchema = homeDAO.findSchema(pluginId, schemaId);
-            return oSchema.map((Function<ThingSchema, Map<String, AttributeType>>) ts -> {
-                var mergedMap = Maps.newHashMap(ts.getAttributes());
-                mergedMap.putAll(thing.getAttributes());
-                return mergedMap;
-            }).orElseGet(thing::getAttributes);
-        } else {
-            return thing.getAttributes();
+            oSchema.ifPresent(ts -> {
+                mergedMap.putAll(ts.getAttributes());
+            });
         }
+        return mergedMap;
     }
 
     private void ensureValid(IotThingImpl thing) throws IOTException {
