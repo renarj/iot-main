@@ -13,11 +13,9 @@ public class BasicCommandImpl implements BasicCommand {
     private String controllerId;
     private String thingId;
 
-    private String attribute;
-
     private CommandType commandType;
 
-    private Map<String, String> properties = new HashMap<>();
+    private Map<String, String> attributes = new HashMap<>();
 
     public String getControllerId() {
         return controllerId;
@@ -36,14 +34,6 @@ public class BasicCommandImpl implements BasicCommand {
         this.thingId = thingId;
     }
 
-    public String getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
-    }
-
     @Override
     public CommandType getCommandType() {
         return commandType;
@@ -54,17 +44,17 @@ public class BasicCommandImpl implements BasicCommand {
     }
 
     @Override
-    public Map<String, String> getProperties() {
-        return properties;
+    public Map<String, String> getAttributes() {
+        return attributes;
     }
 
-    public void setProperties(Map<String, String> properties) {
-        this.properties = properties;
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
     }
 
     @Override
-    public String getProperty(String property) {
-        return properties.get(property);
+    public String getAttribute(String attribute) {
+        return attributes.get(attribute);
     }
 
     @Override
@@ -72,9 +62,8 @@ public class BasicCommandImpl implements BasicCommand {
         return "BasicCommandImpl{" +
                 "controllerId='" + controllerId + '\'' +
                 ", thingId='" + thingId + '\'' +
-                ", attribute='" + attribute + '\'' +
                 ", commandType=" + commandType +
-                ", properties=" + properties +
+                ", attributes=" + attributes +
                 '}';
     }
 }

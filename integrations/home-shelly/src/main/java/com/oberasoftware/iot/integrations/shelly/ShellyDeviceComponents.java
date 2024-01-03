@@ -9,28 +9,30 @@ import java.util.List;
 public enum ShellyDeviceComponents {
 
     SHELLY_PLUG("PlusPlugS", Lists.newArrayList("switch:0")),
+
+    SHELLY_V1_PLUG("SHPLG-S", Lists.newArrayList("relays", "meters", "temperature")),
     PRO_3EM("Pro3EM", Lists.newArrayList("em:0", "emdata:0", "temperature:0")),
     UNKNOWN("UNKNOWN", Lists.newArrayList());
 
-    private String appName;
+    private String typeName;
     private List<String> components;
 
-    ShellyDeviceComponents(String appName, List<String> components) {
-        this.appName = appName;
+    ShellyDeviceComponents(String typeName, List<String> components) {
+        this.typeName = typeName;
         this.components = components;
     }
 
-    public String getAppName() {
-        return this.appName;
+    public String getTypeName() {
+        return this.typeName;
     }
 
     public List<String> getComponents() {
         return components;
     }
 
-    public static ShellyDeviceComponents forAppName(String appName) {
+    public static ShellyDeviceComponents forTypeName(String typeName) {
         return Arrays.stream(values())
-                .filter(dc -> dc.getAppName().equalsIgnoreCase(appName))
+                .filter(dc -> dc.getTypeName().equalsIgnoreCase(typeName))
                 .findFirst()
                 .orElse(UNKNOWN);
     }

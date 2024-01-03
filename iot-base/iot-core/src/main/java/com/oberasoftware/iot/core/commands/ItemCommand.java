@@ -7,4 +7,5 @@ public interface ItemCommand extends Command {
     String getControllerId();
 
     String getThingId();
+
 }

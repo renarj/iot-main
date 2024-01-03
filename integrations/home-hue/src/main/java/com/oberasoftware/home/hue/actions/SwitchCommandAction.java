@@ -23,10 +23,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class SwitchCommandAction implements HueCommandAction<SwitchCommand> {
     private static final Logger LOG = getLogger(SwitchCommandAction.class);
 
-
     @Autowired
     private HueConnector hueConnector;
-
 
     @Autowired
     private HueDeviceManager deviceManager;
@@ -34,22 +32,30 @@ public class SwitchCommandAction implements HueCommandAction<SwitchCommand> {
     @Autowired
     private LocalEventBus automationBus;
 
-
-
     @Override
     public void receive(IotThing item, SwitchCommand switchCommand) {
         String bridgeId = item.getProperties().get("bridge");
-        var light = deviceManager.findDevice(bridgeId, item.getThingId());
+        var olight = deviceManager.findDevice(bridgeId, item.getThingId());
 
-        LOG.debug("Received a switch command for bulb: {} desired state: {}", item.getThingId(), switchCommand.getState());
-        if(light.isPresent()) {
-            OnOffValue value = new OnOffValue(switchCommand.getState() == SwitchCommand.STATE.ON);
+        olight.ifPresent(light -> {
+            switchCommand.getStates().forEach((k, v) -> {
+                OnOffValue value = new OnOffValue(v == SwitchCommand.STATE.ON);
+                LOG.info("Switching state of light: {} on bridge: {} to: {}", light.getThingId(), bridgeId, value);
+                deviceManager.switchState(bridgeId, item.getThingId(), value);
 
-            LOG.info("Switching state of light: {} on bridge: {} to: {}", light.get().getThingId(), bridgeId, value);
-            deviceManager.switchState(bridgeId, item.getThingId(), value);
+                automationBus.publish(new ThingValueEventImpl(item.getControllerId(), item.getThingId(), value, OnOffValue.LABEL));
+            });
+        });
 
-            automationBus.publish(new ThingValueEventImpl(item.getControllerId(), item.getThingId(),value, OnOffValue.LABEL));
-        }
+//        LOG.debug("Received a switch command for bulb: {} desired state: {}", item.getThingId(), switchCommand.getState());
+//        if(light.isPresent()) {
+//            OnOffValue value = new OnOffValue(switchCommand.getState() == SwitchCommand.STATE.ON);
+//
+//            LOG.info("Switching state of light: {} on bridge: {} to: {}", light.get().getThingId(), bridgeId, value);
+//            deviceManager.switchState(bridgeId, item.getThingId(), value);
+//
+//            automationBus.publish(new ThingValueEventImpl(item.getControllerId(), item.getThingId(),value, OnOffValue.LABEL));
+//        }
     }
 
     @Override

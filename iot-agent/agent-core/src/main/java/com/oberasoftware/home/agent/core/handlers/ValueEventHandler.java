@@ -32,7 +32,7 @@ public class ValueEventHandler implements EventHandler {
 
     @EventSubscribe
     public void receive(ThingMultiValueEvent event) {
-        LOG.info("Received a Thing Multi Value event: {}, forwarding to state topic", event);
+        LOG.debug("Received a Thing Multi Value event: {}, forwarding to state topic", event);
 
         topicEventBus.publish(event);
     }

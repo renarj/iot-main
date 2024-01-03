@@ -24,7 +24,7 @@ public class LocoSpeedCommandHandler implements Z21CommandHandler {
 
     @Override
     public boolean supportsCommand(TrainCommand command) {
-        var properties = command.getValues();
+        var properties = command.getAttributes();
 
         return properties.containsKey(SPEED)
                 && properties.containsKey(DIRECTION);
@@ -32,8 +32,8 @@ public class LocoSpeedCommandHandler implements Z21CommandHandler {
 
     @Override
     public void action(TrainCommand command) {
-        var direction = findDirection(command.getValue(DIRECTION).getValue());
-        var speed = (Long)command.getValue(SPEED).getValue();
+        var direction = findDirection(command.getAttribute(DIRECTION).getValue());
+        var speed = (Long)command.getAttribute(SPEED).getValue();
 
         var z21Command = new LocoSpeedCommand(command.getLocAddress(), command.getStepMode(), speed.intValue(), direction);
         LOG.info("Sending loco speed command to loc: {} stepMode: {} direction: {} speed: {}", command.getLocAddress(), command.getStepMode(), direction, speed);

@@ -53,7 +53,7 @@ public class TrainCommandHandler implements ThingCommandHandler {
 
     private Optional<TrainCommand> translate(IotThing thing, Command receivedCommand) {
         if(receivedCommand instanceof ItemValueCommand itvC) {
-            return Optional.of(new TrainCommand(thing.getControllerId(), thing.getThingId(), itvC.getValues(), getLocAddress(thing), getStepMode(thing)));
+            return Optional.of(new TrainCommand(thing.getControllerId(), thing.getThingId(), itvC.getAttributes(), getLocAddress(thing), getStepMode(thing)));
         } else {
             LOG.error("Could not convert command: {} to train command, incorrect command type", receivedCommand);
             return Optional.empty();

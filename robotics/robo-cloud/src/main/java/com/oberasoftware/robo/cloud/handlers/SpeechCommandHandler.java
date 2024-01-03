@@ -38,8 +38,8 @@ public class SpeechCommandHandler implements EventHandler {
         SpeechEngine speechEngine = robot.getCapability(SpeechEngine.class);
 
         if(speechEngine != null) {
-            String textToSpeech = basicCommand.getProperties().get("text");
-            String language = basicCommand.getProperties().get("language");
+            String textToSpeech = basicCommand.getAttributes().get("text");
+            String language = basicCommand.getAttributes().get("language");
             if(StringUtils.hasText(textToSpeech) && StringUtils.hasText(language)) {
                 LOG.info("Text to speech of: {} for language: {}", textToSpeech, language);
 

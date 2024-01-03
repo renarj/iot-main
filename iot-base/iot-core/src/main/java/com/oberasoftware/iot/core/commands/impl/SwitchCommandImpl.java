@@ -14,12 +14,13 @@ public class SwitchCommandImpl implements SwitchCommand {
 
     private final String controllerId;
     private final String thingId;
-    private final STATE state;
 
-    public SwitchCommandImpl(String controllerId, String thingId, STATE state) {
+    private final Map<String, STATE> attributeStates;
+
+    public SwitchCommandImpl(String controllerId, String thingId, Map<String, STATE> attributeStates) {
         this.controllerId = controllerId;
         this.thingId = thingId;
-        this.state = state;
+        this.attributeStates = attributeStates;
     }
 
     @Override
@@ -28,52 +29,41 @@ public class SwitchCommandImpl implements SwitchCommand {
     }
 
     @Override
-    public STATE getState() {
-        return state;
-    }
-
-    @Override
     public String getThingId() {
         return thingId;
     }
 
     @Override
+    public STATE getState(String attribute) {
+        return attributeStates.get(attribute);
+    }
+
+    @Override
+    public Map<String, STATE> getStates() {
+        return attributeStates;
+    }
+
+    @Override
     public String toString() {
         return "SwitchCommandImpl{" +
-                "state=" + state +
+                "attributeStates=" + attributeStates +
                 ", thingId='" + thingId + '\'' +
                 '}';
     }
 
     @Override
-    public Value getValue(String property) {
-        return getValues().get(property);
+    public Value getAttribute(String property) {
+        return convert(attributeStates.get(property));
     }
 
     @Override
-    public Map<String, Value> getValues() {
+    public Map<String, Value> getAttributes() {
         Map<String, Value> valueMap = new HashMap<>();
-        valueMap.put(OnOffValue.LABEL, new OnOffValue(state == STATE.ON));
-
+        attributeStates.forEach((k, v) -> valueMap.put(k, convert(v)));
         return valueMap;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SwitchCommandImpl that = (SwitchCommandImpl) o;
-
-        if (!thingId.equals(that.thingId)) return false;
-        return state == that.state;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = thingId.hashCode();
-        result = 31 * result + state.hashCode();
-        return result;
+    private OnOffValue convert(STATE state) {
+        return new OnOffValue(state == STATE.ON);
     }
 }

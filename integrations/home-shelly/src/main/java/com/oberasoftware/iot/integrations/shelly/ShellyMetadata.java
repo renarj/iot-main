@@ -3,8 +3,13 @@ package com.oberasoftware.iot.integrations.shelly;
 import java.util.List;
 
 public class ShellyMetadata {
+    public enum SHELLY_VERSION {
+        V1,
+        V2
+    }
+
     private final String shellyName;
-    private final String appName;
+    private final String shellyType;
 
     private final String controllerId;
 
@@ -12,14 +17,17 @@ public class ShellyMetadata {
 
     private final String ip;
 
+    private final SHELLY_VERSION version;
+
     private final List<String> shellyComponents;
 
-    public ShellyMetadata(String controllerId, String thingId, String ip, String shellyName, String appName, List<String> shellyComponents) {
+    public ShellyMetadata(String controllerId, String thingId, String ip, SHELLY_VERSION version, String shellyName, String shellyType, List<String> shellyComponents) {
         this.thingId = thingId;
         this.controllerId = controllerId;
         this.ip = ip;
+        this.version = version;
         this.shellyName = shellyName;
-        this.appName = appName;
+        this.shellyType = shellyType;
         this.shellyComponents = shellyComponents;
     }
 
@@ -39,19 +47,27 @@ public class ShellyMetadata {
         return shellyName;
     }
 
-    public String getAppName() {
-        return appName;
+    public String getShellyType() {
+        return shellyType;
     }
 
     public List<String> getShellyComponents() {
         return shellyComponents;
     }
 
+    public SHELLY_VERSION getVersion() {
+        return version;
+    }
+
     @Override
     public String toString() {
         return "ShellyMetadata{" +
                 "shellyName='" + shellyName + '\'' +
-                ", appName='" + appName + '\'' +
+                ", appName='" + shellyType + '\'' +
+                ", controllerId='" + controllerId + '\'' +
+                ", thingId='" + thingId + '\'' +
+                ", ip='" + ip + '\'' +
+                ", version=" + version +
                 ", shellyComponents=" + shellyComponents +
                 '}';
     }

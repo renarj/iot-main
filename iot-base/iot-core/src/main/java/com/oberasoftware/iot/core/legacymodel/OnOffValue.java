@@ -7,7 +7,7 @@ import com.oberasoftware.iot.core.model.states.Value;
  */
 public class OnOffValue implements Value {
 
-    public static String LABEL = "on-off";
+    public static String LABEL = "on";
 
     private final boolean on;
 
@@ -31,7 +31,7 @@ public class OnOffValue implements Value {
 
     @Override
     public String asString() {
-        return isOn() ? "on" : "off";
+        return isOn() ? "true" : "false";
     }
 
     @Override

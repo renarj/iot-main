@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public interface ItemValueCommand extends ItemCommand {
 
-    Value getValue(String property);
+    Value getAttribute(String property);
 
-    Map<String, Value> getValues();
+    Map<String, Value> getAttributes();
 }

@@ -35,7 +35,7 @@ public class WalkMotionCommandHandler implements EventHandler {
 
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        String walkDirection = basicCommand.getProperties().get("direction");
+        String walkDirection = basicCommand.getAttributes().get("direction");
         WalkDirection direction = WalkDirection.FORWARD;
         if(walkDirection != null) {
             direction = WalkDirection.fromString(walkDirection);

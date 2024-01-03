@@ -73,7 +73,7 @@ public class DriveBehaviourHandler implements EventHandler {
     }
 
     private void doAction(BasicCommand basicCommand, BiConsumer<DriveBehaviour, Integer> b) {
-        int speed = IntUtils.toInt(basicCommand.getProperty("speed"), 512);
+        int speed = IntUtils.toInt(basicCommand.getAttribute("speed"), 512);
 
         Optional<BehaviouralRobot> robot = robotRegistry.getRobot(basicCommand.getControllerId());
         Optional<DriveBehaviour> w = Optional.empty(); //robot.flatMap(BehaviouralRobot::getWheels);

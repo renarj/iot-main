@@ -41,7 +41,7 @@ public class RemoteNavigationHandler implements EventHandler {
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
         Map<String, Double> directionInput = new HashMap<>();
-        basicCommand.getProperties().forEach((k, v) -> {
+        basicCommand.getAttributes().forEach((k, v) -> {
             try {
                 Double parsedValue = Double.parseDouble(v);
                 directionInput.put(k, parsedValue);

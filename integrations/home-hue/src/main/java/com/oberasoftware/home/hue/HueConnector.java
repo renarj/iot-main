@@ -12,5 +12,7 @@ public interface HueConnector {
 
     List<HueBridge> getBridges();
 
+    HueBridge getBridge(String bridgeId);
+
     boolean isConnected();
 }

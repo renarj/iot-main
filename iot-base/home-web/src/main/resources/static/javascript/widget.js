@@ -1,14 +1,8 @@
-var stompClient = null;
-
-// Highcharts.setOptions({
-//     global: {
-//         useUTC: false
-//     }
-// });
+let stompClient = null;
 
 function connect() {
     console.log("Connecting to websocket");
-    var socket = new SockJS('http://localhost:9999/ws');
+    let socket = new SockJS(stateSvcUrl + "/ws");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame) {
         console.log('Connected: ' + frame);
@@ -21,73 +15,53 @@ function connect() {
 function handleStateUpdate(state) {
     console.log("Received a state update: " + JSON.stringify(state));
 
-    var itemId = state.itemId;
-    var controllerId = state.controllerId;
+    let thingId = state.itemId;
+    let controllerId = state.controllerId;
+    console.log("State update for: " + thingId)
 
     $.each(state.stateItems, function (i, stateItem) {
-        var label = stateItem.attribute;
+        let attribute = stateItem.attribute;
 
-        if(label === "on-off") {
-            console.log("Received an on-off event: " + stateItem.value.value);
-
-            var iSwitch = $("input[name=" + itemId + "_switch]");
-
-            var value = stateItem.value.value;
-            if(value === "off") {
-                //set switch to off and not trigger event
-                iSwitch.bootstrapSwitch("state", false, true);
-            } else {
-                //set switch to on and not trigger event
-                iSwitch.bootstrapSwitch("state", true, true);
-            }
-        } else if(label === "value") {
-            //slider value potentially
-            var iDimmer = $("input[name=" + itemId + "_slider]");
-            if (iDimmer.length) {
-                console.log("Setting slider value: " + stateItem.value.value + " for device: " + itemId)
-                iDimmer.slider('setValue', stateItem.value.value);
-            } else {
-                setLabelValue(controllerId, itemId, label, stateItem);
-            }
-        } else if(label === "rgb") {
-            console.log("Setting rgb: " + stateItem.value.value + " for device: " + itemId);
-
-            var colorPicker = $("input[name=" + itemId + "_color]");
-            colorPicker.spectrum("set", stateItem.value.value);
-
-        } else {
-            //most likely a raw value on a label
-            setLabelValue(controllerId, itemId, label, stateItem)
-        }
+        setStateValue(controllerId, thingId, attribute, stateItem.value.value);
     })
 }
 
-function setLabelValue(controllerId, thingId, label, stateItem) {
-    console.log("Checking for label for item: " + thingId + " controller: " + controllerId + " with label: " + label);
-    var valueLabel = $("label[thingId='" + thingId + "'][labelId='" + label + "'][controllerId='" + controllerId + "']");
+function setStateValue(controllerId, thingId, attribute, value) {
+    let valueElement = $("[controllerId='" + controllerId + "'][attribute='" + attribute + "'][thingId='" + thingId + "']");
+    valueElement.each(function(i, element) {
+        let widgetType = element.getAttribute('widgetType');
 
-    var rawValue = stateItem.value.value;
-    if(isNumeric(rawValue)) {
-        rawValue = parseFloat(rawValue).toFixed(2);
-    }
-    if (valueLabel.length) {
-        valueLabel.text(rawValue);
-    }
+        if(widgetType === "switch") {
+            setSwitchValue(controllerId, thingId, attribute, value);
+        } else if(widgetType === "label") {
+            setLabelValue(controllerId, thingId, attribute, value);
+        } else {
+            console.log("Unknown widget type: " + widgetType);
+        }
+    });
+}
 
-    var graphs = $("div.graph[thingId='" + thingId + "'][labelId='" + label + "'][controllerId='" + controllerId + "']");
-    if(graphs.length > 0) {
-        $.each(graphs, function(i, graph) {
-            var widgetId = graph.getAttribute("id");
-            console.log("Updating graph with id: " + widgetId);
+function setLabelValue(controllerId, thingId, attribute, rawValue) {
+    console.log("Checking for label for item: " + thingId + " controller: " + controllerId + " with attribute: " + attribute);
+    let valueLabels = $("label[thingId='" + thingId + "'][attribute='" + attribute + "'][controllerId='" + controllerId + "']");
+    valueLabels.each(function(i, element) {
+        if(isNumeric(rawValue)) {
+            rawValue = parseFloat(rawValue).toFixed(2);
+        }
+        element.innerText = rawValue;
+    })
 
-            var widget = $("#" + widgetId);
-            var series = widget.highcharts().series;
-            var time = (new Date).getTime();
+}
 
-            console.log("Adding datapoint: " + time + " val: " + rawValue);
-            series[0].addPoint([time, parseInt(rawValue)]);
-        });
-    }
+function setSwitchValue(controllerId, thingId, attribute, rawValue) {
+    let switches = $("input[thingId='" + thingId + "'][attribute='" + attribute + "'][controllerId='" + controllerId + "']");
+    switches.each(function(i, element) {
+        if(rawValue.toLowerCase() === "true") {
+            element.checked = true;
+        } else {
+            element.checked = false;
+        }
+    });
 }
 
 function isNumeric(n) {
@@ -97,10 +71,10 @@ function isNumeric(n) {
 function tabChange(e) {
     e.preventDefault();
 
-    var currentDashboard = $("#dashboards").attr("dashboardId");
+    let currentDashboard = $("#dashboards").attr("dashboardId");
     $("#dashlink_" + currentDashboard).removeClass('active');
 
-    var targetDashboardId = this.getAttribute('dashboardId');
+    let targetDashboardId = this.getAttribute('dashboardId');
     $("#dashlink_" + targetDashboardId).addClass('active');
 
     console.log("Tab change target dash: " + targetDashboardId);
@@ -114,7 +88,6 @@ function tabAdd(e) {
     $("#createContainerForm").attr("mode", "dashboard");
     $("#addContainerLabel").text("Add a dashboard");
 
-    // $("#containerModal").modal('show');
     new bootstrap.Modal("#containerModal").show();
 
     console.log("Adding tab");
@@ -122,16 +95,16 @@ function tabAdd(e) {
 
 function renderDashboardsLinks() {
     $.get("/dashboards/", function(data) {
-        var dashboardTabs = $('#dashboards');
+        let dashboardTabs = $('#dashboards');
         dashboardTabs.empty();
 
         $.each(data, function(i, item) {
-            var tabClass = "notActive";
-            if(i == 0) {
+            let tabClass = "notActive";
+            if(i === 0) {
                 tabClass = "active";
             }
 
-            var data = {"dashboardId": item.id, "dashboardName": item.name, "weight": item.weight, "tabClass" : tabClass};
+            let data = {"dashboardId": item.id, "dashboardName": item.name, "weight": item.weight, "tabClass" : tabClass};
             dashboardTabs.append(renderTemplate("tabTemplate", data));
         });
 
@@ -176,24 +149,24 @@ function renderContainerById(containerId) {
 }
 
 function renderContainer(item) {
-    var containerId = item.id;
-    var name = item.name;
+    let containerId = item.id;
+    let name = item.name;
 
     console.log("Rendering container: " + containerId + " name: " + name);
 
-    var data = {
+    let data = {
         "containerId" : containerId,
         "name" : name
     };
-    var layout = item.properties.layout;
-    var templateName = "containerTemplateList";
-    if(layout == "grid") {
+    let layout = item.properties.layout;
+    let templateName = "containerTemplateList";
+    if(layout === "grid") {
         templateName = "containerTemplateGrid";
     }
 
-    var rendered = renderTemplate(templateName, data);
+    let rendered = renderTemplate(templateName, data);
     $("#container").append(rendered);
-    var container = $("ul[containerId=" + containerId + "]");
+    let container = $("ul[containerId=" + containerId + "]");
     handleReordering(container);
 
     renderContainerItems(containerId);
@@ -207,10 +180,10 @@ function handleReordering(container) {
         update: function( event, ui ) {
             console.log("Parent: " + $(this).attr("containerId"));
 
-            var column = $(this).attr("column");
+            let column = $(this).attr("column");
 
             $(this).children("li").each(function(index) {
-                var widgetId = $(this).attr("id");
+                let widgetId = $(this).attr("id");
                 console.log("Widget: " + widgetId + " position: " + index);
 
                 $.ajax({url: "/ui/items/(" + widgetId + ")/setProperty(index," + index + ")", type: "POST", data: {}, dataType: "json", contentType: "application/json; charset=utf-8"});
@@ -218,8 +191,8 @@ function handleReordering(container) {
             });
         },
         receive: function( event, ui ) {
-            var containerId = $(this).attr("containerId");
-            var widgetId = ui.item.attr("id");
+            let containerId = $(this).attr("containerId");
+            let widgetId = ui.item.attr("id");
 
             console.log("Setting Parent: " + containerId + " for widget: " + widgetId);
 
@@ -238,7 +211,7 @@ function renderContainerItems(containerId) {
 
 function renderWidget(containerId, item) {
     console.log("Rendering widget: " + item.id + " in container: " + containerId);
-    var widgetType = item.widgetType;
+    let widgetType = item.widgetType;
     switch (widgetType.toLowerCase()) {
         case "switch":
             renderSwitch(item, containerId);
@@ -247,23 +220,45 @@ function renderWidget(containerId, item) {
             renderSlider(item, containerId);
             break;
         case "label":
-            renderLabel(item, containerId);
-            break;
-        case "graph":
-            renderGraph(containerId, item);
+            renderItemLabel(item, containerId);
             break;
         case "color":
             renderColorPicker(containerId, item);
+            break;
+        case "default":
+            renderDefault(containerId, item);
             break;
         default:
             console.log("Unsupported widget type: " + widgetType + " for item: " + item.name);
     }
 }
 
+function renderDefault(containerId, item) {
+    let data = {
+        "containerId" : item.id,
+        "name" : item.name
+    };
+    let templateName = "containerTemplateList";
+    let rendered = renderTemplate(templateName, data);
+
+    appendContainer(rendered, 0, 0, item.itemId, containerId);
+
+    $.get(thingSvcUrl + "/api/controllers(" + item.controllerId + ")/things(" + item.thingId + ")", function(data) {
+        $.each(data.attributes, function(key, type) {
+            if(type === "SWITCH") {
+                renderSwitchWidget(item.id, key, data.thingId, data.controllerId, key, 0, 0, item.id);
+            } else {
+                console.log("Rendering an attribute: " + key + " for default widget for thing: " + data.thingId);
+                renderLabelWidget(key, type, item.itemId + "_" + key, key, data.thingId, data.controllerId, item.id);
+            }
+        });
+    });
+}
+
 function renderColorPicker(containerId, item) {
     console.log("Rendering color picker widget for item: " + item.name);
 
-    var data = {
+    let data = {
         "widgetId": item.id,
         "name": item.name,
         "itemId": item.itemId,
@@ -272,7 +267,7 @@ function renderColorPicker(containerId, item) {
 
     renderWidgetTemplate("colorTemplate", data, item, containerId);
 
-    var cPicker = $("input[name=" + item.itemId + "_color]");
+    let cPicker = $("input[name=" + item.itemId + "_color]");
 
     cPicker.spectrum({
         change: function(color) {
@@ -285,121 +280,26 @@ function renderColorPicker(containerId, item) {
 function handleColorChange(picker, color) {
     console.log("Target color: " + color.toHexString());
 
-    var data = {
+    let data = {
         "itemId" : picker.attr('itemId'),
         "commandType" : "value",
         "properties" : {
             "rgb" : color.toHexString()
         }
     };
-    var jsonData = JSON.stringify(data);
+    let jsonData = JSON.stringify(data);
     console.log("Sending command: " + jsonData);
 
-    $.ajax({url: "/command/send", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function(data) {
+    $.ajax({url: "/command/send", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function() {
         console.log("Posted Command successfully");
     }})
 
 }
 
-function renderGraph(containerId, item) {
-    console.log("Rendering graph for item: " + item.name);
-
-    var label = item.properties.label;
-    var unit = item.properties.unit;
-    var period = item.properties.period;
-    var grouping = item.properties.aggregation;
-
-    var data = {
-        "widgetId": item.id,
-        "thingId": item.thingId,
-        "controllerId": item.controllerId,
-        "name": item.name,
-        "label": label,
-        "index" : item.properties.index
-    };
-
-    renderWidgetTemplate("graphTemplate", data, item, containerId);
-    var periodBox = $("#period_" + item.id);
-    var groupingBox = $("#grouping_" + item.id);
-    periodBox.val(period);
-    groupingBox.val(grouping);
-
-
-    var widget = $("#chart_" + item.id);
-    widget.highcharts({
-        chart: {
-            type: 'area'
-        },
-        title: {
-            text: item.name
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: unit
-            }
-        },
-        plotOptions: {
-            area: {
-                fillColor: {
-                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                    stops: [
-                        [0, Highcharts.getOptions().colors[0]],
-                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                    ]
-                },
-                marker: {
-                    enabled: false,
-                    symbol: 'circle',
-                    radius: 2,
-                    states: {
-                        hover: {
-                            enabled: true
-                        }
-                    }
-                }
-            }
-        },
-        series: [{
-            name: unit,
-            data : []
-        }]
-    });
-
-    periodBox.change(function() {
-        // loadGraphData(item.itemId, label, groupingBox.val(), periodBox.val(), widget);
-    });
-    groupingBox.change(function() {
-        console.log("GRoup change")
-        // loadGraphData(item.itemId, label, groupingBox.val(), periodBox.val(), widget);
-    });
-
-    // loadGraphData(item.itemId, label, grouping, period, widget);
-}
-
-function loadGraphData(itemId, label, grouping, period, widget) {
-    //var series = widget.highcharts().series;
-    //series[0].setData([]);
-
-    $.get("/timeseries/item(" + itemId + ")/label(" + label + ")/grouping(" + grouping + ")/hours(" + period + ")", function(data) {
-        var array = [];
-        $.each(data, function(i, point) {
-            var value = point.value;
-            var timestamp = point.timestamp;
-
-            array.push([timestamp, value]);
-        });
-        var series = widget.highcharts().series;
-        series[0].setData(array);
-    });
-}
-
 function renderSlider(item, containerId) {
     console.log("Rendering dimmer for item: " + item.name);
 
-    var data = {
+    let data = {
         "widgetId": item.id,
         "name": item.name,
         "itemId": item.itemId,
@@ -409,23 +309,23 @@ function renderSlider(item, containerId) {
 
     renderWidgetTemplate("sliderTemplate", data, item, containerId);
 
-    var iDimmer = $("input[name=" + item.itemId + "_slider]");
+    let iDimmer = $("input[name=" + item.itemId + "_slider]");
     iDimmer.slider();
     iDimmer.on("slideStop", handleSlideEvent);
 }
 
 function handleSlideEvent(slideEvt) {
-    var val = slideEvt.value;
+    let val = slideEvt.value;
     console.log("Slide event: " + val);
 
-    var data = {
+    let data = {
         "itemId" : this.getAttribute('itemId'),
         "commandType" : "value",
         "properties" : {
             "value" : val
         }
     };
-    var jsonData = JSON.stringify(data);
+    let jsonData = JSON.stringify(data);
     console.log("Sending command: " + jsonData);
 
     $.ajax({url: "/command/send", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", done: function() {
@@ -435,79 +335,102 @@ function handleSlideEvent(slideEvt) {
 }
 
 function renderSwitch(item, containerId) {
-    console.log("Rendering switch for item: " + item.name);
-
-    var data = {
-        "widgetId": item.id,
-        "name": item.name,
-        "itemId": item.itemId,
-        "label": "on-off",
-        "weight" : item.weight,
-        "index" : item.properties.index
-    };
-
-    renderWidgetTemplate("switchTemplate", data, item, containerId);
-
-    // var iSwitch = $("input[name=" + item.itemId + "_switch]");
-    // iSwitch.bootstrapSwitch();
-    // iSwitch.on('switchChange.bootstrapSwitch', handleSwitchEvent);
-
-    //lets get the initial state for the widget
-    // forceUpdateDeviceState(item.itemId);
+    renderSwitchWidget(item.id, item.name, item.thingId, item.controllerId, item.properties.label, item.weight, item.properties.index, containerId);
 }
 
-function handleSwitchEvent(event, state) {
-    var command = "off";
-    if(state) {
-        command = "on";
+function renderSwitchWidget(widgetId, name, thingId, controllerId, attribute, weight, index, containerId) {
+    console.log("Rendering switch for item: " + name);
+    let data = {
+        "widgetId": widgetId,
+        "name": name,
+        "thingId": thingId,
+        "controllerId" : controllerId,
+        "label": attribute,
+        "weight" : weight,
+        "index" : index
+    };
+    console.debug("Data: " + JSON.stringify(data));
+
+    renderWidgetTmpl("switchTemplate", widgetId, data, 0, 0, containerId)
+
+    $("#" + widgetId + "_switch").change(function() {
+        handleSwitchEvent(widgetId);
+    })
+    forceUpdateDeviceState(controllerId, thingId);
+}
+
+function handleSwitchEvent(widgetId) {
+    let switchEl = $("#" + widgetId + "_switch")
+    let thingId = switchEl.attr("thingId");
+    let controllerId = switchEl.attr("controllerId");
+    let attribute = switchEl.attr("attribute");
+
+    let command = "false";
+    if(switchEl.is(":checked")) {
+        command = "true";
     }
-    var data = {
-        "itemId" : this.getAttribute('itemId'),
-        "commandType" : "switch",
-        "properties" : {
-            "value" : command
+
+    let data = {
+        "controllerId" : controllerId,
+        "thingId" : thingId,
+        "commandType" : "SWITCH",
+        "attributes" : {
+            attribute : command
         }
     };
-    var jsonData = JSON.stringify(data);
+    let jsonData = JSON.stringify(data);
     console.log("Sending command: " + jsonData);
 
-    $.ajax({url: "/command/send", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", done: function() {
+    $.ajax({url: commandSvcUrl + "/api/command/", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", done: function() {
         console.log("Posted Command successfully");
     }})
 }
 
-function renderLabel(item, containerId) {
-    console.log("Rendering label widget for item: " + item.name);
+function renderItemLabel(item, containerId) {
+    renderLabelWidget(item.properties.label, item.properties.unit, item.id, item.name, item.thingId, item.controllerId, containerId);
+}
 
-    var label = item.properties.label;
-    var unit = item.properties.unit;
+function renderLabelWidget(attribute, unitType, widgetId, name, thingId, controllerId, containerId) {
+    console.log("Rendering label widget for item: " + name + " on thing: " + thingId + " for attribute: " + attribute);
 
-    var data = {
-        "widgetId": item.id,
-        "name": item.name,
+    let data = {
+        "widgetId": widgetId,
+        "name": name,
         "value": 0,
-        "thingId": item.thingId,
-        "controllerId": item.controllerId,
-        "label": label,
-        "unit": unit,
-        "index" : item.properties.index
+        "thingId": thingId,
+        "controllerId": controllerId,
+        "label": attribute,
+        "unit": unitType
+        // "index" : item.properties.index
     };
 
-    renderWidgetTemplate("labelTemplate", data, item, containerId);
+    // let rendered = renderTemplate("labelTemplate", data);
+    // console.log("rendered: " + rendered)
+    // appendContainer(rendered, 0, 0, 0, containerId)
+    renderWidgetTmpl("labelTemplate", widgetId, data, 0, 0, containerId)
 
-    //lets get the initial state for the widget
-    forceUpdateDeviceState(item.controllerId, item.thingId);
+    forceUpdateDeviceState(controllerId, thingId);
+}
+
+function renderWidgetTmpl(templateName, widgetId, data, column, index, containerId) {
+    let rendered = renderTemplate(templateName, data);
+    console.debug("rendered: " + rendered)
+    appendContainer(rendered, index, column, widgetId, containerId)
+
 }
 
 function renderWidgetTemplate(templateName, data, item, containerId) {
-    var rendered = renderTemplate(templateName, data);
+    let rendered = renderTemplate(templateName, data);
     appendContainer(rendered, item.id, item.properties.column, item.properties.index, containerId)
 }
 
 function forceUpdateDeviceState(controllerId, thingId) {
-    $.get("/data/controllers(" + controllerId + ")/things(" + thingId + ")/state", function(data){
+    console.log("Forcing state update: " + thingId)
+    $.get(stateSvcUrl + "/api/state/controllers(" + controllerId + ")/things(" + thingId + ")", function(data){
         if(!isEmpty(data)) {
             handleStateUpdate(data);
+        } else {
+            console.log("No data for thing: " + thingId)
         }
     }).fail(function (jqXHR, textStatus, error) {
         console.log("Could not retrieve state update: " + textStatus + " and error: " + error);
@@ -515,31 +438,32 @@ function forceUpdateDeviceState(controllerId, thingId) {
 }
 
 function appendContainer(widgetHtml, index, columnId, widgetId, containerId) {
-    if ($("#" + widgetId).length > 0) {
-        //widget already exists
-    } else {
-        var container = $("div[containerId=" + containerId + "]");
-        var mode = container.attr("mode");
+    // if ($("#" + widgetId).length > 0) {
+    //     //widget already exists
+    //     console.debug("Widget already exists");
+    // } else {
+        let container = $("div[containerId=" + containerId + "]");
+        let mode = container.attr("mode");
         if(mode === "list") {
-            var list = $("ul[containerId=" + containerId + "]");
+            let list = $("ul[containerId=" + containerId + "]");
 
-            console.log("Drawing a list widget");
+            console.debug("Drawing a list widget");
             //list.append(widgetHtml);
 
             insertInColumn(widgetHtml, index, list);
         } else if(mode === "grid") {
-            console.log("Drawing in a grid");
+            console.debug("Drawing in a grid");
 
             //var currentColumn = container.attr("currentColumn");
-            var column = $("ul[containerId=" + containerId + "][column=" + columnId + "]");
+            let column = $("ul[containerId=" + containerId + "][column=" + columnId + "]");
             //column.append(widgetHtml);
 
             insertInColumn(widgetHtml, index, column);
 
-            var nextColumn = column.attr("next");
+            let nextColumn = column.attr("next");
             container.attr("currentColumn", nextColumn);
         }
-    }
+    // }
 }
 
 function insertInColumn(widgetHtml, index, column) {
@@ -554,9 +478,9 @@ function insertInColumn(widgetHtml, index, column) {
 
 
 function getCurrentColumn(containerId) {
-    var container = $("div[containerId=" + containerId + "]");
-    var mode = container.attr("mode");
-    if(mode == "grid") {
+    let container = $("div[containerId=" + containerId + "]");
+    let mode = container.attr("mode");
+    if(mode === "grid") {
         return container.attr("currentColumn");
     } else {
         return 0;
@@ -564,13 +488,13 @@ function getCurrentColumn(containerId) {
 }
 
 function getCurrentWidgetSize(containerId, columnId) {
-    var container = $("div[containerId=" + containerId + "]");
-    var mode = container.attr("mode");
-    if(mode == "grid") {
-        var column = $("ul[containerId=" + containerId + "][column=" + columnId + "]");
+    let container = $("div[containerId=" + containerId + "]");
+    let mode = container.attr("mode");
+    if(mode === "grid") {
+        let column = $("ul[containerId=" + containerId + "][column=" + columnId + "]");
         return column.children("li").length;
     } else {
-        var list = $("ul[containerId=" + containerId + "]");
+        let list = $("ul[containerId=" + containerId + "]");
         return list.children("li").length;
     }
 }

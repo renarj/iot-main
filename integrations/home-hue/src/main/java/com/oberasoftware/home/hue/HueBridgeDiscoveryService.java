@@ -46,10 +46,10 @@ public class HueBridgeDiscoveryService {
             ObjectNode user = mapper.createObjectNode();
             user.put("devicetype", "iotmain#" + "myrandomid");
 
-            try {
+
+            try(HttpClient client = HttpUtils.createClient(true)) {
                 String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
                 LOG.info("Posting json: {}", json);
-                HttpClient client = HttpUtils.createClient(true);
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("https://" + bridge.getBridgeIp() + "/api"))
                         .POST(HttpRequest.BodyPublishers.ofString(json))

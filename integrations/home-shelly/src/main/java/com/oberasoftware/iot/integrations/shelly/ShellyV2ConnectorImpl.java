@@ -22,8 +22,8 @@ import java.util.Map;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
-public class ShellyConnectorImpl implements ShellyConnector {
-    private static final Logger LOG = getLogger(ShellyConnectorImpl.class);
+public class ShellyV2ConnectorImpl implements ShellyConnector {
+    private static final Logger LOG = getLogger(ShellyV2ConnectorImpl.class);
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -51,7 +51,8 @@ public class ShellyConnectorImpl implements ShellyConnector {
             var app = root.findValue("app").asText();
             var name = root.findValue("name").asText();
 
-            return new ShellyMetadata(controllerId, thingId, shellyIp, name, app, ShellyDeviceComponents.forAppName(app).getComponents());
+            return new ShellyMetadata(controllerId, thingId, shellyIp, ShellyMetadata.SHELLY_VERSION.V2,
+                    name, app, ShellyDeviceComponents.forTypeName(app).getComponents());
         } catch (IOException | InterruptedException e) {
             throw new IOTException("Unable to request things from service", e);
         }

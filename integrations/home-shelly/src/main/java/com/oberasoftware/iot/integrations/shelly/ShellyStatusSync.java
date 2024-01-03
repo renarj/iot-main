@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -21,21 +20,16 @@ public class ShellyStatusSync implements Runnable {
     private static final int DEFAULT_INTERVAL = 20000;
 
     @Autowired
-    private ShellyConnector connector;
+    private ShellyV1ConnectorImpl v1Connector;
+
+    @Autowired
+    private ShellyV2ConnectorImpl v2Connector;
 
     @Autowired
     private LocalEventBus eventBus;
 
-    private final Map<String, ShellyMetadata> syncList = new ConcurrentHashMap<>();
-
-    public void addShelly(ShellyMetadata shellyMetadata) {
-        LOG.info("Tracking shelly: {}", shellyMetadata.getIp());
-        this.syncList.put(shellyMetadata.getIp(), shellyMetadata);
-    }
-
-    public boolean isTracking(String shellyIp) {
-        return syncList.containsKey(shellyIp);
-    }
+    @Autowired
+    private ShellyRegister shellyRegister;
 
     @Override
     public void run() {
@@ -54,10 +48,15 @@ public class ShellyStatusSync implements Runnable {
     }
 
     private void syncStatus() {
-        LOG.debug("Starting sync of shellys: {}", syncList);
-        syncList.forEach((k, sh) -> {
+        LOG.debug("Starting sync of shellys: {}", shellyRegister.size());
+        shellyRegister.getAll().forEach(sh -> {
             try {
-                Map<String, Value> values = connector.getValues(sh.getIp(), sh.getShellyComponents());
+                Map<String, Value> values;
+                if(sh.getVersion() == ShellyMetadata.SHELLY_VERSION.V1) {
+                    values = v1Connector.getValues(sh.getIp(), sh.getShellyComponents());
+                } else {
+                    values = v2Connector.getValues(sh.getIp(), sh.getShellyComponents());
+                }
                 LOG.info("Found Shelly values: {}", values);
 
                 eventBus.publish(new ThingMultiValueEventImpl(sh.getControllerId(), sh.getThingId(), values));

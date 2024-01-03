@@ -87,14 +87,14 @@
                     <td>Type:</td>
                     <td>{{type}}</td>
                 </tr>
-                <tr>
-                    <td>Attributes</td>
-                    <td>
-                        {{#each attributes}}
-                            <label>{{this}};</label>
-                        {{/each}}
-                    </td>
-                </tr>
+                {{#each attributes}}
+                    <tr>
+                        <td>Attributes.{{@key}}</td>
+                        <td>
+                            <label>{{this}}</label>
+                        </td>
+                    </tr>
+                {{/each}}
                 {{#each properties}}
                     <tr>
                         <td>properties.{{@key}}</td>

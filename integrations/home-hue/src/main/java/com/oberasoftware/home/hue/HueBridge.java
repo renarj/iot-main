@@ -2,7 +2,7 @@ package com.oberasoftware.home.hue;
 
 import java.util.Objects;
 
-final class HueBridge {
+public class HueBridge {
     private final String bridgeId;
     private final String bridgeIp;
     private final int bridgePort;

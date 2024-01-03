@@ -1,13 +1,16 @@
-var thingSvcUrl = "";
-var stateSvcUrl = "";
+let thingSvcUrl = "";
+let stateSvcUrl = "";
+let commandSvcUrl = "";
 
 function retrieveServiceUrls(callback) {
     $.get("/web/serviceLocations", function(sData) {
         thingSvcUrl = sData.thingSvcUrl;
         stateSvcUrl = sData.stateSvcUrl;
+        commandSvcUrl = sData.commandSvcUrl;
 
         console.log("Loaded state Svc URL: " + stateSvcUrl);
         console.log("Loaded thing Svc URL: " + thingSvcUrl);
+        console.log("Loaded Command Svc URL: " + commandSvcUrl);
         callback();
     });
 }

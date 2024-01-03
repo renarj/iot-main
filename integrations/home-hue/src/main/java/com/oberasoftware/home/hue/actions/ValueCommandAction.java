@@ -3,8 +3,8 @@ package com.oberasoftware.home.hue.actions;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.hue.HueConnector;
 import com.oberasoftware.iot.core.commands.ItemValueCommand;
-import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,8 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
 
     @Override
     public void receive(IotThing item, ItemValueCommand command) {
+//        Map<String, Value> values = command.getValues();
+
 //        LOG.debug("Received a value command: {} for item: {}", command, item);
 //
 //        PHBridge bridge = hueConnector.getSdk().getSelectedBridge();
@@ -132,7 +134,7 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
 //    }
 
     private Optional<String> getValue(ItemValueCommand command, String property) {
-        Optional<Value> optionalValue = Optional.ofNullable(command.getValue(property));
+        Optional<Value> optionalValue = Optional.ofNullable(command.getAttribute(property));
         if(optionalValue.isPresent()) {
             return Optional.of(optionalValue.get().asString());
         } else {
@@ -141,7 +143,7 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
     }
 
     private Optional<Integer> getNumberValue(ItemValueCommand command, String property, boolean correctScale) {
-        Optional<Value> optionalValue = Optional.ofNullable(command.getValue(property));
+        Optional<Value> optionalValue = Optional.ofNullable(command.getAttribute(property));
         if(optionalValue.isPresent()) {
             Value value = optionalValue.get();
 

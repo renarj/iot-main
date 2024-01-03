@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.oberasoftware.iot.core.AgentControllerInformation;
 import com.oberasoftware.iot.core.legacymodel.OnOffValue;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
 import com.oberasoftware.iot.core.model.storage.impl.ThingBuilder;
 import com.oberasoftware.iot.core.util.HttpUtils;
 import org.slf4j.Logger;
@@ -38,20 +39,19 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
     }
 
     @Override
-    public List<IotThing> getDevices() {
-        List<HueBridge> bridges = hueConnector.getBridges();
+    public List<IotThing> getDevices(String bridgeId) {
+        HueBridge bridge = hueConnector.getBridge(bridgeId);
 
         List<IotThing> devicesFound = new ArrayList<>();
-        bridges.forEach(b -> doLightRetrieval(b, light -> {
+        doLightRetrieval(bridge, light -> {
             JsonNode lightInfo = light.getValue();
-            var dev = createDeviceModel(b.getBridgeId(), light.getKey(), lightInfo);
-            LOG.debug("Found hue light: {} on bridge: {}", dev, b.getBridgeId());
+            var dev = createDeviceModel(bridge.getBridgeId(), light.getKey(), lightInfo);
+            LOG.debug("Found hue light: {} on bridge: {}", dev, bridge.getBridgeId());
             devicesFound.add(dev);
-        }));
+        });
         LOG.info("Found {} devices on bridges", devicesFound.size());
         return devicesFound;
     }
-
 
     private void doLightRetrieval(HueBridge bridge, Consumer<Map.Entry<String, JsonNode>> lightNodeConsumer) {
         HttpClient client = HttpUtils.createClient(true);
@@ -120,13 +120,15 @@ public class HueDeviceManagerImpl implements HueDeviceManager {
         String lightName = lightInfo.get("name").asText();
         String lightType = lightInfo.get("productname").asText();
 
-        return ThingBuilder.create(agentControllerInformation.getControllerId(), lightId)
+        return ThingBuilder.create(lightId, agentControllerInformation.getControllerId())
                 .friendlyName(lightName)
+                .type("light")
                 .plugin(HueExtension.HUE_NAME)
-                .parent("bridge-" + bridgeId)
+                .parent(bridgeId)
                 .addProperty("lightType", lightType)
                 .addProperty("bridge", bridgeId)
-                .addAttributes("on", "bri", "hue", "sat", "xy")
+                .addAttribute("on", AttributeType.SWITCH)
+                .addAttributes("bri", "hue", "sat", "xy")
                 .build();
     }
 

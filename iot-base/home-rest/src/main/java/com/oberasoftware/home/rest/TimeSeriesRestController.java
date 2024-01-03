@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rest;
 
-import com.oberasoftware.iot.core.managers.TimeSeriesStore;
+import com.oberasoftware.iot.core.AgentControllerInformation;
 import com.oberasoftware.iot.core.legacymodel.DataPoint;
-import com.oberasoftware.iot.core.ControllerConfiguration;
+import com.oberasoftware.iot.core.managers.TimeSeriesStore;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +30,7 @@ public class TimeSeriesRestController {
     private TimeSeriesStore timeSeriesStore;
 
     @Autowired
-    private ControllerConfiguration bus;
+    private AgentControllerInformation bus;
 
     @RequestMapping("/item({itemId})/label({label})")
     public List<DataPoint> findDeviceData(@PathVariable String itemId,

@@ -10,7 +10,7 @@ import java.util.Map;
 public interface BasicCommand extends ItemCommand {
     CommandType getCommandType();
 
-    Map<String, String> getProperties();
+    String getAttribute(String attribute);
 
-    String getProperty(String property);
+    Map<String, String> getAttributes();
 }

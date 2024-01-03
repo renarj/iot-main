@@ -6,10 +6,8 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.client.ThingClient;
 import com.oberasoftware.iot.core.commands.ItemCommand;
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
 import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
-import com.oberasoftware.iot.core.events.impl.ItemNumericValue;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.extensions.ExtensionManager;
 import com.oberasoftware.iot.core.model.IotThing;
@@ -61,7 +59,7 @@ public class ItemCommandEventHandler implements EventHandler {
             });
         } else {
             //all other item types are virtual, we manage the state of this, let's publish the item value event if applicable
-            publishItemEvents(command);
+//            publishItemEvents(command);
 
 //            Optional<GroupItemImpl> groupItemImpl = homeDAO.findItem(GroupItemImpl.class, command.getItemId());
 //            if(groupItemImpl.isPresent()) {
@@ -78,14 +76,14 @@ public class ItemCommandEventHandler implements EventHandler {
         return null;
     }
 
-    private void publishItemEvents(ItemCommand command) {
-        if(command instanceof ItemValueCommand) {
-            ItemValueCommand valueCommand = (ItemValueCommand) command;
-
-            valueCommand.getValues().forEach((k, v) -> {
-                LOG.debug("Publishing item: {} value: {} label: {}", valueCommand.getThingId(), v, k);
-                automationBus.publish(new ItemNumericValue(valueCommand.getThingId(), v, k));
-            });
-        }
-    }
+//    private void publishItemEvents(ItemCommand command) {
+//        if(command instanceof ItemValueCommand) {
+//            ItemValueCommand valueCommand = (ItemValueCommand) command;
+//
+//            valueCommand.getValues().forEach((k, v) -> {
+//                LOG.debug("Publishing item: {} value: {} label: {}", valueCommand.getThingId(), v, k);
+//                automationBus.publish(new ItemNumericValue(valueCommand.getThingId(), v, k));
+//            });
+//        }
+//    }
 }

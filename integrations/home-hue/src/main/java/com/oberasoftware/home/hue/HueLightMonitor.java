@@ -1,9 +1,8 @@
 package com.oberasoftware.home.hue;
 
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.iot.core.ControllerConfiguration;
-import com.oberasoftware.iot.core.events.ThingValueEvent;
-import com.oberasoftware.iot.core.events.impl.ThingValueEventImpl;
+import com.oberasoftware.iot.core.AgentControllerInformation;
+import com.oberasoftware.iot.core.events.impl.ThingMultiValueEventImpl;
 import com.oberasoftware.iot.core.legacymodel.OnOffValue;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
 import com.oberasoftware.iot.core.model.states.Value;
@@ -13,7 +12,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +28,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class HueLightMonitor {
     private static final Logger LOG = getLogger(HueLightMonitor.class);
 
-    private static final int MONITOR_INTERVAL = 60000;
+    private static final int MONITOR_INTERVAL = 20000;
 
     private final HueConnector hueConnector;
 
@@ -35,11 +36,11 @@ public class HueLightMonitor {
 
     private final LocalEventBus bus;
 
-    private final ControllerConfiguration controllerConfiguration;
+    private final AgentControllerInformation controllerConfiguration;
 
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
-    public HueLightMonitor(HueConnector hueConnector, HueDeviceManager deviceManager, LocalEventBus bus, ControllerConfiguration controllerConfiguration) {
+    public HueLightMonitor(HueConnector hueConnector, HueDeviceManager deviceManager, LocalEventBus bus, AgentControllerInformation controllerConfiguration) {
         this.hueConnector = hueConnector;
         this.deviceManager = deviceManager;
         this.bus = bus;
@@ -72,16 +73,14 @@ public class HueLightMonitor {
 
     public void checkLightState(HueDeviceState light) {
         LOG.debug("Checking light state: {}", light);
-        String deviceId = light.getLightId();
-
-        bus.publish(new ThingValueEventImpl(controllerConfiguration.getControllerId(),
-                deviceId, light.getOnOffState(), OnOffValue.LABEL));
-
+        String thingId = light.getLightId();
         int brightness = light.getBrightness();
         int correctedScale = (int)((double)brightness/255 * 100);
-        Value value = new ValueImpl(VALUE_TYPE.NUMBER, correctedScale);
-        ThingValueEvent valueEvent = new ThingValueEventImpl(controllerConfiguration.getControllerId(),
-                deviceId, value, "value");
-        bus.publish(valueEvent);
+
+        Map<String, Value> values = new HashMap<>();
+        values.put(OnOffValue.LABEL, new ValueImpl(VALUE_TYPE.STRING, light.getOnOffState().asString()));
+        values.put("bri", new ValueImpl(VALUE_TYPE.NUMBER, correctedScale));
+
+        bus.publish(new ThingMultiValueEventImpl(controllerConfiguration.getControllerId(), thingId, values));
     }
 }

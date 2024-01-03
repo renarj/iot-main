@@ -45,9 +45,9 @@ public class ServoCommandHandler implements EventHandler {
         Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
         ServoDriver servoDriver = robot.getServoDriver();
 
-        String servoPosition = basicCommand.getProperty("position");
-        String servoId = basicCommand.getProperty("servoId");
-        String speed = basicCommand.getProperty("speed");
+        String servoPosition = basicCommand.getAttribute("position");
+        String servoId = basicCommand.getAttribute("servoId");
+        String speed = basicCommand.getAttribute("speed");
         if(StringUtils.hasText(servoPosition) && StringUtils.hasText(servoId)) {
             LOG.info("Setting servo: {} to position: {}", servoId, servoPosition);
 
@@ -71,9 +71,9 @@ public class ServoCommandHandler implements EventHandler {
         Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
         ServoDriver servoDriver = robot.getServoDriver();
 
-        String servoId = basicCommand.getProperty("servoId");
-        boolean torgueEnabled = Boolean.parseBoolean(basicCommand.getProperty("torgue"));
-        Optional<Integer> tl = IntUtils.toInt(basicCommand.getProperty("torgueLimit"));
+        String servoId = basicCommand.getAttribute("servoId");
+        boolean torgueEnabled = Boolean.parseBoolean(basicCommand.getAttribute("torgue"));
+        Optional<Integer> tl = IntUtils.toInt(basicCommand.getAttribute("torgueLimit"));
         if(servoId != null) {
             if (tl.isPresent()) {
                 servoDriver.setTorgue(servoId, tl.get());

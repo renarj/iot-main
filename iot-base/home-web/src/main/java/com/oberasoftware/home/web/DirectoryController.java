@@ -16,11 +16,15 @@ public class DirectoryController {
     @Value("${state-svc.baseUrl}")
     private String stateServiceUrl;
 
+    @Value("${command-svc.baseUrl}")
+    private String commandServiceUrl;
+
     @RequestMapping("/serviceLocations")
     public Map<String, String> getServiceLocations() {
         return new ImmutableMap.Builder<String, String>()
                 .put("thingSvcUrl", thingServiceUrl)
                 .put("stateSvcUrl", stateServiceUrl)
+                .put("commandSvcUrl", commandServiceUrl)
                 .build();
     }
 }

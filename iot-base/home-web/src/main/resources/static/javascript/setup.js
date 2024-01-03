@@ -103,6 +103,9 @@ function loadSetupDialog(schemaId, thingData) {
             if(val.fieldType === "TEXT") {
                 field.val(val.defaultValue);
             }
+            if(val.fieldType === "DYNAMIC") {
+                loadDynamicField();
+            }
         })
 
         if(thingData) {
@@ -114,6 +117,10 @@ function loadSetupDialog(schemaId, thingData) {
         let controllerId = getSelectedController();
         loadParentList(controllerId, pluginId);
     })
+}
+
+function loadDynamicField() {
+
 }
 
 function loadParentList(controllerId, pluginId, selectedParent) {
@@ -130,6 +137,7 @@ function loadParentList(controllerId, pluginId, selectedParent) {
     }).fail(function(jqXHR) {
         console.log("Plugin: " + pluginId + " not found on controller: " + controllerId);
     });
+    parentList.append(new Option(controllerId, controllerId, false, false));
 }
 
 function loadExistingData(data) {

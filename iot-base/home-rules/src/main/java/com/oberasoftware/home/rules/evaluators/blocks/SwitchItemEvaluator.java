@@ -2,9 +2,6 @@ package com.oberasoftware.home.rules.evaluators.blocks;
 
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.rules.api.general.SwitchItem;
-import com.oberasoftware.iot.core.commands.ItemCommand;
-import com.oberasoftware.iot.core.commands.impl.SwitchCommandImpl;
-import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,9 +22,9 @@ public class SwitchItemEvaluator implements BlockEvaluator<SwitchItem> {
     public Boolean eval(SwitchItem input) {
         LOG.debug("Generating a switch command: {}", input);
 
-        ItemCommand command = new SwitchCommandImpl(input.getControllerId(), input.getItemId(), input.getState());
-
-        automationBus.publish(new ItemCommandEvent(input.getItemId(), command));
+//        ItemCommand command = new SwitchCommandImpl(input.getControllerId(), input.getItemId(), input.getState());
+//
+//        automationBus.publish(new ItemCommandEvent(input.getItemId(), command));
 
         return true;
     }

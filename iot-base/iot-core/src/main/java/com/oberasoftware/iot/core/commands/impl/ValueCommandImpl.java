@@ -14,12 +14,12 @@ public class ValueCommandImpl implements ItemValueCommand {
     private final String thingId;
     private final String controllerId;
 
-    private Map<String, Value> values = new HashMap<>();
+    private Map<String, Value> attributes = new HashMap<>();
 
-    public ValueCommandImpl(String controllerId, String thingId, Map<String, Value> values) {
+    public ValueCommandImpl(String controllerId, String thingId, Map<String, Value> attributes) {
         this.controllerId = controllerId;
         this.thingId = thingId;
-        this.values = values;
+        this.attributes = attributes;
     }
 
     @Override
@@ -33,39 +33,20 @@ public class ValueCommandImpl implements ItemValueCommand {
     }
 
     @Override
-    public Value getValue(String property) {
-        return values.get(property);
+    public Value getAttribute(String property) {
+        return attributes.get(property);
     }
 
     @Override
-    public Map<String, Value> getValues() {
-        return values;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ValueCommandImpl that = (ValueCommandImpl) o;
-
-        if (!thingId.equals(that.thingId)) return false;
-        return values.equals(that.values);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = thingId.hashCode();
-        result = 31 * result + values.hashCode();
-        return result;
+    public Map<String, Value> getAttributes() {
+        return attributes;
     }
 
     @Override
     public String toString() {
         return "ValueCommandImpl{" +
                 "thingId='" + thingId + '\'' +
-                ", values=" + values +
+                ", attributes=" + attributes +
                 '}';
     }
 }

@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-3">&nbsp;</div>
                 <div class="col-2">
-                    <label controllerId="{{controllerId}}" thingId="{{thingId}}" labelId="{{label}}">{{value}}</label>
+                    <label controllerId="{{controllerId}}" thingId="{{thingId}}" attribute="{{label}}" widgetType="label">{{value}}</label>
                 </div>
                 <div class="col-1">
                     <label>{{unit}}</label>
@@ -28,39 +28,6 @@
         </div>
     </li>
 </script>
-<script id="graphTemplate" type="text/x-handlebars-template">
-    <li class="well well-sm widget" id="{{widgetId}}">
-        <div class="row">
-            <div class="col-md-6">
-                <label>{{name}}</label>
-            </div>
-            <div class="col-md-5">
-                <label>Period</label>
-                <select id="period_{{widgetId}}">
-                    <option value="12">12 Hours</option>
-                    <option value="24">Day</option>
-                    <option value="168">Week</option>
-                </select>
-                <label>Aggregate</label>
-                <select id="grouping_{{widgetId}}">
-                    <option value="minute">Minute</option>
-                    <option value="hour">Hour</option>
-                    <option value="day">Day</option>
-                </select>
-            </div>
-            <div class="col-md-1">
-                <a href="#" widgetId="{{widgetId}}" class="btn btn-default btn-sm removeWidget" title="Deleted widget"><span class="glyphicon glyphicon-trash"></span></a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="graph" index="{{index}}" id="chart_{{widgetId}}" thingId="{{thingId}}" controllerId="{{controllerId}}" labelId="{{label}}">
-                </div>
-            </div>
-        </div>
-    </li>
-</script>
-
 <script id="switchTemplate" type="text/x-handlebars-template">
     <li class="card" index="{{index}}" id="{{widgetId}}">
         <div class="card-body">
@@ -70,7 +37,7 @@
                 </div>
                 <div class="col-3">&nbsp;</div>
                 <div class="col-3 form-switch">
-                    <input type="checkbox" data-size="small" class="form-check-input" role="switch" itemId="{{itemId}}" labelId="{{label}}" name="{{itemId}}_switch"/>
+                    <input type="checkbox" data-size="small" class="form-check-input" role="switch" thingId="{{thingId}}" controllerId="{{controllerId}}" attribute="{{label}}" widgetType="switch" id="{{widgetId}}_switch"/>
                 </div>
                 <div class="col-1">&nbsp;</div>
                 <div class="col-2">

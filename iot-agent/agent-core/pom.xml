@@ -71,6 +71,11 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
+            <artifactId>home-hue</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
             <artifactId>roco-z21-adapter</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -33,7 +33,7 @@ public class RunMotionCommandHandler implements EventHandler {
         LOG.info("Executing motion: {} from topic: {}", mqttMessage.getMessage(), mqttMessage.getTopic());
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        String motionName = basicCommand.getProperties().get("motion");
+        String motionName = basicCommand.getAttributes().get("motion");
         if(motionName != null) {
             LOG.info("Received motion execution: {}", motionName);
 

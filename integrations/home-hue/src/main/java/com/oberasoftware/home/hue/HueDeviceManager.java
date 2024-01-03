@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HueDeviceManager {
-    List<IotThing> getDevices();
+    List<IotThing> getDevices(String bridgeId);
 
     Optional<IotThing> findDevice(String bridgeId, String lightId);
 

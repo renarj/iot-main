@@ -36,8 +36,8 @@ public class RemoteHandsHandler implements EventHandler {
         LOG.info("Executing motion: {} from topic: {}", mqttMessage.getMessage(), mqttMessage.getTopic());
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        String handsPosition = basicCommand.getProperty("position");
-        String hand = basicCommand.getProperty("hands");
+        String handsPosition = basicCommand.getAttribute("position");
+        String hand = basicCommand.getAttribute("hands");
         if(handsPosition != null) {
             LOG.info("Received hand motion execution: {} for hand: {}", handsPosition, hand);
 

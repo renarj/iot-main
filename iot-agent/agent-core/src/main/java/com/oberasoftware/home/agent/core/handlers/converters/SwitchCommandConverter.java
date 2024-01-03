@@ -7,6 +7,9 @@ import com.oberasoftware.iot.core.commands.impl.SwitchCommandImpl;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -20,18 +23,24 @@ public class SwitchCommandConverter implements CommandConverter<BasicCommand, Sw
     @ConverterType(commandType = CommandType.SWITCH)
     public SwitchCommand map(BasicCommand source) {
 
-        if(source.getProperties().containsKey("value")) {
-            String value = source.getProperties().get("value");
-            String itemId = source.getThingId();
+        if(!source.getAttributes().isEmpty()) {
+            Map<String, SwitchCommand.STATE> states = new HashMap<>();
+            String thingId = source.getThingId();
             String controllerId = source.getControllerId();
 
-            switch (value.toLowerCase()) {
-                case "on":
-                    return new SwitchCommandImpl(controllerId, itemId, SwitchCommand.STATE.ON);
-                case "off":
-                default:
-                    return new SwitchCommandImpl(controllerId, itemId, SwitchCommand.STATE.OFF);
-            }
+            source.getAttributes().forEach((k, v) -> {
+                switch (v.toLowerCase()) {
+                    case "on":
+                        states.put(k, SwitchCommand.STATE.ON);
+                        break;
+                    case "off":
+                    default:
+                        states.put(k, SwitchCommand.STATE.OFF);
+                        break;
+                }
+            });
+
+            return new SwitchCommandImpl(controllerId, thingId, states);
         } else {
             LOG.warn("Could not map basic command: {}, missing target value for switch state", source);
             return null;

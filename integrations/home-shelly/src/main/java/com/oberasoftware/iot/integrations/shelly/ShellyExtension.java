@@ -28,6 +28,7 @@ public class ShellyExtension implements AutomationExtension {
     private static final Logger LOG = getLogger(ShellyExtension.class);
     protected static final String SHELLY_IP = "SHELLY_IP";
     private static final String SHELLY_COMPONENTS = "SHELLY_COMPONENTS";
+    private static final String SHELLY_NAME = "SHELLY_NAME";
 
     @Autowired
     private ShellyCommandHandler commandHandler;
@@ -36,13 +37,19 @@ public class ShellyExtension implements AutomationExtension {
     private AgentControllerInformation controllerInformation;
 
     @Autowired
-    private ShellyConnector connector;
+    private ShellyV2ConnectorImpl v2Connector;
+
+    @Autowired
+    private ShellyV1ConnectorImpl v1Connector;
 
     @Autowired
     private ThingClient thingClient;
 
     @Autowired
     private ShellyStatusSync shellyStatusSync;
+
+    @Autowired
+    private ShellyRegister shellyRegister;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -60,32 +67,51 @@ public class ShellyExtension implements AutomationExtension {
         executorService.submit(shellyStatusSync);
     }
 
-    private void activateShellyDevice(IotThing thing) {
+    public void activateShellyDevice(IotThing thing) {
         LOG.info("Activating Shelly device: {} on Controller: {}", thing.getThingId(), thing.getControllerId());
         var shellyIp = thing.getProperty(SHELLY_IP);
         try {
-            ShellyMetadata metadata = connector.getShellyInfo(thing.getControllerId(), thing.getThingId(), shellyIp);
-            LOG.info("retrieved shelly metadata: {}", metadata);
-            if(!thing.getProperties().containsKey(SHELLY_COMPONENTS)) {
-                LOG.info("Shelly components not stored, storing for shelly: {} thing: {} on controller: {}",
-                        shellyIp, thing.getThingId(), thing.getControllerId());
+            ShellyMetadata.SHELLY_VERSION version = v1Connector.getShellyVersion(shellyIp);
 
-                thingClient.createOrUpdate(ThingBuilder.create(thing.getThingId(), thing.getControllerId())
-                        .plugin(getId()).parent(getId())
-                        .friendlyName(metadata.getShellyName())
-                        .type(metadata.getAppName())
-                        .addProperty(SHELLY_IP, shellyIp)
-                        .addProperty(SHELLY_COMPONENTS, Joiner.on(",").join(metadata.getShellyComponents()))
-                        .build());
+            ShellyMetadata metadata;
+            if(version == ShellyMetadata.SHELLY_VERSION.V2) {
+                LOG.info("Shelly: {} on controller: {} is a V2 device", thing.getThingId(), thing.getControllerId());
+                metadata = activateDevice(v2Connector, thing, shellyIp);
+            } else {
+                LOG.info("Shelly: {} on controller: {} is a V1 device", thing.getThingId(), thing.getControllerId());
+                metadata = activateDevice(v1Connector, thing, shellyIp);
             }
+            LOG.info("Retrieved Shelly metadata: {} for Shelly: {} on Controller: {}", metadata, thing.getThingId(), thing.getControllerId());
 
-            LOG.info("Scheduling shelly: {} for regular syncs", metadata);
-            shellyStatusSync.addShelly(metadata);
+            if(shellyRegister.findShelly(thing.getControllerId(), thing.getThingId()).isEmpty()) {
+                LOG.info("Scheduling shelly: {} for regular syncs", metadata);
+                shellyRegister.addShelly(metadata);
+            } else {
+                LOG.info("Shelly: {} already syncing, skipping config update", shellyIp);
+            }
         } catch(IOTException e) {
             LOG.error("Could not activate shelly: " + shellyIp, e);
         } catch(Exception e) {
             LOG.error("", e);
         }
+    }
+
+    private ShellyMetadata activateDevice(ShellyConnector connector, IotThing thing, String shellyIp) throws IOTException {
+        ShellyMetadata metadata = connector.getShellyInfo(thing.getControllerId(), thing.getThingId(), shellyIp);
+        LOG.info("retrieved shelly metadata: {}", metadata);
+        if(!thing.getProperties().containsKey(SHELLY_COMPONENTS)) {
+            LOG.info("Shelly components not stored, storing for shelly: {} thing: {} on controller: {}",
+                    shellyIp, thing.getThingId(), thing.getControllerId());
+
+            thingClient.createOrUpdate(ThingBuilder.create(thing.getThingId(), thing.getControllerId())
+                    .plugin(getId()).parent(getId())
+                    .type(metadata.getShellyType())
+                    .addProperty(SHELLY_NAME, metadata.getShellyName())
+                    .addProperty(SHELLY_IP, shellyIp)
+                    .addProperty(SHELLY_COMPONENTS, Joiner.on(",").join(metadata.getShellyComponents()))
+                    .build());
+        }
+        return metadata;
     }
 
     @Override

@@ -25,14 +25,14 @@ public class SetLocoFunctionCommand implements Z21CommandHandler {
 
     @Override
     public boolean supportsCommand(TrainCommand command) {
-        return command.getValues().containsKey(FUNCTION)
-                && command.getValues().containsKey(FUNCTION_STATE);
+        return command.getAttributes().containsKey(FUNCTION)
+                && command.getAttributes().containsKey(FUNCTION_STATE);
     }
 
     @Override
     public void action(TrainCommand command) {
-        var functionNr = Integer.parseInt(command.getValue(FUNCTION).asString());
-        FunctionState state = FunctionState.valueOf(command.getValue(FUNCTION_STATE).asString());
+        var functionNr = Integer.parseInt(command.getAttribute(FUNCTION).asString());
+        FunctionState state = FunctionState.valueOf(command.getAttribute(FUNCTION_STATE).asString());
 
         var z21Command = new LocoFunctionCommand(command.getLocAddress(), functionNr, state);
         LOG.info("Sending Loco function: {} to loc: {} with state: {}", functionNr, command.getLocAddress(), state);

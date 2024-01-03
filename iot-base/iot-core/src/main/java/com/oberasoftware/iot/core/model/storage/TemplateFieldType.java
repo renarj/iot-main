@@ -6,5 +6,7 @@ public enum TemplateFieldType {
 
     STATIC_DEFAULT,
 
-    ENUM
+    ENUM,
+
+    DYNAMIC
 }

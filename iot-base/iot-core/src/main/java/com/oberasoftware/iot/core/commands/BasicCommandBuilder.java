@@ -52,7 +52,7 @@ public class BasicCommandBuilder {
         command.setControllerId(controllerId);
         command.setCommandType(type);
         command.setThingId(thing);
-        command.setProperties(properties);
+        command.setAttributes(properties);
 
         return command;
     }

@@ -30,7 +30,7 @@ public class ValueCommandConverter implements CommandConverter<BasicCommand, Ite
     @Override
     @ConverterType(commandType = CommandType.VALUE)
     public ItemValueCommand map(BasicCommand source) {
-        Map<String, String> properties = source.getProperties();
+        Map<String, String> properties = source.getAttributes();
         String itemId = source.getThingId();
 
         Map<String, Value> values = new HashMap<>();

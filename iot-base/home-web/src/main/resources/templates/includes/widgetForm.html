@@ -2,7 +2,7 @@
 <div class="modal" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="addUiItemLabel" aria-hidden="true"
      th:fragment="widgetForm" xmlns:th="http://www.w3.org/1999/xhtml">
     <form role="form" id="createUIItemForm" action="#" method="post">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="addUiItemLabel">Add a Widget</h4>
@@ -18,7 +18,7 @@
                             <div class="form-group">
                                 <label for="sourceItem">Item Type</label>
                                 <select class="form-control" id="sourceItem">
-                                    <option value="device">Device</option>
+                                    <option value="thing" selected>Thing</option>
                                     <option value="group">Group</option>
                                     <option value="virtual">Virtual Item</option>
                                 </select>
@@ -43,6 +43,7 @@
                             <div class="form-group">
                                 <label for="widgetList">Widget Type</label>
                                 <select class="form-control" id="widgetList">
+                                    <option value="default">Default</option>
                                     <option value="switch">Switch</option>
                                     <option value="dimmer">Dimmer</option>
                                     <option value="color">Color</option>
@@ -50,9 +51,9 @@
                                     <option value="graph">Graph</option>
                                 </select>
                             </div>
-                            <div class="form-group hide" id="widgetValueTypeDiv">
-                                <label for="widgetLabel">Device Value Type</label>
-                                <select class="form-control" id="widgetLabel">
+                            <div class="form-group fade" id="widgetValueTypeDiv">
+                                <label for="widgetLabel">Device Attribute</label>
+                                <select class="form-control" id="widgetLabel" disabled>
                                     <option value="none"></option>
                                     <option value="power">Power</option>
                                     <option value="energy">Energy</option>
@@ -62,13 +63,13 @@
                                     <option value="custom">Custom</option>
                                 </select>
                             </div>
-                            <div class="form-group hide" id="widgetCustomValueType">
+                            <div class="form-group fade" id="widgetCustomValueType">
                                 <label for="customLabel">Custom Label</label>
-                                <input class="form-control" id="customLabel" type="text"/>
+                                <input class="form-control" id="customLabel" type="text" disabled/>
                             </div>
-                            <div class="form-group hide" id="widgetUnitTypeDiv">
+                            <div class="form-group fade" id="widgetUnitTypeDiv">
                                 <label for="widgetLabelUnitType">Value Unit type</label>
-                                <select class="form-control" id="widgetLabelUnitType">
+                                <select class="form-control" id="widgetLabelUnitType" disabled>
                                     <option value="none"></option>
                                     <option value="kwh">KWH</option>
                                     <option value="watt">Watt</option>
@@ -77,23 +78,6 @@
                                     <option value="percentage">%</option>
                                 </select>
                             </div>
-                            <div class="form-group hide" id="graphTimeDiv">
-                                <label for="graphTime">Graph Time period</label>
-                                <select class="form-control" id="graphTime">
-                                    <option value="12">halfday</option>
-                                    <option value="24">day</option>
-                                    <option value="168">week</option>
-                                </select>
-                            </div>
-                            <div class="form-group hide" id="graphGroupingDiv">
-                                <label for="widgetLabel">Aggregration per:</label>
-                                <select class="form-control" id="graphGrouping">
-                                    <option value="minute">Minute</option>
-                                    <option value="hour">Hour</option>
-                                    <option value="day">Day</option>
-                                </select>
-                            </div>
-
                         </div>
                     </div>
                     <input type="hidden" value="" id="containerId"/>
