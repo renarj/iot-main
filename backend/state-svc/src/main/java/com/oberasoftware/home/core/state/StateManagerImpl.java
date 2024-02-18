@@ -38,7 +38,7 @@ public class StateManagerImpl implements StateManager {
 
     @Override
     public State updateItemState(String controllerId, String thingId, String attribute, Value value) {
-        LOG.info("Update state for controller: {} and thing: {} attribute: {} and value: {}", controllerId, thingId, attribute, value);
+        LOG.debug("Update state for controller: {} and thing: {} attribute: {} and value: {}", controllerId, thingId, attribute, value);
 
         boolean updated = updateState(controllerId, thingId, attribute, value);
 

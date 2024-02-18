@@ -87,6 +87,19 @@ function initPage() {
                 renderAndAppend("propertyTemplate", data, "propertyList");
                 $("#" + uniqueId + "-type").val(val.fieldType);
             })
+
+            $("#attributeList").empty();
+            $.each(sData.attributes, function (key, val) {
+                let uniqueId = Math.floor(Math.random() * Date.now());
+
+                data = {
+                    "uniqueId": uniqueId,
+                    "description": key
+                }
+                renderAndAppend("attributeTemplate", data, "attributeList");
+                $("#" + uniqueId + "-type").val(val);
+            })
+
         })
     });
 

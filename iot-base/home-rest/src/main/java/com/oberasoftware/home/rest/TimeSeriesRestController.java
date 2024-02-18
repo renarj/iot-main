@@ -1,6 +1,5 @@
 package com.oberasoftware.home.rest;
 
-import com.oberasoftware.iot.core.AgentControllerInformation;
 import com.oberasoftware.iot.core.legacymodel.DataPoint;
 import com.oberasoftware.iot.core.managers.TimeSeriesStore;
 import org.slf4j.Logger;
@@ -29,24 +28,21 @@ public class TimeSeriesRestController {
     @Autowired(required = false)
     private TimeSeriesStore timeSeriesStore;
 
-    @Autowired
-    private AgentControllerInformation bus;
-
-    @RequestMapping("/item({itemId})/label({label})")
-    public List<DataPoint> findDeviceData(@PathVariable String itemId,
-                                          @PathVariable String label) {
-        return findDeviceData(itemId, label, "minute", DEFAULT_TIME_SCALE);
+    @RequestMapping("/controller({controllerId})/things({thingId})/attribute({attribute})")
+    public List<DataPoint> findDeviceData(@PathVariable String controllerId, @PathVariable String thingId,
+                                          @PathVariable String attribute) {
+        return findDeviceData(controllerId, thingId, attribute, "minute", DEFAULT_TIME_SCALE);
     }
 
 
-    @RequestMapping("/item({itemId})/label({label})/grouping({group})/hours({time})")
-    public List<DataPoint> findDeviceData(@PathVariable String itemId,
-                                          @PathVariable String label, @PathVariable String group, @PathVariable long time) {
+    @RequestMapping("/controller({controllerId})/things({thingId})/attribute({attribute})/grouping({group})/hours({time})")
+    public List<DataPoint> findDeviceData(@PathVariable String controllerId, @PathVariable String thingId,
+                                          @PathVariable String attribute, @PathVariable String group, @PathVariable long time) {
         if(timeSeriesStore != null) {
             TimeSeriesStore.GROUPING grouping = TimeSeriesStore.GROUPING.fromName(group);
-            LOG.debug("Doing item: {} time series request for: {} hours grouped by: {}", itemId, time, grouping);
+            LOG.debug("Doing item: {} time series request for: {} hours grouped by: {}", thingId, time, grouping);
 
-            return timeSeriesStore.findDataPoints(bus.getControllerId(), itemId, label, grouping,
+            return timeSeriesStore.findDataPoints(controllerId, thingId, attribute, grouping,
                     time, TimeUnit.HOURS);
         }
         return new ArrayList<>();

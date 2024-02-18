@@ -1,5 +1,6 @@
 package com.oberasoftware.home.storage.jasdb;
 
+import com.oberasoftware.home.storage.StorageConfiguration;
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
@@ -31,7 +32,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JasDBConfiguration.class)
+@ContextConfiguration(classes = StorageConfiguration.class)
 public class JasDBCentralDataStoreTest {
     private static final Logger LOG = getLogger(JasDBCentralDataStoreTest.class);
 
@@ -39,7 +40,7 @@ public class JasDBCentralDataStoreTest {
     private JasDBCentralDatastore centralDatastore;
 
     @Autowired
-    private HomeDAOImpl homeDAOImpl;
+    private JasDBHomeDAOImpl jasDBHomeDAOImpl;
 
     @ClassRule
     public static TemporaryFolder folder = new TemporaryFolder();
@@ -60,14 +61,14 @@ public class JasDBCentralDataStoreTest {
 
         centralDatastore.store(new IotThingImpl(id, "controller1", "device1", "plugin1", null, new HashMap<>()));
 
-        Optional<IotThing> item = homeDAOImpl.findThing("controller1",  "device1");
+        Optional<IotThing> item = jasDBHomeDAOImpl.findThing("controller1",  "device1");
         assertThat(item.isPresent(), is(true));
 
         centralDatastore.store(new IotThingImpl(id, "controller1", "plugin1", "device1", "updated name", new HashMap<>()));
 
-        assertThat(homeDAOImpl.findThings("controller1").size(), is(1));
+        assertThat(jasDBHomeDAOImpl.findThings("controller1").size(), is(1));
 
-        item = homeDAOImpl.findThing("controller1", "device1");
+        item = jasDBHomeDAOImpl.findThing("controller1", "device1");
         assertThat(item.isPresent(), is(true));
     }
 
@@ -79,6 +80,6 @@ public class JasDBCentralDataStoreTest {
         centralDatastore.store(new WidgetImpl(id1, "UI Item 1", "container1", "switch", "jsdlfjsd", "randomControllerId", new HashMap<>(), 0));
         centralDatastore.store(new WidgetImpl(id2, "UI Item 2", "container1", "switch", "jsdlfjsd", "randomControllerId", new HashMap<>(), 0));
 
-        assertThat(homeDAOImpl.findWidgets("container1").size(), is(2));
+        assertThat(jasDBHomeDAOImpl.findWidgets("container1").size(), is(2));
     }
 }

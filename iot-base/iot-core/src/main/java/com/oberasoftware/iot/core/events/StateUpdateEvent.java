@@ -29,4 +29,13 @@ public class StateUpdateEvent implements ItemEvent {
     public State getState() {
         return state;
     }
+
+    @Override
+    public String toString() {
+        return "StateUpdateEvent{" +
+                "state=" + state +
+                ", itemId='" + itemId + '\'' +
+                ", attribute='" + attribute + '\'' +
+                '}';
+    }
 }

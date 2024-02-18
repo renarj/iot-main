@@ -27,7 +27,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class JasDBCentralDatastore implements CentralDatastore {
     private static final Logger LOG = getLogger(JasDBCentralDatastore.class);
 
-    public static final String ITEMS_BAG_NAME = "items";
+    public static final String THINGS_BAG_NAME = "things";
 
     @Autowired
     private JasDBSessionFactory jasDBSessionFactory;
@@ -51,11 +51,11 @@ public class JasDBCentralDatastore implements CentralDatastore {
         LOG.debug("Creating a composite index");
 
         try {
-            jasDBSessionFactory.createSession().createOrGetBag(ITEMS_BAG_NAME).ensureIndex(
+            jasDBSessionFactory.createSession().createOrGetBag(THINGS_BAG_NAME).ensureIndex(
                     new SimpleCompositeIndexField(
                             new SimpleIndexField("controllerId", new StringKeyType()),
                             new SimpleIndexField("pluginId", new StringKeyType()),
-                            new SimpleIndexField("deviceId", new StringKeyType()),
+                            new SimpleIndexField("thingId", new StringKeyType()),
                             new SimpleIndexField("type", new StringKeyType())
                     ), false);
         } catch (JasDBException e) {

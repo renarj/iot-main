@@ -4,7 +4,6 @@ import com.oberasoftware.jasdb.api.exceptions.JasDBException;
 import com.oberasoftware.jasdb.api.exceptions.JasDBStorageException;
 import com.oberasoftware.jasdb.api.session.DBSession;
 import com.oberasoftware.jasdb.rest.client.RestDBSession;
-import com.oberasoftware.jasdb.service.local.LocalDBSession;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,9 +40,12 @@ public class JasDBSessionFactory {
             LOG.debug("Creating JasDB REST session to host: {} port: {} instance: {}", jasdbHost, jasdbPort, jasdbInstance);
             session = new RestDBSession(jasdbInstance, jasdbHost, jasdbPort);
         } else {
-            LOG.debug("Creating JasDB Local session to instance: {}", jasdbInstance);
-            session = new LocalDBSession(jasdbInstance);
+            throw new JasDBException("Unsupported Mode: " + jasdbMode);
         }
+//        else {
+//            LOG.debug("Creating JasDB Local session to instance: {}", jasdbInstance);
+//            session = new LocalDBSession(jasdbInstance);
+//        }
         handleWipeData(session);
 
         return session;

@@ -1,6 +1,6 @@
 package com.oberasoftware.home.data;
 
-import com.oberasoftware.home.storage.jasdb.JasDBConfiguration;
+import com.oberasoftware.home.storage.StorageConfiguration;
 import com.oberasoftware.iot.activemq.QueueConfiguration;
 import com.oberasoftware.iot.activemq.RabbitMQTopicSender;
 import com.oberasoftware.iot.core.CoreConfiguation;
@@ -20,7 +20,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author Renze de Vries
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, SpringApplicationAdminJmxAutoConfiguration.class})
-@Import({CoreConfiguation.class, JasDBConfiguration.class, QueueConfiguration.class})
+@Import({CoreConfiguation.class, StorageConfiguration.class, QueueConfiguration.class})
 public class DataServiceContainer {
     private static final Logger LOG = getLogger( DataServiceContainer.class );
 
@@ -30,7 +30,7 @@ public class DataServiceContainer {
     }
 
     @Bean
-    ApplicationRunner run (@Autowired RabbitMQTopicSender sender) {
+    ApplicationRunner runDataSvc (@Autowired RabbitMQTopicSender sender) {
         return args -> {
             LOG.info("Connecting to Topic Sender");
             sender.connect();

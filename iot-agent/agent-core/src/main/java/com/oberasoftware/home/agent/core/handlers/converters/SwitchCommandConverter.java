@@ -31,9 +31,11 @@ public class SwitchCommandConverter implements CommandConverter<BasicCommand, Sw
             source.getAttributes().forEach((k, v) -> {
                 switch (v.toLowerCase()) {
                     case "on":
+                    case "true":
                         states.put(k, SwitchCommand.STATE.ON);
                         break;
                     case "off":
+                    case "false":
                     default:
                         states.put(k, SwitchCommand.STATE.OFF);
                         break;

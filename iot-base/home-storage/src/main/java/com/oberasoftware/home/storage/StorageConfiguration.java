@@ -1,4 +1,4 @@
-package com.oberasoftware.home.storage.jasdb;
+package com.oberasoftware.home.storage;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,9 +10,11 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  * @author renarj
  */
 @Configuration
-@ComponentScan
+//@EnableJpaRepositories("com.oberasoftware.home.storage.jpa")
+//@EntityScan("com.oberasoftware.iot.core.model.storage.impl")
+@ComponentScan("com.oberasoftware.home.storage.jasdb")
 @PropertySource("classpath:application.properties")
-public class JasDBConfiguration {
+public class StorageConfiguration {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {

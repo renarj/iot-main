@@ -4,19 +4,29 @@ import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import java.util.Map;
 
 /**
  * @author renarj
  */
-@JasDBEntity(bagName = "controllers")
+@Entity(name="Controllers")
+@JasDBEntity(bagName = "Controllers")
 public class ControllerImpl implements Controller {
+    @Column(unique = true)
     private String controllerId;
+
+    @javax.persistence.Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
     private String orgId;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "ControllerProperties")
     private Map<String, String> properties;
 
     public ControllerImpl(String id, String controllerId, String orgId, Map<String, String> properties) {

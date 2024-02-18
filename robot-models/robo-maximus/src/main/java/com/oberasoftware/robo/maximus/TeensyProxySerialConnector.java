@@ -29,7 +29,7 @@ public class TeensyProxySerialConnector extends SerialDynamixelConnector {
         super();
 
         baudRate = 57600;
-        responseDelayTime = 1000;
+        responseDelayTime = 2000;
     }
 
     public byte[] sendAndReceiveCommand(String command, Map<String, String> parameters, boolean wait) {

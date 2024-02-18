@@ -18,7 +18,6 @@ package com.oberasoftware.robo.maximus;
 import com.oberasoftware.iot.client.ClientConfiguration;
 import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
 import com.oberasoftware.max.core.CoreConfiguration;
-import com.oberasoftware.robo.cloud.RemoteConfiguration;
 import com.oberasoftware.robo.dynamixel.DynamixelConfiguration;
 import com.oberasoftware.robo.dynamixel.SerialDynamixelConnector;
 import com.oberasoftware.robo.dynamixel.web.WebConfiguration;
@@ -43,7 +42,7 @@ import org.springframework.context.annotation.Import;
         DataSourceTransactionManagerAutoConfiguration.class})
 @Import({
         DynamixelConfiguration.class,
-        RemoteConfiguration.class,
+//        RemoteConfiguration.class,
         SensorConfiguration.class,
         CoreConfiguration.class,
         ClientConfiguration.class,

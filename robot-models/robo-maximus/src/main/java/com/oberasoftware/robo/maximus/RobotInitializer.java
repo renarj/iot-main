@@ -20,7 +20,6 @@ import com.oberasoftware.robo.maximus.motion.cartesian.CartesianControlImpl;
 import com.oberasoftware.robo.maximus.motion.cartesian.CoordinatesMonitor;
 import com.oberasoftware.robo.maximus.sensors.Ina260CurrentSensor;
 import com.oberasoftware.robo.maximus.sensors.LSM9DS1GyroSensor;
-import com.oberasoftware.robo.maximus.sensors.TeensySensorDriver;
 import com.oberasoftware.robo.maximus.storage.MotionStorage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +83,7 @@ public class RobotInitializer {
                                 .build())
                 .capability(ServoSensorDriver.class)
                 .capability(MotionStorage.class)
-                .capability(TeensySensorDriver.class)
+//                .capability(TeensySensorDriver.class)
 //                .capability(InfluxDBMetricsCapability.class)
                 .capability(DynamixelTorgueManager.class)
 //                .remote(RemoteCloudDriver.class, true)

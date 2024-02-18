@@ -24,7 +24,9 @@ public class DynamixelTest {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(DynamixelTest.class);
         ServoDriver servoDriver = context.getBean(ServoDriver.class);
-        servoDriver.activate(null, ImmutableMap.<String, String>builder().put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem76930201").build());
+        servoDriver.activate(null, ImmutableMap.<String, String>builder()
+                .put(DynamixelServoDriver.PORT, "/dev/tty.usbmodem76930201")
+                .put("protocol.v2.enabled", "true").build());
         servoDriver.getServos().forEach(s -> {
             LOG.info("Servo found: {} on position: {}", s.getId(), s.getData().getValue(ServoProperty.POSITION));
         });

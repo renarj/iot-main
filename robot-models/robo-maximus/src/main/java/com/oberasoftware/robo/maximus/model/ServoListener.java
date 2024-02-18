@@ -20,11 +20,9 @@ public class ServoListener implements EventHandler {
     private static final Logger LOG = getLogger(ServoListener.class);
 
     private final JointControl motionControl;
-//    private final TorgueManager torgueManager;
 
     ServoListener(JointControl motionControl) {
         this.motionControl = motionControl;
-//        this.torgueManager = torgueManager;
     }
 
     @EventSubscribe

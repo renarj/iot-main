@@ -1,7 +1,8 @@
 let stompClient = null;
 
 function connect() {
-    console.log("Connecting to websocket");
+    stateSvcUrl = "http://localhost:9006"
+    console.log("Connecting to websocket: " + stateSvcUrl);
     let socket = new SockJS(stateSvcUrl + "/ws");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame) {
@@ -369,14 +370,14 @@ function handleSwitchEvent(widgetId) {
     if(switchEl.is(":checked")) {
         command = "true";
     }
+    let attributes = {};
+    attributes[attribute] = command;
 
     let data = {
         "controllerId" : controllerId,
         "thingId" : thingId,
         "commandType" : "SWITCH",
-        "attributes" : {
-            attribute : command
-        }
+        "attributes" : attributes
     };
     let jsonData = JSON.stringify(data);
     console.log("Sending command: " + jsonData);
@@ -500,8 +501,10 @@ function getCurrentWidgetSize(containerId, columnId) {
 }
 
 $(document).ready(function() {
-    renderDashboardsLinks();
-    renderDefaultDashboard();
+    retrieveServiceUrls(function() {
+        renderDashboardsLinks();
+        renderDefaultDashboard();
 
-    connect();
+        connect();
+    })
 });

@@ -20,8 +20,8 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-public class HomeDAOImpl extends BaseDAO implements HomeDAO {
-    private static final Logger LOG = getLogger(HomeDAOImpl.class);
+public class JasDBHomeDAOImpl extends BaseDAO implements HomeDAO {
+    private static final Logger LOG = getLogger(JasDBHomeDAOImpl.class);
 
     @Override
     public <T extends IotBaseEntity> Optional<T> findItem(Class<T> type, String id) {

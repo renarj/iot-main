@@ -4,6 +4,9 @@ import com.oberasoftware.iot.core.model.storage.TemplateFieldType;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 @JasDBEntity(bagName = "fieldDescriptors")
 public class SchemaFieldDescriptor {
 

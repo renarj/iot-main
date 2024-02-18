@@ -94,17 +94,24 @@ function loadSetupDialog(schemaId, thingData) {
         $("#type").val(data.type);
 
         $.each(data.properties, function (key, val) {
-            renderAndAppend("propertyTemplate", {"field": key}, "thingForm")
+            let defVal = val.defaultValue;
             let field = $("#" + key);
-            if(val.fieldType === "STATIC_DEFAULT") {
-                field.prop( "disabled", true);
-                field.val(val.defaultValue);
-            }
-            if(val.fieldType === "TEXT") {
-                field.val(val.defaultValue);
-            }
-            if(val.fieldType === "DYNAMIC") {
-                loadDynamicField();
+
+            if(val.fieldType === "LINK") {
+                renderAndAppend("propertyLinkTemplate", {"field": key, "plugin": defVal}, "thingForm")
+                loadLinkages(field, defVal);
+            } else {
+                renderAndAppend("propertyTemplate", {"field": key}, "thingForm")
+                if(val.fieldType === "STATIC_DEFAULT") {
+                    field.prop( "disabled", true);
+                    field.val(defVal);
+                }
+                if(val.fieldType === "TEXT") {
+                    field.val(defVal);
+                }
+                if(val.fieldType === "DYNAMIC") {
+                    loadDynamicField();
+                }
             }
         })
 
@@ -116,7 +123,34 @@ function loadSetupDialog(schemaId, thingData) {
     $("#controllerList").change(function () {
         let controllerId = getSelectedController();
         loadParentList(controllerId, pluginId);
+
+        reloadLinkages();
     })
+}
+
+function reloadLinkages() {
+    $(".linkage").each(function(i, e) {
+        let id = e.getAttribute("id");
+        let plugin = e.getAttribute("plugin");
+
+        console.log("Loading linkages for field: " + id + " and plugin: " + plugin);
+        loadLinkages("#" + id, plugin);
+    })
+}
+
+function loadLinkages(field, pluginId) {
+    let controllerId = getSelectedController();
+    $.get(thingSvcUrl + "/api/controllers("+controllerId+")/plugins(" + pluginId + ")/things", function(data) {
+        console.log("Retrieved link field items")
+        let linkList = $(field);
+
+        $.each(data, function (i, linkItem) {
+            console.log("Adding list option: " + linkItem.thingId)
+            linkList.append(new Option(linkItem.thingId, linkItem.thingId, false, false));
+        })
+    }).fail(function(jqXHR) {
+        console.log("Linked Items: " + pluginId + " not found on controller: " + controllerId);
+    });
 }
 
 function loadDynamicField() {

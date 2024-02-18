@@ -33,6 +33,7 @@ public class SerialDynamixelConnector implements DynamixelConnector {
     private String portName;
 
     private List<Byte> buffer = new CopyOnWriteArrayList<>();
+    private int messageLength = 0;
 
     private AtomicBoolean responseReceived = new AtomicBoolean(false);
 
@@ -151,12 +152,25 @@ public class SerialDynamixelConnector implements DynamixelConnector {
         public void serialEvent(SerialPortEvent serialPortEvent) {
             LOG.debug("Bytes in buffer: {}", serialPortEvent.getEventValue());
             try {
+                if(buffer.isEmpty()) {
+                    byte[] header = serialPort.readBytes(4);
+                    messageLength = Integer.parseInt(new String(header));
+                    LOG.debug("Message length: {}", messageLength);
+                }
+
                 byte[] readBytes = serialPort.readBytes();
                 if(readBytes.length > 0) {
                     for (byte b : readBytes) {
                         buffer.add(b);
                     }
-                    responseReceived.set(true);
+                    LOG.debug("This is in the buffer: {}", new String(readBytes));
+
+                    if(buffer.size() == messageLength) {
+                        LOG.debug("Message complete");
+                        responseReceived.set(true);
+                    } else {
+                        LOG.debug("Buffer not yet received full message, buffer: {}, expected: {}, waiting", buffer.size(), messageLength);
+                    }
                 }
             } catch (SerialPortException e) {
                 LOG.error("", e);

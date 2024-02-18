@@ -4,15 +4,23 @@ import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.util.*;
+import javax.persistence.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author renarj
  */
-@JasDBEntity(bagName = "devices")
+@JasDBEntity(bagName = "things")
+@Entity(name = "Things")
 public class IotThingImpl implements IotThing {
+    @javax.persistence.Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
+
     private String thingId;
     private String controllerId;
     private String friendlyName;
@@ -25,8 +33,12 @@ public class IotThingImpl implements IotThing {
 
     private String parentId;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "ThingAttributes")
     private Map<String, AttributeType> attributes = new LinkedHashMap<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "ThingProperties")
     private Map<String, String> properties;
 
 

@@ -4,11 +4,14 @@ import com.oberasoftware.iot.core.model.ThingSchema;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@JasDBEntity(bagName = "templates")
+@Entity(name="ThingSchemas")
+@JasDBEntity(bagName = "schemas")
 public class ThingSchemaImpl implements ThingSchema {
     private String schemaId;
 
@@ -18,10 +21,17 @@ public class ThingSchemaImpl implements ThingSchema {
 
     private String type;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "SchemaProperties")
     private Map<String, SchemaFieldDescriptor> properties = new LinkedHashMap<>();
 
+    @javax.persistence.Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "SchemaAttributes")
     private Map<String, AttributeType> attributes = new LinkedHashMap<>();
 
     @Override
