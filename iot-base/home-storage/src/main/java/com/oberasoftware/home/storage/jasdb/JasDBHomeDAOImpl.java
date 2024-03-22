@@ -104,6 +104,13 @@ public class JasDBHomeDAOImpl extends BaseDAO implements HomeDAO {
     }
 
     @Override
+    public List<IotThing> findThingsWithSchema(String controllerId, String schemaId) {
+        return findThings(controllerId, new ImmutableMap.Builder<String, String>()
+                .put("schemaId", schemaId)
+                .build());
+    }
+
+    @Override
     public List<IotThing> findThings(String controllerId, String pluginId) {
         return findThings(controllerId, new ImmutableMap.Builder<String, String>()
                 .put("pluginId", pluginId)

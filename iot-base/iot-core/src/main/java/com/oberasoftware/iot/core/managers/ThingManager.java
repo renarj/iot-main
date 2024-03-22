@@ -17,6 +17,8 @@ public interface ThingManager {
 
     IotThing createOrUpdateThing(String controllerId, String thingId, IotThingImpl thing) throws IOTException;
 
+    IotThing installPluginOnController(String controllerId, String pluginId) throws IOTException;
+
     boolean removeThing(String controllerId, String thingId) throws IOTException;
 
     List<Controller> findControllers();
@@ -28,6 +30,8 @@ public interface ThingManager {
     List<IotThing> findThings(String controlerId, String pluginId);
 
     List<IotThing> findThings(String controlerId, String pluginId, String type);
+
+    List<IotThing> findThingsWithSchema(String controlerId, String schemaId);
 
     List<IotThing> findChildren(String controllerId, String parentId);
 

@@ -40,7 +40,7 @@ public class SerialDynamixelConnector implements DynamixelConnector {
     @Value("${dynamixel.baudrate:57600}")
     protected int baudRate = 57600;
 
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
     /*
      * Response delay time in ms. before reading buffer for a serial response
@@ -152,21 +152,22 @@ public class SerialDynamixelConnector implements DynamixelConnector {
         public void serialEvent(SerialPortEvent serialPortEvent) {
             LOG.debug("Bytes in buffer: {}", serialPortEvent.getEventValue());
             try {
-                if(buffer.isEmpty()) {
+                if(buffer.isEmpty() && messageLength == 0) {
                     byte[] header = serialPort.readBytes(4);
                     messageLength = Integer.parseInt(new String(header));
                     LOG.debug("Message length: {}", messageLength);
                 }
 
                 byte[] readBytes = serialPort.readBytes();
-                if(readBytes.length > 0) {
+                if(readBytes!=null && readBytes.length > 0) {
                     for (byte b : readBytes) {
                         buffer.add(b);
                     }
-                    LOG.debug("This is in the buffer: {}", new String(readBytes));
+                    LOG.trace("This is in the buffer: {}", new String(readBytes));
 
                     if(buffer.size() == messageLength) {
                         LOG.debug("Message complete");
+                        messageLength = 0;
                         responseReceived.set(true);
                     } else {
                         LOG.debug("Buffer not yet received full message, buffer: {}, expected: {}, waiting", buffer.size(), messageLength);

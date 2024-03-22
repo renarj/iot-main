@@ -3,6 +3,7 @@ package com.oberasoftware.iot.integrations.shelly;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oberasoftware.iot.core.commands.SwitchCommand;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
 import com.oberasoftware.iot.core.model.states.Value;
@@ -110,6 +111,11 @@ public class ShellyV1ConnectorImpl implements ShellyConnector {
         } catch (IOException e) {
             throw new IOTException("Unable to request Shelly Device Status", e);
         }
+    }
+
+    @Override
+    public boolean setRelay(String shellyIp, int relay, SwitchCommand.STATE state) throws IOTException {
+        return false;
     }
 
     private void processArray(String component, JsonNode compNode, Map<String, Value> valueMap) {

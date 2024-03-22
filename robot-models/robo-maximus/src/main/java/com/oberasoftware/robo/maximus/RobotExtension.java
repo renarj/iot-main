@@ -13,10 +13,11 @@ import java.util.Map;
 @Component
 public class RobotExtension implements AutomationExtension {
     private static final Logger LOG = LoggerFactory.getLogger(RobotExtension.class);
+    public static final String ROBOT_EXTENSION = "RobotExtension";
 
     @Override
     public String getId() {
-        return "RobotExtension";
+        return ROBOT_EXTENSION;
     }
 
     @Override

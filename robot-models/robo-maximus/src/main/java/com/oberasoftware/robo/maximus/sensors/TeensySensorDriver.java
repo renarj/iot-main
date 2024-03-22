@@ -4,7 +4,7 @@ import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.robotics.Robot;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
 import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
-import com.oberasoftware.robo.maximus.TeensyProxySerialConnector;
+import com.oberasoftware.robo.dynamixel.ESP32SerialConnector;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class TeensySensorDriver implements SensorDriver<TeensyPort> {
     static final String LSM_9_DS_1_HEADING = "heading";
 
     @Autowired
-    private TeensyProxySerialConnector proxySerialConnector;
+    private ESP32SerialConnector proxySerialConnector;
 
     @Autowired
     private LocalEventBus eventBus;

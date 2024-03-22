@@ -96,6 +96,11 @@ public class JPAHomeDAOImpl implements HomeDAO {
     }
 
     @Override
+    public List<IotThing> findThingsWithSchema(String controllerId, String schemaId) {
+        return null;
+    }
+
+    @Override
     public List<IotThing> findThings(String controllerId, Map<String, String> queryParams) {
         return null;
     }

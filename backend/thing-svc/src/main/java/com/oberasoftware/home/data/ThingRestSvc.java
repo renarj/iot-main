@@ -6,6 +6,7 @@ import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.model.storage.impl.PluginImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,6 +63,13 @@ public class ThingRestSvc {
         }
     }
 
+    @RequestMapping(value = "/controllers({controllerId})/schemas({schemaId})/things", method = RequestMethod.GET)
+    public List<IotThing> getThingsWithSchema(@PathVariable String controllerId, @PathVariable String schemaId) {
+        LOG.debug("Requested list of all things on controller: {} with Schema: {}", controllerId, schemaId);
+
+        return thingManager.findThingsWithSchema(controllerId, schemaId);
+    }
+
     @RequestMapping(value = "/controllers({controllerId})/children({thingId})", method = RequestMethod.GET)
     public List<IotThing> getChildren(@PathVariable String controllerId, @PathVariable String thingId) {
         LOG.debug("Requested list of all children on controller: {} of thing: {}", controllerId, thingId);
@@ -91,6 +99,17 @@ public class ThingRestSvc {
             return new ResponseEntity<>(thingManager.createOrUpdateController(controllerId, controller.getProperties()), HttpStatus.CREATED);
         } else {
             LOG.warn("Invalid entity controllerId: '{}' not matching API controllerId: '{}'", controller.getControllerId(), controllerId);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/controllers({controllerId})/plugins", method = RequestMethod.POST)
+    public ResponseEntity<Object> installPlugin(@PathVariable String controllerId, @RequestBody PluginImpl plugin) throws IOTException {
+        if(StringUtils.hasText(controllerId) && StringUtils.hasText(plugin.getPluginId())) {
+            LOG.info("Installing or updating plugin: {} on controller: {}", plugin, controllerId);
+            return new ResponseEntity<>(thingManager.installPluginOnController(controllerId, plugin.getPluginId()), HttpStatus.CREATED);
+        } else {
+            LOG.warn("Invalid entity controllerId: '{}' or pluginId: '{}'", controllerId, plugin.getPluginId());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

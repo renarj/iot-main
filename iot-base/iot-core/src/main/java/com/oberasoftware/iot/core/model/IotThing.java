@@ -16,7 +16,7 @@ public interface IotThing extends IotBaseEntity {
 
     String getType();
 
-    String getTemplateId();
+    String getSchemaId();
 
     String getFriendlyName();
 

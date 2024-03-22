@@ -12,6 +12,7 @@ import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.model.storage.impl.ThingBuilder;
 import com.oberasoftware.iot.core.storage.CentralDatastore;
 import com.oberasoftware.iot.core.storage.HomeDAO;
 import org.slf4j.Logger;
@@ -125,8 +126,8 @@ public class ThingManagerImpl implements ThingManager {
      */
     private void mergeValues(IotThing existing, IotThingImpl updated) {
         //ensure we keep the templateId/Schema if we have it, we should not unlink
-        if(updated.getTemplateId() == null && existing.getTemplateId() != null) {
-            updated.setTemplateId(existing.getTemplateId());
+        if(updated.getSchemaId() == null && existing.getSchemaId() != null) {
+            updated.setSchemaId(existing.getSchemaId());
         }
         if(updated.getFriendlyName() == null && existing.getFriendlyName() != null) {
             updated.setFriendlyName(existing.getFriendlyName());
@@ -141,7 +142,7 @@ public class ThingManagerImpl implements ThingManager {
 
     private Map<String, AttributeType> mergeAttributesWithSchema(Map<String, AttributeType> existingAttributes, IotThingImpl updatedThing) {
         var pluginId = updatedThing.getPluginId();
-        var schemaId = updatedThing.getTemplateId();
+        var schemaId = updatedThing.getSchemaId();
         Map<String, AttributeType> mergedMap = new HashMap<>(existingAttributes);
         if(updatedThing.getAttributes() != null && !updatedThing.getAttributes().isEmpty()) {
             mergedMap.putAll(updatedThing.getAttributes());
@@ -180,6 +181,23 @@ public class ThingManagerImpl implements ThingManager {
             if(homeDAO.findThing(thing.getControllerId(), thing.getParentId()).isEmpty()) {
                 throw new IOTException("Specified parent link: " + thing.getParentId() + " is not valid");
             }
+        }
+    }
+
+    @Override
+    public IotThing installPluginOnController(String controllerId, String pluginId) throws IOTException {
+        var oPlugin = homeDAO.findPlugin(pluginId);
+
+        if(oPlugin.isPresent()) {
+            var plugin = oPlugin.get();
+            return createOrUpdateThing(controllerId, plugin.getPluginId(), ThingBuilder
+                    .create(pluginId, controllerId)
+                    .plugin(pluginId)
+                    .friendlyName(plugin.getFriendlyName())
+                    .schema(pluginId)
+                    .build());
+        } else {
+            throw new IOTException("Cannot install plugin, plugin does not exist on IoT system");
         }
     }
 
@@ -224,6 +242,11 @@ public class ThingManagerImpl implements ThingManager {
     @Override
     public List<IotThing> findThings(String controlerId, String pluginId, String type) {
         return homeDAO.findThings(controlerId, pluginId, type);
+    }
+
+    @Override
+    public List<IotThing> findThingsWithSchema(String controlerId, String schemaId) {
+        return homeDAO.findThingsWithSchema(controlerId, schemaId);
     }
 
     @Override

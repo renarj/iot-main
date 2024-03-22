@@ -62,7 +62,7 @@ public class ServiceContainer {
 
         SpringApplication springApplication = new SpringApplication(ServiceContainer.class);
         ConfigurableApplicationContext context = springApplication.run(args);
-        RobotInitializer initializer = context.getBean(RobotInitializer.class);
+        StaticRobotInitializer initializer = context.getBean(StaticRobotInitializer.class);
         SerialDynamixelConnector d = context.getBean(SerialDynamixelConnector.class);
 //        var topicBus = context.getBean(MQTTTopicEventBus.class);
 //        topicBus.initialize();

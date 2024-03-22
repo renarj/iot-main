@@ -42,6 +42,8 @@ public class DynamixelServoDriver implements ServoDriver {
     private static final int MAX_ID = 240;
     public static final String PORT = "port";
     public static final int OPENCR_MODEL = 116;
+    private static final String PROTOCOL_V_2_ENABLED = "protocol.v2.enabled";
+    private static final String MOTORS = "motors";
 
     @Autowired
     private SerialDynamixelConnector connector;
@@ -56,7 +58,7 @@ public class DynamixelServoDriver implements ServoDriver {
     private DynamixelServoMovementHandler servoMovementHandler;
 
 
-    @Value("${protocol.v2.enabled:false}")
+    @Value("${protocol.v2.enabled:true}")
     private boolean v2Enabled;
 
     @Autowired
@@ -72,9 +74,13 @@ public class DynamixelServoDriver implements ServoDriver {
         String portName = properties.get(PORT);
         connector.connect(portName);
 
+        if(properties.containsKey(PROTOCOL_V_2_ENABLED) && properties.get(PROTOCOL_V_2_ENABLED).equalsIgnoreCase("true")) {
+            v2Enabled = true;
+        }
+
         boolean motorsFound;
-        if(properties.containsKey("motors")) {
-            String motorIdentifiers = properties.get("motors");
+        if(properties.containsKey(MOTORS)) {
+            String motorIdentifiers = properties.get(MOTORS);
 
             motorsFound = !scan(parseMotorIdentifiers(motorIdentifiers), true).isEmpty();
         } else {

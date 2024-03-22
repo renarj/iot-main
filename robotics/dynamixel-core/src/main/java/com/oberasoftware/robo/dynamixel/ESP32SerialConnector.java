@@ -1,8 +1,7 @@
-package com.oberasoftware.robo.maximus;
+package com.oberasoftware.robo.dynamixel;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableMap;
-import com.oberasoftware.robo.dynamixel.SerialDynamixelConnector;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Primary;
@@ -17,15 +16,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
 @Primary
-public class TeensyProxySerialConnector extends SerialDynamixelConnector {
-    private static final Logger LOG = getLogger(TeensyProxySerialConnector.class);
-
-    private static final String DXL_MSG = "{\"command\":\"%s\",\"wait\":\"%s\",\"dxldata\":\"%s\"}";
+public class ESP32SerialConnector extends SerialDynamixelConnector {
+    private static final Logger LOG = getLogger(ESP32SerialConnector.class);
 
     private static final String JSON_HEAD = "{\"command\":\"%s\"";
     private static final String JSON_PARAM = ",\"%s\":\"%s\"";
 
-    public TeensyProxySerialConnector() {
+    public ESP32SerialConnector() {
         super();
 
         baudRate = 57600;
@@ -34,9 +31,7 @@ public class TeensyProxySerialConnector extends SerialDynamixelConnector {
 
     public byte[] sendAndReceiveCommand(String command, Map<String, String> parameters, boolean wait) {
         StringBuilder builder = new StringBuilder(String.format(JSON_HEAD, command));
-        parameters.forEach((k, v) -> {
-            builder.append(String.format(JSON_PARAM, k, v));
-        });
+        parameters.forEach((k, v) -> builder.append(String.format(JSON_PARAM, k, v)));
         builder.append("}");
 
         return sendInternal(builder.toString(), wait);
@@ -71,12 +66,12 @@ public class TeensyProxySerialConnector extends SerialDynamixelConnector {
 
             if("hex".equalsIgnoreCase(format)) {
                 String hexData = jo.getString("feedback");
-                if(hexData.length() > 0) {
+                if(!hexData.isEmpty()) {
                     String[] hs = hexData.split(" ");
                     byte[] converted = new byte[hs.length];
                     for (int i = 0; i < hs.length; i++) {
                         String element = hs[i];
-                        if (element.trim().length() > 0) {
+                        if (!element.trim().isEmpty()) {
                             converted[i] = (byte) Integer.parseInt(hs[i], 16);
                         }
                     }

@@ -18,4 +18,6 @@ public interface ThingRepository extends CrudRepository<IotThingImpl, String> {
     List<IotThingImpl> findByControllerIdAndParentId(String controllerId, String parentId);
 
     List<IotThingImpl> findByControllerIdAndPluginIdAndType(String controllerId, String parentId, String type);
+
+    List<IotThingImpl> findByControllerIdAndPluginIdAndSchemaId(String controllerId, String parentId, String type);
 }

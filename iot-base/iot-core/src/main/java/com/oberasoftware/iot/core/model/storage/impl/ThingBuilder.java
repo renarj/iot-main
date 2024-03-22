@@ -35,6 +35,11 @@ public class ThingBuilder {
         return this;
     }
 
+    public ThingBuilder schema(String schemaId) {
+        this.thing.setSchemaId(schemaId);
+        return this;
+    }
+
     public ThingBuilder parent(String parentId) {
         this.thing.setParentId(parentId);
         return this;

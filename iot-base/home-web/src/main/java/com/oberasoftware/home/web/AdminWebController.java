@@ -63,6 +63,21 @@ public class AdminWebController {
         return "admin/things";
     }
 
+    @RequestMapping("/controllers")
+    public String showControllerIndex() {
+        LOG.debug("Showing admin screen - Controllers");
+
+        return "admin/controllers";
+    }
+
+    @RequestMapping("/controllers({controllerId})")
+    public String showControllerIndex(@PathVariable String controllerId, Model model) {
+        LOG.debug("Showing admin screen - Controllers, pre-selected controller: {}", controllerId);
+        model.addAttribute("controllerId", controllerId);
+
+        return "admin/controllers";
+    }
+
     @RequestMapping("/things/controllers({controllerId})")
     public String showController(@PathVariable String controllerId, Model model) {
         model.addAttribute("controllerId", controllerId);

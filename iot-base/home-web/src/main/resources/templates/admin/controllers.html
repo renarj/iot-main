@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  data-bs-theme="dark">
+<head th:replace="includes/header :: header">
+</head>
+<body>
+<script th:src="@{/javascript/admin/controller.js}" src="/static/javascript/admin/controller.js"></script>
+<div class="modal fade modal-lg" id="controllerForm" tabindex="-1" aria-labelledby="newControllerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newControllerLabel">New Controller</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content" id="nav-tabContent">
+                    <form>
+                        <div class="mb-3">
+                            <label for="controllerId" class="col-form-label">Controller ID:</label>
+                            <input type="text" class="form-control" id="controllerId">
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgId" class="col-form-label">Org ID:</label>
+                            <input type="text" class="form-control" id="orgId"/>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addController">Save Controller</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-lg" id="pluginForm" tabindex="-1" aria-labelledby="newPluginLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newPluginLabel">Install Plugin on Controller</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <form>
+                        <div class="mb-3">
+                            <label for="pluginList" class="col-form-label col-sm-2">Plugin to install:</label>
+                            <select id="pluginList">
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addPlugin">Install Plugin</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid" th:attr="controllerId=${controllerId}" id="root">
+    <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
+
+    <div th:replace="includes/header :: adminTabs (selectTab='controllers')"></div>
+    <script id="controllerTemplate" type="text/x-handlebars-template">
+        <a class="list-group-item list-group-item-action controllerButton" controllerId="{{controllerId}}" href="/web/admin/controllers({{controllerId}})">{{controllerId}}</a>
+    </script>
+    <script id="thingTemplate" type="text/x-handlebars-template">
+        <a class="list-group-item list-group-item-action thingButton" controllerId="{{controllerId}}" thingId="{{thingId}}" href="/web/admin/things/controllers({{controllerId}})/things({{thingId}})">{{thingId}}</a>
+    </script>
+
+    <script id="breadCrumbTemplate" type="text/x-handlebars-template">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/web/admin/things/controllers({{controllerId}})" class="breadcrumb-controller-item" controllerId="{{controllerId}}">{{controllerId}}</a></li>
+                {{#if parentId}}
+                    <li class="breadcrumb-item"><a href="/web/admin/things/controllers({{controllerId}})/things({{parentId}})" class="breadcrumb-item" controllerId="{{controllerId}}" parentId="{{parentId}}">{{parentId}}</a></li>
+                {{/if}}
+                <li class="breadcrumb-item active" aria-current="page">{{thingId}}</li>
+            </ol>
+        </nav>
+    </script>
+    <script id="controllerDetailTemplate" type="text/x-handlebars-template">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Property</th>
+                <th scope="col">Value</th>
+            </tr>
+            </thead>
+            <tbody id="functionList">
+            <tr>
+                <td>ControllerId:</td>
+                <td>{{controllerId}}</td>
+            </tr>
+            <tr>
+                <td>OrgId:</td>
+                <td>{{orgId}}</td>
+            </tr>
+            {{#each properties}}
+                <tr>
+                    <td>properties.{{@key}}</td>
+                    <td>{{this}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </script>
+    </script>
+
+    <div class="container-fluid" style="height:100%;">
+        <div class="row p-1 justify-content-start" id="renderThing">
+            <div class="col-2" id="actionMenu">
+                <div class="card px-0">
+                    <div class="card-header d-flex justify-content-start">
+                        <h5 class="card-title flex-grow-1">Controllers</h5>
+                        <a class="addController" href="#" id="addControllerButton" data-bs-toggle="modal" data-bs-target="#controllerForm" data-bs-whatever="@mdo"><i class="bi bi-plus"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group" id="controllerList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="row">
+                    <div class="col-8" id="thingDetail">
+                        <div class="card px-0">
+                            <div class="card-header d-flex justify-content-start">
+                                <h5 class="card-title flex-grow-1">Detail of: <label id="thingListDetailLabel">Default</label></h5>
+                                <a class="removeThing" href="#" id="removeThing"><i class="bi bi-trash"></i></a>
+                                <a class="editThing" href="#" id="editThing"><i class="bi bi-pencil-fill"></i></a>
+                            </div>
+                            <div class="card-body" id="thingDetails">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card px-0">
+                            <div class="card-header d-flex justify-content-start">
+                                <h5 class="card-title flex-grow-1">Plugins</h5>
+                                <a class="addPlugin" href="#" id="addPluginButton" data-bs-toggle="modal" data-bs-target="#pluginForm" data-bs-whatever="@mdo"><i class="bi bi-plus"></i></a>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group" id="thingList">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="includes/header :: footer"></div>
+</div>
+
+</body>
+</html>

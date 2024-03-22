@@ -1,11 +1,17 @@
 
 #include <ArduinoJson.h>
+#include "Sensors.h"
 
-int LED_PIN = 13;
+
+int LED_PIN = 18;
 int SEND_PIN = 26;
 int FEEDBACK_TIMEOUT = 500;
 
+ControllerSensors sensors = ControllerSensors();
+
 bool debugMode = false;
+//{"command":"toggleDebug"}
+//{"command":"sensors"}
 //{"command":"dynamixel","wait":"true","dxldata":"FFFFFD00650300010B9E"}
 
 void printDebug(const char * message) {
@@ -82,11 +88,12 @@ void setup() {
   pinMode(SEND_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
 
-  // sensors.setup();
+  sensors.setup();
+
   Serial1.setRxBufferSize(1024);
   Serial.setRxBufferSize(1024);
   Serial.setTxBufferSize(1024);
-  Serial1.begin(57600);
+  Serial1.begin(57600, SERIAL_8N1, 16, 17);
   Serial.begin(57600);
 }
 
@@ -147,10 +154,10 @@ bool handleCommand(String inputString) {
 
       printDebug("Command delivered");
     } else if (String("sensors").equalsIgnoreCase(command)) {
-      // sensors.readSensors();
+      sensors.readSensors();
 
       String feedback = "{\"feedback\":{}";
-      // feedback.concat(sensors.getJson());
+      feedback.concat(sensors.getJson());
       feedback.concat(",\"format\":\"json\"}");
       feedback.trim();
       Serial.println(feedback);

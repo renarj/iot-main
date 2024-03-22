@@ -39,6 +39,8 @@ public interface HomeDAO {
 
     List<IotThing> findThings(String controllerId, String pluginId, String type);
 
+    List<IotThing> findThingsWithSchema(String controllerId, String schemaId);
+
     List<IotThing> findThings(String controllerId, Map<String, String> queryParams);
 
     List<ThingSchema> findSchemas();

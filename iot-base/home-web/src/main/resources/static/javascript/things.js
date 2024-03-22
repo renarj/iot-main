@@ -114,6 +114,7 @@ function loadThing(controllerId, thingId) {
             "controllerId" : data.controllerId,
             "thingId" : data.thingId,
             "pluginId" : data.pluginId,
+            "schemaId" : data.schemaId,
             "type": data.type,
             "name": data.friendlyName,
             "attributes": data.attributes,
