@@ -61,7 +61,7 @@
         <module>backend/state-svc</module>
         <module>backend/thing-svc</module>
         <module>backend/influxdb-bridge-svc</module>
-        <module>robot-models/robo-nao</module>
+<!--        <module>robot-models/robo-nao</module>-->
     </modules>
 
     <licenses>
