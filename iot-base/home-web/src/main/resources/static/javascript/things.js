@@ -137,7 +137,7 @@ function loadThing(controllerId, thingId) {
             $("#stateList").html("No known State");
         });
 
-        $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/children(" + thingId + ")", function(data) {
+        $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/things(" + thingId + ")/children", function(data) {
             $.each(data, function (i, child) {
                 let data = {
                     "controllerId": controllerId,

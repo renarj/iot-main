@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.maximus;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
@@ -101,7 +101,7 @@ public class MockServoDriver implements ServoDriver {
     }
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
 
     }
 

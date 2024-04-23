@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>dynamixel-web</artifactId>
+            <artifactId>dynamixel-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -25,14 +25,14 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-behaviours</artifactId>
+            <artifactId>robo-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-web</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.oberasoftware</groupId>-->
+<!--            <artifactId>robo-web</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
 

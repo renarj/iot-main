@@ -2,7 +2,7 @@ package com.oberasoftware.robo.hexapod;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Uninterruptibles;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
@@ -54,7 +54,7 @@ public class Walker {
             m.put(l.getTibia().getId(), new PositionAndSpeedCommand(l.getTibia().getId(), (int)angles.getTibiaAngle(),new Scale(0, 1023), 200, new Scale(0, 1023)));
         });
 
-        Robot robot = robotRegistry.getRobots().get(0);
+        RobotHardware robot = robotRegistry.getRobots().get(0);
         ServoDriver servoDriver = robot.getServoDriver();
         servoDriver.bulkSetPositionAndSpeed(m);
 
@@ -62,7 +62,7 @@ public class Walker {
     }
 
     public RobotFeedback setLeg(String legName, PosData dirInput, PosData rotInput) {
-        Robot robot = robotRegistry.getRobots().get(0);
+        RobotHardware robot = robotRegistry.getRobots().get(0);
         ServoDriver servoDriver = robot.getServoDriver();
 
         Leg leg = legFactory.getLeg(legName);
@@ -77,7 +77,7 @@ public class Walker {
     }
 
     public void loopLeg() {
-        Robot robot = robotRegistry.getRobots().get(0);
+        RobotHardware robot = robotRegistry.getRobots().get(0);
         ServoDriver servoDriver = robot.getServoDriver();
 
 
@@ -148,7 +148,7 @@ public class Walker {
         );
 
 
-        Robot robot = robotRegistry.getRobots().get(0);
+        RobotHardware robot = robotRegistry.getRobots().get(0);
         ServoDriver servoDriver = robot.getServoDriver();
 
         LOG.info("Starting walk");
@@ -169,7 +169,7 @@ public class Walker {
     }
 
     public Map<String, PositionAndSpeedCommand> createLegGroupCommands(PosData position, List<Leg> legs) {
-        Robot robot = robotRegistry.getRobots().get(0);
+        RobotHardware robot = robotRegistry.getRobots().get(0);
         ServoDriver servoDriver = robot.getServoDriver();
 
 

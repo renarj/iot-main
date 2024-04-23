@@ -63,6 +63,12 @@
                                 <label for="schemaType" class="col-form-label">Type:</label>
                                 <input type="text" class="form-control" id="schemaType"/>
                             </div>
+                            <div class="mb-3">
+                                <label for="parentType" class="col-form-label">Parent Type:</label>
+                                <select id="parentType" class="form-select">
+
+                                </select>
+                            </div>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="propertiesTab" role="tabpanel" aria-labelledby="properties-tab">
@@ -192,12 +198,20 @@
                 <td>{{pluginId}}</td>
             </tr>
             <tr>
+                <td>Parent Type:</td>
+                <td>{{parentType}}</td>
+            </tr>
+            <tr>
                 <td>Type:</td>
                 <td>{{type}}</td>
             </tr>
             <tr>
                 <td>Template Text:</td>
                 <td>{{template}}</td>
+            </tr>
+            <tr>
+                <td># Related Things</td>
+                <td>{{relatedThings}}</td>
             </tr>
             {{#each properties}}
                 <tr>

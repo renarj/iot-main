@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.events.DistanceSensorEvent;
 import com.oberasoftware.iot.core.robotics.sensors.AnalogPort;
 import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
@@ -24,7 +24,7 @@ public class DistanceSensor extends AbstractSensor<DistanceValue> {
     private final String name;
     private final String portName;
 
-    private Robot robot;
+    private RobotHardware robot;
     private Port port;
 
     private AtomicInteger lastDistance = new AtomicInteger(0);
@@ -52,12 +52,12 @@ public class DistanceSensor extends AbstractSensor<DistanceValue> {
     }
 
     @Override
-    public void activate(Robot robot) {
+    public void activate(RobotHardware robot) {
         this.robot = robot;
     }
 
     @Override
-    public void activate(Robot robot, SensorDriver sensorDriver) {
+    public void activate(RobotHardware robot, SensorDriver sensorDriver) {
         activate(robot);
         this.port = sensorDriver.getPort(portName);
         if(this.port instanceof AnalogPort) {

@@ -7,7 +7,7 @@ import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
@@ -42,7 +42,7 @@ public class ServoCommandHandler implements EventHandler {
         LOG.debug("Executing Servo command from topic: {} {}", mqttMessage.getMessage(), mqttMessage.getTopic());
         BasicCommandImpl basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
         ServoDriver servoDriver = robot.getServoDriver();
 
         String servoPosition = basicCommand.getAttribute("position");
@@ -68,7 +68,7 @@ public class ServoCommandHandler implements EventHandler {
         LOG.debug("Executing Servo command from topic: {} {}", mqttMessage.getMessage(), mqttMessage.getTopic());
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
         ServoDriver servoDriver = robot.getServoDriver();
 
         String servoId = basicCommand.getAttribute("servoId");

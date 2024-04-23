@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.hexapod;
 
 import com.google.common.collect.Lists;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.Servo;
@@ -63,7 +63,7 @@ public class LegFactory {
     }
 
     private void initLegs() {
-        Robot robot = robotRegistry.getRobots().get(0);
+        RobotHardware robot = robotRegistry.getRobots().get(0);
 
         ServoDriver servoDriver = robot.getServoDriver();
         servoDriver.getServos().forEach(s -> {

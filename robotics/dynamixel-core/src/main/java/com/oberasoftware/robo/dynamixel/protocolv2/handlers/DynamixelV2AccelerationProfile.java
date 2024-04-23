@@ -21,7 +21,7 @@ import static com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2CommandPack
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
-@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = true)
 public class DynamixelV2AccelerationProfile implements EventHandler {
     private static final Logger LOG = getLogger(DynamixelV2AccelerationProfile.class);
 

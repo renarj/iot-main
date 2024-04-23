@@ -1,8 +1,8 @@
 package com.oberasoftware.iot.core.robotics.humanoid;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.oberasoftware.iot.core.robotics.Robot;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.humanoid.components.ChainSet;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Head;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Legs;
@@ -12,7 +12,7 @@ import com.oberasoftware.iot.core.robotics.sensors.Sensor;
 import java.util.List;
 import java.util.Optional;
 
-public interface HumanoidRobot extends BehaviouralRobot, ChainSet {
+public interface HumanoidRobot extends Robot, ChainSet {
 
     Optional<ChainSet> getChainSet(String name);
 
@@ -20,7 +20,7 @@ public interface HumanoidRobot extends BehaviouralRobot, ChainSet {
 
     List<ChainSet> getChainSets(boolean includeChildren);
 
-    Robot getRobotCore();
+    RobotHardware getRobotCore();
 
     JointControl getJointControl();
 

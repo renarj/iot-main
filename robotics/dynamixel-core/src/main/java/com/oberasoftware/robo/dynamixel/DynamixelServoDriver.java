@@ -2,7 +2,7 @@ package com.oberasoftware.robo.dynamixel;
 
 import com.google.common.base.Stopwatch;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.commands.*;
 import com.oberasoftware.iot.core.robotics.servo.Servo;
 import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
@@ -70,13 +70,14 @@ public class DynamixelServoDriver implements ServoDriver {
     private final Map<String, Servo> servos = new HashMap<>();
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         String portName = properties.get(PORT);
         connector.connect(portName);
 
         if(properties.containsKey(PROTOCOL_V_2_ENABLED) && properties.get(PROTOCOL_V_2_ENABLED).equalsIgnoreCase("true")) {
             v2Enabled = true;
         }
+        LOG.info("Using v2 protocol: {}", v2Enabled);
 
         boolean motorsFound;
         if(properties.containsKey(MOTORS)) {

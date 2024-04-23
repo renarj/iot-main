@@ -7,9 +7,9 @@ import java.util.Optional;
  * @author renarj
  */
 public interface BehaviouralRobotRegistry {
-    void register(BehaviouralRobot robot);
+    void register(Robot robot);
 
-    List<BehaviouralRobot> getRobots();
+    List<Robot> getRobots();
 
-    Optional<BehaviouralRobot> getRobot(String robotId);
+    Optional<Robot> getRobot(String robotId);
 }

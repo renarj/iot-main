@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.motion;
 
 import com.oberasoftware.iot.core.robotics.MotionTask;
-import com.oberasoftware.iot.core.robotics.Robot;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
 import com.oberasoftware.iot.core.robotics.humanoid.NavigationControl;
 import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
@@ -25,7 +25,7 @@ public class NavigationControlImpl implements NavigationControl {
     private MotionEngine motionEngine;
 
     @Override
-    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+    public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
         this.motionEngine = behaviouralRobot.getBehaviour(MotionEngine.class);
         this.cartesianControl = behaviouralRobot.getBehaviour(CartesianControl.class);
     }

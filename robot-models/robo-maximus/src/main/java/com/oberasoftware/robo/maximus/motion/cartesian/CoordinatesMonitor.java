@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.motion.cartesian;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
 import org.slf4j.Logger;
 
@@ -21,7 +21,7 @@ public class CoordinatesMonitor implements Behaviour {
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     @Override
-    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+    public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
         LOG.info("Initializing coordinates monitor");
         executorService.submit(() -> {
             LOG.info("Starting coordinates monitor");

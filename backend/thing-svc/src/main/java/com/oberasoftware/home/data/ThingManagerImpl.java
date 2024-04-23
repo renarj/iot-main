@@ -170,17 +170,50 @@ public class ThingManagerImpl implements ThingManager {
         if(homeDAO.findController(thing.getControllerId()).isEmpty()) {
             throw new IOTException("Controller: " + thing.getControllerId() + " does not exist");
         }
-        ensureLinked(thing);
+        validateSchema(thing);
     }
 
-    private void ensureLinked(IotThingImpl thing) throws IOTException {
-        if(thing.getParentId() == null) {
-            throw new IOTException("No parent link was specified for thing: " + thing.getThingId());
-        }
-        if(!thing.getParentId().equalsIgnoreCase(thing.getControllerId())) {
-            if(homeDAO.findThing(thing.getControllerId(), thing.getParentId()).isEmpty()) {
-                throw new IOTException("Specified parent link: " + thing.getParentId() + " is not valid");
+    private void validateSchema(IotThingImpl thing) throws IOTException {
+        var schemaId = thing.getSchemaId();
+        if(schemaId != null && !schemaId.equalsIgnoreCase("Plugin")) {
+            //non-plugin can have any relation and need to be valid to a schema
+            if(schemaId.isEmpty()) {
+                throw new IOTException("No Schema specified for thing: " + thing.getThingId());
             }
+            var oSchema = homeDAO.findSchema(thing.getPluginId(), schemaId)
+                    .orElseThrow(() -> new IOTException("Invalid schema specified: " + schemaId + ", does not exist for thing: " + thing.getThingId()));
+            validateParentRelations(thing.getControllerId(), thing.getParentId(), oSchema.getParentType());
+        } else {
+            //plugins always have a relation to controllers
+            validateParentRelations(thing.getControllerId(), thing.getParentId(), "Controller");
+        }
+    }
+
+    private void validateParentRelations(String controllerId, String parentId, String schemaParentType) throws IOTException {
+        if(parentId == null) {
+            throw new IOTException("No parent link was specified for thing");
+        }
+        switch(schemaParentType) {
+            case "Controller":
+                homeDAO.findController(parentId).orElseThrow(() -> new IOTException("Thing Parent Controller: " + parentId + " specified does not exist"));
+                break;
+            case "Plugin":
+                var oPlugin = homeDAO.findThing(controllerId, parentId);
+                if(oPlugin.isPresent()) {
+                    if(!oPlugin.get().getType().equalsIgnoreCase("Plugin")) {
+                        throw new IOTException("Parent link is not of required Plugin Type");
+                    }
+                }
+                break;
+            default:
+                var oThing = homeDAO.findThing(controllerId, parentId);
+                if(oThing.isPresent()) {
+                    if(!oThing.get().getSchemaId().equalsIgnoreCase(schemaParentType)) {
+                        throw new IOTException("Parent link is not of required Schema: " + schemaParentType);
+                    }
+                } else {
+                    throw new IOTException("Specified parent link: " + parentId + " is not valid, could not be found");
+                }
         }
     }
 
@@ -193,8 +226,9 @@ public class ThingManagerImpl implements ThingManager {
             return createOrUpdateThing(controllerId, plugin.getPluginId(), ThingBuilder
                     .create(pluginId, controllerId)
                     .plugin(pluginId)
+                    .type("Plugin")
                     .friendlyName(plugin.getFriendlyName())
-                    .schema(pluginId)
+                    .schema("Plugin")
                     .build());
         } else {
             throw new IOTException("Cannot install plugin, plugin does not exist on IoT system");
@@ -207,9 +241,14 @@ public class ThingManagerImpl implements ThingManager {
         try {
             Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
             if(thing.isPresent()) {
-                LOG.debug("Deleted thing: {} on controller: {}", thingId, controllerId);
-                centralDatastore.delete(IotThingImpl.class, thing.get().getId());
-                return true;
+                if(!homeDAO.findChildren(controllerId, thingId).isEmpty()) {
+                    LOG.debug("Deleted thing: {} on controller: {}", thingId, controllerId);
+                    centralDatastore.delete(IotThingImpl.class, thing.get().getId());
+                    return true;
+                } else {
+                    LOG.error("Could not delete Thing: {}, existing dependent Things present", thingId);
+                    return false;
+                }
             } else {
                 LOG.warn("Tried to remove thing: {} on controller: {} but was not found", thingId, controllerId);
                 return false;
@@ -250,8 +289,23 @@ public class ThingManagerImpl implements ThingManager {
     }
 
     @Override
+    public List<IotThing> findThingsWithSchema(String schemaId) {
+        return homeDAO.findThingsWithSchema(schemaId);
+    }
+
+    @Override
+    public List<IotThing> findThingsWithType(String controllerId, String type) {
+        return homeDAO.findThingsofType(controllerId, type);
+    }
+
+    @Override
     public List<IotThing> findChildren(String controllerId, String parentId) {
         return homeDAO.findChildren(controllerId, parentId);
+    }
+
+    @Override
+    public List<IotThing> findChildren(String controllerId, String parentId, String type) {
+        return homeDAO.findChildren(controllerId, parentId, type);
     }
 
     @Override

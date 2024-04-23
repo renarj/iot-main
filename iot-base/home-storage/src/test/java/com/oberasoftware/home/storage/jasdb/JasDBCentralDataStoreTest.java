@@ -7,7 +7,6 @@ import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
 import com.oberasoftware.iot.core.model.storage.impl.WidgetImpl;
 import com.oberasoftware.jasdb.api.exceptions.JasDBException;
 import com.oberasoftware.jasdb.engine.HomeLocatorUtil;
-import com.oberasoftware.jasdb.service.JasDBMain;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -52,7 +51,7 @@ public class JasDBCentralDataStoreTest {
 
     @After
     public void tearDown() throws JasDBException {
-        JasDBMain.shutdown();
+
     }
 
     @Test

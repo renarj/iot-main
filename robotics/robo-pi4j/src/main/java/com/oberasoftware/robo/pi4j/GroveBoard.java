@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.pi4j;
 
 import com.oberasoftware.iot.core.robotics.ActivatableCapability;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
@@ -25,7 +25,7 @@ public class GroveBoard implements ActivatableCapability {
     private I2CDevice port1;
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         try {
             int busId = I2CBus.BUS_1;
             String type = SystemInfo.getBoardType().name();

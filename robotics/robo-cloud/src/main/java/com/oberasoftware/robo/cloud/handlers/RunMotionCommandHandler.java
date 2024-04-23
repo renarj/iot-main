@@ -8,7 +8,7 @@ import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import com.oberasoftware.iot.core.robotics.MotionEngine;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class RunMotionCommandHandler implements EventHandler {
         if(motionName != null) {
             LOG.info("Received motion execution: {}", motionName);
 
-            Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+            RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
             MotionEngine motionEngine = robot.getMotionEngine();
             motionEngine.runMotion(motionName);
         } else {
@@ -51,7 +51,7 @@ public class RunMotionCommandHandler implements EventHandler {
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
         LOG.info("Stopping all motion tasks for controller: {}", basicCommand.getControllerId());
 
-        Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
         MotionEngine motionEngine = robot.getMotionEngine();
         motionEngine.stopAllTasks();
     }

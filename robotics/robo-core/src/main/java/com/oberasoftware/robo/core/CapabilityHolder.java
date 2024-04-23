@@ -2,7 +2,7 @@ package com.oberasoftware.robo.core;
 
 import com.oberasoftware.iot.core.robotics.ActivatableCapability;
 import com.oberasoftware.iot.core.robotics.Capability;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ public class CapabilityHolder {
         return capability;
     }
 
-    public void initializeCapability(Robot robot) {
+    public void initializeCapability(RobotHardware robot) {
         if (capability instanceof ActivatableCapability) {
             LOG.info("Activating capability: {} with properties: {}", capability, properties);
             ((ActivatableCapability) capability).activate(robot, properties);

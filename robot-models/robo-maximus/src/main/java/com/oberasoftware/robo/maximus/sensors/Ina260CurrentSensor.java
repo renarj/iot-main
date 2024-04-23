@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.sensors;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.sensors.MultiValueSensor;
 import com.oberasoftware.robo.maximus.model.SensorDataImpl;
 
@@ -53,7 +53,7 @@ public class Ina260CurrentSensor implements MultiValueSensor<DoubleValue> {
     }
 
     @Override
-    public void activate(Robot robot) {
+    public void activate(RobotHardware robot) {
         TeensySensorDriver sensorDriver = robot.getCapability(TeensySensorDriver.class);
         if(sensorDriver != null) {
             sensorDriver.getPort(INA_260_CURRENT).listen(e -> {

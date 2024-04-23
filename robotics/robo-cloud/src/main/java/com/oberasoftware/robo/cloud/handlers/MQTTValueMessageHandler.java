@@ -7,7 +7,7 @@ import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.iot.core.events.impl.ThingValueEventImpl;
 import com.oberasoftware.iot.core.model.ValueTransportMessage;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.util.ConverterHelper;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class MQTTValueMessageHandler implements EventHandler {
         ValueTransportMessage message = ConverterHelper.mapFromJson(mqttMessage.getMessage(), ValueTransportMessage.class);
         LOG.info("Received sensor value information: {}", message);
 
-        Robot robot = robotRegistry.getRobot(message.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(message.getControllerId());
 
         message.getValues().forEach((k, v) -> {
             robot.publish(new ThingValueEventImpl(message.getControllerId(), message.getThingId(), v, k));

@@ -8,7 +8,7 @@ import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import com.oberasoftware.iot.core.robotics.MotionEngine;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.motion.WalkDirection;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class WalkMotionCommandHandler implements EventHandler {
         }
 
         LOG.info("Walking in direction: {}", direction);
-        Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
         MotionEngine motionEngine = robot.getMotionEngine();
 
         if(direction != WalkDirection.STOP) {
@@ -60,7 +60,7 @@ public class WalkMotionCommandHandler implements EventHandler {
         LOG.debug("Executing Prepare Walk: {} from topic: {}", mqttMessage.getMessage(), mqttMessage.getTopic());
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
         MotionEngine motionEngine = robot.getMotionEngine();
         motionEngine.prepareWalk();
     }
@@ -71,7 +71,7 @@ public class WalkMotionCommandHandler implements EventHandler {
         LOG.debug("Executing Rest command: {} from topic: {}", mqttMessage.getMessage(), mqttMessage.getTopic());
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
         MotionEngine motionEngine = robot.getMotionEngine();
         motionEngine.rest();
     }

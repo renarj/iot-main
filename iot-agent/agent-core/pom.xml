@@ -79,6 +79,11 @@
             <artifactId>roco-z21-adapter</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
+            <artifactId>robo-maximus</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

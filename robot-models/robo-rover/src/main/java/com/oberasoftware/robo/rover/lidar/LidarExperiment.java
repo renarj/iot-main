@@ -10,7 +10,6 @@ import com.oberasoftware.robo.dynamixel.SerialDynamixelConnector;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2Address;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2CommandPacket;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2ReturnPacket;
-import com.oberasoftware.robo.dynamixel.web.DynamixelConsole;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -30,7 +29,7 @@ public class LidarExperiment {
 
     public static void lidarTest() {
         LOG.info("Starting Dynamixel Web Console");
-        ConfigurableApplicationContext c = SpringApplication.run(DynamixelConsole.class);
+        ConfigurableApplicationContext c = SpringApplication.run(LidarExperiment.class);
 
         DynamixelServoDriver servoDriver = c.getBean(DynamixelServoDriver.class);
         SerialDynamixelConnector connector = c.getBean(SerialDynamixelConnector.class);

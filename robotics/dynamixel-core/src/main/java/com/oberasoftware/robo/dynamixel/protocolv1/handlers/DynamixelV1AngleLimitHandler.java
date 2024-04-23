@@ -28,7 +28,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "false", matchIfMissing = true)
+@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "false", matchIfMissing = false)
 public class DynamixelV1AngleLimitHandler implements EventHandler {
     private static final Logger LOG = getLogger(DynamixelV1AngleLimitHandler.class);
 

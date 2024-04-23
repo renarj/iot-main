@@ -29,7 +29,7 @@ import static java.lang.String.valueOf;
  * @author Renze de Vries
  */
 @Component
-@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = true)
 public class DynamixelV2ReadTemperatureHandler implements EventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelV2ReadTemperatureHandler.class);
 

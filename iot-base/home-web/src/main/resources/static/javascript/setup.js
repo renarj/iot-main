@@ -10,12 +10,12 @@ function pageInit() {
     if(controllerId !== undefined && thingId !== undefined) {
         $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/things(" + thingId + ")", function(data) {
             let root = $("#root");
-            root.attr("schemaId", data.templateId);
+            root.attr("schemaId", data.schemaId);
             root.attr("pluginId", data.pluginId);
 
             loadPlugins();
 
-            loadSetupDialog(data.templateId, data);
+            loadSetupDialog(data.schemaId, data);
 
             $("#addThing").click(function() {
                 saveThing();
@@ -137,8 +137,8 @@ function reloadLinkages() {
         let field = e.getAttribute("field");
         let schemaId = e.getAttribute("schemaId");
 
-        console.log("Loading linkages for field: " + field + " and plugin: " + plugin);
-        loadLinkages("#" + field, plugin);
+        console.log("Loading linkages for field: " + field + " and schema: " + schemaId);
+        loadLinkages("#" + field, schemaId);
     })
 }
 
@@ -162,21 +162,52 @@ function loadDynamicField() {
 
 }
 
-function loadParentList(controllerId, pluginId, selectedParent) {
+function loadParentList() {
+    let controllerId = getSelectedController();
+    let schemaId = getSchemaId();
+    let pluginId = getPluginId();
+    console.log("Loading Parents according to schema: " + schemaId)
+    $.get(thingSvcUrl + "/api/system/plugins("+pluginId+")/schemas(" + schemaId + ")", function(data) {
+        let parentDataType = data.parentType;
+        console.log("Parent type: " + parentDataType);
+        if(parentDataType === "Controller") {
+            $.get(thingSvcUrl + "/api/controllers", function(cData) {
+                $.each(cData, function (index, item) {
+                    console.log("Adding controller: " + item.controllerId);
+                    parentList.append(new Option(item.controllerId, item.controllerId, false, false));
+                })
+            })
+        } else if(parentDataType === "Plugin") {
+            $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/plugins", function(cData) {
+                $.each(cData, function (index, item) {
+                    console.log("Adding Plugin: " + item.thingId);
+                    parentList.append(new Option(item.thingId, item.thingId, false, false));
+                })
+            })
+        } else {
+            $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/schemas(" + parentDataType + ")/things", function(cData) {
+                $.each(cData, function (index, item) {
+                    console.log("Adding based on schema: " + item.thingId);
+                    parentList.append(new Option(item.thingId, item.thingId, false, false));
+                })
+            })
+        }
+    });
+
     console.log("Loading parents")
     let parentList = $("#parentList");
-    $.get(thingSvcUrl + "/api/controllers("+controllerId+")/things(" + pluginId + ")", function(data) {
-        if(data.thingId === pluginId && data.type === "plugin") {
-            if(selectedParent && selectedParent === data.thingId) {
-                parentList.append(new Option(data.thingId, data.thingId, true, true));
-            } else {
-                parentList.append(new Option(data.thingId, data.thingId, false, false));
-            }
-        }
+    $.get(thingSvcUrl + "/api/controllers("+controllerId+")/schemas(" + schemaId + ")/things", function(data) {
+        // if(data.thingId === pluginId && data.type === "plugin") {
+        //     if(selectedParent && selectedParent === data.thingId) {
+        //         parentList.append(new Option(data.thingId, data.thingId, true, true));
+        //     } else {
+        //         parentList.append(new Option(data.thingId, data.thingId, false, false));
+        //     }
+        // }
     }).fail(function(jqXHR) {
-        console.log("Plugin: " + pluginId + " not found on controller: " + controllerId);
+        console.log("No parents found for type: " + schemaId + " on controller: " + controllerId);
     });
-    parentList.append(new Option(controllerId, controllerId, false, false));
+    // parentList.append(new Option(controllerId, controllerId, false, false));
 }
 
 function loadExistingData(data) {

@@ -2,7 +2,7 @@ package com.oberasoftware.robo.cloud;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.CommandType;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.SpeechEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import static com.oberasoftware.iot.core.commands.BasicCommandBuilder.create;
 public class RemoteSpeechEngine implements SpeechEngine {
     private static final Logger LOG = LoggerFactory.getLogger(RemoteSpeechEngine.class);
 
-    private Robot robot;
+    private RobotHardware robot;
 
     @Override
     public void say(String text, String language) {
@@ -36,7 +36,7 @@ public class RemoteSpeechEngine implements SpeechEngine {
     }
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         LOG.info("Activating remote speech engine for robot: {}", robot.getName());
         this.robot = robot;
     }

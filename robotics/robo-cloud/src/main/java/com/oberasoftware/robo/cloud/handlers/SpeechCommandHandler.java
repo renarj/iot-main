@@ -7,7 +7,7 @@ import com.oberasoftware.home.core.mqtt.MQTTPath;
 import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.SpeechEngine;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class SpeechCommandHandler implements EventHandler {
         LOG.debug("Executing text to speech: {} from topic: {}", mqttMessage.getMessage(), mqttMessage.getTopic());
         BasicCommand basicCommand = mapFromJson(mqttMessage.getMessage(), BasicCommandImpl.class);
 
-        Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+        RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
         SpeechEngine speechEngine = robot.getCapability(SpeechEngine.class);
 
         if(speechEngine != null) {

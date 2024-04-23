@@ -19,6 +19,8 @@ public class ThingSchemaImpl implements ThingSchema {
 
     private String template;
 
+    private String parentType;
+
     private String type;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -83,6 +85,16 @@ public class ThingSchemaImpl implements ThingSchema {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    @JasDBProperty
+    public String getParentType() {
+        return parentType;
+    }
+
+    public void setParentType(String parentType) {
+        this.parentType = parentType;
     }
 
     @Override

@@ -6,11 +6,11 @@ import java.util.List;
  * @author Renze de Vries
  */
 public interface RobotRegistry {
-    Robot getRobot(String name);
+    RobotHardware getRobot(String name);
 
-    List<Robot> getRobots();
+    List<RobotHardware> getRobots();
 
-    Robot getDefaultRobot();
+    RobotHardware getDefaultRobot();
 
-    void register(Robot robot);
+    void register(RobotHardware robot);
 }

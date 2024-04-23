@@ -2,6 +2,7 @@ package com.oberasoftware.home.data;
 
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
 import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.managers.SystemDataManager;
 import com.oberasoftware.iot.core.model.Plugin;
 import com.oberasoftware.iot.core.model.ThingSchema;
@@ -54,6 +55,7 @@ public class SystemDataManagerImpl implements SystemDataManager {
     public ThingSchemaImpl storeScheme(ThingSchemaImpl schema) {
         centralDatastore.beginTransaction();
         try {
+            validateSchema(schema);
             var oSchema = homeDAO.findSchema(schema.getPluginId(), schema.getSchemaId());
             oSchema.ifPresent(thingSchema -> schema.setId(thingSchema.getId()));
             return centralDatastore.store(schema);
@@ -61,6 +63,26 @@ public class SystemDataManagerImpl implements SystemDataManager {
             throw new RuntimeException(e);
         } finally {
             centralDatastore.commitTransaction();
+        }
+    }
+
+    private void validateSchema(ThingSchemaImpl schema) {
+        throwIfNull(schema.getParentType());
+        throwIfNull(schema.getType());
+        throwIfNull(schema.getSchemaId());
+        throwIfNull(schema.getPluginId());
+
+        var parentType = schema.getParentType();
+        if(!parentType.equalsIgnoreCase("Controller") && !parentType.equalsIgnoreCase("Plugin")) {
+            if(homeDAO.findSchema(schema.getPluginId(), schema.getParentType()).isEmpty()) {
+                throw new RuntimeIOTException("Schema has invalid parent Schema or Type: " + parentType);
+            }
+        }
+    }
+
+    private void throwIfNull(String property) {
+        if(property == null || property.isEmpty()) {
+            throw new RuntimeIOTException("Invalid schema, property is null or empty");
         }
     }
 

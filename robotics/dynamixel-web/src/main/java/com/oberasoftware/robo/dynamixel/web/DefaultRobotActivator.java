@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.dynamixel.web;
 
 import com.google.common.collect.ImmutableMap;
-import com.oberasoftware.iot.core.robotics.Robot;
-import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
+import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class DefaultRobotActivator {
         Map<String, String> servoProperties = ImmutableMap.<String, String>builder()
                 .put("port", port).build();
 
-        Robot robot = new SpringAwareRobotBuilder("default", applicationContext)
+        RobotHardware robot = new HardwareRobotBuilder("default", applicationContext)
                 .servoDriver(DynamixelServoDriver.class, servoProperties)
                 .capability(ServoSensorDriver.class)
                 .build();

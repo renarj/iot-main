@@ -26,7 +26,7 @@ public class ESP32SerialConnector extends SerialDynamixelConnector {
         super();
 
         baudRate = 57600;
-        responseDelayTime = 2000;
+        responseDelayTime = 1000;
     }
 
     public byte[] sendAndReceiveCommand(String command, Map<String, String> parameters, boolean wait) {

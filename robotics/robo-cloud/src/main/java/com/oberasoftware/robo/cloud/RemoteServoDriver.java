@@ -3,7 +3,7 @@ package com.oberasoftware.robo.cloud;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.BasicCommandBuilder;
 import com.oberasoftware.iot.core.commands.impl.CommandType;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
@@ -26,10 +26,10 @@ import java.util.Map;
 public class RemoteServoDriver implements ServoDriver {
     private static final Logger LOG = LoggerFactory.getLogger(RemoteServoDriver.class);
 
-    private Robot robot;
+    private RobotHardware robot;
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         LOG.info("Activating remote motion engine for robot: {}", robot.getName());
         this.robot = robot;
     }

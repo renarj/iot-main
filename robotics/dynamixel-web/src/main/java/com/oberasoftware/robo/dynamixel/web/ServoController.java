@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.dynamixel.web;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
@@ -44,7 +44,7 @@ public class ServoController {
 
     @RequestMapping
     public List<SimpleServo> getServos() {
-        List<Robot> robots = robotRegistry.getRobots();
+        List<RobotHardware> robots = robotRegistry.getRobots();
         return robots.stream().map(r -> r.getServoDriver().getServos()
                 .stream().map(SimpleServo::new).collect(Collectors.toList()))
                 .flatMap(Collection::stream).collect(Collectors.toList());
@@ -149,7 +149,7 @@ public class ServoController {
         getServoDriver().resetServos();
     }
 
-    private Robot getDefaultRobot() {
+    private RobotHardware getDefaultRobot() {
         return robotRegistry.getRobots().get(0);
     }
 

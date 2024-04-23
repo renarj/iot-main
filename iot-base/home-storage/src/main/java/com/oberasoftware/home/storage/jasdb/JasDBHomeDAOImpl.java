@@ -104,10 +104,24 @@ public class JasDBHomeDAOImpl extends BaseDAO implements HomeDAO {
     }
 
     @Override
+    public List<IotThing> findThingsofType(String controllerId, String type) {
+        return findThings(controllerId, new ImmutableMap.Builder<String, String>()
+                .put("type", type)
+                .build());
+    }
+
+    @Override
     public List<IotThing> findThingsWithSchema(String controllerId, String schemaId) {
         return findThings(controllerId, new ImmutableMap.Builder<String, String>()
                 .put("schemaId", schemaId)
                 .build());
+    }
+
+    @Override
+    public List<IotThing> findThingsWithSchema(String schemaId) {
+        return newArrayList(findItems(IotThingImpl.class, new ImmutableMap.Builder<String, String>()
+                .put("schemaId", schemaId)
+                .build()));
     }
 
     @Override
@@ -121,6 +135,14 @@ public class JasDBHomeDAOImpl extends BaseDAO implements HomeDAO {
     public List<IotThing> findChildren(String controllerId, String parentId) {
         return findThings(controllerId, new ImmutableMap.Builder<String, String>()
                 .put("parentId", parentId)
+                .build());
+    }
+
+    @Override
+    public List<IotThing> findChildren(String controllerId, String parentId, String type) {
+        return findThings(controllerId, new ImmutableMap.Builder<String, String>()
+                .put("parentId", parentId)
+                .put("type", type)
                 .build());
     }
 

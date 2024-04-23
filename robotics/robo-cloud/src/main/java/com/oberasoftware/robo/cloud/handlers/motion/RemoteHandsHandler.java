@@ -8,7 +8,7 @@ import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import com.oberasoftware.iot.core.robotics.MotionEngine;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.motion.controller.HandsController;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class RemoteHandsHandler implements EventHandler {
         if(handsPosition != null) {
             LOG.info("Received hand motion execution: {} for hand: {}", handsPosition, hand);
 
-            Robot robot = robotRegistry.getRobot(basicCommand.getControllerId());
+            RobotHardware robot = robotRegistry.getRobot(basicCommand.getControllerId());
             MotionEngine motionEngine = robot.getMotionEngine();
             Optional<HandsController> handsController = motionEngine.getMotionController(HandsController.CONTROLLER_NAME);
             if(handsController.isPresent()) {

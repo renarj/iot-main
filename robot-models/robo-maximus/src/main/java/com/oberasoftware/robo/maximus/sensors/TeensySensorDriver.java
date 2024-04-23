@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.sensors;
 
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
 import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
 import com.oberasoftware.robo.dynamixel.ESP32SerialConnector;
@@ -61,7 +61,7 @@ public class TeensySensorDriver implements SensorDriver<TeensyPort> {
     }
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         ports.add(new TeensyPort(LSM_9_DS_1_ROLL));
         ports.add(new TeensyPort(LSM_9_DS_1_PITCH));
         ports.add(new TeensyPort(LSM_9_DS_1_HEADING));

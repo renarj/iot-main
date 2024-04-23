@@ -2,7 +2,7 @@ package com.oberasoftware.robo.cloud;
 
 import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.commands.PingCommand;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,10 @@ public class KeepAliveHandler implements Runnable {
     @Autowired
     private MQTTTopicEventBus mqttTopicEventBus;
 
-    private Robot robot;
+    private RobotHardware robot;
 
 
-    public void start(Robot robot) {
+    public void start(RobotHardware robot) {
         this.robot = robot;
 
         LOG.info("Starting keep alive thread");

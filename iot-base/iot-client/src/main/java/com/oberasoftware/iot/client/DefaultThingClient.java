@@ -67,7 +67,7 @@ public class DefaultThingClient implements ThingClient {
                 LOG.info("Thing was created: {}", t);
                 return t;
             } else {
-                throw new IOTException("Unable to create Thing, error code: " + response.statusCode() + " and reason: " + response.body());
+                throw new IOTException("Unable to create Thing: " + thing.getThingId() + ", error code: " + response.statusCode() + " and reason: " + response.body());
             }
         } catch (IOException | InterruptedException e) {
             throw new IOTException("Unable to create Thing", e);
@@ -220,13 +220,28 @@ public class DefaultThingClient implements ThingClient {
         var request = HttpRequest.newBuilder()
                 .uri(UriBuilder.create(baseUrl)
                         .resource("controllers", controllerId)
-                        .resource("children", thingId)
+                        .resource("things", thingId)
+                        .resource("children")
                         .build())
                 .build();
         LOG.info("Doing HTTP Request to retrieve children for controller: {} and thing: {} request: {}", controllerId, thingId, request);
 
         return doListRequest(request);
     }
+
+    @Override
+    public List<IotThing> getChildren(String controllerId, String thingId, String type) throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl)
+                        .resource("controllers", controllerId)
+                        .resource("things", thingId)
+                        .resource("children")
+                        .param("type", type)
+                        .build())
+                .build();
+        LOG.info("Doing HTTP Request to retrieve children for controller: {} and thing: {} request: {} of type: {}", controllerId, thingId, request, type);
+
+        return doListRequest(request);    }
 
     @Override
     public List<IotThing> getThings(String controllerId, String pluginId, String type) throws IOTException {

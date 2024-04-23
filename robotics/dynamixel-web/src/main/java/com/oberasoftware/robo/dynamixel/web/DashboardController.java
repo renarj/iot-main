@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.dynamixel.web;
 
 import com.google.common.base.Stopwatch;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.servo.Servo;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class DashboardController {
     public String getIndex(Model model) {
         LOG.info("Index was requested");
         Stopwatch w = Stopwatch.createStarted();
-        List<Robot> robots = robotRegistry.getRobots();
+        List<RobotHardware> robots = robotRegistry.getRobots();
 
 
         Stopwatch s = Stopwatch.createStarted();

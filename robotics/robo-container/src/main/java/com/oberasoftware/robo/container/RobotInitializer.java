@@ -2,20 +2,20 @@ package com.oberasoftware.robo.container;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import com.oberasoftware.max.core.BehaviouralRobotBuilder;
-import com.oberasoftware.max.core.behaviours.WheelBasedWithCameraNavigationControllerImpl;
-import com.oberasoftware.max.core.behaviours.servos.impl.SingleServoBehaviour;
-import com.oberasoftware.max.core.behaviours.wheels.impl.MecanumDriveTrainImpl;
-import com.oberasoftware.max.core.behaviours.wheels.impl.WheelImpl;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import com.oberasoftware.robo.cloud.RemoteCloudDriver;
-import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.HardwareRobotBuilder;
+import com.oberasoftware.robo.core.behaviours.BehaviouralRobotBuilder;
+import com.oberasoftware.robo.core.behaviours.WheelBasedWithCameraNavigationControllerImpl;
+import com.oberasoftware.robo.core.behaviours.servos.impl.SingleServoBehaviour;
+import com.oberasoftware.robo.core.behaviours.wheels.impl.MecanumDriveTrainImpl;
+import com.oberasoftware.robo.core.behaviours.wheels.impl.WheelImpl;
 import com.oberasoftware.robo.core.commands.OperationModeCommand;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
@@ -50,7 +50,7 @@ public class RobotInitializer {
 
     public void initialize() {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
-        Robot robot = new SpringAwareRobotBuilder("max", applicationContext)
+        RobotHardware robot = new HardwareRobotBuilder("max", applicationContext)
 //                .motionEngine(RoboPlusMotionEngine.class,
 //                        new JsonMotionResource("/basic-animations.json")
 //                )
@@ -97,7 +97,7 @@ public class RobotInitializer {
 //
         MecanumDriveTrainImpl mecanumDriveTrain = new MecanumDriveTrainImpl(frontLeft, frontRight, rearLeft, rearRight);
 //
-        BehaviouralRobot robotCar = BehaviouralRobotBuilder.create(robot)
+        Robot robotCar = BehaviouralRobotBuilder.create(robot)
 //                .gripper(GripperBuilder.create(
 //                        new SingleServoBehaviour("3", 640, 420, 640),
 //                        new SingleServoBehaviour("4", 426, 570, 582))

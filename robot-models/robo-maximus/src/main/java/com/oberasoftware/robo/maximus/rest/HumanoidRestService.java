@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.maximus.rest;
 
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.JointData;
@@ -85,7 +85,7 @@ public class HumanoidRestService {
     }
 
     private Optional<HumanoidRobot> findRobot(String robotId) {
-        Optional<BehaviouralRobot> robot = behaviouralRobotRegistry.getRobot(robotId);
+        Optional<Robot> robot = behaviouralRobotRegistry.getRobot(robotId);
 
         return robot.map(r -> (HumanoidRobot) r);
     }

@@ -91,8 +91,23 @@ public class JPAHomeDAOImpl implements HomeDAO {
     }
 
     @Override
+    public List<IotThing> findChildren(String controllerId, String parentId, String type) {
+        return new ArrayList<>(thingRepository.findByControllerIdAndParentIdAndType(controllerId, parentId, type));
+    }
+
+    @Override
     public List<IotThing> findThings(String controllerId, String pluginId, String type) {
-        return new ArrayList<>(thingRepository.findByControllerIdAndPluginIdAndType(controllerId, pluginId, type));
+        return new ArrayList<>(thingRepository.findByControllerIdAndType(controllerId, type));
+    }
+
+    @Override
+    public List<IotThing> findThingsWithSchema(String schemaId) {
+        return new ArrayList<>(thingRepository.findBySchema(schemaId));
+    }
+
+    @Override
+    public List<IotThing> findThingsofType(String controllerId, String type) {
+        return null;
     }
 
     @Override

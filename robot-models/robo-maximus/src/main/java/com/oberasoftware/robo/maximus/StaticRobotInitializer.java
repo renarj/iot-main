@@ -5,12 +5,12 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
 import com.oberasoftware.iot.core.robotics.servo.DynamixelDevice;
-import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelTorgueManager;
@@ -36,9 +36,9 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.*;
-import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.ArmBuilder.createArm;
-import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.JointBuilder.create;
-import static com.oberasoftware.robo.maximus.HumanoidRobotBuilder.LegBuilder.createLeg;
+import static com.oberasoftware.robo.maximus.JointBasedRobotBuilder.ArmBuilder.createArm;
+import static com.oberasoftware.robo.maximus.JointBasedRobotBuilder.JointBuilder.create;
+import static com.oberasoftware.robo.maximus.JointBasedRobotBuilder.LegBuilder.createLeg;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -68,14 +68,14 @@ public class StaticRobotInitializer {
         initialize(new ArrayList<>(), false);
     }
 
-    public void initialize(BiConsumer<Robot, HumanoidRobot> action, boolean terminateAfterAction) {
+    public void initialize(BiConsumer<RobotHardware, HumanoidRobot> action, boolean terminateAfterAction) {
         initialize(Lists.newArrayList(action), terminateAfterAction);
 
     }
 
-    public void initialize(List<BiConsumer<Robot, HumanoidRobot>> actions, boolean terminateAfterAction) {
+    public void initialize(List<BiConsumer<RobotHardware, HumanoidRobot>> actions, boolean terminateAfterAction) {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
-        Robot robot = new SpringAwareRobotBuilder("maximus-core", applicationContext)
+        RobotHardware robot = new HardwareRobotBuilder("maximus-core", applicationContext)
                 .servoDriver(DynamixelServoDriver.class,
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort)
@@ -117,8 +117,8 @@ public class StaticRobotInitializer {
         }
     }
 
-    private HumanoidRobot constructHumanoid(Robot robot) {
-        HumanoidRobot maximus = HumanoidRobotBuilder.create(robot, "maximus")
+    private HumanoidRobot constructHumanoid(RobotHardware robot) {
+        HumanoidRobot maximus = JointBasedRobotBuilder.create("maximus")
                 .legs(
                         createLeg(RIGHT_LEG)
                                 .ankle(RIGHT_ANKLE,
@@ -165,7 +165,7 @@ public class StaticRobotInitializer {
                 .behaviourController(new CartesianControlImpl())
                 .behaviourController(new NavigationControlImpl())
                 .behaviourController(new CoordinatesMonitor())
-                .build();
+                .build(robot);
         behaviouralRobotRegistry.register(maximus);
 
         robot.listen(new LowVoltageMonitor());

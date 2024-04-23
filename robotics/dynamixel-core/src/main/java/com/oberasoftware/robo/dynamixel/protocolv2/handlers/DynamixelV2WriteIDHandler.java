@@ -18,7 +18,7 @@ import static com.oberasoftware.robo.core.ConverterUtil.toSafeInt;
 import static com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2CommandPacket.bb2hex;
 
 @Component
-@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = true)
 public class DynamixelV2WriteIDHandler implements EventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelV2WriteIDHandler.class);
 

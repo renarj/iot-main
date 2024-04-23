@@ -10,6 +10,7 @@
 
 
     <logger name="com.oberasoftware" level="debug"/>
+    <logger name="org.springframework" level="info"/>
 
     <root level="OFF">
         <appender-ref ref="STDOUT"/>

@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.events.BumperEvent;
 import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
 import com.oberasoftware.iot.core.robotics.sensors.Port;
@@ -15,7 +15,7 @@ public class BumperSensor extends AbstractSensor<TriggerValue> {
     private String name;
     private String portName;
 
-    private Robot robot;
+    private RobotHardware robot;
 
     private Port port;
 
@@ -35,7 +35,7 @@ public class BumperSensor extends AbstractSensor<TriggerValue> {
     }
 
     @Override
-    public void activate(Robot robot) {
+    public void activate(RobotHardware robot) {
         this.robot = robot;
     }
 
@@ -45,7 +45,7 @@ public class BumperSensor extends AbstractSensor<TriggerValue> {
     }
 
     @Override
-    public void activate(Robot robot, SensorDriver sensorDriver) {
+    public void activate(RobotHardware robot, SensorDriver sensorDriver) {
         activate(robot);
 
         port = sensorDriver.getPort(portName);

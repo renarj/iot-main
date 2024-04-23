@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
 import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
 import org.slf4j.Logger;
@@ -31,11 +31,11 @@ public class ServoSensor extends AbstractSensor<PositionValue> {
     }
 
     @Override
-    public void activate(Robot robot) {
+    public void activate(RobotHardware robot) {
     }
 
     @Override
-    public void activate(Robot robot, SensorDriver sensorDriver) {
+    public void activate(RobotHardware robot, SensorDriver sensorDriver) {
         if(sensorDriver instanceof ServoSensorDriver) {
             LOG.debug("Activating servo port: {}", portName);
             DirectPort<PositionValue> port = ((ServoSensorDriver) sensorDriver).getPort(portName);

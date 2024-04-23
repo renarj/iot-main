@@ -6,9 +6,9 @@ import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
 import com.oberasoftware.iot.core.model.storage.impl.ThingBuilder;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.components.ChainSet;
@@ -37,7 +37,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     private final List<ChainSet> chainSets;
 
-    private final Robot robot;
+    private final RobotHardware robot;
     private final Head head;
     private final Torso torso;
     private final Legs legs;
@@ -47,7 +47,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
     private final List<Behaviour> behaviours = new ArrayList<>();
     private final List<Behaviour> registeredBehaviours = new ArrayList<>();
 
-    public HumanoidRobotImpl(Robot robot, String name, Legs legs, Torso torso, Head head, List<Sensor> sensors, List<Behaviour> behaviours) {
+    public HumanoidRobotImpl(RobotHardware robot, String name, Legs legs, Torso torso, Head head, List<Sensor> sensors, List<Behaviour> behaviours) {
         this.robot = robot;
         this.name = name;
         this.legs = legs;
@@ -65,7 +65,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
     }
 
     @Override
-    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+    public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
         List<Joint> joints = getJoints(true);
 
         MotionEngineImpl motionEngine = new MotionEngineImpl(joints);
@@ -92,7 +92,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
         registerRemoteCapabilities(robotCore, motionControl);
     }
 
-    private void registerRemoteCapabilities(Robot robotCore, JointControl motionControl) {
+    private void registerRemoteCapabilities(RobotHardware robotCore, JointControl motionControl) {
         if(robotCore.isRemote()) {
             var controllerId = robot.getName();
             robotCore.getRemoteDriver().registerThing(new IotThingImpl(robot.getName(), "joints", "joints", "JointControl", null, new HashMap<>()));
@@ -134,7 +134,7 @@ public class HumanoidRobotImpl implements HumanoidRobot {
 
     @Override
     @JsonIgnore
-    public Robot getRobotCore() {
+    public RobotHardware getRobotCore() {
         return robot;
     }
 

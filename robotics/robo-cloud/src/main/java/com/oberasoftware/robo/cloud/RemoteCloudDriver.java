@@ -12,7 +12,7 @@ import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.robotics.RemoteDriver;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.commands.CommandListener;
 import com.oberasoftware.iot.core.robotics.commands.RobotCommand;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class RemoteCloudDriver implements RemoteDriver, EventHandler {
     private List<CommandListener> commandListeners = new CopyOnWriteArrayList<>();
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         LOG.info("Connecting to remote Robot Cloud");
 
         if (robot.isRemote()) {

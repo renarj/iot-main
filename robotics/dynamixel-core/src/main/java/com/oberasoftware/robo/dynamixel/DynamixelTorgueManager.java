@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.robotics.ActivatableCapability;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.commands.BulkTorgueCommand;
 import com.oberasoftware.iot.core.robotics.commands.TorgueCommand;
 import com.oberasoftware.iot.core.robotics.commands.TorgueLimitCommand;
@@ -41,7 +41,7 @@ public class DynamixelTorgueManager implements ActivatableCapability, TorgueMana
     private LocalEventBus localEventBus;
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         LOG.info("Reading initial Torgue states");
         robot.getServoDriver().getServos().forEach(s -> {
             ServoDataReceivedEvent rcvd = torgueHandler.receive(new ReadTorgueCommand(s.getId()));

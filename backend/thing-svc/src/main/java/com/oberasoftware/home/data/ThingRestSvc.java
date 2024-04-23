@@ -63,18 +63,36 @@ public class ThingRestSvc {
         }
     }
 
+    @RequestMapping(value = "/controllers({controllerId})/plugins", method = RequestMethod.GET)
+    public List<IotThing> getPlugins(@PathVariable String controllerId) {
+        LOG.debug("Requested list of all Plugins installed on controller: {}", controllerId);
+
+        return thingManager.findThingsWithType(controllerId, "Plugin");
+    }
+
     @RequestMapping(value = "/controllers({controllerId})/schemas({schemaId})/things", method = RequestMethod.GET)
-    public List<IotThing> getThingsWithSchema(@PathVariable String controllerId, @PathVariable String schemaId) {
+    public List<IotThing> getControllerThingsWithSchema(@PathVariable String controllerId, @PathVariable String schemaId) {
         LOG.debug("Requested list of all things on controller: {} with Schema: {}", controllerId, schemaId);
 
         return thingManager.findThingsWithSchema(controllerId, schemaId);
     }
 
-    @RequestMapping(value = "/controllers({controllerId})/children({thingId})", method = RequestMethod.GET)
-    public List<IotThing> getChildren(@PathVariable String controllerId, @PathVariable String thingId) {
+    @RequestMapping(value = "/schemas({schemaId})/things", method = RequestMethod.GET)
+    public List<IotThing> getAllThingsWithSchema(@PathVariable String schemaId) {
+        LOG.debug("Requested list of all things with Schema: {}", schemaId);
+
+        return thingManager.findThingsWithSchema(schemaId);
+    }
+
+    @RequestMapping(value = "/controllers({controllerId})/things({thingId})/children", method = RequestMethod.GET)
+    public List<IotThing> getChildren(@PathVariable String controllerId, @PathVariable String thingId, @RequestParam Optional<String> type) {
         LOG.debug("Requested list of all children on controller: {} of thing: {}", controllerId, thingId);
 
-        return thingManager.findChildren(controllerId, thingId);
+        if(type.isPresent()) {
+            return thingManager.findChildren(controllerId, thingId, type.get());
+        } else {
+            return thingManager.findChildren(controllerId, thingId);
+        }
     }
 
     @RequestMapping(value = "/controllers({controllerId})/children", method = RequestMethod.GET)

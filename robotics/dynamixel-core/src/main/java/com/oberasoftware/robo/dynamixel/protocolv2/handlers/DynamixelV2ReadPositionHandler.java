@@ -26,7 +26,7 @@ import static java.lang.String.valueOf;
  * @author Renze de Vries
  */
 @Component
-@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = true)
 public class DynamixelV2ReadPositionHandler extends AbstractDynamixelHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelV2ReadPositionHandler.class);
     public static final double MA_CURRENT_UNIT = 2.69;

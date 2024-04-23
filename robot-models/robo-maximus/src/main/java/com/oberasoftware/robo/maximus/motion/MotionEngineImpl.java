@@ -3,9 +3,9 @@ package com.oberasoftware.robo.maximus.motion;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.robotics.MotionTask;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
@@ -62,7 +62,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
     }
 
     @Override
-    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+    public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
         this.servoDriver = robotCore.getServoDriver();
 
         startListener();

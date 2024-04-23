@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.motion.cartesian;
 
-import com.oberasoftware.iot.core.robotics.Robot;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
 import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
@@ -48,7 +48,7 @@ public class CartesianControlImpl implements CartesianControl {
     private final Map<String, List<Joint>> jointTypeMap = new HashMap<>();
 
     @Override
-    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+    public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
         this.motionEngine = behaviouralRobot.getBehaviour(MotionEngine.class);
         this.motionControl = behaviouralRobot.getBehaviour(JointControl.class);
 

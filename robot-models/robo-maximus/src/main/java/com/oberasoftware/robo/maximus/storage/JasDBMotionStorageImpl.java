@@ -2,21 +2,15 @@ package com.oberasoftware.robo.maximus.storage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oberasoftware.jasdb.api.entitymapper.EntityManager;
-import com.oberasoftware.jasdb.api.exceptions.JasDBException;
-import com.oberasoftware.jasdb.api.session.DBSession;
-import com.oberasoftware.jasdb.api.session.query.QueryBuilder;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
 import com.oberasoftware.iot.core.robotics.motion.Motion;
 import com.oberasoftware.robo.core.motion.MotionImpl;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -24,65 +18,65 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class JasDBMotionStorageImpl implements MotionStorage {
     private static final Logger LOG = getLogger(JasDBMotionStorageImpl.class);
 
-    @Autowired
-    private JasDBSessionFactory sessionFactory;
+//    @Autowired
+//    private JasDBSessionFactory sessionFactory;
 
     @Override
     public void storeMotion(String motionName, Motion motion) {
         SimpleMotionEntity existingMotion = findMotionEntity(motionName);
         String id = existingMotion != null ? existingMotion.getId() : null;
 
-        try {
-            SimpleMotionEntity entity = new SimpleMotionEntity(id, motionName, toBlob(motion));
-            DBSession session = sessionFactory.createSession();
-            EntityManager em = session.getEntityManager();
-            em.persist(entity);
-        } catch (JasDBException e) {
-            LOG.error("Could not persist motion");
-        }
+//        try {
+//            SimpleMotionEntity entity = new SimpleMotionEntity(id, motionName, toBlob(motion));
+//            DBSession session = sessionFactory.createSession();
+//            EntityManager em = session.getEntityManager();
+//            em.persist(entity);
+//        } catch (JasDBException e) {
+//            LOG.error("Could not persist motion");
+//        }
     }
 
     @Override
     public void deleteMotion(String motionName) {
-        SimpleMotionEntity existingMotion = findMotionEntity(motionName);
-        if(existingMotion != null) {
-            try {
-                DBSession session = sessionFactory.createSession();
-                session.getEntityManager().remove(existingMotion);
-            } catch (JasDBException e) {
-                LOG.error("Could not remove motion with name: " + motionName);
-            }
-        }
+//        SimpleMotionEntity existingMotion = findMotionEntity(motionName);
+//        if(existingMotion != null) {
+//            try {
+//                DBSession session = sessionFactory.createSession();
+//                session.getEntityManager().remove(existingMotion);
+//            } catch (JasDBException e) {
+//                LOG.error("Could not remove motion with name: " + motionName);
+//            }
+//        }
     }
 
     @Override
     public List<Motion> findAllMotions() {
-        try {
-            DBSession session = sessionFactory.createSession();
-            EntityManager em = session.getEntityManager();
-
-            List<SimpleMotionEntity> motionList = em.findEntities(SimpleMotionEntity.class, QueryBuilder.createBuilder());
-
-            return motionList.stream().map(m -> fromBlob(m.getBlob())).collect(Collectors.toList());
-        } catch (JasDBException e) {
-            LOG.error("Could not load all motions", e);
-        }
+//        try {
+//            DBSession session = sessionFactory.createSession();
+//            EntityManager em = session.getEntityManager();
+//
+//            List<SimpleMotionEntity> motionList = em.findEntities(SimpleMotionEntity.class, QueryBuilder.createBuilder());
+//
+//            return motionList.stream().map(m -> fromBlob(m.getBlob())).collect(Collectors.toList());
+//        } catch (JasDBException e) {
+//            LOG.error("Could not load all motions", e);
+//        }
 
         return Collections.emptyList();
     }
 
     private SimpleMotionEntity findMotionEntity(String motionName) {
-        try {
-            DBSession session = sessionFactory.createSession();
-            EntityManager em = session.getEntityManager();
-            List<SimpleMotionEntity> motionsList = em.findEntities(SimpleMotionEntity.class, QueryBuilder.createBuilder().field("name").value(motionName));
-
-            if(motionsList.size() == 1) {
-                return motionsList.get(0);
-            }
-        } catch(JasDBException e) {
-            LOG.error("Could not load motion", e);
-        }
+//        try {
+//            DBSession session = sessionFactory.createSession();
+//            EntityManager em = session.getEntityManager();
+//            List<SimpleMotionEntity> motionsList = em.findEntities(SimpleMotionEntity.class, QueryBuilder.createBuilder().field("name").value(motionName));
+//
+//            if(motionsList.size() == 1) {
+//                return motionsList.get(0);
+//            }
+//        } catch(JasDBException e) {
+//            LOG.error("Could not load motion", e);
+//        }
         return null;
     }
 

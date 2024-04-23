@@ -1,13 +1,13 @@
 package com.oberasoftware.iot.core.robotics.behavioural;
 
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 
 /**
  * @author renarj
  */
 public interface Behaviour {
-    default void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+    default void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
 
     }
 }

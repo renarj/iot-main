@@ -1,10 +1,10 @@
 package com.oberasoftware.robo.hexapod;
 
 import com.google.common.collect.ImmutableMap;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class RobotInitializer {
     public void initialize() {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
 
-        Robot robot = new SpringAwareRobotBuilder("hexapod", applicationContext)
+        RobotHardware robot = new HardwareRobotBuilder("hexapod", applicationContext)
                 .servoDriver(DynamixelServoDriver.class,
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort).build())

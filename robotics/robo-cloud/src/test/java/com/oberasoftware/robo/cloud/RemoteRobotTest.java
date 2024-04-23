@@ -4,11 +4,11 @@ import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.events.ThingValueEvent;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.SpeechEngine;
 import com.oberasoftware.robo.cloud.motion.RemoteMotionEngine;
 import com.oberasoftware.robo.core.CoreConfiguration;
-import com.oberasoftware.robo.core.SpringAwareRobotBuilder;
+import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -35,12 +35,12 @@ public class RemoteRobotTest {
 
         ApplicationContext context = new SpringApplication(RemoteRobotTest.class).run(args);
 
-        Robot max = new SpringAwareRobotBuilder("max", context)
+        RobotHardware max = new HardwareRobotBuilder("max", context)
                 .motionEngine(RemoteMotionEngine.class)
                 .remote(RemoteCloudDriver.class, true)
                 .build();
 
-        Robot pep = new SpringAwareRobotBuilder("peppy", context)
+        RobotHardware pep = new HardwareRobotBuilder("peppy", context)
                 .motionEngine(RemoteMotionEngine.class)
                 .capability(RemoteSpeechEngine.class)
                 .remote(RemoteCloudDriver.class, true)
@@ -62,11 +62,11 @@ public class RemoteRobotTest {
     }
 
     public static class MaxRobotEventHandler implements EventHandler {
-        private Robot pep;
+        private RobotHardware pep;
 
         private AtomicBoolean guard = new AtomicBoolean(true);
 
-        private MaxRobotEventHandler(Robot pep) {
+        private MaxRobotEventHandler(RobotHardware pep) {
             this.pep = pep;
         }
 
@@ -90,9 +90,9 @@ public class RemoteRobotTest {
     }
 
     public static class PepRobotEventHandler implements EventHandler {
-        private Robot max;
+        private RobotHardware max;
 
-        public PepRobotEventHandler(Robot max) {
+        public PepRobotEventHandler(RobotHardware max) {
             this.max = max;
         }
 

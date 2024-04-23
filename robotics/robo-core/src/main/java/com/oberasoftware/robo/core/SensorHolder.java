@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.core;
 
 import com.oberasoftware.base.event.EventBus;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.sensors.ListenableSensor;
 import com.oberasoftware.iot.core.robotics.sensors.Sensor;
 import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
@@ -24,7 +24,7 @@ public class SensorHolder {
         this.eventBus = eventBus;
     }
 
-    public void initializeSensor(Robot robot) {
+    public void initializeSensor(RobotHardware robot) {
         LOG.info("Activating sensor: {}", sensor);
         sensor.activate(robot, driver);
 

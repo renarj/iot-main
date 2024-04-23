@@ -2,7 +2,7 @@ package com.oberasoftware.robo.core;
 
 import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +14,10 @@ import java.util.List;
 @Component
 public class RobotRegistryImpl implements RobotRegistry {
 
-    private Robot robot;
+    private RobotHardware robot;
 
     @Override
-    public Robot getRobot(String name) {
+    public RobotHardware getRobot(String name) {
         if(robot.getName().equalsIgnoreCase(name)) {
             return robot;
         } else {
@@ -26,17 +26,17 @@ public class RobotRegistryImpl implements RobotRegistry {
     }
 
     @Override
-    public Robot getDefaultRobot() {
+    public RobotHardware getDefaultRobot() {
         return robot;
     }
 
     @Override
-    public List<Robot> getRobots() {
+    public List<RobotHardware> getRobots() {
         return Lists.newArrayList(robot);
     }
 
     @Override
-    public void register(Robot robot) {
+    public void register(RobotHardware robot) {
         this.robot = robot;
     }
 }

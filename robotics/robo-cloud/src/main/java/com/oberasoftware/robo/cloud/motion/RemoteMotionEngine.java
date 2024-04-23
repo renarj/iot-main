@@ -4,7 +4,7 @@ import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.robotics.MotionEngine;
 import com.oberasoftware.iot.core.robotics.MotionTask;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.motion.KeyFrame;
 import com.oberasoftware.iot.core.robotics.motion.Motion;
 import com.oberasoftware.iot.core.robotics.motion.MotionResource;
@@ -33,7 +33,7 @@ import static java.util.Optional.of;
 public class RemoteMotionEngine implements MotionEngine {
     private static final Logger LOG = LoggerFactory.getLogger(RemoteMotionEngine.class);
 
-    private Robot robot;
+    private RobotHardware robot;
 
     @Autowired
     private List<RemoteController> remoteControllers;
@@ -180,7 +180,7 @@ public class RemoteMotionEngine implements MotionEngine {
     }
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         LOG.info("Activating remote motion engine for robot: {}", robot.getName());
         this.robot = robot;
 

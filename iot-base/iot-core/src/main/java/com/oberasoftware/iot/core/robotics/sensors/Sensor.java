@@ -1,7 +1,7 @@
 package com.oberasoftware.iot.core.robotics.sensors;
 
 import com.oberasoftware.iot.core.robotics.Capability;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 
 /**
  * @author Renze de Vries
@@ -12,10 +12,10 @@ public interface Sensor extends Capability {
         return this.getClass().getName();
     }
 
-    default void activate(Robot robot, SensorDriver sensorDriver) {
+    default void activate(RobotHardware robot, SensorDriver sensorDriver) {
         //no activiation needed by default
         activate(robot);
     }
 
-    void activate(Robot robot);
+    void activate(RobotHardware robot);
 }

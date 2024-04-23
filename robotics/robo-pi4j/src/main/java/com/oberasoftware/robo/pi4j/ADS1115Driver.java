@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.pi4j;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
 import com.oberasoftware.iot.core.robotics.sensors.AnalogPort;
 import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
@@ -33,7 +33,7 @@ public class ADS1115Driver implements SensorDriver<AnalogPort> {
     private ADS1115GpioProvider gpioProvider;
 
     @Override
-    public void activate(Robot r, Map<String, String> p) {
+    public void activate(RobotHardware r, Map<String, String> p) {
         try {
             LOG.info("Initializing ADS 1115 Driver");
             final GpioController gpio = GpioFactory.getInstance();

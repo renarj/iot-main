@@ -1,6 +1,6 @@
 package com.oberasoftware.iot.core.robotics.sensors;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 
 import java.util.Map;
 import java.util.Set;
@@ -13,10 +13,10 @@ public interface MultiValueSensor<T extends SensorValue> extends Sensor {
 
     Map<String, T> getValues();
 
-    default void activate(Robot robot, SensorDriver sensorDriver) {
+    default void activate(RobotHardware robot, SensorDriver sensorDriver) {
         //no activiation needed by default
         activate(robot);
     }
 
-    void activate(Robot robot);
+    void activate(RobotHardware robot);
 }

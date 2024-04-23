@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.core.sensors;
 
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.sensors.AnalogPort;
 import com.oberasoftware.iot.core.robotics.sensors.PercentageValue;
 import com.oberasoftware.iot.core.robotics.sensors.SensorConverter;
@@ -29,7 +29,7 @@ public class GyroSensor implements SingeValueSensor<PercentageValue> {
     }
 
     @Override
-    public void activate(Robot robot) {
+    public void activate(RobotHardware robot) {
 
     }
 

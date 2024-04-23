@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.sensors.DirectPort;
 import com.oberasoftware.iot.core.robotics.sensors.SensorDriver;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
@@ -58,7 +58,7 @@ public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>
     }
 
     @Override
-    public void activate(Robot robot, Map<String, String> properties) {
+    public void activate(RobotHardware robot, Map<String, String> properties) {
         activate(robot.getServoDriver());
     }
 
@@ -93,7 +93,10 @@ public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>
     public void receive(ServoUpdateEvent servoUpdate) {
         LOG.debug("Received servo update: {}", servoUpdate);
         if(ports.containsKey(servoUpdate.getServoId())) {
+            LOG.debug("Notifying observer: {}", ports.get(servoUpdate.getServoId()));
             ports.get(servoUpdate.getServoId()).notify(servoUpdate);
+        } else {
+            LOG.warn("No observer for servo: {}", servoUpdate.getServoId());
         }
     }
 

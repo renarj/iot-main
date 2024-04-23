@@ -23,7 +23,7 @@ import static com.oberasoftware.robo.core.ConverterUtil.toSafeInt;
  * @author Renze de Vries
  */
 @Component
-@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "false", matchIfMissing = true)
+@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "false", matchIfMissing = false)
 public class DynamixelV1BulkWriteMovementHandler implements EventHandler, BulkWriteMovementHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelV1BulkWriteMovementHandler.class);
 

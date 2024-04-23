@@ -22,7 +22,7 @@ public class ExtensionServiceLoaderUtil {
     private ExtensionServiceLoaderUtil() {
         ServiceLoader<SpringExtension> extensions = ServiceLoader.load(SpringExtension.class);
         extensions.forEach(e -> {
-            LOG.debug("Found spring extension: {}", e);
+            LOG.info("Found spring extension: {}", e);
             springExtensions.add(e);
         });
     }

@@ -14,6 +14,8 @@ public interface ThingSchema extends IotBaseEntity {
 
     String getTemplate();
 
+    String getParentType();
+
     Map<String, SchemaFieldDescriptor> getProperties();
 
     Map<String, AttributeType> getAttributes();

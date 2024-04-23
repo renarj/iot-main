@@ -29,7 +29,7 @@ import static com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2CommandPack
  * @author Renze de Vries
  */
 @Component
-@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "protocol.v2.enabled", havingValue = "true", matchIfMissing = true)
 public class DynamixelV2ServoMovementHandler extends AbstractV2MovementHandler implements EventHandler, DynamixelServoMovementHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelV2ServoMovementHandler.class);
 

@@ -2,7 +2,7 @@ package com.oberasoftware.robo.cloud.motion.controllers;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.CommandType;
-import com.oberasoftware.iot.core.robotics.Robot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.motion.controller.HandsController;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import static com.oberasoftware.iot.core.commands.BasicCommandBuilder.create;
 @Component
 public class RemoteHandsController implements HandsController, RemoteController {
 
-    private Robot robot;
+    private RobotHardware robot;
 
     @Override
     public void openHands() {
@@ -69,7 +69,7 @@ public class RemoteHandsController implements HandsController, RemoteController 
     }
 
     @Override
-    public void activate(Robot robot) {
+    public void activate(RobotHardware robot) {
         this.robot = robot;
     }
 }

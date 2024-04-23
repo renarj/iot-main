@@ -8,7 +8,7 @@ import com.oberasoftware.home.core.mqtt.MessageGroup;
 import com.oberasoftware.iot.core.commands.BasicCommand;
 import com.oberasoftware.iot.core.commands.impl.BasicCommandImpl;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
 import com.oberasoftware.iot.core.robotics.navigation.DirectionalInput;
 import com.oberasoftware.iot.core.robotics.navigation.RobotNavigationController;
@@ -50,7 +50,7 @@ public class RemoteNavigationHandler implements EventHandler {
             }
         });
 
-        Optional<BehaviouralRobot> behaviouralRobot = robotRegistry.getRobot(basicCommand.getControllerId());
+        Optional<Robot> behaviouralRobot = robotRegistry.getRobot(basicCommand.getControllerId());
         behaviouralRobot.ifPresent((b) -> {
             RobotNavigationController navigationController = b.getBehaviour(RobotNavigationController.class);
             LOG.info("Sending directional input: {} to robot: {}", directionInput, basicCommand.getControllerId());

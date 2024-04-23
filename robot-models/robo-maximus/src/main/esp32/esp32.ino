@@ -5,7 +5,7 @@
 
 int LED_PIN = 18;
 int SEND_PIN = 26;
-int FEEDBACK_TIMEOUT = 500;
+int FEEDBACK_TIMEOUT = 250;
 
 ControllerSensors sensors = ControllerSensors();
 

@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.motion;
 
 import com.google.common.collect.ImmutableMap;
-import com.oberasoftware.iot.core.robotics.Robot;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobot;
+import com.oberasoftware.iot.core.robotics.RobotHardware;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.PositionAndSpeedCommand;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
@@ -45,7 +45,7 @@ public class JointControlImpl implements JointControl {
     }
 
     @Override
-    public void initialize(BehaviouralRobot behaviouralRobot, Robot robotCore) {
+    public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
         this.servoDriver = robotCore.getServoDriver();
         this.motionEngine = behaviouralRobot.getBehaviour(MotionEngine.class);
         this.motionStorage = robotCore.getCapability(MotionStorage.class);
