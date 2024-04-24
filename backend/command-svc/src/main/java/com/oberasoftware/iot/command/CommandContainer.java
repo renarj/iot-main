@@ -19,9 +19,9 @@ import org.springframework.context.annotation.Import;
 /**
  * @author Renze de Vries
  */
-@SpringBootApplication
-@Import({QueueConfiguration.class, BaseConfiguration.class, CoreConfiguation.class, DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class})
+@Import({QueueConfiguration.class, BaseConfiguration.class, CoreConfiguation.class})
 public class CommandContainer {
     private static final Logger LOG = LoggerFactory.getLogger(CommandContainer.class);
 

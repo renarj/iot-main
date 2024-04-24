@@ -24,9 +24,9 @@ import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
 /**
  * @author Renze de Vries
  */
-@SpringBootApplication
-@Import({MQTTConfiguration.class, QueueConfiguration.class, DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class})
+@Import({MQTTConfiguration.class, QueueConfiguration.class})
 public class EdgeProcessorContainer {
     private static final Logger LOG = LoggerFactory.getLogger(EdgeProcessorContainer.class);
 

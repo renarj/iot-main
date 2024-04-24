@@ -25,9 +25,9 @@ import static com.oberasoftware.iot.core.util.ConverterHelper.mapFromJson;
 /**
  * @author Renze de Vries
  */
-@SpringBootApplication
-@Import({StateConfiguration.class, BaseConfiguration.class, QueueConfiguration.class, CoreConfiguation.class, DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class})
+@Import({StateConfiguration.class, BaseConfiguration.class, QueueConfiguration.class, CoreConfiguation.class})
 public class StateContainer {
     private static final Logger LOG = LoggerFactory.getLogger(StateContainer.class);
 
