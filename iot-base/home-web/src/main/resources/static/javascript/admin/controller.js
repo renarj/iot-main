@@ -27,6 +27,24 @@ function initPage() {
             }})
     })
 
+    $("#removeController").click(function() {
+        let controllerId = getControllerId();
+        $("#removeControllerLabel").html("'" + controllerId + "'");
+        $("#confirmDeleteDialog").modal('show');
+    })
+
+    $("#removeControllerConfirm").click(function() {
+        let controllerId = getControllerId();
+
+        console.log("Deleting Controller: " + controllerId);
+        $.ajax({url: thingSvcUrl + "/api/controllers(" + controllerId + ")", type: "DELETE", contentType: "application/json; charset=utf-8", success: function(data) {
+                console.log("Removed Controller successfully");
+                location.href = "/web/admin/controllers";
+            }}).fail(function(jqXHR) {
+                console.log("Failed to delete controller: " + controllerId);
+        });
+    })
+
     $("#addPlugin").click(function() {
         let controllerId = getControllerId();
         let selectedPlugin = $("#pluginList").find('option:selected').val();

@@ -21,6 +21,8 @@ public interface ThingManager {
 
     boolean removeThing(String controllerId, String thingId) throws IOTException;
 
+    boolean removeController(String controllerId) throws IOTException;
+
     List<Controller> findControllers();
 
     Optional<Controller> findController(String controllerId);

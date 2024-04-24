@@ -259,6 +259,27 @@ public class ThingManagerImpl implements ThingManager {
     }
 
     @Override
+    public boolean removeController(String controllerId) throws IOTException {
+        centralDatastore.beginTransaction();
+        try {
+            var oController = homeDAO.findController(controllerId);
+            List<IotThing> things = homeDAO.findThings(controllerId);
+            if(things.isEmpty() && oController.isPresent()) {
+                centralDatastore.delete(ControllerImpl.class, oController.get().getId());
+                return true;
+            } else {
+                if(oController.isEmpty()) {
+                    return false;
+                } else {
+                    throw new IOTException("Could not delete Controller, still existing dependent Things present");
+                }
+            }
+        } finally {
+            centralDatastore.commitTransaction();
+        }
+    }
+
+    @Override
     public List<Controller> findControllers() {
         return homeDAO.findControllers();
     }

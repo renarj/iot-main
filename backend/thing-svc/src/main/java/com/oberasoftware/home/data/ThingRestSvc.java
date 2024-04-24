@@ -161,6 +161,17 @@ public class ThingRestSvc {
         }
     }
 
+    @RequestMapping(value = "/controllers({controllerId})", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> removeController(@PathVariable String controllerId) throws IOTException {
+        LOG.info("Received remove Controller request for controller: {}", controllerId);
+        boolean result = thingManager.removeController(controllerId);
+        if(result) {
+            return ResponseEntity.accepted().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     private boolean validateThing(IotThing thing) {
         return StringUtils.hasText(thing.getFriendlyName()) &&
                 StringUtils.hasText(thing.getThingId()) &&

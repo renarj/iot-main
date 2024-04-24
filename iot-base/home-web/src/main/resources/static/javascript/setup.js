@@ -138,13 +138,13 @@ function reloadLinkages() {
         let schemaId = e.getAttribute("schemaId");
 
         console.log("Loading linkages for field: " + field + " and schema: " + schemaId);
-        loadLinkages("#" + field, schemaId);
+        loadLinkages(field, schemaId);
     })
 }
 
 function loadLinkages(field, pluginId) {
     let controllerId = getSelectedController();
-    console.log("Loading linkages for field: " + field + " and plugin: " + pluginId + " on controller: " + controllerId);
+    console.debug("Loading linkages for field: " + field + " and plugin: " + pluginId + " on controller: " + controllerId);
     $.get(thingSvcUrl + "/api/controllers("+controllerId+")/schemas(" + pluginId + ")/things", function(data) {
         console.log("Retrieved link field items")
         let linkList = $("#" + field);

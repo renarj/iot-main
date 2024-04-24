@@ -60,7 +60,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade modal-lg" id="confirmDeleteDialog" tabindex="-1" aria-labelledby="confirmDeleteDialogLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="confirmDeleteDialogLabel">Remove Controller</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <p>Are you sure you want to remove Controller, this will also remove all related Things:&nbsp;<label id="removeControllerLabel"></label></p>
+                </div>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="removeControllerConfirm">Remove Controller</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid" th:attr="controllerId=${controllerId}" id="root">
     <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
@@ -133,8 +152,8 @@
                         <div class="card px-0">
                             <div class="card-header d-flex justify-content-start">
                                 <h5 class="card-title flex-grow-1">Detail of: <label id="thingListDetailLabel">Default</label></h5>
-                                <a class="removeThing" href="#" id="removeThing"><i class="bi bi-trash"></i></a>
-                                <a class="editThing" href="#" id="editThing"><i class="bi bi-pencil-fill"></i></a>
+                                <a class="removeController" href="#" id="removeController"><i class="bi bi-trash"></i></a>
+                                <a class="editController" href="#" id="editController"><i class="bi bi-pencil-fill"></i></a>
                             </div>
                             <div class="card-body" id="thingDetails">
                             </div>
