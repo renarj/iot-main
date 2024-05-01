@@ -47,6 +47,10 @@ public class HardwareRobotBuilder {
         return this;
     }
 
+    public String getName() {
+        return this.robotName;
+    }
+
     public HardwareRobotBuilder motionEngine(MotionEngine motionEngine, MotionResource resource) {
         if(resource != null) {
             motionEngine.loadResource(resource);

@@ -1,9 +1,7 @@
 package com.oberasoftware.robo.maximus;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
@@ -43,21 +41,21 @@ public class RobotInitializer {
 
     private final LocalEventBus eventBus;
 
-    private final ServoRegistry servoRegistry = new ServoRegistry();
+    private final ServoRegistry servoRegistry;
 
     private final ActivatorFactory activatorFactory;
 
     private final AgentControllerInformation controllerInformation;
 
-    public RobotInitializer(ThingClient thingClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, AgentControllerInformation controllerInformation, LocalEventBus eventBus) {
+    public RobotInitializer(ThingClient thingClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, AgentControllerInformation controllerInformation, LocalEventBus eventBus, ServoRegistry servoRegistry) {
         this.thingClient = thingClient;
         this.applicationContext = applicationContext;
         this.robotRegistry = robotRegistry;
         this.controllerInformation = controllerInformation;
-        this.activatorFactory = new ActivatorFactory(Lists.newArrayList(new RobotArmActivator(), new DynamixelActivator()));
+        this.servoRegistry = servoRegistry;
         this.eventBus = eventBus;
+        this.activatorFactory = new ActivatorFactory(Lists.newArrayList(new RobotArmActivator(), new DynamixelActivator()));
     }
-
 
     public void initialize() {
         try {
@@ -67,8 +65,8 @@ public class RobotInitializer {
 
             robots.forEach(r -> {
                 LOG.info("Configuring robot: {} on controller: {}", r.getThingId(), r.getControllerId());
-                HardwareRobotBuilder hardwareRobotBuilder = new HardwareRobotBuilder(applicationContext);
-                JointBasedRobotBuilder robotBuilder = new JointBasedRobotBuilder();
+                HardwareRobotBuilder hardwareRobotBuilder = new HardwareRobotBuilder(r.getThingId(), applicationContext);
+                JointBasedRobotBuilder robotBuilder = new JointBasedRobotBuilder(r.getThingId());
                 var context = new RobotContext(hardwareRobotBuilder, robotBuilder);
                 activatorFactory.getActivator(r).ifPresent(a -> a.initRobot(context, r));
 
@@ -82,36 +80,8 @@ public class RobotInitializer {
 
                 LOG.info("Robot: {} configured", r.getThingId());
             });
-        } catch (IOTException e) {
-            LOG.error("", e);
         } catch(Exception e) {
             LOG.error("", e);
-        }
-    }
-
-    private class ThingKey {
-        private final String controllerId;
-        private final String thingId;
-
-        public ThingKey(String controllerId, String thingId) {
-            this.controllerId = controllerId;
-            this.thingId = thingId;
-        }
-    }
-
-    private class ServoRegistry {
-        private Multimap<String, ThingKey> servoRegister = ArrayListMultimap.create();
-
-        public void addServo(String controllerId, String thingId, String servoId) {
-            servoRegister.put(servoId, getKey(controllerId, thingId));
-        }
-
-        public List<ThingKey> getThings(String servoId) {
-            return Lists.newArrayList(servoRegister.get(servoId));
-        }
-
-        private ThingKey getKey(String controllerId, String thingId) {
-            return new ThingKey(controllerId, thingId);
         }
     }
 
@@ -129,8 +99,8 @@ public class RobotInitializer {
                         .forEach(e ->
                             valueMap.put(e.getKey().name().toLowerCase(), new ValueImpl(VALUE_TYPE.NUMBER, e.getValue())));
 
-                var v = new ThingMultiValueEventImpl(t.controllerId, t.thingId, valueMap);
-                LOG.info("Sending servo value: {}", v);
+                var v = new ThingMultiValueEventImpl(t.getControllerId(), t.getThingId(), valueMap);
+                LOG.debug("Sending servo value: {}", v);
                 eventBus.publish(v);
             });
         }
@@ -201,7 +171,7 @@ public class RobotInitializer {
             try {
                 String port = driver.getProperty("DXL_PORT");
                 List<IotThing> servos = thingClient.getChildren(driver.getControllerId(), driver.getThingId(), "servo");
-                servos.forEach(s -> servoRegistry.addServo(s.getControllerId(), s.getThingId(), s.getProperty("servo_id")));
+                servos.forEach(s -> servoRegistry.addServo(s.getControllerId(), s.getThingId(), s.getProperty("servo_id"), context.getHardwareBuilder().getName()));
                 String motorString = servos.stream().map(s -> s.getProperty("servo_id")).collect(Collectors.joining(","));
                 LOG.info("Registering Dynamixel servo driver for servos: {} on port: {}", motorString, port);
 
@@ -228,7 +198,6 @@ public class RobotInitializer {
         @Override
         void activate(RobotContext context, IotThing activatable) {
             LOG.info("Activating robot: {}", activatable.getThingId());
-            context.getHardwareBuilder().name(activatable.getThingId());
         }
 
         @Override
