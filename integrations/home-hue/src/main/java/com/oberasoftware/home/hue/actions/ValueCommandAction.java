@@ -2,7 +2,7 @@ package com.oberasoftware.home.hue.actions;
 
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.hue.HueConnector;
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
+import com.oberasoftware.iot.core.commands.ThingValueCommand;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
@@ -23,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
+public class ValueCommandAction implements HueCommandAction<ThingValueCommand> {
     private static final Logger LOG = getLogger(ValueCommandAction.class);
 
     @Autowired
@@ -33,7 +33,7 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
     private LocalEventBus automationBus;
 
     @Override
-    public void receive(GroupItem groupItem, List<IotThing> items, ItemValueCommand command) {
+    public void receive(GroupItem groupItem, List<IotThing> items, ThingValueCommand command) {
 //        PHBridge bridge = hueConnector.getSdk().getSelectedBridge();
 //
 //        PHGroup group = GroupHelper.getOrCreateGroup(groupItem, hueConnector.getBridge(), items);
@@ -60,7 +60,7 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
     }
 
     @Override
-    public void receive(IotThing item, ItemValueCommand command) {
+    public void receive(IotThing item, ThingValueCommand command) {
 //        Map<String, Value> values = command.getValues();
 
 //        LOG.debug("Received a value command: {} for item: {}", command, item);
@@ -133,7 +133,7 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
 //        state.setY(xy[1]);
 //    }
 
-    private Optional<String> getValue(ItemValueCommand command, String property) {
+    private Optional<String> getValue(ThingValueCommand command, String property) {
         Optional<Value> optionalValue = Optional.ofNullable(command.getAttribute(property));
         if(optionalValue.isPresent()) {
             return Optional.of(optionalValue.get().asString());
@@ -142,7 +142,7 @@ public class ValueCommandAction implements HueCommandAction<ItemValueCommand> {
         }
     }
 
-    private Optional<Integer> getNumberValue(ItemValueCommand command, String property, boolean correctScale) {
+    private Optional<Integer> getNumberValue(ThingValueCommand command, String property, boolean correctScale) {
         Optional<Value> optionalValue = Optional.ofNullable(command.getAttribute(property));
         if(optionalValue.isPresent()) {
             Value value = optionalValue.get();

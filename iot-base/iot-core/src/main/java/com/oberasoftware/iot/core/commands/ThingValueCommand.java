@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author renarj
  */
-public interface ItemValueCommand extends ItemCommand {
+public interface ThingValueCommand extends ThingCommand {
 
     Value getAttribute(String property);
 

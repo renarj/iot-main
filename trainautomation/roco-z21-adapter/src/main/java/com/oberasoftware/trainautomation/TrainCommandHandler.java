@@ -2,7 +2,7 @@ package com.oberasoftware.trainautomation;
 
 import com.oberasoftware.iot.core.client.ThingClient;
 import com.oberasoftware.iot.core.commands.Command;
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
+import com.oberasoftware.iot.core.commands.ThingValueCommand;
 import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.IotThing;
@@ -52,7 +52,7 @@ public class TrainCommandHandler implements ThingCommandHandler {
     }
 
     private Optional<TrainCommand> translate(IotThing thing, Command receivedCommand) {
-        if(receivedCommand instanceof ItemValueCommand itvC) {
+        if(receivedCommand instanceof ThingValueCommand itvC) {
             return Optional.of(new TrainCommand(thing.getControllerId(), thing.getThingId(), itvC.getAttributes(), getLocAddress(thing), getStepMode(thing)));
         } else {
             LOG.error("Could not convert command: {} to train command, incorrect command type", receivedCommand);

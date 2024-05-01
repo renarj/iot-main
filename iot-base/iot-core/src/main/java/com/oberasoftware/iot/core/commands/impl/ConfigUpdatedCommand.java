@@ -1,8 +1,8 @@
 package com.oberasoftware.iot.core.commands.impl;
 
-import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.ThingCommand;
 
-public class ConfigUpdatedCommand implements ItemCommand {
+public class ConfigUpdatedCommand implements ThingCommand {
     private final String controllerId;
     private final String thingId;
 

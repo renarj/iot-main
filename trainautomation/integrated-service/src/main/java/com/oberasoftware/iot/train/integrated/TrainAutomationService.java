@@ -3,7 +3,7 @@ package com.oberasoftware.iot.train.integrated;
 import com.oberasoftware.home.core.edge.EdgeProcessorContainer;
 import com.oberasoftware.home.core.state.StateContainer;
 import com.oberasoftware.home.data.DataServiceContainer;
-import com.oberasoftware.home.service.HomeAutomation;
+import com.oberasoftware.home.service.IotUiContainer;
 import com.oberasoftware.iot.command.CommandContainer;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.train.TrainServiceContainer;
@@ -16,7 +16,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication(exclude = {SpringApplicationAdminJmxAutoConfiguration.class, SecurityAutoConfiguration.class})
-@Import({HomeAutomation.class, DataServiceContainer.class,
+@Import({IotUiContainer.class, DataServiceContainer.class,
         CommandContainer.class,
         EdgeProcessorContainer.class, StateContainer.class,
         TrainServiceContainer.class})

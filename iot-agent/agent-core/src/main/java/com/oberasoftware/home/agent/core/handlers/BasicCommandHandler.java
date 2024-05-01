@@ -3,7 +3,7 @@ package com.oberasoftware.home.agent.core.handlers;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.ThingCommand;
 import com.oberasoftware.home.agent.core.handlers.converters.CommandConverter;
 import com.oberasoftware.home.agent.core.handlers.converters.ConverterType;
 import com.oberasoftware.iot.core.commands.impl.CommandType;
@@ -27,9 +27,9 @@ public class BasicCommandHandler implements EventHandler {
 
 
     @Autowired(required = false)
-    private List<CommandConverter<BasicCommand, ? extends ItemCommand>> commandConverters;
+    private List<CommandConverter<BasicCommand, ? extends ThingCommand>> commandConverters;
 
-    private Map<String, CommandConverter<BasicCommand, ? extends ItemCommand>> commandConverterMap = new HashMap<>();
+    private Map<String, CommandConverter<BasicCommand, ? extends ThingCommand>> commandConverterMap = new HashMap<>();
 
     @PostConstruct
     public void mapConverters() {
@@ -58,9 +58,9 @@ public class BasicCommandHandler implements EventHandler {
         String commandType = basicCommand.getCommandType().name();
 
         if(commandConverterMap.containsKey(commandType)) {
-            CommandConverter<BasicCommand, ? extends ItemCommand> converter = commandConverterMap.get(commandType);
+            CommandConverter<BasicCommand, ? extends ThingCommand> converter = commandConverterMap.get(commandType);
 
-            ItemCommand command = converter.map(basicCommand);
+            ThingCommand command = converter.map(basicCommand);
             LOG.info("Converted: {} to command: {} sending to automation bus", basicCommand, command);
 
             return new ItemCommandEvent(command.getThingId(), command);

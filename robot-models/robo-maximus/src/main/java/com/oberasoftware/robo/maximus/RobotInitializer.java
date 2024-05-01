@@ -16,6 +16,7 @@ import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoData;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
@@ -77,6 +78,7 @@ public class RobotInitializer {
 
 
                 hardwareRobot.listen(new ServoUpdateListener());
+                robotRegistry.register(hardwareRobot);
 
                 LOG.info("Robot: {} configured", r.getThingId());
             });
@@ -116,14 +118,16 @@ public class RobotInitializer {
     public class ServoUpdateListener implements EventHandler {
         @EventSubscribe
         public void receiveStateUpdate(ServoUpdateEvent stateUpdateEvent) {
-            LOG.info("Received servo update event: {}", stateUpdateEvent);
+            LOG.debug("Received servo update event: {}", stateUpdateEvent);
             ServoData data = stateUpdateEvent.getServoData();
             var servoId = data.getServoId();
 
             servoRegistry.getThings(servoId).forEach(t -> {
                 Map<String, Value> valueMap = new HashMap<>();
-                stateUpdateEvent.getServoData().getValues().forEach((k, v) ->
-                        valueMap.put(k.name(), new ValueImpl(VALUE_TYPE.NUMBER, v)));
+                stateUpdateEvent.getServoData().getValues().entrySet().stream()
+                        .filter(e -> !(e.getValue() instanceof Scale))
+                        .forEach(e ->
+                            valueMap.put(e.getKey().name().toLowerCase(), new ValueImpl(VALUE_TYPE.NUMBER, e.getValue())));
 
                 var v = new ThingMultiValueEventImpl(t.controllerId, t.thingId, valueMap);
                 LOG.info("Sending servo value: {}", v);

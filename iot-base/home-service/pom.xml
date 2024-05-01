@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>home-rest</artifactId>
+            <artifactId>iot-rest-ui</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

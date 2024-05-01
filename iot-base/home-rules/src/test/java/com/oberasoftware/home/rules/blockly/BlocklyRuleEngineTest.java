@@ -8,7 +8,7 @@ import com.oberasoftware.home.rules.TestConfiguration;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.test.MockAutomationBus;
 import com.oberasoftware.home.rules.test.MockStateManager;
-import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.ThingCommand;
 import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
@@ -114,7 +114,7 @@ public class BlocklyRuleEngineTest {
 
         Map<String, Value> values = new HashMap<>();
         values.put("PowerStart", new ValueImpl(VALUE_TYPE.NUMBER, 12345));
-        ItemCommand command = new ValueCommandImpl("controllerId", "6d1a20a5-7347-41cf-bdc7-4f6df2035b24", values);
+        ThingCommand command = new ValueCommandImpl("controllerId", "6d1a20a5-7347-41cf-bdc7-4f6df2035b24", values);
         ItemCommandEvent commandEvent = new ItemCommandEvent("6d1a20a5-7347-41cf-bdc7-4f6df2035b24", command);
 
         assertThat(Iterables.getFirst(publishedEvents, null), is(commandEvent));
@@ -140,7 +140,7 @@ public class BlocklyRuleEngineTest {
         assertThat(publishedEvents.size(), is(1));
         Map<String, Value> values = new HashMap<>();
         values.put("PowerUsed", new ValueImpl(VALUE_TYPE.NUMBER, 45l));
-        ItemCommand command = new ValueCommandImpl("controllerId", itemId, values);
+        ThingCommand command = new ValueCommandImpl("controllerId", itemId, values);
         ItemCommandEvent commandEvent = new ItemCommandEvent(itemId, command);
 
         assertThat(Iterables.getFirst(publishedEvents, null), is(commandEvent));

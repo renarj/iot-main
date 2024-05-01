@@ -24,10 +24,10 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class, SpringApplicationAdminJmxAutoConfiguration.class})
 @Import({RestConfiguration.class, StorageConfiguration.class, CoreConfiguation.class, WebConfiguration.class, BaseConfiguration.class, RuleConfiguration.class, ClientConfiguration.class})
-public class HomeAutomation {
-    private static final Logger LOG = getLogger(HomeAutomation.class);
+public class IotUiContainer {
+    private static final Logger LOG = getLogger(IotUiContainer.class);
 
-    public HomeAutomation() {
+    public IotUiContainer() {
 
     }
 
@@ -35,7 +35,7 @@ public class HomeAutomation {
         LOG.info("Starting HomeAutomation system");
 
         try {
-            SpringApplication.run(HomeAutomation.class);
+            SpringApplication.run(IotUiContainer.class);
             LOG.info("HomeAutomation Service started");
         } catch (RuntimeIOTException e) {
             LOG.error("Could not start the HomeAutomationSystem", e);
@@ -43,7 +43,7 @@ public class HomeAutomation {
     }
 
     public static void main(String[] args) {
-        HomeAutomation automation = new HomeAutomation();
+        IotUiContainer automation = new IotUiContainer();
         automation.start(args);
     }
 

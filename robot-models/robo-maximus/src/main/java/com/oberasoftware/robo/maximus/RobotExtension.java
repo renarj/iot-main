@@ -20,6 +20,9 @@ public class RobotExtension implements AutomationExtension {
     @Autowired
     private RobotInitializer robotInitializer;
 
+    @Autowired
+    private RobotCommandHandler commandHandler;
+
     @Override
     public String getId() {
         return ROBOT_EXTENSION;
@@ -37,7 +40,7 @@ public class RobotExtension implements AutomationExtension {
 
     @Override
     public CommandHandler getCommandHandler() {
-        return null;
+        return commandHandler;
     }
 
     @Override

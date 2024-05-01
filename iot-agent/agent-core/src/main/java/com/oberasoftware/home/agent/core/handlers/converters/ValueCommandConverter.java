@@ -1,7 +1,7 @@
 package com.oberasoftware.home.agent.core.handlers.converters;
 
 import com.oberasoftware.iot.core.commands.BasicCommand;
-import com.oberasoftware.iot.core.commands.ItemValueCommand;
+import com.oberasoftware.iot.core.commands.ThingValueCommand;
 import com.oberasoftware.iot.core.commands.impl.CommandType;
 import com.oberasoftware.iot.core.commands.impl.ValueCommandImpl;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
@@ -24,12 +24,12 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-public class ValueCommandConverter implements CommandConverter<BasicCommand, ItemValueCommand> {
+public class ValueCommandConverter implements CommandConverter<BasicCommand, ThingValueCommand> {
     private static final Logger LOG = getLogger(ValueCommandConverter.class);
 
     @Override
     @ConverterType(commandType = CommandType.VALUE)
-    public ItemValueCommand map(BasicCommand source) {
+    public ThingValueCommand map(BasicCommand source) {
         Map<String, String> properties = source.getAttributes();
         String itemId = source.getThingId();
 

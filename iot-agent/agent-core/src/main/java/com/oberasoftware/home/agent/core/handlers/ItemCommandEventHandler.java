@@ -5,7 +5,7 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.client.ThingClient;
-import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.ThingCommand;
 import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
 import com.oberasoftware.iot.core.exceptions.IOTException;
@@ -39,7 +39,7 @@ public class ItemCommandEventHandler implements EventHandler {
     public Event receive(ItemCommandEvent event) throws IOTException {
         LOG.debug("Received a device command event: {}", event);
 
-        ItemCommand command = event.getCommand();
+        ThingCommand command = event.getCommand();
         LOG.debug("Looking up device details for command: {} and itemId: {}",command, command.getThingId());
 
         Optional<IotThing> deviceData = thingClient.getThing(command.getControllerId(), command.getThingId());
@@ -55,7 +55,9 @@ public class ItemCommandEventHandler implements EventHandler {
                 ThingCommandHandler commandHandler = (ThingCommandHandler) p.getCommandHandler();
 
                 LOG.debug("Executing command: {} on extension: {}", command, p);
-                commandHandler.receive(deviceItem, command);
+                if(commandHandler != null) {
+                    commandHandler.receive(deviceItem, command);
+                }
             });
         } else {
             //all other item types are virtual, we manage the state of this, let's publish the item value event if applicable

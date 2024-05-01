@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author renarj
  */
-public interface BasicCommand extends ItemCommand {
+public interface BasicCommand extends ThingCommand {
     CommandType getCommandType();
 
     String getAttribute(String attribute);

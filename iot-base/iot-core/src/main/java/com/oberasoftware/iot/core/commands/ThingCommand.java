@@ -3,7 +3,7 @@ package com.oberasoftware.iot.core.commands;
 /**
  * @author renarj
  */
-public interface ItemCommand extends Command {
+public interface ThingCommand extends Command {
     String getControllerId();
 
     String getThingId();

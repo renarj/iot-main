@@ -1,6 +1,6 @@
 package com.oberasoftware.iot.core.events.impl;
 
-import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.ThingCommand;
 import com.oberasoftware.iot.core.events.ItemEvent;
 
 /**
@@ -9,9 +9,9 @@ import com.oberasoftware.iot.core.events.ItemEvent;
 public class ItemCommandEvent implements ItemEvent {
 
     private final String itemId;
-    private final ItemCommand command;
+    private final ThingCommand command;
 
-    public ItemCommandEvent(String itemId, ItemCommand command) {
+    public ItemCommandEvent(String itemId, ThingCommand command) {
         this.itemId = itemId;
         this.command = command;
     }
@@ -20,7 +20,7 @@ public class ItemCommandEvent implements ItemEvent {
         return itemId;
     }
 
-    public ItemCommand getCommand() {
+    public ThingCommand getCommand() {
         return command;
     }
 

@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * @author renarj
  */
-public interface SwitchCommand extends ItemValueCommand {
+public interface SwitchCommand extends ThingValueCommand {
 
     enum STATE {
         ON,

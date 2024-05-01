@@ -1,7 +1,7 @@
 package com.oberasoftware.iot.core.commands.impl;
 
 import com.oberasoftware.iot.core.commands.GroupCommand;
-import com.oberasoftware.iot.core.commands.ItemCommand;
+import com.oberasoftware.iot.core.commands.ThingCommand;
 import com.oberasoftware.iot.core.model.storage.GroupItem;
 
 /**
@@ -9,16 +9,16 @@ import com.oberasoftware.iot.core.model.storage.GroupItem;
  */
 public class GroupCommandImpl implements GroupCommand {
 
-    private final ItemCommand command;
+    private final ThingCommand command;
     private final GroupItem groupItem;
 
-    public GroupCommandImpl(ItemCommand command, GroupItem groupItem) {
+    public GroupCommandImpl(ThingCommand command, GroupItem groupItem) {
         this.command = command;
         this.groupItem = groupItem;
     }
 
     @Override
-    public ItemCommand getCommand() {
+    public ThingCommand getCommand() {
         return command;
     }
 

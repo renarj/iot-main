@@ -7,5 +7,5 @@ import com.oberasoftware.iot.core.model.IotThing;
  * @author renarj
  */
 public interface CommandHandler<T extends IotThing> {
-    void receive(T item, Command command);
+    void receive(T thing, Command command);
 }

@@ -111,6 +111,7 @@ public class SerialDynamixelConnector implements DynamixelConnector {
             }
         } catch (SerialPortException e) {
             LOG.error("Unable to write message to dynamixel controller", e);
+            System.exit(-1);
         } finally {
             lock.unlock();
         }

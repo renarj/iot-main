@@ -11,7 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>home-rest</artifactId>
+    <artifactId>iot-rest-ui</artifactId>
 
     <dependencies>
         <dependency>
