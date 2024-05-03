@@ -1,4 +1,4 @@
-package com.oberasoftware.home.service;
+package com.oberasoftware.home.web.manager;
 
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;

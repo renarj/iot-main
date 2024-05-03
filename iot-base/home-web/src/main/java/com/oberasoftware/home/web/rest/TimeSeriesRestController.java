@@ -1,4 +1,4 @@
-package com.oberasoftware.home.rest;
+package com.oberasoftware.home.web.rest;
 
 import com.oberasoftware.iot.core.legacymodel.DataPoint;
 import com.oberasoftware.iot.core.managers.TimeSeriesStore;

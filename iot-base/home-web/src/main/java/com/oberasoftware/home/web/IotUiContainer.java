@@ -1,10 +1,8 @@
-package com.oberasoftware.home.service;
+package com.oberasoftware.home.web;
 
 import com.oberasoftware.base.BaseConfiguration;
-import com.oberasoftware.home.rest.RestConfiguration;
 import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.home.storage.StorageConfiguration;
-import com.oberasoftware.home.web.WebConfiguration;
 import com.oberasoftware.iot.client.ClientConfiguration;
 import com.oberasoftware.iot.core.CoreConfiguation;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
@@ -23,7 +21,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class, SpringApplicationAdminJmxAutoConfiguration.class})
-@Import({RestConfiguration.class, StorageConfiguration.class, CoreConfiguation.class, WebConfiguration.class, BaseConfiguration.class, RuleConfiguration.class, ClientConfiguration.class})
+@Import({StorageConfiguration.class, CoreConfiguation.class, WebConfiguration.class, BaseConfiguration.class, RuleConfiguration.class, ClientConfiguration.class})
 public class IotUiContainer {
     private static final Logger LOG = getLogger(IotUiContainer.class);
 
@@ -32,13 +30,13 @@ public class IotUiContainer {
     }
 
     public void start(String[] args) {
-        LOG.info("Starting HomeAutomation system");
+        LOG.info("Starting HomeAutomation UI");
 
         try {
             SpringApplication.run(IotUiContainer.class);
-            LOG.info("HomeAutomation Service started");
+            LOG.info("HomeAutomation UI started");
         } catch (RuntimeIOTException e) {
-            LOG.error("Could not start the HomeAutomationSystem", e);
+            LOG.error("Could not start the HomeAutomation UI", e);
         }
     }
 

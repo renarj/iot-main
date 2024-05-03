@@ -1,4 +1,4 @@
-package com.oberasoftware.home.rest;
+package com.oberasoftware.home.web;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;

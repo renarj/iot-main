@@ -1,5 +1,6 @@
-package com.oberasoftware.home.service;
+package com.oberasoftware.home.web.manager;
 
+import com.oberasoftware.home.web.manager.GenericItemManagerImpl;
 import com.oberasoftware.iot.core.managers.VirtualItemManager;
 import com.oberasoftware.iot.core.model.storage.VirtualItem;
 import com.oberasoftware.iot.core.model.storage.impl.VirtualItemImpl;

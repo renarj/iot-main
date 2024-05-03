@@ -1,4 +1,4 @@
-package com.oberasoftware.home.rest;
+package com.oberasoftware.home.web.rest;
 
 import com.oberasoftware.iot.core.managers.DashboardManager;
 import com.oberasoftware.iot.core.model.storage.Dashboard;

@@ -3,7 +3,7 @@ package com.oberasoftware.iot.train.integrated;
 import com.oberasoftware.home.core.edge.EdgeProcessorContainer;
 import com.oberasoftware.home.core.state.StateContainer;
 import com.oberasoftware.home.data.DataServiceContainer;
-import com.oberasoftware.home.service.IotUiContainer;
+import com.oberasoftware.home.web.IotUiContainer;
 import com.oberasoftware.iot.command.CommandContainer;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.train.TrainServiceContainer;

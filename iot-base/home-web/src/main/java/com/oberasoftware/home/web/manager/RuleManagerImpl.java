@@ -1,4 +1,4 @@
-package com.oberasoftware.home.service;
+package com.oberasoftware.home.web.manager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
