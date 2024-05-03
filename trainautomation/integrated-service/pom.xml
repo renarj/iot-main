@@ -44,7 +44,7 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>home-service</artifactId>
+            <artifactId>home-web</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
