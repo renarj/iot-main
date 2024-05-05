@@ -13,9 +13,9 @@ $(document).ready(function() {
         event.preventDefault();
 
         var mode = $("#createContainerForm").attr("mode");
-        if(mode == "container") {
+        if(mode === "container") {
             createContainer();
-        } else if (mode == "dashboard") {
+        } else if (mode === "dashboard") {
             createDashboard();
         } else {
             console.log("Unsupported container creation: " + mode);
@@ -52,7 +52,7 @@ $(document).ready(function() {
     }
 
     function determineMaxWeight() {
-        return $("#dashboards").find("a").size();
+        return $("#dashboards").find("a").length;
     }
 
     function createContainer() {

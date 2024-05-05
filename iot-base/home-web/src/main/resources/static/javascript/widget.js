@@ -168,7 +168,8 @@ function renderContainer(item) {
 
     let data = {
         "containerId" : containerId,
-        "name" : name
+        "name" : name,
+        "links" : true
     };
     let layout = item.properties.layout;
     let templateName = "containerTemplateList";
@@ -216,14 +217,15 @@ function handleReordering(container) {
 function renderContainerItems(containerId) {
     $.get("/ui/containers(" + containerId + ")/items", function (data) {
         $.each(data, function (i, item) {
+            console.log("Rendering item: " + item.id + " with name: " + item.name + " in container: " + containerId);
             renderWidget(containerId, item);
         })
     })
 }
 
 function renderWidget(containerId, item) {
-    console.log("Rendering widget: " + item.id + " in container: " + containerId);
     let widgetType = item.widgetType;
+    console.log("Rendering widget: " + item.id + " in container: " + containerId + " of type " + widgetType);
     switch (widgetType.toLowerCase()) {
         case "switch":
             renderSwitch(item, containerId);
@@ -253,7 +255,11 @@ function renderDefault(containerId, item) {
     let templateName = "containerTemplateList";
     let rendered = renderTemplate(templateName, data);
 
-    appendContainer(rendered, 0, 0, item.itemId, containerId);
+    let column = 1;
+    if(item.properties.column !== undefined) {
+        column = item.properties.column;
+    }
+    appendContainer(rendered, 0, column, item.itemId, containerId);
 
     $.get(thingSvcUrl + "/api/controllers(" + item.controllerId + ")/things(" + item.thingId + ")", function(data) {
         $.each(data.attributes, function(key, type) {
@@ -264,7 +270,7 @@ function renderDefault(containerId, item) {
                 renderDefaultSlider(item.id, key, data)
             } else {
                 console.log("Rendering an attribute: " + key + " for default widget for thing: " + data.thingId);
-                renderLabelWidget(key, type, item.itemId + "_" + key, key, data.thingId, data.controllerId, item.id);
+                renderLabelWidget(key, type, item.itemId + "_" + key, key, data.thingId, data.controllerId, item.id, 0, 0);
             }
         });
     });
@@ -423,10 +429,10 @@ function handleSwitchEvent(widgetId) {
 }
 
 function renderItemLabel(item, containerId) {
-    renderLabelWidget(item.properties.label, item.properties.unit, item.id, item.name, item.thingId, item.controllerId, containerId);
+    renderLabelWidget(item.properties.label, item.properties.unit, item.id, item.name, item.thingId, item.controllerId, containerId, item.properties.index, item.properties.column);
 }
 
-function renderLabelWidget(attribute, unitType, widgetId, name, thingId, controllerId, containerId) {
+function renderLabelWidget(attribute, unitType, widgetId, name, thingId, controllerId, containerId, index, column) {
     console.log("Rendering label widget for item: " + name + " on thing: " + thingId + " for attribute: " + attribute);
 
     let data = {
@@ -436,14 +442,14 @@ function renderLabelWidget(attribute, unitType, widgetId, name, thingId, control
         "thingId": thingId,
         "controllerId": controllerId,
         "label": attribute,
-        "unit": unitType
-        // "index" : item.properties.index
+        "unit": unitType,
+        "index" : index
     };
 
     // let rendered = renderTemplate("labelTemplate", data);
     // console.log("rendered: " + rendered)
     // appendContainer(rendered, 0, 0, 0, containerId)
-    renderWidgetTmpl("labelTemplate", widgetId, data, 0, 0, containerId)
+    renderWidgetTmpl("labelTemplate", widgetId, data, column, index, containerId)
 
     forceUpdateDeviceState(controllerId, thingId);
 }
@@ -478,6 +484,7 @@ function appendContainer(widgetHtml, index, columnId, widgetId, containerId) {
     //     //widget already exists
     //     console.debug("Widget already exists");
     // } else {
+    console.log("Appending widget: " + widgetId + " to container: " + containerId);
         let container = $("div[containerId=" + containerId + "]");
         let mode = container.attr("mode");
         if(mode === "list") {
@@ -488,7 +495,7 @@ function appendContainer(widgetHtml, index, columnId, widgetId, containerId) {
 
             insertInColumn(widgetHtml, index, list);
         } else if(mode === "grid") {
-            console.debug("Drawing in a grid");
+            console.debug("Drawing in a grid for widget: " + widgetId + " and rendered " + widgetHtml);
 
             //var currentColumn = container.attr("currentColumn");
             let column = $("ul[containerId=" + containerId + "][column=" + columnId + "]");

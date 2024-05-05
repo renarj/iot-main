@@ -100,26 +100,34 @@
 <script id="containerTemplateGrid" type="text/x-handlebars-template">
     <div class="row" id="{{containerId}}">
         <div class="col-md-12">
-            <div class="panel panel-primary">
-                <div class="panel-heading clearfix">
-                    <h3 class="panel-title pull-left">{{name}}</h3>
-                    <div class="btn btn-group pull-right">
-                        <a href="#" containerId="{{containerId}}" class="btn btn-default btn-sm removeContainer" title="Delete container"><span class="glyphicon glyphicon-trash"></span></a>
-                        <a href="#" data-toggle="modal" data-target="#dataModal" data-id="{{containerId}}" class="btn btn-default btn-sm addWidget" title="Add a Widget"><span class="glyphicon glyphicon-plus"></span></a>
+            <div class="card">
+                <div class="card-header text-bg-primary-subtle d-flex justify-content-start">
+                    <h3 class="flex-grow-1">{{name}}</h3>
+                    {{#if links}}
+                    <div>
+                        <a href="#" containerId="{{containerId}}" class="btn btn-default btn-sm removeContainer" title="Delete container">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        <a href="#" data-toggle="modal" data-target="#dataModal" data-id="{{containerId}}" class="btn btn-default btn-sm addWidget" title="Add a Widget">
+                            <i class="bi bi-file-earmark-plus-fill"></i>
+                        </a>
                     </div>
+                    {{/if}}
                 </div>
-                <div class="row" currentColumn="1" containerId="{{containerId}}" mode="grid">
-                    <div class="col-md-4">
-                        <ul class="panel-body list-unstyled sortable" column="1" containerId="{{containerId}}" next="2">
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <ul class="panel-body list-unstyled sortable" column="2" containerId="{{containerId}}" next="3">
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <ul class="panel-body list-unstyled sortable" column="3" containerId="{{containerId}}" next="1">
-                        </ul>
+                <div class="card-body" currentColumn="1" containerId="{{containerId}}" mode="grid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul class="panel-body list-unstyled sortable" column="1" containerId="{{containerId}}" next="2">
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="panel-body list-unstyled sortable" column="2" containerId="{{containerId}}" next="3">
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="panel-body list-unstyled sortable" column="3" containerId="{{containerId}}" next="1">
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,12 +139,16 @@
             <div class="card">
                 <div class="card-header text-bg-primary-subtle d-flex justify-content-start">
                     <div class="flex-grow-1"><h4>{{name}}</h4></div>
-                    <div class=""><a href="#" containerId="{{containerId}}" class="btn btn-default btn-sm removeContainer" title="Delete container">
-                        <i class="bi bi-trash"></i>
-                    </a>
-                    <a href="#" data-toggle="modal" data-target="#dataModal" data-id="{{containerId}}" class="btn btn-default btn-sm addWidget" title="Add a Widget">
-                        <i class="bi bi-file-earmark-plus-fill"></i>
-                    </a></div>
+                    {{#if links}}
+                    <div>
+                        <a href="#" containerId="{{containerId}}" class="btn btn-default btn-sm removeContainer" title="Delete container">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        <a href="#" data-toggle="modal" data-target="#dataModal" data-id="{{containerId}}" class="btn btn-default btn-sm addWidget" title="Add a Widget">
+                            <i class="bi bi-file-earmark-plus-fill"></i>
+                        </a>
+                    </div>
+                    {{/if}}
                 </div>
                 <div class="card-body">
                     <ul class="panel-body list-unstyled sortable" column="0" containerId="{{containerId}}">
@@ -147,8 +159,8 @@
     </div>
 </script>
 <script id="tabTemplate" type="text/x-handlebars-template">
-    <li role="nav-item" id="dashlink_{{dashboardId}}">
-        <a dashboardId="{{dashboardId}}" class="tab nav-link {{tabClass}}" weight="{{weight}}" href="#">{{dashboardName}}</a>
+    <li role="nav-item">
+        <a id="dashlink_{{dashboardId}}" dashboardId="{{dashboardId}}" class="tab nav-link {{tabClass}}" weight="{{weight}}" href="#">{{dashboardName}}</a>
     </li>
 </script>
 <script id="addDashButtonTemplate" type="text/x-handlebars-template">
