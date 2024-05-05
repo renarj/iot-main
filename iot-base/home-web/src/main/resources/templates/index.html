@@ -28,6 +28,38 @@
         </div>
     </li>
 </script>
+<script id="sliderTemplate" type="text/x-handlebars-template">
+    <li class="card" index="{{index}}" id="{{widgetId}}">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-3">
+                    <label>{{name}}</label>
+                </div>
+                <div class="col-2">&nbsp;</div>
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col-1">
+                            <label class="form-text">{{min}}</label>
+                        </div>
+                        <div class="col-8">
+                            <input controllerId="{{controllerId}}" thingId="{{thingId}}" attribute="{{label}}" widgetType="slider" type="range" class="form-range" min="{{min}}" max="{{max}}" id="{{widgetId}}_position">
+                        </div>
+                        <div class="col-1">
+                            <label class="form-text">{{max}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <label>{{unit}}</label>
+                </div>
+                <div class="col-1">&nbsp;</div>
+                <div class="col-2">
+                    <a href="#" widgetId="{{widgetId}}" class="btn btn-default btn-sm removeWidget" title="Delete widget"><span class="glyphicon glyphicon-trash"></span></a>
+                </div>
+            </div>
+        </div>
+    </li>
+</script>
 <script id="switchTemplate" type="text/x-handlebars-template">
     <li class="card" index="{{index}}" id="{{widgetId}}">
         <div class="card-body">
@@ -65,23 +97,6 @@
     </li>
 </script>
 
-<script id="sliderTemplate" type="text/x-handlebars-template">
-    <li class="well well-sm widget" index="{{index}}" id="{{widgetId}}">
-        <div class="row">
-            <div class="col-xs-3">
-                <label>{{name}}</label>
-            </div>
-            <div class="col-xs-3">&nbsp;</div>
-            <div class="col-xs-3">
-                <input style="width: 100%;" name="{{itemId}}_slider" itemId="{{itemId}}" data-slider-id='{{itemId}}' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
-            </div>
-            <div class="col-xs-1">&nbsp;</div>
-            <div class="col-xs-2">
-                <a href="#" widgetId="{{widgetId}}" class="btn btn-default btn-sm removeWidget" title="Deleted widget"><span class="glyphicon glyphicon-trash"></span></a>
-            </div>
-        </div>
-    </li>
-</script>
 <script id="containerTemplateGrid" type="text/x-handlebars-template">
     <div class="row" id="{{containerId}}">
         <div class="col-md-12">

@@ -7,6 +7,9 @@ public enum AttributeType {
     LABEL,
     DEGREES,
     ABS_POSITION,
+
+    VELOCITY,
+
     VOLTAGE
 
 }

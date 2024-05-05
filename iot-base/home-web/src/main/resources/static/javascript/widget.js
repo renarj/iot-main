@@ -36,6 +36,8 @@ function setStateValue(controllerId, thingId, attribute, value) {
             setSwitchValue(controllerId, thingId, attribute, value);
         } else if(widgetType === "label") {
             setLabelValue(controllerId, thingId, attribute, value);
+        } else if(widgetType === "slider") {
+            setSliderValue(controllerId, thingId, attribute, value);
         } else {
             console.log("Unknown widget type: " + widgetType);
         }
@@ -51,16 +53,25 @@ function setLabelValue(controllerId, thingId, attribute, rawValue) {
         }
         element.innerText = rawValue;
     })
+}
 
+function setSliderValue(controllerId, thingId, attribute, rawValue) {
+    console.log("Checking for Slider for item: " + thingId + " controller: " + controllerId + " with attribute: " + attribute);
+    let sliders = $("input[thingId='" + thingId + "'][attribute='" + attribute + "'][controllerId='" + controllerId + "']");
+    sliders.each(function(i, element) {
+        if(isNumeric(rawValue)) {
+            element.value = parseFloat(rawValue).toFixed(2);
+        }
+    })
 }
 
 function setSwitchValue(controllerId, thingId, attribute, rawValue) {
     let switches = $("input[thingId='" + thingId + "'][attribute='" + attribute + "'][controllerId='" + controllerId + "']");
     switches.each(function(i, element) {
-        if(rawValue.toLowerCase() === "true") {
+        if($.type(rawValue) === "string" && rawValue.toLowerCase() === "true") {
             element.checked = true;
         } else {
-            element.checked = false;
+            element.checked = $.type(rawValue) === "number" && rawValue > 0;
         }
     });
 }
@@ -218,7 +229,7 @@ function renderWidget(containerId, item) {
             renderSwitch(item, containerId);
             break;
         case "dimmer":
-            renderSlider(item, containerId);
+            console.log("Not implemented");
             break;
         case "label":
             renderItemLabel(item, containerId);
@@ -248,12 +259,27 @@ function renderDefault(containerId, item) {
         $.each(data.attributes, function(key, type) {
             if(type === "SWITCH") {
                 renderSwitchWidget(item.id, key, data.thingId, data.controllerId, key, 0, 0, item.id);
+            } else if(type === "ABS_POSITION" || type === "DEGREES") {
+                console.log("Rendering a slider for: " + key + " for default widget for thing: " + data.thingId);
+                renderDefaultSlider(item.id, key, data)
             } else {
                 console.log("Rendering an attribute: " + key + " for default widget for thing: " + data.thingId);
                 renderLabelWidget(key, type, item.itemId + "_" + key, key, data.thingId, data.controllerId, item.id);
             }
         });
     });
+}
+
+function renderDefaultSlider(widgetId, key, data) {
+    let min = data.properties["min_" + key];
+    let max = data.properties["max_" + key];
+    if(min === undefined) {
+        min = 0;
+    }
+    if(max === undefined) {
+        max = 100;
+    }
+    renderSliderWidget(widgetId + "_" + key, key, data.thingId, data.controllerId, key, min, max, 0, 0, widgetId);
 }
 
 function renderColorPicker(containerId, item) {
@@ -297,42 +323,51 @@ function handleColorChange(picker, color) {
 
 }
 
-function renderSlider(item, containerId) {
-    console.log("Rendering dimmer for item: " + item.name);
-
+function renderSliderWidget(widgetId, name, thingId, controllerId, attribute, min, max, weight, index, containerId) {
+    console.log("Rendering slider for item: " + name);
     let data = {
-        "widgetId": item.id,
-        "name": item.name,
-        "itemId": item.itemId,
-        "weight" : item.weight,
-        "index" : item.properties.index
+        "widgetId": widgetId,
+        "name": name,
+        "thingId": thingId,
+        "controllerId" : controllerId,
+        "label": attribute,
+        "weight" : weight,
+        "min" : min,
+        "max" : max,
+        "index" : index
     };
+    console.debug("Data: " + JSON.stringify(data));
 
-    renderWidgetTemplate("sliderTemplate", data, item, containerId);
+    renderWidgetTmpl("sliderTemplate", widgetId, data, 0, 0, containerId)
+    forceUpdateDeviceState(controllerId, thingId);
 
-    let iDimmer = $("input[name=" + item.itemId + "_slider]");
-    iDimmer.slider();
-    iDimmer.on("slideStop", handleSlideEvent);
+    $("#" + widgetId + "_position").change(function() {
+        handleSliderEvent(widgetId);
+    })
 }
 
-function handleSlideEvent(slideEvt) {
-    let val = slideEvt.value;
-    console.log("Slide event: " + val);
+function handleSliderEvent(widgetId) {
+    let positionEl = $("#" + widgetId + "_position")
+    let thingId = positionEl.attr("thingId");
+    let controllerId = positionEl.attr("controllerId");
+    let attribute = positionEl.attr("attribute");
+
+    let position = positionEl.val();
+    let attributes = {};
+    attributes[attribute] = position;
 
     let data = {
-        "itemId" : this.getAttribute('itemId'),
-        "commandType" : "value",
-        "properties" : {
-            "value" : val
-        }
+        "controllerId" : controllerId,
+        "thingId" : thingId,
+        "commandType" : "VALUE",
+        "attributes" : attributes
     };
     let jsonData = JSON.stringify(data);
-    console.log("Sending command: " + jsonData);
+    console.log("Sending command for position: " + jsonData);
 
-    $.ajax({url: "/command/send", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", done: function() {
-        console.log("Posted Command successfully");
-    }})
-
+    $.ajax({url: commandSvcUrl + "/api/command/", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", done: function() {
+            console.log("Posted Command successfully");
+        }})
 }
 
 function renderSwitch(item, containerId) {
