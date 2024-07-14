@@ -46,6 +46,7 @@
             <groupId>com.oberasoftware</groupId>
             <artifactId>iot-ui</artifactId>
             <version>${project.version}</version>
+            <classifier>original</classifier>
         </dependency>
     </dependencies>
 </project>
