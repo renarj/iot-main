@@ -21,6 +21,7 @@ import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelTorgueManager;
+import com.oberasoftware.robo.maximus.sensors.ESP32SensorDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -171,18 +172,34 @@ public class RobotInitializer {
             try {
                 String port = driver.getProperty("DXL_PORT");
                 List<IotThing> servos = thingClient.getChildren(driver.getControllerId(), driver.getThingId(), "servo");
-                servos.forEach(s -> servoRegistry.addServo(s.getControllerId(), s.getThingId(), s.getProperty("servo_id"), context.getHardwareBuilder().getName()));
-                String motorString = servos.stream().map(s -> s.getProperty("servo_id")).collect(Collectors.joining(","));
-                LOG.info("Registering Dynamixel servo driver for servos: {} on port: {}", motorString, port);
+                if(servos.isEmpty()) {
+                    LOG.info("Servo driver configured, but no servo's specified, trigger Servo Scan");
+                    context.getHardwareBuilder()
+                            .servoDriver(DynamixelServoDriver.class,
+                                    ImmutableMap.<String, String>builder()
+                                            .put(DynamixelServoDriver.PORT, port)
+                                            .build())
+                            .capability(ServoSensorDriver.class)
+                            .capability(DynamixelTorgueManager.class);
+                } else {
+                    servos.forEach(s -> servoRegistry.addServo(s.getControllerId(), s.getThingId(), s.getProperty("servo_id"), context.getHardwareBuilder().getName()));
+                    String motorString = servos.stream().map(s -> s.getProperty("servo_id")).collect(Collectors.joining(","));
+                    LOG.info("Registering Dynamixel servo driver for servos: {} on port: {}", motorString, port);
 
-                context.getHardwareBuilder()
-                        .servoDriver(DynamixelServoDriver.class,
-                                ImmutableMap.<String, String>builder()
-                                        .put(DynamixelServoDriver.PORT, port)
-                                        .put("motors", motorString)
-                                        .build())
-                        .capability(ServoSensorDriver.class)
-                        .capability(DynamixelTorgueManager.class);
+                    context.getHardwareBuilder()
+                            .servoDriver(DynamixelServoDriver.class,
+                                    ImmutableMap.<String, String>builder()
+                                            .put(DynamixelServoDriver.PORT, port)
+                                            .put("motors", motorString)
+                                            .build())
+                            .capability(ServoSensorDriver.class)
+                            .capability(DynamixelTorgueManager.class);
+                }
+
+                if(driver.hasProperty("sensors") && "true".equalsIgnoreCase(driver.getProperty("sensors"))) {
+                    LOG.info("Configuring ESP32 sensors");
+                    context.getHardwareBuilder().capability(ESP32SensorDriver.class);
+                }
             } catch (IOTException e) {
                 throw new RuntimeException(e);
             }
@@ -192,7 +209,7 @@ public class RobotInitializer {
     private class RobotArmActivator extends Activator {
         @Override
         public String getSchemaId() {
-            return "RobotArm";
+            return "HumanoidRobot";
         }
 
         @Override

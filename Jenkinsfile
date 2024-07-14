@@ -25,6 +25,7 @@ pipeline {
                 sh "docker build backend/edge-svc/ -t edge-svc:latest"
                 sh "docker build backend/state-svc/ -t state-svc:latest"
                 sh "docker build backend/thing-svc/ -t thing-svc:latest"
+                sh "docker build iot-base/iot-ui/ -t iot-ui:latest"
             }
         }
         stage("Publish Docker") {
@@ -41,6 +42,9 @@ pipeline {
 
                 sh "docker tag thing-svc:latest public.ecr.aws/e1s4e3s4/thing-svc:latest"
                 sh "docker push public.ecr.aws/e1s4e3s4/thing-svc:latest"
+
+                sh "docker tag iot-ui:latest public.ecr.aws/e1s4e3s4/iot-ui:latest"
+                sh "docker push public.ecr.aws/e1s4e3s4/iot-ui:latest"
             }
         }
     }

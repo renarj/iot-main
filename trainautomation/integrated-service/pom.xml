@@ -44,7 +44,7 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>home-web</artifactId>
+            <artifactId>iot-ui</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -23,8 +23,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
-public class TeensySensorDriver implements SensorDriver<TeensyPort> {
-    private static final Logger LOG = getLogger(TeensySensorDriver.class);
+public class ESP32SensorDriver implements SensorDriver<TeensyPort> {
+    private static final Logger LOG = getLogger(ESP32SensorDriver.class);
 
     private static final int CHECK_INTERVAL = 1000;
 

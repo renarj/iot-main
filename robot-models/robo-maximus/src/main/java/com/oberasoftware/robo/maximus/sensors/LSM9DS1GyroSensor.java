@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.oberasoftware.robo.maximus.sensors.TeensySensorDriver.*;
+import static com.oberasoftware.robo.maximus.sensors.ESP32SensorDriver.*;
 
 public class LSM9DS1GyroSensor implements MultiValueSensor<DoubleValue> {
 
@@ -53,7 +53,7 @@ public class LSM9DS1GyroSensor implements MultiValueSensor<DoubleValue> {
 
     @Override
     public void activate(RobotHardware robot) {
-        TeensySensorDriver sensorDriver = robot.getCapability(TeensySensorDriver.class);
+        ESP32SensorDriver sensorDriver = robot.getCapability(ESP32SensorDriver.class);
         if(sensorDriver != null) {
             sensorDriver.getPort(LSM_9_DS_1_HEADING).listen(e -> {
                 this.heading = e.getRaw();

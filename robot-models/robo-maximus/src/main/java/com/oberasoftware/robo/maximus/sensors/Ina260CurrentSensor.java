@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.oberasoftware.robo.maximus.sensors.TeensySensorDriver.*;
+import static com.oberasoftware.robo.maximus.sensors.ESP32SensorDriver.*;
 
 public class Ina260CurrentSensor implements MultiValueSensor<DoubleValue> {
 
@@ -54,7 +54,7 @@ public class Ina260CurrentSensor implements MultiValueSensor<DoubleValue> {
 
     @Override
     public void activate(RobotHardware robot) {
-        TeensySensorDriver sensorDriver = robot.getCapability(TeensySensorDriver.class);
+        ESP32SensorDriver sensorDriver = robot.getCapability(ESP32SensorDriver.class);
         if(sensorDriver != null) {
             sensorDriver.getPort(INA_260_CURRENT).listen(e -> {
                 this.current = e.getRaw() / UNIT_DIVISION;

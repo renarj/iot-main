@@ -2,10 +2,12 @@ package com.oberasoftware.robo.maximus.handlers;
 
 import com.google.common.collect.Sets;
 import com.oberasoftware.iot.core.commands.ThingValueCommand;
+import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
+import com.oberasoftware.iot.core.util.IntUtils;
 import com.oberasoftware.robo.maximus.ServoRegistry;
 import com.oberasoftware.robo.maximus.ThingKey;
 import org.slf4j.Logger;
@@ -13,11 +15,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Component
 public class PositionHandler implements RobotAttributeHandler {
     private static final Logger LOG = LoggerFactory.getLogger(PositionHandler.class);
+    private static final int DEFAULT_SPEED = 20;
+
+    private static final Scale REMOTE_SCALE_SPEED = new Scale(-100, 100);
+    private static final Scale REMOTE_SCALE_POSITION = new Scale(0, 4095);
 
     @Autowired
     private RobotRegistry robotRegistry;
@@ -40,8 +47,23 @@ public class PositionHandler implements RobotAttributeHandler {
         ServoDriver servoDriver = robot.getServoDriver();
 
         Long servoPosition = command.getAttribute("position").getValue();
-//        Value speed = command.getAttribute("speed");
+        Optional<Value> speedOpt = Optional.ofNullable(command.getAttribute("speed"));
+
+        if(speedOpt.isPresent()) {
+            setServoPositionWithSpeed(servoDriver, servoId, servoPosition, speedOpt.get().getValue());
+        } else {
+            setServoPosition(servoDriver, servoId, servoPosition);
+        }
+    }
+
+    private void setServoPositionWithSpeed(ServoDriver servoDriver, String servoId, Long servoPosition, String speed) {
+        LOG.info("Setting servo: {} to position: {} with velocity: {}", servoId, servoPosition, speed);
+        servoDriver.setPositionAndSpeed(servoId, IntUtils.toInt(speed, DEFAULT_SPEED), REMOTE_SCALE_SPEED,
+                servoPosition.intValue(), REMOTE_SCALE_POSITION);
+    }
+
+    private void setServoPosition(ServoDriver servoDriver, String servoId, Long servoPosition) {
         LOG.info("Setting servo: {} to position: {}", servoId, servoPosition);
-        servoDriver.setTargetPosition(servoId, servoPosition.intValue(), new Scale(0, 4095));
+        servoDriver.setTargetPosition(servoId, servoPosition.intValue(), REMOTE_SCALE_POSITION);
     }
 }
