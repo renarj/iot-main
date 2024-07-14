@@ -2,6 +2,7 @@ package com.oberasoftware.robo.dynamixel;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableMap;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Primary;
@@ -55,31 +56,36 @@ public class ESP32SerialConnector extends SerialDynamixelConnector {
     }
 
     private byte[] sendInternal(String msg, boolean wait) {
-        LOG.debug("Sending message to Teensy: {}", msg);
+        LOG.debug("Sending message to ESP32: {}", msg);
         Stopwatch w = Stopwatch.createStarted();
         byte[] recvd = super.send(msg.getBytes(Charset.defaultCharset()), wait);
         if(recvd.length > 0 && wait) {
             LOG.debug("Received: {} on request: {} in {} ms.", new String(recvd), msg, w.elapsed(TimeUnit.MILLISECONDS));
 
-            JSONObject jo = new JSONObject(new String(recvd));
-            String format = jo.getString("format");
+            try {
+                JSONObject jo = new JSONObject(new String(recvd));
+                String format = jo.getString("format");
 
-            if("hex".equalsIgnoreCase(format)) {
-                String hexData = jo.getString("feedback");
-                if(!hexData.isEmpty()) {
-                    String[] hs = hexData.split(" ");
-                    byte[] converted = new byte[hs.length];
-                    for (int i = 0; i < hs.length; i++) {
-                        String element = hs[i];
-                        if (!element.trim().isEmpty()) {
-                            converted[i] = (byte) Integer.parseInt(hs[i], 16);
+                if ("hex".equalsIgnoreCase(format)) {
+                    String hexData = jo.getString("feedback");
+                    if (!hexData.isEmpty()) {
+                        String[] hs = hexData.split(" ");
+                        byte[] converted = new byte[hs.length];
+                        for (int i = 0; i < hs.length; i++) {
+                            String element = hs[i];
+                            if (!element.trim().isEmpty()) {
+                                converted[i] = (byte) Integer.parseInt(hs[i], 16);
+                            }
                         }
-                    }
 
-                    return converted;
+                        return converted;
+                    }
+                } else if ("json".equalsIgnoreCase(format)) {
+                    return jo.getJSONObject("feedback").toString().getBytes();
                 }
-            } else if ("json".equalsIgnoreCase(format)){
-                return jo.getJSONObject("feedback").toString().getBytes();
+            } catch(JSONException e) {
+                LOG.info("Original json: {} org command: {}", recvd, msg);
+                LOG.error("", e);
             }
         } else if(wait) {
             LOG.info("Received nothing?: {} on message request: {}", recvd, msg);

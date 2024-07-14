@@ -156,11 +156,16 @@ bool handleCommand(String inputString) {
     } else if (String("sensors").equalsIgnoreCase(command)) {
       sensors.readSensors();
 
-      String feedback = "{\"feedback\":{}";
+      String feedback = "{\"feedback\":{";
       feedback.concat(sensors.getJson());
-      feedback.concat(",\"format\":\"json\"}");
+      feedback.concat("},\"format\":\"json\"}");
       feedback.trim();
-      Serial.println(feedback);
+
+      char buf[11];
+      sprintf (buf, "%04i", feedback.length()) ;
+      Serial.print(buf);
+      Serial.print(feedback);
+      Serial.flush();
 
       return false;
     } else if(String("toggleDebug").equalsIgnoreCase(command)) {

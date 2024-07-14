@@ -4,11 +4,11 @@ import com.oberasoftware.iot.core.model.Plugin;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.Id;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 
 @Entity(name="Plugins")
 @JasDBEntity(bagName = "plugins")
@@ -17,7 +17,7 @@ public class PluginImpl implements Plugin {
     private String pluginId;
     private String name;
 
-    @javax.persistence.Id
+    @jakarta.persistence.Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;

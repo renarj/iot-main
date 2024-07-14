@@ -1,7 +1,6 @@
 let stompClient = null;
 
 function connect() {
-    stateSvcUrl = "http://localhost:9006"
     console.log("Connecting to websocket: " + stateSvcUrl);
     let socket = new SockJS(stateSvcUrl + "/ws");
     stompClient = Stomp.over(socket);

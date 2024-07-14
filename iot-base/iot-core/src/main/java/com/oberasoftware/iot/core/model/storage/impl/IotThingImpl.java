@@ -6,7 +6,7 @@ import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBEntity;
 import com.oberasoftware.jasdb.api.entitymapper.annotations.JasDBProperty;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 @JasDBEntity(bagName = "things")
 @Entity(name = "Things")
 public class IotThingImpl implements IotThing {
-    @javax.persistence.Id
+    @jakarta.persistence.Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;

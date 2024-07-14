@@ -174,7 +174,7 @@ String ControllerSensors::getJson() {
   json.concat(getPitch());
   json.concat(",\"heading\":");
   json.concat(getHeading());
-  json.concat("}}}");
+  json.concat("}}");
 
   return json;
 }

@@ -6,8 +6,8 @@ import com.oberasoftware.iot.core.model.storage.Container;
 import com.oberasoftware.iot.core.storage.CentralDatastore;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Component
 public class JPACentralDataStore implements CentralDatastore {
