@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
-<head th:replace="includes/header :: header">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body>
 <script th:src="@{/javascript/widget.js}" src="/static/javascript/widget.js"></script>
@@ -169,7 +169,7 @@
 
 <div class="container-fluid">
 
-    <div th:replace="includes/header :: navigation (selectTab='dashboard')"></div>
+    <div th:replace="~{includes/header :: navigation (selectTab='dashboard')}"></div>
 
     <div class="row">
         <div class="col-md-11">
@@ -183,9 +183,9 @@
 
     <div class="row">
         <div class="col-12">
-            <div th:replace="includes/widgetForm :: widgetForm"></div>
+            <div th:replace="~{includes/widgetForm :: widgetForm}"></div>
 
-            <div th:replace="includes/containerForm :: containerForm"></div>
+            <div th:replace="~{includes/containerForm :: containerForm}"></div>
 
             <div class="card" id="dashboard">
                 <div class="card-header text-bg-info-subtle d-flex justify-content-start">
@@ -200,7 +200,7 @@
             </div>
         </div>
     </div>
-    <div th:replace="includes/header :: footer"></div>
+    <div th:replace="~{includes/header :: footer}"></div>
 </div>
 
 </body>

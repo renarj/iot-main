@@ -1,13 +1,13 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
-<head th:replace="includes/header :: header">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body style="height:100%;">
 <script th:src="@{/javascript/loc-sensors.js}" src="/static/javascript/loc-sensors.js"></script>
 
-<div th:replace="includes/header :: navigation (selectTab='trains')"></div>
+<div th:replace="~{includes/header :: navigation (selectTab='trains')}"></div>
 
-<div th:replace="includes/header :: trainTabs (selectTab='sensors')"></div>
+<div th:replace="~{includes/header :: trainTabs (selectTab='sensors')}"></div>
 
 <script id="controllerTemplate" type="text/x-handlebars-template">
     <a class="list-group-item list-group-item-action controllerButton" controllerId="{{controllerId}}" href="#">{{controllerId}}</a>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  data-bs-theme="dark">
-<head th:replace="includes/header :: header">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body>
 <script th:src="@{/javascript/admin/sysconfig.js}" src="/static/javascript/admin/sysconfig.js"></script>
@@ -128,9 +128,9 @@
 </div>
 
 <div class="container-fluid" id="root" th:attr="pluginId=${pluginId},schemaId=${schemaId}">
-    <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
+    <div th:replace="~{includes/header :: navigation (selectTab='admin')}"></div>
 
-    <div th:replace="includes/header :: adminTabs (selectTab='sysconfig')"></div>
+    <div th:replace="~{includes/header :: adminTabs (selectTab='sysconfig')}"></div>
     <script id="pluginTemplate" type="text/x-handlebars-template">
         <a class="list-group-item list-group-item-action pluginButton" pluginId="{{pluginId}}" href="/web/admin/sysconfig/plugins({{pluginId}})">{{pluginId}} ({{name}})</a>
     </script>

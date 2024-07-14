@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
-<head th:replace="includes/header :: header">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body>
 <script th:src="@{/javascript/virtualitems.js}" src="/static/javascript/virtualitems.js"></script>
@@ -35,9 +35,9 @@
 
 
 <div class="container-fluid">
-    <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
+    <div th:replace="~{includes/header :: navigation (selectTab='admin')}"></div>
 
-    <div th:replace="includes/header :: adminTabs (selectTab='virtualitems')"></div>
+    <div th:replace="~{includes/header :: adminTabs (selectTab='virtualitems')}"></div>
 
     <!-- Modal for data insertion -->
     <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="addGroupLabel" aria-hidden="true">
@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <div th:replace="includes/header :: footer"></div>
+    <div th:replace="~{includes/header :: footer}"></div>
 </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  data-bs-theme="dark">
-<head th:replace="includes/header :: header">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body>
 <script th:src="@{/javascript/admin/controller.js}" src="/static/javascript/admin/controller.js"></script>
@@ -82,9 +82,9 @@
 </div>
 
 <div class="container-fluid" th:attr="controllerId=${controllerId}" id="root">
-    <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
+    <div th:replace="~{includes/header :: navigation (selectTab='admin')}"></div>
 
-    <div th:replace="includes/header :: adminTabs (selectTab='controllers')"></div>
+    <div th:replace="~{includes/header :: adminTabs (selectTab='controllers')}"></div>
     <script id="controllerTemplate" type="text/x-handlebars-template">
         <a class="list-group-item list-group-item-action controllerButton" controllerId="{{controllerId}}" href="/web/admin/controllers({{controllerId}})">{{controllerId}}</a>
     </script>
@@ -177,7 +177,7 @@
         </div>
     </div>
 
-    <div th:replace="includes/header :: footer"></div>
+    <div th:replace="~{includes/header :: footer}"></div>
 </div>
 
 </body>

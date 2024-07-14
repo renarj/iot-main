@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
-<head th:replace="includes/header :: header">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body style="height:100%;">
 <script src="https://unpkg.com/blockly/blockly.min.js"></script>
@@ -8,9 +8,9 @@
 <script th:src="@{/javascript/blocks.js}" src="/static/javascript/blocks.js"></script>
 
 <div class="container-fluid" style="height:100%;">
-    <div th:replace="includes/header :: navigation (selectTab='admin')"></div>
+    <div th:replace="~{includes/header :: navigation (selectTab='admin')}"></div>
 
-    <div th:replace="includes/header :: adminTabs (selectTab='rules')"></div>
+    <div th:replace="~{includes/header :: adminTabs (selectTab='rules')}"></div>
 
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    <div th:replace="includes/header :: footer"></div>
+    <div th:replace="~{includes/header :: footer}"></div>
 </div>
 
 <xml id="toolbox" style="display: none">

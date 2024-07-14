@@ -1,11 +1,11 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
-<head th:replace="includes/header :: header">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body style="height:100%;">
-<div th:replace="includes/header :: navigation (selectTab='trains')"></div>
+<div th:replace="~{includes/header :: navigation (selectTab='trains')}"></div>
 
-<div th:replace="includes/header :: trainTabs (selectTab='locomotives')"></div>
+<div th:replace="~{includes/header :: trainTabs (selectTab='locomotives')}"></div>
 
 <script th:src="@{/javascript/locomotive.js}" src="/static/javascript/locomotive.js"></script>
 <script src="/javascript/holder.min.js"></script>
@@ -222,7 +222,7 @@
             </div>
         </div>
         <div class="col">
-            <div th:replace="train/dashboard :: train-dash"></div>
+            <div th:replace="~{train/dashboard :: train-dash}"></div>
         </div>
     </div>
 </div>
