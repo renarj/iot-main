@@ -9,6 +9,8 @@
     </appender>
 
     <logger name="com.oberasoftware" level="info"/>
+
+    <logger name="com.oberasoftware.robo.dynamixel" level="info"/>
     <logger name="org.springframework" level="info"/>
 
     <root level="OFF">

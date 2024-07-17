@@ -78,9 +78,11 @@ public class StateManagerImpl implements StateManager {
 
         return state.updateIfChanged(attribute, new StateItemImpl(attribute, value));
     }
+
     private String key(String controllerId, String thingId) {
         return controllerId + "-" + thingId;
     }
+
     private void updateStateStores(String controllerId, String thingId, String attribute, Value value) {
         if(stateStores != null) {
             stateStores.forEach(s -> s.store(controllerId, thingId, attribute, value));

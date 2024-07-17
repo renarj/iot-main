@@ -26,7 +26,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ESP32SensorDriver implements SensorDriver<TeensyPort> {
     private static final Logger LOG = getLogger(ESP32SensorDriver.class);
 
-    private static final int CHECK_INTERVAL = 1000;
+    private static final int CHECK_INTERVAL = 10000;
 
     static final String INA_260 = "ina260";
     static final String LSM9DS1 = "LSM9DS1";
