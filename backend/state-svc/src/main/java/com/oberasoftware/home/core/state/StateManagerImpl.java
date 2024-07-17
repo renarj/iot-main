@@ -66,7 +66,7 @@ public class StateManagerImpl implements StateManager {
 
     @Override
     public Optional<State> getState(String controllerId, String thingId) {
-        LOG.info("Retrieving item state for controller: {} and thing: {}", controllerId, thingId);
+        LOG.debug("Retrieving item state for controller: {} and thing: {}", controllerId, thingId);
         return Optional.ofNullable(itemStates.get(key(controllerId, thingId)));
     }
 
@@ -85,6 +85,7 @@ public class StateManagerImpl implements StateManager {
 
     private void updateStateStores(String controllerId, String thingId, String attribute, Value value) {
         if(stateStores != null) {
+            LOG.debug("Updating statestores: {} for controller/thing {}/{}", stateStores.size(), controllerId, thingId);
             stateStores.forEach(s -> s.store(controllerId, thingId, attribute, value));
         }
     }

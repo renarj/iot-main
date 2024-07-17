@@ -50,7 +50,7 @@ public class RabbitMQTopicListener extends AbstractRMQConnector implements Topic
 
             channel.basicConsume(queueName, true, (consumerTag, message) -> {
                 var msg = new String(message.getBody(), 0, message.getBody().length, Charset.defaultCharset());
-                LOG.info("Received RMQ message: {} from topic: {}", msg, rmqTopic);
+                LOG.debug("Received RMQ message: {} from topic: {}", msg, rmqTopic);
                 notifyListeners(message.getEnvelope().getExchange(), msg);
             }, consumerTag -> {});
         } catch (IOException e) {
@@ -65,7 +65,7 @@ public class RabbitMQTopicListener extends AbstractRMQConnector implements Topic
 
     private void notifyListeners(String topic, String message) {
         topicConsumers.get(topic).forEach(c -> {
-            LOG.info("Notifying topic: {} consumer: {} with message: {}", topic, c, message);
+            LOG.debug("Notifying topic: {} consumer: {} with message: {}", topic, c, message);
             c.receive(message);
         });
     }
