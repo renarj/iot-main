@@ -95,6 +95,17 @@ public class ThingRestSvc {
         }
     }
 
+    @RequestMapping(value = "/controllers({controllerId})/things({thingId})/linked", method = RequestMethod.GET)
+    public List<IotThing> getLinkedItems(@PathVariable String controllerId, @PathVariable String thingId, @RequestParam Optional<String> type) {
+        LOG.debug("Requested list of Linked items on controller: {} of thing: {} with optional Type: {}", controllerId, thingId, type);
+
+        if(type.isPresent()) {
+            return thingManager.findLinkedItems(controllerId, thingId, type.get());
+        } else {
+            return thingManager.findLinkedItems(controllerId, thingId);
+        }
+    }
+
     @RequestMapping(value = "/controllers({controllerId})/children", method = RequestMethod.GET)
     public List<IotThing> getChildren(@PathVariable String controllerId) {
         LOG.debug("Requested list of all children on controller: {}", controllerId);

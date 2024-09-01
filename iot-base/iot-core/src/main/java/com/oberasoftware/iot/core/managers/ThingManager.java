@@ -33,6 +33,10 @@ public interface ThingManager {
 
     List<IotThing> findThings(String controlerId, String pluginId, String type);
 
+    List<IotThing> findLinkedItems(String controllerId, String thingId, String type);
+
+    List<IotThing> findLinkedItems(String controllerId, String thingId);
+
     List<IotThing> findThingsWithSchema(String controlerId, String schemaId);
 
     List<IotThing> findThingsWithSchema(String schemaId);

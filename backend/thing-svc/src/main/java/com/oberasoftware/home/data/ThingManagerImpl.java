@@ -9,6 +9,7 @@ import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.managers.ThingManager;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.TemplateFieldType;
 import com.oberasoftware.iot.core.model.storage.impl.AttributeType;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
@@ -302,6 +303,45 @@ public class ThingManagerImpl implements ThingManager {
     @Override
     public List<IotThing> findThings(String controlerId, String pluginId, String type) {
         return homeDAO.findThings(controlerId, pluginId, type);
+    }
+
+    @Override
+    public List<IotThing> findLinkedItems(String controllerId, String thingId) {
+        return findLinked(controllerId, thingId, null);
+    }
+
+    @Override
+    public List<IotThing> findLinkedItems(String controllerId, String thingId, String type) {
+        return findLinked(controllerId, thingId, type);
+    }
+
+    private List<IotThing> findLinked(String controllerId, String thingId, String type) {
+        var oThing = findThing(controllerId, thingId);
+        if(oThing.isPresent()) {
+            var thing = oThing.get();
+
+            var oSchema = homeDAO.findSchema(thing.getPluginId(), thing.getSchemaId());
+            if(oSchema.isPresent()) {
+                Set<String> linkedTypes = new HashSet<>();
+                oSchema.get().getProperties().forEach((k, v) -> {
+                    if(v.getFieldType() == TemplateFieldType.LINK) {
+                        if(type == null || type.equalsIgnoreCase(v.getDefaultValue())) {
+                            linkedTypes.add(k);
+                        }
+                    }
+                });
+
+                Set<String> thingIds = new HashSet<>();
+                linkedTypes.forEach(f -> {
+                    thingIds.add(thing.getProperty(f));
+                });
+
+                List<IotThing> things = new ArrayList<>();
+                thingIds.forEach(ti -> findThing(controllerId, ti).ifPresent(things::add));
+                return things;
+            }
+        }
+        return List.of();
     }
 
     @Override
