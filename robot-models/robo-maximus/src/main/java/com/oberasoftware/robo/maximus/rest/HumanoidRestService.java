@@ -2,7 +2,7 @@ package com.oberasoftware.robo.maximus.rest;
 
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.JointData;
 import com.oberasoftware.iot.core.robotics.motion.JointTarget;
 import com.oberasoftware.robo.core.motion.JointTargetImpl;
@@ -30,15 +30,15 @@ public class HumanoidRestService {
     }
 
     @RequestMapping
-    public List<HumanoidRobot> getRobots() {
+    public List<JointBasedRobot> getRobots() {
         LOG.info("Requesting all humanoid robots");
         return behaviouralRobotRegistry.getRobots().stream()
-                .filter(r -> HumanoidRobot.class.isAssignableFrom(r.getClass()))
-                .map(r -> (HumanoidRobot) r).collect(Collectors.toList());
+                .filter(r -> JointBasedRobot.class.isAssignableFrom(r.getClass()))
+                .map(r -> (JointBasedRobot) r).collect(Collectors.toList());
     }
 
     @RequestMapping(path = "/robot/{robotId}")
-    public ResponseEntity<HumanoidRobot> getRobot(@PathVariable String robotId) {
+    public ResponseEntity<JointBasedRobot> getRobot(@PathVariable String robotId) {
         LOG.info("Requesting robot with id: {}", robotId);
 
         return findRobot(robotId).map(behaviouralRobot -> new ResponseEntity<>(behaviouralRobot, HttpStatus.OK))
@@ -47,7 +47,7 @@ public class HumanoidRestService {
 
     @RequestMapping(path = "/robot/{robotId}/joints")
     public ResponseEntity<List<JointData>> getJointData(@PathVariable String robotId) {
-        Optional<HumanoidRobot> robot = findRobot(robotId);
+        Optional<JointBasedRobot> robot = findRobot(robotId);
         return robot.map(humanoidRobot -> new ResponseEntity<>(humanoidRobot.getJointControl().getJointsData(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -60,7 +60,7 @@ public class HumanoidRestService {
 
     @RequestMapping(path = "/robot/{robotId}/joints", method = RequestMethod.POST)
     public ResponseEntity<Object> setJointAngles(@PathVariable String robotId, @RequestBody List<JointTargetImpl> jointAngles) {
-        Optional<HumanoidRobot> robot = findRobot(robotId);
+        Optional<JointBasedRobot> robot = findRobot(robotId);
 
         LOG.info("Joint angles requested: {}", jointAngles);
 
@@ -74,7 +74,7 @@ public class HumanoidRestService {
 
     @RequestMapping(path = "/robot/{robotId}/joint", method = RequestMethod.POST)
     public ResponseEntity<Object> setJointAngle(@PathVariable String robotId, @RequestBody JointTargetImpl jointAngle) {
-        Optional<HumanoidRobot> robot = findRobot(robotId);
+        Optional<JointBasedRobot> robot = findRobot(robotId);
 
         LOG.info("Joint angle request: {}", jointAngle);
 
@@ -84,10 +84,10 @@ public class HumanoidRestService {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    private Optional<HumanoidRobot> findRobot(String robotId) {
+    private Optional<JointBasedRobot> findRobot(String robotId) {
         Optional<Robot> robot = behaviouralRobotRegistry.getRobot(robotId);
 
-        return robot.map(r -> (HumanoidRobot) r);
+        return robot.map(r -> (JointBasedRobot) r);
     }
 }
 

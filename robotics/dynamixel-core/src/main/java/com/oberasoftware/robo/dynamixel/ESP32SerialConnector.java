@@ -84,7 +84,7 @@ public class ESP32SerialConnector extends SerialDynamixelConnector {
                     return jo.getJSONObject("feedback").toString().getBytes();
                 }
             } catch(JSONException e) {
-                LOG.info("Original json: {} org command: {}", recvd, msg);
+                LOG.info("Original json: {} org command: {}, string: {}", recvd, msg, new String(recvd));
                 LOG.error("", e);
             }
         } else if(wait) {

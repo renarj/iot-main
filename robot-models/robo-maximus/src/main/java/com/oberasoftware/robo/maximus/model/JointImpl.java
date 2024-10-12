@@ -7,7 +7,10 @@ public class JointImpl implements Joint {
     public static final int DEFAULT_MAX_DEGREES = 180;
     public static final int DEFAULT_MIN_DEGREES = -180;
 
-    private final String id;
+    private final String controllerId;
+    private final String robotId;
+    private final String thingId;
+    private final String servoId;
     private final String name;
     private final String type;
     private final boolean inverted;
@@ -15,8 +18,11 @@ public class JointImpl implements Joint {
     private final int minDegrees;
     private final int maxDegrees;
 
-    public JointImpl(String id, String name, String type, boolean inverted) {
-        this.id = id;
+    public JointImpl(String robotId, String controllerId, String thingId, String servoId, String name, String type, boolean inverted) {
+        this.robotId = robotId;
+        this.controllerId = controllerId;
+        this.thingId = thingId;
+        this.servoId = servoId;
         this.name = name;
         this.type = type;
         this.minDegrees = DEFAULT_MIN_DEGREES;
@@ -24,13 +30,21 @@ public class JointImpl implements Joint {
         this.inverted = inverted;
     }
 
-    public JointImpl(String id, String name, String type, int minDegrees, int maxDegrees, boolean inverted) {
-        this.id = id;
+    public JointImpl(String robotId, String controllerId, String thingId, String servoId, String name, String type, int minDegrees, int maxDegrees, boolean inverted) {
+        this.robotId = robotId;
+        this.controllerId = controllerId;
+        this.thingId = thingId;
+        this.servoId = servoId;
         this.name = name;
         this.type = type;
         this.minDegrees = minDegrees;
         this.maxDegrees = maxDegrees;
         this.inverted = inverted;
+    }
+
+    @Override
+    public String getRobotId() {
+        return this.robotId;
     }
 
     @Override
@@ -49,8 +63,18 @@ public class JointImpl implements Joint {
     }
 
     @Override
-    public String getID() {
-        return id;
+    public String getJointId() {
+        return thingId;
+    }
+
+    @Override
+    public String getServoId() {
+        return servoId;
+    }
+
+    @Override
+    public String getControllerId() {
+        return controllerId;
     }
 
     @Override

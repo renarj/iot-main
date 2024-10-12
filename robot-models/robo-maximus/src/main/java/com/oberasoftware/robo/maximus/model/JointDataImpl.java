@@ -1,6 +1,7 @@
 package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.Sets;
+import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.JointData;
 import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 
@@ -15,18 +16,21 @@ public class JointDataImpl implements JointData {
     public static final String TORGUE = "torgue";
 
     private String id;
+    private String controllerId;
 //    private int degrees;
 //    private int position;
 //    private int torgueState;
 
-    private Map<String, Object> jointValues = new HashMap<>();
+    private Map<String, Value> jointValues = new HashMap<>();
 
-    public JointDataImpl(String id) {
+    public JointDataImpl(String controllerId, String id) {
         this.id = id;
+        this.controllerId = controllerId;
     }
 
-    public JointDataImpl(String id, Map<String, Object> jointValues) {
+    public JointDataImpl(String controllerId, String id, Map<String, Value> jointValues) {
         this.id = id;
+        this.controllerId = controllerId;
         this.jointValues = jointValues;
     }
 
@@ -44,7 +48,7 @@ public class JointDataImpl implements JointData {
     }
 
     @Override
-    public Map<String, ?> getValues() {
+    public Map<String, Value> getValues() {
 //        return ImmutableMap.<String, Object> builder()
 //                .put(DEGREES, getDegrees())
 //                .put(POSITION, getPosition())
@@ -84,6 +88,15 @@ public class JointDataImpl implements JointData {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String getControllerId() {
+        return controllerId;
+    }
+
+    public void setControllerId(String controllerId) {
+        this.controllerId = controllerId;
     }
 
     @Override

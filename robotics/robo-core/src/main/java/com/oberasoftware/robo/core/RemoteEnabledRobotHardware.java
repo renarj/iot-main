@@ -4,7 +4,6 @@ import com.oberasoftware.base.event.Event;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.robotics.Capability;
-import com.oberasoftware.iot.core.robotics.MotionEngine;
 import com.oberasoftware.iot.core.robotics.RemoteDriver;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.commands.CommandListener;
@@ -48,11 +47,6 @@ public class RemoteEnabledRobotHardware implements RobotHardware, CommandListene
     @Override
     public void listen(EventHandler robotEventHandler) {
         this.localRobot.listen(robotEventHandler);
-    }
-
-    @Override
-    public MotionEngine getMotionEngine() {
-        return localRobot.getMotionEngine();
     }
 
     @Override

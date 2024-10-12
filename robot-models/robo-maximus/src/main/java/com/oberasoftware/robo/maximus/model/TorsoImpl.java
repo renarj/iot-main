@@ -5,13 +5,12 @@ import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Arm;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Torso;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
-import com.oberasoftware.iot.core.robotics.humanoid.joints.JointChain;
 
 import java.util.List;
 
 public class TorsoImpl implements Torso {
 
-    private static final String TORSO = "Torso";
+    public static final String TORSO = "Torso";
 
     private final Arm leftArm;
     private final Arm rightArm;
@@ -19,12 +18,6 @@ public class TorsoImpl implements Torso {
     public TorsoImpl(Arm leftArm, Arm rightArm) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
-    }
-
-    @Override
-    public List<JointChain> getJointChains() {
-        return ImmutableList.<JointChain>builder()
-                .add(leftArm, rightArm).build();
     }
 
     @Override

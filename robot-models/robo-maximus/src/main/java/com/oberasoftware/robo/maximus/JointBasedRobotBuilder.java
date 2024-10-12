@@ -1,16 +1,18 @@
 package com.oberasoftware.robo.maximus;
 
+import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
-import com.oberasoftware.iot.core.robotics.humanoid.components.*;
 import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
-import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.components.*;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
+import com.oberasoftware.iot.core.robotics.humanoid.joints.JointChain;
 import com.oberasoftware.iot.core.robotics.sensors.Sensor;
 import com.oberasoftware.robo.maximus.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.*;
 
@@ -21,49 +23,73 @@ public class JointBasedRobotBuilder implements RobotBuilder {
 
 
     private String name;
-    private Legs legs;
-    private Torso torso;
-    private Head head;
+    private String controllerId;
+
+    private Map<String, JointChain> jointChains = new HashMap<>();
 
     private final List<Sensor> sensors = new ArrayList<>();
     private final List<Behaviour> behaviours = new ArrayList<>();
 
-    public JointBasedRobotBuilder(String name) {
+    private LegBuilder leftLeg;
+    private LegBuilder rightLeg;
+    private ArmBuilder leftArm;
+    private ArmBuilder rightArm;
+
+    private String headName;
+    private JointBuilder headPitch;
+    private JointBuilder headRoll;
+
+    public JointBasedRobotBuilder(String controllerId, String name) {
         this.name = name;
+        this.controllerId = controllerId;
     }
 
     public JointBasedRobotBuilder() {
     }
 
-    public JointBasedRobotBuilder name(String name) {
+    public JointBasedRobotBuilder name(String controllerId, String name) {
         this.name = name;
+        this.controllerId = controllerId;
         return this;
     }
 
-    public static JointBasedRobotBuilder create(String name) {
-        return new JointBasedRobotBuilder(name);
+    public static JointBasedRobotBuilder create(String controllerId, String name) {
+        return new JointBasedRobotBuilder(controllerId, name);
     }
 
     public JointBasedRobotBuilder legs(LegBuilder leftLeg, LegBuilder rightLeg) {
-        legs = new LegsImpl(leftLeg.build(), rightLeg.build());
+        this.leftLeg = leftLeg;
+        this.rightLeg = rightLeg;
         return this;
     }
 
     public JointBasedRobotBuilder torso(ArmBuilder leftArm, ArmBuilder rightArm) {
-        torso = new TorsoImpl(leftArm.build(), rightArm.build());
-        return this;
-    }
-
-    public JointBasedRobotBuilder head(String name, String pitchId, String yawId) {
-        head = new HeadImpl(name,
-                new JointImpl(pitchId, name + PITCH, name + PITCH, false),
-                new JointImpl(yawId, name + YAW, name + YAW, false));
+        this.leftArm = leftArm;
+        this.rightArm = rightArm;
         return this;
     }
 
     public JointBasedRobotBuilder head(String name, JointBuilder pitchBuilder, JointBuilder rollBuilder) {
-        head = new HeadImpl(name, pitchBuilder.type(PITCH_HEAD).build(), rollBuilder.type(ROLL_HEAD).build());
+        this.headName = name;
+        this.headPitch = pitchBuilder;
+        this.headRoll = rollBuilder;
 
+        return this;
+    }
+
+    public JointBasedRobotBuilder joints(String setName, List<JointBuilder> jbs) {
+        var chain = new JointChain() {
+            @Override
+            public List<Joint> getJoints(boolean includeChildren) {
+                return jbs.stream().map(jb -> jb.build(name, controllerId)).collect(Collectors.toList());
+            }
+
+            @Override
+            public String getName() {
+                return setName;
+            }
+        };
+        jointChains.put(setName, chain);
         return this;
     }
 
@@ -77,23 +103,39 @@ public class JointBasedRobotBuilder implements RobotBuilder {
         return this;
     }
 
-    public HumanoidRobot build(RobotHardware hardware) {
-        if(legs != null && torso != null) {
-            HumanoidRobot humanoidRobot = new HumanoidRobotImpl(hardware, name, legs, torso, head, sensors, behaviours);
-            humanoidRobot.initialize(humanoidRobot, hardware);
-
-            return humanoidRobot;
-        } else {
-            throw new BuildException("Cannot build a robot without legs or arms!!!!");
+    public JointBasedRobot build(RobotHardware hardware) {
+        var combinedJoints = Lists.newArrayList(jointChains.values());
+        if(leftLeg != null && rightLeg != null) {
+            var legs = new LegsImpl(leftLeg.build(name, controllerId), rightLeg.build(name, controllerId));
+            combinedJoints.add(legs);
         }
+        if(leftArm != null && rightArm != null) {
+            var torso = new TorsoImpl(leftArm.build(name, controllerId), rightArm.build(name, controllerId));
+            combinedJoints.add(torso);
+        }
+        if(headPitch != null && headRoll != null) {
+            var head = new HeadImpl(name, headPitch.build(name, controllerId), headRoll.build(name, controllerId));
+            combinedJoints.add(head);
+        }
+        JointBasedRobot jointBasedRobot = new JointBasedRobotImpl(controllerId, hardware, name, combinedJoints, sensors, behaviours);
+        jointBasedRobot.initialize(jointBasedRobot, hardware);
+
+        return jointBasedRobot;
     }
 
     public static class LegBuilder {
         private final String legName;
 
-        private Hip hip;
-        private Joint knee;
-        private Ankle ankle;
+        private String ankleName;
+        private String hipName;
+
+        private JointBuilder kneeBuilder;
+        private JointBuilder ankleXBuilder;
+        private JointBuilder ankleYBuilder;
+
+        private JointBuilder hipXBuilder;
+        private JointBuilder hipYBuilder;
+        private JointBuilder hipZBuilder;
 
         private LegBuilder(String legName) {
             this.legName = legName;
@@ -104,32 +146,30 @@ public class JointBasedRobotBuilder implements RobotBuilder {
         }
 
         public LegBuilder ankle(String ankleName, JointBuilder x, JointBuilder y) {
-            ankle = new AnkleImpl(ankleName,
-                    x.type(ANKLE_PITCH).build(),
-                    y.type(ANKLE_ROLL).build());
-
+            this.ankleName = ankleName;
+            this.ankleXBuilder = x;
+            this.ankleYBuilder = y;
             return this;
         }
 
         public LegBuilder knee(JointBuilder jointBuilder) {
-            knee = jointBuilder.type(KNEE).build();
+            this.kneeBuilder = jointBuilder;
             return this;
         }
 
         public LegBuilder hip(String hipName, JointBuilder x, JointBuilder y, JointBuilder z) {
-            hip = new HipImpl(hipName,
-                    x.type(HIP_ROLL).build(),
-                    y.type(HIP_PITCH).build(),
-                    z.type(HIP_YAW).build());
+            this.hipName = hipName;
+            this.hipXBuilder = x;
+            this.hipYBuilder = y;
+            this.hipZBuilder = z;
             return this;
         }
 
-        private Leg build() throws RoboException {
-            if(hip != null && knee != null && ankle != null) {
-                return new LegImpl(legName, hip, knee, ankle);
-            } else {
-                throw new BuildException("Could not create robot, missing hip, knee or ankle");
-            }
+        private Leg build(String robotId, String controllerId) throws RoboException {
+            var a = new AnkleImpl(ankleName, ankleXBuilder.build(robotId, controllerId), ankleYBuilder.build(robotId, controllerId));
+            var h = new HipImpl(hipName, hipXBuilder.build(robotId, controllerId), hipYBuilder.build(robotId, controllerId), hipZBuilder.build(robotId, controllerId));
+
+            return new LegImpl(legName, h, kneeBuilder.build(robotId, controllerId), a);
         }
     }
 
@@ -137,9 +177,13 @@ public class JointBasedRobotBuilder implements RobotBuilder {
         private final String armName;
 
         private Shoulder shoulder;
-        private Joint elbow;
-        private Joint elbowRoll;
-        private Joint hand;
+        private String shoulderName;
+        private JointBuilder shoulderX;
+        private JointBuilder shoulderY;
+
+        private JointBuilder elbow;
+
+        private JointBuilder hand;
 
         public ArmBuilder(String armName) {
             this.armName = armName;
@@ -149,50 +193,35 @@ public class JointBasedRobotBuilder implements RobotBuilder {
             return new ArmBuilder(armName);
         }
 
-        public ArmBuilder shoulder(String name, String xId, String yId) {
-            shoulder = new ShoulderImpl(name,
-                    new JointImpl(xId, name + "x", SHOULDER_ROLL, false),
-                    new JointImpl(yId, name + "y", SHOULDER_PITCH, false));
-            return this;
-        }
-
         public ArmBuilder shoulder(String name, JointBuilder x, JointBuilder y) {
-            shoulder = new ShoulderImpl(name,
-                    x.type(SHOULDER_ROLL).build(),
-                    y.type(SHOULDER_PITCH).build());
+            this.shoulderName = name;
+            this.shoulderX = x;
+            this.shoulderY = y;
             return this;
-
         }
 
-        public ArmBuilder elbow(JointBuilder jointBuilder, JointBuilder rotateBuilder) {
-            elbow = jointBuilder.type(ELBOW).build();
-            elbowRoll = rotateBuilder.type(ELBOW_ROLL).build();
+        public ArmBuilder elbow(JointBuilder jointBuilder) {
+            elbow = jointBuilder.type(ELBOW);
 
             return this;
         }
 
         public ArmBuilder hand(JointBuilder jointBuilder) {
-            hand = jointBuilder.type(HAND).build();
+            hand = jointBuilder.type(HAND);
             return this;
         }
 
-        public ArmBuilder hand(String name, String handId) {
-            hand = new JointImpl(handId, name, HAND, false);
-            return this;
-        }
+        public Arm build(String robotId, String controllerId) {
+            var shoulder = new ShoulderImpl(shoulderName, shoulderX.build(robotId, controllerId), shoulderY.build(robotId, controllerId));
 
-        public Arm build() {
-            if(shoulder != null && elbow != null && elbowRoll != null && hand != null) {
-                return new ArmImpl(armName, shoulder, elbow, elbowRoll, hand);
-            } else {
-                throw new BuildException("Could not create robot, missing shoulder, elbow or hand");
-            }
+            return new ArmImpl(armName, shoulder, elbow.build(robotId, controllerId), hand.build(robotId, controllerId));
         }
     }
 
     public static class JointBuilder {
-        private final String id;
+        private final String thingId;
         private final String name;
+        private final String servoId;
 
         private final boolean inverted;
 
@@ -200,20 +229,33 @@ public class JointBasedRobotBuilder implements RobotBuilder {
         private Integer min;
         private Integer max;
 
-        public JointBuilder(String id, String name, boolean inverted) {
-            this.id = id;
+        public JointBuilder(String thingId, String servoId, String name, boolean inverted) {
+            this.thingId = thingId;
+            this.servoId = servoId;
             this.name = name;
             this.inverted = inverted;
         }
 
-        public static JointBuilder create(String id, String name) {
-            return new JointBuilder(id, name, false);
+        public static JointBuilder create(String thingId, String servoId, String name) {
+            return new JointBuilder(thingId, servoId, name, false);
         }
 
-        public static JointBuilder create(String id, String name, boolean inverted) {
-            return new JointBuilder(id, name, inverted);
+        /**
+         * Legacy API call, assuming servo and joint id are equal
+         * @param thingId
+         * @param name
+         * @return
+         */
+        public static JointBuilder create(String thingId, String name) {
+            return new JointBuilder(thingId, thingId, name, false);
         }
 
+        public static JointBuilder create(String thingId, String servoId, String name, boolean inverted) {
+            return new JointBuilder(thingId, servoId, name, inverted);
+        }
+        public static JointBuilder create(String thingId, String name, boolean inverted) {
+            return new JointBuilder(thingId, thingId, name, inverted);
+        }
         public JointBuilder type(String type) {
             this.type = type;
             return this;
@@ -229,18 +271,12 @@ public class JointBasedRobotBuilder implements RobotBuilder {
             return this;
         }
 
-        public Joint build() {
+        public Joint build(String robotId, String controllerId) {
             if(min != null && max != null) {
-                return new JointImpl(id, name, type, min, max, inverted);
+                return new JointImpl(robotId, controllerId, thingId, servoId, name, type, min, max, inverted);
             } else {
-                return new JointImpl(id, name, type, inverted);
+                return new JointImpl(robotId, controllerId, thingId, servoId, name, type, inverted);
             }
-        }
-    }
-
-    public static class BuildException extends RoboException {
-        public BuildException(String message) {
-            super(message);
         }
     }
 }

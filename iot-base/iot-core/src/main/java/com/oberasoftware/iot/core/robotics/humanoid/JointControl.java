@@ -15,7 +15,11 @@ public interface JointControl extends Behaviour {
 
     boolean isJointPresent(String jointId);
 
+    boolean isServoJointPresent(String servoId);
+
     Joint getJoint(String jointId);
+
+    Joint getServoJoint(String servoId);
 
     List<Joint> getJoints();
 
@@ -23,5 +27,5 @@ public interface JointControl extends Behaviour {
 
     void setJointPositions(List<JointTarget> jointPositions);
 
-    void runMotion(String motionId);
+    void runMotion(String controllerId, String motionId);
 }

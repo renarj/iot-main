@@ -37,7 +37,7 @@ public class LegAngles {
         KeyFrameImpl kf = new KeyFrameImpl(UUID.randomUUID().toString(), timeInMs);
         angles.forEach((key, value) -> {
             jointTypeMap.get(key).forEach(joint -> {
-                kf.addServoStep(new JointTargetImpl(joint.getID(), 0, value.intValue()));
+                kf.addServoStep(new JointTargetImpl(joint.getJointId(), 0, value.intValue()));
             });
         });
         return kf;

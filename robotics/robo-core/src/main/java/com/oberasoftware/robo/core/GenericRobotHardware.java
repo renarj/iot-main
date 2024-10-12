@@ -62,11 +62,6 @@ public class GenericRobotHardware implements RobotHardware {
     }
 
     @Override
-    public MotionEngine getMotionEngine() {
-        return getCapability(MotionEngine.class);
-    }
-
-    @Override
     public <T extends Capability> T getCapability(Class<T> capabilityClass) {
         Optional<Capability> o = capabilities.stream()
                 .map(CapabilityHolder::getCapability)

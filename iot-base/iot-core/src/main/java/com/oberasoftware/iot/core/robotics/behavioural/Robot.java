@@ -9,6 +9,8 @@ import java.util.List;
 public interface Robot {
     String getRobotId();
 
+    String getControllerId();
+
     List<Behaviour> getBehaviours();
 
     <T extends Behaviour> T getBehaviour(Class<T> behaviourClass);

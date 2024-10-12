@@ -17,7 +17,10 @@ public class RobotImpl implements Robot {
     private final List<Behaviour> behaviours;
     private final RobotHardware robot;
 
-    public RobotImpl(RobotHardware robot, List<Behaviour> behaviours) {
+    private final String controllerId;
+
+    public RobotImpl(String controllerId, RobotHardware robot, List<Behaviour> behaviours) {
+        this.controllerId = controllerId;
         this.behaviours = behaviours;
         this.robot = robot;
     }
@@ -54,5 +57,10 @@ public class RobotImpl implements Robot {
     @Override
     public String getRobotId() {
         return robot.getName();
+    }
+
+    @Override
+    public String getControllerId() {
+        return controllerId;
     }
 }

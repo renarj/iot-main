@@ -9,7 +9,6 @@ import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
-import com.oberasoftware.robo.cloud.RemoteCloudDriver;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.behaviours.BehaviouralRobotBuilder;
 import com.oberasoftware.robo.core.behaviours.WheelBasedWithCameraNavigationControllerImpl;
@@ -58,7 +57,6 @@ public class RobotInitializer {
                         ImmutableMap.<String, String>builder()
                                 .put(DynamixelServoDriver.PORT, dynamixelPort).build())
                 .capability(ServoSensorDriver.class)
-                .remote(RemoteCloudDriver.class)
                 .build();
 //        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("5", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
 //        robot.getServoDriver().sendCommand(new DynamixelAngleLimitCommand("9", DynamixelAngleLimitCommand.MODE.WHEEL_MODE));
@@ -107,7 +105,7 @@ public class RobotInitializer {
                 .camera(cameraTilt, camerRotate)
                 .wheels(mecanumDriveTrain)
                 .navigation(new WheelBasedWithCameraNavigationControllerImpl())
-                .build();
+                .build("test");
         behaviouralRobotRegistry.register(robotCar);
         LOG.info("Robot: {} was registered", robotCar);
 //
