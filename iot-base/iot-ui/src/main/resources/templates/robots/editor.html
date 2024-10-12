@@ -1,40 +1,46 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml">
-<head th:replace="includes/header :: header">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  data-bs-theme="dark">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body>
 
-<script th:src="@{/js/editor.js}" src="/static/js/editor.js"></script>
+<script th:src="@{/javascript/robots/editor.js}" src="/static/javascript/robots/editor.js"></script>
 
-<script id="jointContainer" type="x-tmp-mustache">
-    <div class="card border-dark mb-3 mt-1" style="width: 18rem;">
-      <div class="card-header text-white bg-primary" style="height: 40px; padding: 10px 15px;">
+<script id="controllerTemplate" type="text/x-handlebars-template">
+    <a class="list-group-item list-group-item-action controllerButton" controllerId="{{controllerId}}" href="/web/robots/editor/controllers({{controllerId}})">{{controllerId}}</a>
+</script>
+
+<script id="robotTemplate" type="text/x-handlebars-template">
+    <a class="list-group-item list-group-item-action robotButton" controllerId="{{controllerId}}" robotId="{{robotId}}" href="/web/robots/editor/controllers({{controllerId}})/robots({{robotId}})">{{robotId}}</a>
+</script>
+
+<script id="groupContainer" type="text/x-handlebars-template">
+    <div class="card mt-2">
+      <div class="card-header text-center text-white bg-primary" style="height: 40px; padding: 10px 15px;">
         <div class="checkbox" style="display:inline">
             <input  type="checkbox" value="" id="cb-{{id}}">
         </div>
         <label class="form-check-label" for="defaultCheck1">
-            {{chainName}} - {{name}}
+            {{name}}
         </label>
       </div>
-      <div class="card-body">
-            <ul class="list-group py-0" id="{{id}}">
-            </ul>
-      </div>
+        <ul class="list-group list-group-flush" id="{{id}}">
+        </ul>
     </div>
 </script>
 
-<script id="jointsTemplate" type="x-tmp-mustache">
-     <a href="#" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" friendlyName="{{name}}" jointType="{{jointType}}" style="height: 40px; padding: 10px 15px;">
-            <div class="checkbox" style="display:inline">
-            <input  type="checkbox" value="" jointChainId="{{jointChainId}}" jointId="{{jointId}}" class="jointCheckBox">
+<script id="jointsTemplate" type="text/x-handlebars-template">
+     <a href="#" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" friendlyName="{{name}}" jointType="{{jointType}}">
+        <div class="checkbox" style="display:inline">
+            <input  type="checkbox" value="" groupId="{{jointChainId}}" jointId="{{jointId}}" class="jointCheckBox">
         </div>
         <label class="form-check-label" for="defaultCheck1">
-            {{name}} (ID: {{jointId}})
+            {{name}}
         </label>
      </a>
 </script>
 
-<script id="jointPosition" type="x-tmp-mustache">
+<script id="jointPosition" type="text/x-handlebars-template">
     <tr id="jointPosition-{{id}}" jointId="{{id}}">
         <td class="jid" jointId="{{id}}">{{id}} ({{name}})</td>
         <td class="pos">{{position}}</td>
@@ -46,7 +52,7 @@
     </tr>
 </script>
 
-<script id="frame" type="x-tmp-mustache">
+<script id="frame" type="text/x-handlebars-template">
     <tr id="frame-{{id}}">
         <td class="fid" frameId="{{id}}">{{id}}</td>
         <td >{{frames}}</td>
@@ -58,7 +64,7 @@
     </tr>
 </script>
 
-<script id="motion" type="x-tmp-mustache">
+<script id="motion" type="text/x-handlebars-template">
     <tr id="motion-{{id}}" motionId="{{id}}">
         <td class="mid" motionId="{{id}}">{{id}}</td>
         <td>{{frames}}</td>
@@ -69,7 +75,7 @@
     </tr>
 </script>
 
-<script id="sensor" type="x-tmp-mustache">
+<script id="sensor" type="text/x-handlebars-template">
     <tr id="sensor-{{id}}" sensorId="{{id}}">
         <td>{{id}}</td>
         <td id="sensor-value-{{id}}">{{value}}</td>
@@ -95,15 +101,46 @@
     </div>
 </div>
 
-<div th:replace="includes/header :: navigation"/>
+<div th:replace="~{includes/header :: navigation (selectTab='robots')}"></div>
 
-<div class="container-fluid" id="chainContainer">
+<div th:replace="~{includes/header :: robotTabs (selectTab='editor')}"></div>
+
+<div class="container-fluid" id="root" th:attr="controllerId=${controllerId},robotId=${robotId}">
     <div class="row">
-        <div class="col-md-2" id="joints">
+        <div class="col-2" id="actionMenu">
+            <div class="card px-0">
+                <div class="card-header">
+                    <h5 class="card-title">Controllers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="controllerList">
 
+                    </div>
+                </div>
+            </div>
+            <div class="card px-0 hide mt-2" id="robotListCard">
+                <div class="card-header">
+                    <h5 class="card-title">Robots</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="robotList">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card px-0 hide mt-2" id="groupListCard">
+                <div class="card-header">
+                    <h5 class="card-title">Joints</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group" id="groupList">
+
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-7 mb-3 mt-1" id="editor">
-            <div class="row mb-3 card">
+            <div class="row mb-3 card me-1">
                 <div class="card-header bg-primary text-white">
                     Editor
                 </div>
@@ -111,33 +148,37 @@
                     <div class="col-md-4">
                         <div class="card mr-1">
                             <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Position of: <label id="servoTitle"></label></h6></div>
-                            <div class="card-body row">
-                                <div class="col-sm-4">
-                                    <input id="positionSlider" type="text" data-slider-min="-180" data-slider-max="180" data-slider-step="1" data-slider-value="0" data-slider-orientation="vertical"/>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <input id="positionSlider" type="range" min="-180" max="180" data-slider-step="1" data-slider-value="0"/>
                                 </div>
-                                <div class="col-sm-8 small">
-                                    <div class="form-group row">
-                                        <label for="degrees">Degrees</label>
+                                <div class="form-group row">
+                                    <label for="degrees" class="col-sm-4 col-form-label-sm">Degrees</label>
+                                    <div class="col-sm-6">
                                         <input type="text" class="form-control" id="degrees" placeholder="" disabled>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="position">Pos</label>
+                                </div>
+                                <div class="form-group row mt-2">
+                                    <label for="position" class="col-sm-4 col-form-label-sm">Pos</label>
+                                    <div class="col-sm-6">
                                         <input type="text" class="form-control small" id="position" placeholder="" disabled>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="sync">Mirror Grouped Joints:</label>
-                                        <input type="checkbox" class="form-control small" id="sync">
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="sync">
+                                        <label class="form-check-label" for="sync">Mirror Grouped Joints</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <button type="button" class="btn btn-secondary btn-sm torgueEnable" id="tEnable">On</button>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable">Off</button>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <button type="button" class="btn btn-primary btn-sm" id="add">Add</button>
-                                        </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-3">
+                                        <button type="button" class="btn btn-secondary btn-sm torgueEnable" id="tEnable">On</button>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button type="button" class="btn btn-secondary btn-sm torgueDisable" id="tDisable">Off</button>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button type="button" class="btn btn-primary btn-sm" id="add">Add</button>
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +203,7 @@
                             </div>
                         </div>
 
-                        <div class="card mt-2 border-dark">
+                        <div class="card mt-2">
                             <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools <label id="frameLabel"></label></h6></div>
                             <div class="card-body mb-1 mt-1 ml-1">
                                 <form>
@@ -172,14 +213,14 @@
                                             <input type="text" class="form-control" size="10" id="frameName">
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row mt-2">
                                         <label for="time" class="col-sm-4 col-form-label">Time (in ms.)</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" size="10" id="time">
                                         </div>
                                     </div>
                                 </form>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-sm-12 mb-1">
                                         <button type="submit" class="btn btn-primary btn-sm" id="saveFrame">Save Frame</button>
                                         <button type="submit" class="btn btn-primary btn-sm" id="newFrame">New Frame</button>
@@ -200,7 +241,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row card border-dark">
+            <div class="row card me-1">
                 <div class="card-header text-white bg-primary">Key Frames</div>
                 <div class="body">
                     <table class="table">
@@ -241,8 +282,8 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card mt-1 border-dark" id="motionTool">
-                        <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Current Motion: <label id="motionLabel"></label></h6></div>
+                    <div class="card mt-1" id="motionTool">
+                        <div class="card-header"><h6>Current Motion: <label id="motionLabel"></label></h6></div>
                         <div class="card-body">
                             <form>
                                 <div class="form-group row">
@@ -252,13 +293,17 @@
                                     </div>
                                 </div>
                             </form>
-                            <button type="submit" class="btn btn-primary btn-sm" id="saveMotion">Save Motion</button>
-                            <button type="submit" class="btn btn-primary btn-sm" id="newMotion">New Motion</button>
-                            <button type="submit" class="btn btn-primary btn-sm" id="runMotion">Run Motion</button>
-                            <button type="submit" class="btn btn-primary btn-sm" id="exportMotions">Export All</button>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-sm" id="saveMotion">Save Motion</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="newMotion">New Motion</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="runMotion">Run Motion</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="exportMotions">Export All</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card mt-1 border-dark" id="robotTool">
+                    <div class="card mt-1" id="robotTool">
                         <div class="card-header" style="height: 40px; padding: 10px 15px;"><h6>Tools</h6></div>
                         <div class="card-body">
                             <button type="submit" class="btn btn-primary btn-sm" id="torgueAllOn">Torgue On - All</button>
@@ -267,7 +312,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card row mt-1 mr-1 ml-1">
+            <div class="card row mt-2 mr-1 ml-1">
                 <div class="card-header bg-primary text-white">
                     <h5>Sensors</h5>
                 </div>
@@ -288,7 +333,7 @@
     </div>
 </div>
 
-<div th:replace="includes/header :: footer"></div>
+<div th:replace="~{includes/header :: footer}"></div>
 
 </body>
 </html>

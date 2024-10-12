@@ -34,6 +34,7 @@
                     <li class="nav-item"><a th:classappend="${selectTab == 'dashboard'} ? 'active'" class="nav-link" th:href="@{'/web'}">DashBoard</a></li>
                     <li class="nav-item"><a th:classappend="${selectTab == 'admin'} ? 'active'" class="nav-link" th:href="@{'/web/admin/things'}">Administration</a></li>
                     <li class="nav-item"><a th:classappend="${selectTab == 'trains'} ? 'active'" class="nav-link" th:href="@{'/web/trains'}">Model Trains</a></li>
+                    <li class="nav-item"><a th:classappend="${selectTab == 'robots'} ? 'active'" class="nav-link" th:href="@{'/web/robots'}">Robotics</a></li>
                 </ul>
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -54,14 +55,19 @@
     </ul>
 
     <ul class="nav nav-tabs" th:fragment="trainTabs (selectTab)">
-        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'locomotives'} ? 'active'" href="#" th:href="@{'/web/trains/'}">Locomotives</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'locomotives'} ? 'active'" href="#" th:href="@{'/web/trains'}">Locomotives</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'turnouts'} ? 'active'" href="#" th:href="@{'/web/trains/turnouts'}">Turnouts</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'sensors'} ? 'active'" href="#" th:href="@{'/web/trains/sensors'}">Sensors</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'system'} ? 'active'" href="#" th:href="@{'/web/trains/system'}">System</a></li>
     </ul>
 
+    <ul class="nav nav-tabs" th:fragment="robotTabs (selectTab)">
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'joints'} ? 'active'" href="#" th:href="@{'/web/robots'}">Joints</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'editor'} ? 'active'" href="#" th:href="@{'/web/robots/editor'}">Editors</a></li>
+    </ul>
+
 <div id="version" th:fragment="footer">
-    <p class="text-center">&#169; Copyright 2023 Oberasoftware, version: <span>1.0</span></p>
+    <p class="text-center">&#169; Copyright 2024 Oberasoftware, version: <span>2.0</span></p>
 
 
 </div>

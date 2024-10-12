@@ -2,6 +2,46 @@ let thingSvcUrl = "";
 let stateSvcUrl = "";
 let commandSvcUrl = "";
 
+function getControllerId() {
+    let root = $("#root")
+    return root.attr("controllerId");
+}
+
+function getThingId() {
+    let root = $("#root")
+    return root.attr("thingId");
+}
+
+function sendCommand(data, successCallback) {
+    $.ajax({
+        url: commandSvcUrl + "/api/command/",
+        data: JSON.stringify(data),
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            if(successCallback !== undefined) {
+                successCallback();
+            }
+        }
+    });
+}
+
+function loadControllerTemplate(templateName, controllerList, callback) {
+    $.get(thingSvcUrl + "/api/controllers", function(data) {
+        $.each(data, function (i, controller) {
+            let data = {
+                "controllerId": controller.controllerId
+            };
+
+            renderAndAppend(templateName, data, controllerList);
+        })
+
+        if(callback) {
+            callback();
+        }
+    });
+}
+
 function retrieveServiceUrls(callback) {
     $.get("/web/serviceLocations", function(sData) {
         thingSvcUrl = sData.thingSvcUrl;

@@ -26,7 +26,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ESP32SensorDriver implements SensorDriver<TeensyPort> {
     private static final Logger LOG = getLogger(ESP32SensorDriver.class);
 
-    private static final int CHECK_INTERVAL = 10000;
+    private static final int CHECK_INTERVAL = 5000;
 
     static final String INA_260 = "ina260";
     static final String LSM9DS1 = "LSM9DS1";
@@ -91,7 +91,7 @@ public class ESP32SensorDriver implements SensorDriver<TeensyPort> {
         JSONObject sensors = jo.getJSONObject("sensors");
         for(String key: sensors.keySet()) {
             JSONObject sensor = sensors.getJSONObject(key);
-            LOG.debug("Sensor: {} data: {}", key, sensor.toString());
+            LOG.info("Sensor: {} data: {}", key, sensor.toString());
 
             for(String attribute : sensor.keySet()) {
                 LOG.debug("Sensor data: {} value: {}", key + "." + attribute, sensor.get(attribute));

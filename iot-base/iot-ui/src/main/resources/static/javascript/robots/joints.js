@@ -308,14 +308,8 @@ function setServoAngle(jointId, degrees) {
         }});
 }
 
-function renderTemplate(templateName, data) {
-    var template = $('#' + templateName).html();
-    Mustache.parse(template);
-    return Mustache.render(template, data);
-}
-
 $(document).ready(function() {
     renderRobots();
 
-    connect();
+    // connect();
 });

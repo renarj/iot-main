@@ -9,13 +9,13 @@ void ControllerSensors::setup()
   // imu.settings.device.commInterface = IMU_MODE_I2C;
   // imu.settings.device.mAddress = LSM9DS1_M;
   // imu.settings.device.agAddress = LSM9DS1_AG;
-  // if (!imu.begin())
-  // {
-  //   while (1) {
-  //     Serial.println("IMU failed to start");
-  //     delay(100);
-  //   }
-  // }
+  if (!imu.begin())
+  {
+    while (1) {
+      Serial.println("IMU failed to start");
+      delay(100);
+    }
+  }
 
   if (!ina260.begin()) {    
     while (1) {
@@ -26,20 +26,20 @@ void ControllerSensors::setup()
 }
 
 void ControllerSensors::readSensors() {
-  // if ( imu.gyroAvailable() )
-  // {
-  //   imu.readGyro();
-  // }
-  // if ( imu.accelAvailable() )
-  // {
-  //   imu.readAccel();
-  // }
-  // if ( imu.magAvailable() )
-  // {
-  //   imu.readMag();
-  // }
+  if ( imu.gyroAvailable() )
+  {
+    imu.readGyro();
+  }
+  if ( imu.accelAvailable() )
+  {
+    imu.readAccel();
+  }
+  if ( imu.magAvailable() )
+  {
+    imu.readMag();
+  }
 
-  // calcAttitude();
+  calcAttitude();
 
   readINA260();
 }

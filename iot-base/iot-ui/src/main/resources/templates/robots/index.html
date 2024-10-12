@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml">
-<head th:replace="includes/header :: header">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  data-bs-theme="dark">
+<head th:replace="~{includes/header :: header}">
 </head>
 <body>
 
-<script th:src="@{/js/joints.js}" src="/static/js/joints.js"></script>
+<script th:src="@{/javascript/robots/joints.js}" src="/static/javascript/robots/joints.js"></script>
 
-<script id="chain" type="x-tmpl-mustache">
+<script id="chain" type="text/x-handlebars-template">
 <div class="row">
     <div class="card bg-light mb-3 w-100">
         <div class="card-header">{{name}}</div>
@@ -19,7 +19,7 @@
 </div>
 </script>
 
-<script id="jointChain" type="x-tmpl-mustache">
+<script id="jointChain" type="text/x-handlebars-template">
 <div class="col-sm-6">
     <div class="card" >
       <div class="card-body">
@@ -31,14 +31,14 @@
 </div>
 </script>
 
-<script id="sensor" type="x-tmp-mustache">
+<script id="sensor" type="text/x-handlebars-template">
     <tr id="sensor-{{id}}" sensorId="{{id}}">
         <td>{{id}}</td>
         <td id="sensor-value-{{id}}">{{value}}</td>
     </tr>
 </script>
 
-<script id="joint" type="x-tmpl-mustache">
+<script id="joint" type="text/x-handlebars-template">
     <div class="card mr-1 col">
       <div class="card-header row text-white bg-primary "><h6>{{name}} ({{id}})</h6></div>
       <div class="card-body row">
@@ -73,7 +73,9 @@
       </div>
     </div>
 </script>
-<div th:replace="includes/header :: navigation"/>
+<div th:replace="~{includes/header :: navigation (selectTab='robots')}"></div>
+
+<div th:replace="~{includes/header :: robotTabs (selectTab='joints')}"></div>
 
 <div class="container-fluid" id="main">
     <div class="row">
@@ -119,7 +121,7 @@
 
 </div>
 
-<div th:replace="includes/header :: footer"></div>
+<div th:replace="~{includes/header :: footer}"></div>
 
 </body>
 </html>

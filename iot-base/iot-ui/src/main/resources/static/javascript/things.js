@@ -23,26 +23,8 @@ function pageInit() {
     })
 }
 
-function getControllerId() {
-    let root = $("#root")
-    return root.attr("controllerId");
-}
-
-function getThingId() {
-    let root = $("#root")
-    return root.attr("thingId");
-}
-
 function loadControllers() {
-    $.get(thingSvcUrl + "/api/controllers", function(data) {
-        $.each(data, function (i, controller) {
-            let data = {
-                "controllerId": controller.controllerId
-            };
-
-            renderAndAppend("controllerTemplate", data, "controllerList");
-        })
-
+    loadControllerTemplate("controllerTemplate", "controllerList", function() {
         let controllerId = getControllerId();
         let thingId = getThingId();
         if(controllerId !== undefined) {
@@ -54,7 +36,7 @@ function loadControllers() {
                 loadControllerThings(controllerId);
             }
         }
-    });
+    })
 }
 
 function loadControllerThings(controllerId) {

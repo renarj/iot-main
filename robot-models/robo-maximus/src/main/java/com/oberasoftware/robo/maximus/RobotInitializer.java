@@ -14,6 +14,8 @@ import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoData;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
@@ -21,7 +23,9 @@ import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelTorgueManager;
+import com.oberasoftware.robo.maximus.model.JointDataImpl;
 import com.oberasoftware.robo.maximus.sensors.ESP32SensorDriver;
+import com.oberasoftware.robo.maximus.storage.MotionStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -40,6 +44,8 @@ public class RobotInitializer {
 
     private final RobotRegistry robotRegistry;
 
+    private final BehaviouralRobotRegistry behaviouralRobotRegistry;
+
     private final LocalEventBus eventBus;
 
     private final ServoRegistry servoRegistry;
@@ -48,10 +54,11 @@ public class RobotInitializer {
 
     private final AgentControllerInformation controllerInformation;
 
-    public RobotInitializer(ThingClient thingClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, AgentControllerInformation controllerInformation, LocalEventBus eventBus, ServoRegistry servoRegistry) {
+    public RobotInitializer(ThingClient thingClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, BehaviouralRobotRegistry behaviouralRobotRegistry, AgentControllerInformation controllerInformation, LocalEventBus eventBus, ServoRegistry servoRegistry) {
         this.thingClient = thingClient;
         this.applicationContext = applicationContext;
         this.robotRegistry = robotRegistry;
+        this.behaviouralRobotRegistry = behaviouralRobotRegistry;
         this.controllerInformation = controllerInformation;
         this.servoRegistry = servoRegistry;
         this.eventBus = eventBus;
@@ -67,14 +74,15 @@ public class RobotInitializer {
             robots.forEach(r -> {
                 LOG.info("Configuring robot: {} on controller: {}", r.getThingId(), r.getControllerId());
                 HardwareRobotBuilder hardwareRobotBuilder = new HardwareRobotBuilder(r.getThingId(), applicationContext);
-                JointBasedRobotBuilder robotBuilder = new JointBasedRobotBuilder(r.getThingId());
+                hardwareRobotBuilder.capability(MotionStorage.class);
+                JointBasedRobotBuilder robotBuilder = new JointBasedRobotBuilder(r.getControllerId(), r.getThingId());
                 var context = new RobotContext(hardwareRobotBuilder, robotBuilder);
                 activatorFactory.getActivator(r).ifPresent(a -> a.initRobot(context, r));
 
                 var hardwareRobot = hardwareRobotBuilder.build();
                 LOG.info("All dependencies for robot: {} are configured, building robot construct", r.getThingId());
-//                robotBuilder.build(hardwareRobot);
-
+                Robot robot = robotBuilder.build(hardwareRobot);
+                behaviouralRobotRegistry.register(robot);
 
                 hardwareRobot.listen(new ServoUpdateListener());
                 robotRegistry.register(hardwareRobot);
@@ -105,13 +113,21 @@ public class RobotInitializer {
                 eventBus.publish(v);
             });
         }
+
+        @EventSubscribe
+        public void receiveJointUpdate(JointDataImpl jointData) {
+            var v = jointData.getValues();
+            var event = new ThingMultiValueEventImpl(jointData.getControllerId(), jointData.getId(), v);
+            LOG.debug("Publishing joint event: {}", event);
+            eventBus.publish(event);
+        }
     }
 
     public class RobotContext {
         private final HardwareRobotBuilder hardwareBuilder;
-        private final RobotBuilder robotBuilder;
+        private final JointBasedRobotBuilder robotBuilder;
 
-        public RobotContext(HardwareRobotBuilder hardwareBuilder, RobotBuilder robotBuilder) {
+        public RobotContext(HardwareRobotBuilder hardwareBuilder, JointBasedRobotBuilder robotBuilder) {
             this.hardwareBuilder = hardwareBuilder;
             this.robotBuilder = robotBuilder;
         }
@@ -120,7 +136,7 @@ public class RobotInitializer {
             return hardwareBuilder;
         }
 
-        public RobotBuilder getRobotBuilder() {
+        public JointBasedRobotBuilder getRobotBuilder() {
             return robotBuilder;
         }
     }
@@ -215,6 +231,20 @@ public class RobotInitializer {
         @Override
         void activate(RobotContext context, IotThing activatable) {
             LOG.info("Activating robot: {}", activatable.getThingId());
+
+            try {
+                List<IotThing> joints = thingClient.getChildren(activatable.getControllerId(), activatable.getThingId(), "Joint");
+                LOG.info("Discovered joints: {} for robot: {}", joints, activatable.getThingId());
+
+                var jbs = joints.stream().map(j -> {
+                    String servoThingId = j.getProperty("servo");
+                    String servoId = servoRegistry.getThing(activatable.getControllerId(), servoThingId).getServoId();
+                    return JointBasedRobotBuilder.JointBuilder.create(j.getThingId(), servoId, j.getFriendlyName());
+                }).collect(Collectors.toList());
+                context.getRobotBuilder().joints("default", jbs);
+            } catch(IOTException e) {
+                LOG.error("Could not retrieve robot joints", e);
+            }
         }
 
         @Override
@@ -226,6 +256,8 @@ public class RobotInitializer {
                 try {
                     var oDriver = thingClient.getThing(activatable.getControllerId(), servoDriver);
                     oDriver.ifPresent(thingsToActivate::add);
+
+
                 } catch (IOTException e) {
                     LOG.error("Could not retrieve remote servo driver information", e);
                 }
