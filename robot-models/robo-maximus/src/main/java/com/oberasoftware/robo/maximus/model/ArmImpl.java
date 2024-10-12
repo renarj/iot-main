@@ -12,14 +12,12 @@ public class ArmImpl implements Arm {
     private final String name;
     private final Shoulder shoulder;
     private final Joint elbow;
-    private final Joint elbowRoll;
     private final Joint hand;
 
-    public ArmImpl(String name, Shoulder shoulder, Joint elbow, Joint elbowRoll, Joint hand) {
+    public ArmImpl(String name, Shoulder shoulder, Joint elbow, Joint hand) {
         this.name = name;
         this.shoulder = shoulder;
         this.elbow = elbow;
-        this.elbowRoll = elbowRoll;
         this.hand = hand;
     }
 
@@ -34,11 +32,6 @@ public class ArmImpl implements Arm {
     }
 
     @Override
-    public Joint getElbowRoll() {
-        return elbowRoll;
-    }
-
-    @Override
     public Joint getHand() {
         return hand;
     }
@@ -47,8 +40,7 @@ public class ArmImpl implements Arm {
     public List<Joint> getJoints(boolean includeChildren) {
         ImmutableList.Builder<Joint> b = ImmutableList.<Joint>builder()
                 .add(hand)
-                .add(elbow)
-                .add(elbowRoll);
+                .add(elbow);
 
         b.addAll(shoulder.getJoints());
 

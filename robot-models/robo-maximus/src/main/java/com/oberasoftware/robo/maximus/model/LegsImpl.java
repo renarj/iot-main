@@ -5,12 +5,11 @@ import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Leg;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Legs;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
-import com.oberasoftware.iot.core.robotics.humanoid.joints.JointChain;
 
 import java.util.List;
 
 public class LegsImpl implements Legs {
-    private static final String LEGS = "Legs";
+    public static final String LEGS = "Legs";
     private final Leg leftLeft;
     private final Leg rightLeg;
 
@@ -22,14 +21,6 @@ public class LegsImpl implements Legs {
     @Override
     public Leg getLeg(String legName) {
         return legName.equalsIgnoreCase("left") ? leftLeft : rightLeg;
-    }
-
-    @Override
-    public List<JointChain> getJointChains() {
-        return ImmutableList.<JointChain>builder()
-                .add(leftLeft)
-                .add(rightLeg)
-                .build();
     }
 
     @Override

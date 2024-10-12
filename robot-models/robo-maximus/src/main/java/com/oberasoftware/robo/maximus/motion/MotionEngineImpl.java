@@ -58,7 +58,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
     private final Map<String, Joint> jointMap;
 
     public MotionEngineImpl(List<Joint> joints) {
-        this.jointMap = joints.stream().collect(Collectors.toMap(Joint::getID, jv -> jv));
+        this.jointMap = joints.stream().collect(Collectors.toMap(Joint::getJointId, jv -> jv));
     }
 
     @Override
@@ -133,7 +133,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         Stopwatch w = Stopwatch.createStarted();
         var intervalList = unit.getFrames().stream().map(f -> calculateFrame(lastServoPositions, f))
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .toList();
         LOG.info("Calculated: {} intervals in: {} for motion: {}", intervalList.size(), w.elapsed(MILLISECONDS), unit);
 
         LOG.info("Enabling torgue");
@@ -146,7 +146,10 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
             Stopwatch is = Stopwatch.createStarted();
             Map<String, PositionAndSpeedCommand> m = targets.stream()
-                    .map(jt -> new PositionAndSpeedCommand(jt.getServoId(), jt.getTargetAngle(), RADIAL_SCALE, jt.getTargetVelocity(), new Scale(0, 100)))
+                    .map(jt -> {
+                        String sId = jointMap.get(jt.getJointId()).getServoId();
+                        return new PositionAndSpeedCommand(sId, jt.getTargetAngle(), RADIAL_SCALE, jt.getTargetVelocity(), new Scale(0, 100));
+                    })
                     .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, jtm -> jtm));
 
             servoDriver.bulkSetPositionAndSpeed(m, BulkPositionSpeedCommand.WRITE_MODE.SYNC);
@@ -170,12 +173,11 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
             var l = IntStream.range(0, iterations).mapToObj(i -> new IntervalTarget(frame.getKeyFrameId(), new ArrayList<>())).collect(Collectors.toList());
 
             LOG.debug("REv PER FREQ: {}", REV_PER_FREQ_INT);
-
-
             for(JointTarget t: frame.getJointTargets()) {
-                int currentAngle = positions.get(t.getServoId());
+                String servoId = jointMap.get(t.getJointId()).getServoId();
+                int currentAngle = positions.get(servoId);
 
-                int targetAngle = checkAngle(t.getServoId(), t.getTargetAngle());
+                int targetAngle = checkAngle(t.getJointId(), t.getTargetAngle());
                 if(currentAngle != targetAngle) {
                     double deltaPerFrame = (double)(targetAngle - currentAngle) / iterations;
 
@@ -193,16 +195,16 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
                         double interim = (deltaPerFrame * (i + 1));
                         int angle = (int)(currentAngle + interim);
 
-                        LOG.debug("Target: {} at velocity: {} for servo: {}", angle, velocityProfile, t.getServoId());
+                        LOG.debug("Target: {} at velocity: {} for servo: {}", angle, velocityProfile, t.getJointId());
 
-                        JointTargetImpl jt = new JointTargetImpl(t.getServoId(), 0, angle);
+                        JointTargetImpl jt = new JointTargetImpl(t.getJointId(), 0, angle);
                         jt.setTargetVelocity(velocityProfile);
                         l.get(i).addTarget(jt);
                     }
 
-                    positions.put(t.getServoId(), targetAngle);
+                    positions.put(servoId, targetAngle);
                 } else {
-                    LOG.debug("Target angle: {} is already reached for servo: {}", targetAngle, t.getServoId());
+                    LOG.debug("Target angle: {} is already reached for servo: {}", targetAngle, t.getJointId());
                 }
             }
 

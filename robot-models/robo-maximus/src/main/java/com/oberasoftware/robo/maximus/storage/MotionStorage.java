@@ -6,11 +6,7 @@ import com.oberasoftware.iot.core.robotics.motion.Motion;
 import java.util.List;
 
 public interface MotionStorage extends Capability {
-    void storeMotion(String motionName, Motion motion);
+    List<Motion> findAllMotions(String controllerId, String robotId);
 
-    void deleteMotion(String motionName);
-
-    List<Motion> findAllMotions();
-
-    Motion findMotion(String motionName);
+    Motion findMotion(String controllerId, String motionId);
 }

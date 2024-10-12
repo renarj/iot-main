@@ -56,8 +56,8 @@ public class BehaviouralRobotBuilder {
     }
 
 
-    public Robot build() {
-        RobotImpl behaviouralRobot = new RobotImpl(robot, behaviours);
+    public Robot build(String controllerId) {
+        RobotImpl behaviouralRobot = new RobotImpl(controllerId, robot, behaviours);
         behaviouralRobot.initialize();
 
         return behaviouralRobot;

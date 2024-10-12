@@ -19,7 +19,6 @@ public class RobotCommandHandler implements ThingCommandHandler {
     @Autowired
     private List<RobotAttributeHandler> handlers;
 
-    //BasicCommandImpl{controllerId='PiRoboArm', thingId='servo-122', commandType=SWITCH, attributes={torgue=true}} to command: SwitchCommandImpl{attributeStates={torgue=ON}, thingId='servo-122'}
     @Override
     public void receive(IotThing thing, Command command) {
         LOG.info("Received command: {} for thing: {}", command, thing);

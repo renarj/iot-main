@@ -18,11 +18,16 @@ public class RobotRegistryImpl implements RobotRegistry {
 
     @Override
     public RobotHardware getRobot(String name) {
-        if(robot.getName().equalsIgnoreCase(name)) {
+        if(containsRobot(name)) {
             return robot;
         } else {
             throw new RuntimeIOTException("This is a singleton robot registry, no robot with name: " + name + " registered");
         }
+    }
+
+    @Override
+    public boolean containsRobot(String name) {
+        return robot.getName().equalsIgnoreCase(name);
     }
 
     @Override

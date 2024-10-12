@@ -8,7 +8,7 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
 import com.oberasoftware.iot.core.robotics.servo.DynamixelDevice;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
@@ -68,12 +68,12 @@ public class StaticRobotInitializer {
         initialize(new ArrayList<>(), false);
     }
 
-    public void initialize(BiConsumer<RobotHardware, HumanoidRobot> action, boolean terminateAfterAction) {
+    public void initialize(BiConsumer<RobotHardware, JointBasedRobot> action, boolean terminateAfterAction) {
         initialize(Lists.newArrayList(action), terminateAfterAction);
 
     }
 
-    public void initialize(List<BiConsumer<RobotHardware, HumanoidRobot>> actions, boolean terminateAfterAction) {
+    public void initialize(List<BiConsumer<RobotHardware, JointBasedRobot>> actions, boolean terminateAfterAction) {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
         RobotHardware robot = new HardwareRobotBuilder("maximus-core", applicationContext)
                 .servoDriver(DynamixelServoDriver.class,
@@ -99,9 +99,9 @@ public class StaticRobotInitializer {
         undetectedServos.removeAll(detectedServos);
         undetectedServos.forEach(s -> LOG.info("Did not detect servo: {}", s));
 
-        HumanoidRobot humanoidRobot = constructHumanoid(robot);
+        JointBasedRobot jointBasedRobot = constructHumanoid(robot);
         actions.forEach(a -> {
-            a.accept(robot, humanoidRobot);
+            a.accept(robot, jointBasedRobot);
         });
 
         if(terminateAfterAction) {
@@ -117,8 +117,8 @@ public class StaticRobotInitializer {
         }
     }
 
-    private HumanoidRobot constructHumanoid(RobotHardware robot) {
-        HumanoidRobot maximus = JointBasedRobotBuilder.create("maximus")
+    private JointBasedRobot constructHumanoid(RobotHardware robot) {
+        JointBasedRobot maximus = JointBasedRobotBuilder.create("test", "maximus")
                 .legs(
                         createLeg(RIGHT_LEG)
                                 .ankle(RIGHT_ANKLE,
@@ -144,8 +144,8 @@ public class StaticRobotInitializer {
                                         create("131", LEFT_SHOULDER_ROLL, true),
                                         create("130", LEFT_SHOULDER_PITCH))
                                 .elbow(
-                                        create("133", LEFT_ELBOW, true  ).max(110).min(-110),
-                                        create("132", LEFT_ELBOW_ROLL))
+                                        create("133", LEFT_ELBOW, true  ).max(110).min(-110)
+                                        )
                                 .hand(create("134", LEFT_HAND).min(-5).max(20)), //"LeftHand", "134"
                         createArm(RIGHT_ARM)
                                 .shoulder(RIGHT_SHOULDER,
@@ -153,8 +153,7 @@ public class StaticRobotInitializer {
                                         create("120", RIGHT_SHOULDER_PITCH, true)
                                         )
                                 .elbow(
-                                        create("123", RIGHT_ELBOW, true).max(110).min(-110),
-                                        create("122", RIGHT_ELBOW_ROLL)
+                                        create("123", RIGHT_ELBOW, true).max(110).min(-110)
                                 )
                                 .hand(create("124", RIGHT_HAND, true).min(-5).max(20)))  //"RightHand", "124"
                 .head("head",

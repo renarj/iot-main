@@ -1,6 +1,10 @@
 package com.oberasoftware.robo.maximus.motion;
 
 import com.google.common.collect.ImmutableMap;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.states.Value;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.commands.BulkPositionSpeedCommand;
@@ -35,17 +39,19 @@ public class JointControlImpl implements JointControl {
     private ServoDriver servoDriver;
     private MotionEngine motionEngine;
     private MotionStorage motionStorage;
+    private Robot robot;
 
     private Map<String, Joint> jointMap;
 
     private TorgueManager torgueManager;
 
     public JointControlImpl(List<Joint> joints) {
-        jointMap = joints.stream().collect(Collectors.toMap(Joint::getID, jv -> jv));
+        jointMap = joints.stream().collect(Collectors.toMap(Joint::getJointId, jv -> jv));
     }
 
     @Override
     public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
+        this.robot = behaviouralRobot;
         this.servoDriver = robotCore.getServoDriver();
         this.motionEngine = behaviouralRobot.getBehaviour(MotionEngine.class);
         this.motionStorage = robotCore.getCapability(MotionStorage.class);
@@ -79,13 +85,13 @@ public class JointControlImpl implements JointControl {
             converted = -converted;
         }
 
-        Map<String, Object> map = new ImmutableMap.Builder<String, Object>()
-                .put(DEGREES, converted)
-                .put(ServoProperty.POSITION.name().toLowerCase(), position)
-                .put(ServoProperty.TORGUE.name().toLowerCase(), tState)
+        Map<String, Value> map = new ImmutableMap.Builder<String, Value>()
+                .put(DEGREES, new ValueImpl(VALUE_TYPE.NUMBER, converted))
+                .put(ServoProperty.POSITION.name().toLowerCase(), new ValueImpl(VALUE_TYPE.NUMBER, position))
+                .put(ServoProperty.TORGUE.name().toLowerCase(), new ValueImpl(VALUE_TYPE.BOOLEAN, tState))
                 .build();
 
-        return new JointDataImpl(jointId, map);
+        return new JointDataImpl(robot.getControllerId(), jointId, map);
     }
 
     @Override
@@ -108,23 +114,34 @@ public class JointControlImpl implements JointControl {
     }
 
     @Override
+    public boolean isServoJointPresent(String servoId) {
+        return jointMap.values().stream().anyMatch(j -> j.getServoId().equalsIgnoreCase(servoId));
+    }
+
+    @Override
+    public Joint getServoJoint(String servoId) {
+        return jointMap.values().stream().filter(j -> j.getServoId().equalsIgnoreCase(servoId)).findFirst()
+                .orElseThrow(() -> new RuntimeIOTException("Could not find Joint for servo: " + servoId));
+    }
+
+    @Override
     public List<Joint> getJoints() {
         return new ArrayList<>(jointMap.values());
     }
 
     @Override
     public void setJointPosition(JointTarget position) {
-        LOG.info("Setting joint position for ID: {} to: {}", position.getServoId(), position.getTargetAngle());
+        LOG.info("Setting joint position for ID: {} to: {}", position.getJointId(), position.getTargetAngle());
 
-        if(jointMap.containsKey(position.getServoId())) {
-            Joint joint = jointMap.get(position.getServoId());
+        if(jointMap.containsKey(position.getJointId())) {
+            Joint joint = jointMap.get(position.getJointId());
             if(validateDegrees(position, joint)) {
-                servoDriver.setPositionAndSpeed(position.getServoId(), 15, new Scale(0,0), correctInversion(joint, position.getTargetAngle()), RADIAL_SCALE);
+                servoDriver.setPositionAndSpeed(position.getJointId(), 15, new Scale(0,0), correctInversion(joint, position.getTargetAngle()), RADIAL_SCALE);
 
 //                servoDriver.setTargetPosition(position.getServoId(), correctInversion(joint, position.getTargetAngle()), RADIAL_SCALE);
             } else {
                 throw new RoboException(String.format("Joint: %s position: %s exceeds minimum: %d and Maximum: %d",
-                        position.getServoId(), position.getTargetAngle(), joint.getMinDegrees(), joint.getMaxDegrees()));
+                        position.getJointId(), position.getTargetAngle(), joint.getMinDegrees(), joint.getMaxDegrees()));
             }
         }
     }
@@ -132,10 +149,10 @@ public class JointControlImpl implements JointControl {
     @Override
     public void setJointPositions(List<JointTarget> jointPositions) {
         Map<String, PositionAndSpeedCommand> commands = jointPositions.stream()
-                .filter(j -> jointMap.containsKey(j.getServoId()))
-                .filter(j -> validateDegrees(j, jointMap.get(j.getServoId())))
-                .map(j -> new PositionAndSpeedCommand(j.getServoId(),
-                        correctInversion(jointMap.get(j.getServoId()), j.getTargetAngle()), RADIAL_SCALE, 0, new Scale(0, 100)))
+                .filter(j -> jointMap.containsKey(j.getJointId()))
+                .filter(j -> validateDegrees(j, jointMap.get(j.getJointId())))
+                .map(j -> new PositionAndSpeedCommand(j.getJointId(),
+                        correctInversion(jointMap.get(j.getJointId()), j.getTargetAngle()), RADIAL_SCALE, 0, new Scale(0, 100)))
                 .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, c -> c));
 
         LOG.info("Setting bulk positions: {}", commands);
@@ -144,8 +161,8 @@ public class JointControlImpl implements JointControl {
     }
 
     @Override
-    public void runMotion(String motionId) {
-        Motion motion = motionStorage.findMotion(motionId);
+    public void runMotion(String controllerId, String motionId) {
+        Motion motion = motionStorage.findMotion(controllerId, motionId);
         if(motion != null) {
             LOG.info("Submitting motion: {} for execution", motion);
             motionEngine.post(motion);
