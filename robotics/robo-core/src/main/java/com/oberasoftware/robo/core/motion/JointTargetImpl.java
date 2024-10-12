@@ -7,19 +7,19 @@ import com.oberasoftware.iot.core.robotics.motion.JointTarget;
  */
 public class JointTargetImpl implements JointTarget {
 
-    private String servoId;
+    private String jointId;
     private int targetPosition;
     private int targetAngle = 0;
     private int targetVelocity = 0;
 
-    public JointTargetImpl(String servoId, int targetPosition, int targetAngle) {
-        this.servoId = servoId;
+    public JointTargetImpl(String jointId, int targetPosition, int targetAngle) {
+        this.jointId = jointId;
         this.targetPosition = targetPosition;
         this.targetAngle = targetAngle;
     }
 
-    public JointTargetImpl(String servoId, int targetPosition) {
-        this.servoId = servoId;
+    public JointTargetImpl(String jointId, int targetPosition) {
+        this.jointId = jointId;
         this.targetPosition = targetPosition;
     }
 
@@ -36,12 +36,12 @@ public class JointTargetImpl implements JointTarget {
     }
 
     @Override
-    public String getServoId() {
-        return servoId;
+    public String getJointId() {
+        return jointId;
     }
 
-    public void setServoId(String servoId) {
-        this.servoId = servoId;
+    public void setJointId(String jointId) {
+        this.jointId = jointId;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class JointTargetImpl implements JointTarget {
     @Override
     public String toString() {
         return "JointTargetImpl{" +
-                "servoId='" + servoId + '\'' +
+                "jointId='" + jointId + '\'' +
                 ", targetPosition=" + targetPosition +
                 ", targetAngle=" + targetAngle +
                 ", targetVelocity=" + targetVelocity +

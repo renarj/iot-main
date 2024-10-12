@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.rest;
 
 import com.google.common.collect.Lists;
-import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
 import com.oberasoftware.iot.core.robotics.humanoid.NavigationControl;
@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -68,21 +67,14 @@ public class MotionRestController {
         }
     }
 
-    @RequestMapping(value = "/motion/{motionId}", method = RequestMethod.POST)
-    public @ResponseBody Motion storeMotion(@PathVariable String motionId, @RequestBody MotionImpl motion) {
-        LOG.info("Motion Name: {} with keyframes: {}", motion.getName(), motion.getFrames());
 
-        motionStorage.storeMotion(motionId, motion);
-
-        return motion;
-    }
 
     @RequestMapping(value = "/motion/run/{robotId}/{motionId}", method = RequestMethod.POST)
     public ResponseEntity<String> runMotion(@PathVariable String robotId, @PathVariable String motionId) {
         LOG.info("Requesting motion: {} to be run on robot: {}", motionId, robotId);
 
         Optional<Robot> br = behaviouralRobotRegistry.getRobot(robotId);
-        br.ifPresent(behaviouralRobot -> behaviouralRobot.getBehaviour(JointControl.class).runMotion(motionId));
+        br.ifPresent(behaviouralRobot -> behaviouralRobot.getBehaviour(JointControl.class).runMotion(robotId, motionId));
 
         if(br.isPresent()) {
             return new ResponseEntity<>("Motion executed", HttpStatus.OK);
@@ -107,20 +99,5 @@ public class MotionRestController {
 
     }
 
-    @RequestMapping(value = "/motion/{motionId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteMotion(@PathVariable String motionId) {
-        motionStorage.deleteMotion(motionId);
 
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }
-
-        @RequestMapping(value = "/motions")
-    public List<Motion> getMotions() {
-        return motionStorage.findAllMotions();
-    }
-
-    @RequestMapping(value = "/motions/{motionId}")
-    public Motion getMotion(@PathVariable String motionId) {
-        return motionStorage.findMotion(motionId);
-    }
 }

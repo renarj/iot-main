@@ -3,7 +3,7 @@ package com.oberasoftware.robo.maximus.motion.cartesian;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
-import com.oberasoftware.iot.core.robotics.humanoid.HumanoidRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
 import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
@@ -52,7 +52,7 @@ public class CartesianControlImpl implements CartesianControl {
         this.motionEngine = behaviouralRobot.getBehaviour(MotionEngine.class);
         this.motionControl = behaviouralRobot.getBehaviour(JointControl.class);
 
-        HumanoidRobot r = (HumanoidRobot) behaviouralRobot;
+        JointBasedRobot r = (JointBasedRobot) behaviouralRobot;
         jointMap = r.getJoints(true).stream().collect(Collectors.toMap(Joint::getName, k -> k));
 
         r.getJoints(true).forEach(j -> {
@@ -144,7 +144,7 @@ public class CartesianControlImpl implements CartesianControl {
         LegAngles angles = new LegAngles();
         jointMap.forEach((jk, j) -> {
             var jointType = j.getJointType();
-            Optional<JointData> jd = motionControl.getJointData(j.getID());
+            Optional<JointData> jd = motionControl.getJointData(j.getJointId());
             if(jd.isPresent()) {
                 Double degrees = (double) jd.get().getDegrees();
                 if (angles.contains(jointType)) {

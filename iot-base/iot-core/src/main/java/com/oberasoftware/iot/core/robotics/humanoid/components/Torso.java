@@ -1,4 +1,6 @@
 package com.oberasoftware.iot.core.robotics.humanoid.components;
 
-public interface Torso extends ChainSet {
+import com.oberasoftware.iot.core.robotics.humanoid.joints.JointChain;
+
+public interface Torso extends JointChain {
 }

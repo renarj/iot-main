@@ -12,8 +12,5 @@ public interface Arm extends JointChain {
     Joint getElbow();
 
     @JsonIgnore
-    Joint getElbowRoll();
-
-    @JsonIgnore
     Joint getHand();
 }

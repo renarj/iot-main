@@ -29,7 +29,6 @@
 
     <modules>
         <module>robotics/robo-core</module>
-        <module>robotics/robo-cloud</module>
         <module>robotics/dynamixel-core</module>
         <module>robotics/dynamixel-web</module>
         <module>robotics/robo-container</module>

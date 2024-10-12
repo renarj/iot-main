@@ -51,21 +51,6 @@ public class HardwareRobotBuilder {
         return this.robotName;
     }
 
-    public HardwareRobotBuilder motionEngine(MotionEngine motionEngine, MotionResource resource) {
-        if(resource != null) {
-            motionEngine.loadResource(resource);
-        }
-        return addCapability(motionEngine, new HashMap<>());
-    }
-
-    public HardwareRobotBuilder motionEngine(Class<? extends MotionEngine> motionEngineClass, MotionResource resource) {
-        return motionEngine(context.getBean(motionEngineClass), resource);
-    }
-
-    public HardwareRobotBuilder motionEngine(Class<? extends MotionEngine> motionEngineClass) {
-        return motionEngine(context.getBean(motionEngineClass), null);
-    }
-
     public HardwareRobotBuilder servoDriver(ServoDriver servoDriver, Map<String, String> properties) {
         return addCapability(servoDriver, properties);
     }

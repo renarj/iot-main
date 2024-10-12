@@ -162,8 +162,8 @@ public class DynamixelMotionExecutor implements MotionExecutor {
         String cacheKey = motionId + "_" + previousFrameId + "_" + keyFrame.getKeyFrameId();
         if(!cachedCommands.containsKey(cacheKey)) {
             Map<String, PositionAndSpeedCommand> commands = keyFrame.getJointTargets().stream()
-                    .map(s -> new PositionAndSpeedCommand(s.getServoId(), s.getTargetPosition(), new Scale(0, 1023),
-                            calculateSpeed(previousKeyFrame, s.getServoId(), s.getTargetPosition(), timeInMs), new Scale(0, 1023)))
+                    .map(s -> new PositionAndSpeedCommand(s.getJointId(), s.getTargetPosition(), new Scale(0, 1023),
+                            calculateSpeed(previousKeyFrame, s.getJointId(), s.getTargetPosition(), timeInMs), new Scale(0, 1023)))
                     .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, Function.identity()));
             cachedCommands.put(cacheKey, new BulkPositionSpeedCommand(commands));
         }
@@ -182,7 +182,7 @@ public class DynamixelMotionExecutor implements MotionExecutor {
     private int calculateSpeed(KeyFrame previousKeyFrame, String servoId, int targetPosition, long timeInMs) {
         int currentPosition;
         if(previousKeyFrame != null) {
-            JointTarget previousServoStep = previousKeyFrame.getJointTargets().stream().filter(s -> s.getServoId().equals(servoId)).findFirst().get();
+            JointTarget previousServoStep = previousKeyFrame.getJointTargets().stream().filter(s -> s.getJointId().equals(servoId)).findFirst().get();
             currentPosition = previousServoStep.getTargetPosition();
         } else {
             currentPosition = dataManager.readServoProperty(servoId, ServoProperty.POSITION);

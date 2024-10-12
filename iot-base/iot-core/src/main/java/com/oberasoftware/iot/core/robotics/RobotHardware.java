@@ -18,8 +18,6 @@ public interface RobotHardware {
 
     void publish(Event robotEvent);
 
-    MotionEngine getMotionEngine();
-
     ServoDriver getServoDriver();
 
     RemoteDriver getRemoteDriver();

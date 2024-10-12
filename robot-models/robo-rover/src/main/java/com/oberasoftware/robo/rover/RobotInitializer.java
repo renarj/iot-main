@@ -79,7 +79,7 @@ public class RobotInitializer {
                 .camera(cameraTilt, camerRotate)
                 .wheels(mecanumDriveTrain)
                 .navigation(new WheelBasedWithCameraNavigationControllerImpl())
-                .build();
+                .build("test");
         behaviouralRobotRegistry.register(robotCar);
         LOG.info("Robot: {} was registered", robotCar);
 

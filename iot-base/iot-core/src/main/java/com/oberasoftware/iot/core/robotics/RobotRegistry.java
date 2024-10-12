@@ -8,6 +8,8 @@ import java.util.List;
 public interface RobotRegistry {
     RobotHardware getRobot(String name);
 
+    boolean containsRobot(String name);
+
     List<RobotHardware> getRobots();
 
     RobotHardware getDefaultRobot();
