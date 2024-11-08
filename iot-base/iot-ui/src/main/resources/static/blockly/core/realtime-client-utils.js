@@ -252,7 +252,7 @@ rtclient.createRealtimeFile = function(title, mimeType, folderTitle, callback) {
       }).execute(function(resp) {
         insertFile(folderId);
       });
-    };
+    }
 
     function createFolder() {
       gapi.client.drive.files.insert({

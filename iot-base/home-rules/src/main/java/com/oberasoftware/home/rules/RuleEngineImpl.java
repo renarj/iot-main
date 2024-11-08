@@ -1,6 +1,6 @@
 package com.oberasoftware.home.rules;
 
-import com.oberasoftware.home.rules.api.Block;
+import com.oberasoftware.home.rules.api.Statement;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.evaluators.EvalException;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
@@ -31,7 +31,7 @@ public class RuleEngineImpl implements RuleEngine {
     @Autowired
     private List<TriggerProcessor> triggerProcessors;
 
-    private List<Rule> rules = new CopyOnWriteArrayList<>();
+    private final List<Rule> rules = new CopyOnWriteArrayList<>();
 
     @Override
     public void register(Rule rule) throws IOTException {
@@ -98,13 +98,16 @@ public class RuleEngineImpl implements RuleEngine {
 
     private void eval(Rule rule) {
         LOG.debug("Evaluating rule: {}", rule);
-        BlockEvaluator<Block> b = evaluatorFactory.getEvaluator(rule.getBlock());
-        try {
-            boolean eval = b.eval(rule.getBlock());
+        rule.getBlocks().forEach(b -> {
+            BlockEvaluator<Statement> e = evaluatorFactory.getEvaluator(b);
+            try {
+                boolean eval = e.eval(b);
 
-            LOG.debug("Rule: {} was evaluated: {}", rule, eval);
-        } catch(EvalException e) {
-            LOG.debug("Rule could not be evaluated: {}", e.getMessage());
-        }
+                LOG.debug("Rule: {} was evaluated: {}", rule, eval);
+            } catch(EvalException ex) {
+                LOG.debug("Rule could not be evaluated: {}", ex.getMessage());
+            }
+        });
+
     }
 }

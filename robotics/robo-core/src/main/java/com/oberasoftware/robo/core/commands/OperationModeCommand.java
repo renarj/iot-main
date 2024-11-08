@@ -7,7 +7,7 @@ public class OperationModeCommand implements ServoCommand {
         VELOCITY_MODE,
         POSITION_CONTROL,
         EXTENDED_POSITION_CONTROL,
-        CURRENT_CONTROL_MODE;
+        CURRENT_CONTROL_MODE
     }
 
     private final String servoId;

@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class SystemTriggerProcessor implements TriggerProcessor {
 
-    private List<Rule> systemRules = new CopyOnWriteArrayList<>();
+    private final List<Rule> systemRules = new CopyOnWriteArrayList<>();
 
     @Autowired
     private RuleEngine ruleEngine;

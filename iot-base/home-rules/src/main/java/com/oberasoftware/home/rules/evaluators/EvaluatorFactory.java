@@ -26,7 +26,7 @@ public class EvaluatorFactory {
     @Autowired(required = false)
     private List<Evaluator<?, ?>> evaluators;
 
-    private Map<String, Evaluator<?, ?>> evaluatorMap = new HashMap<>();
+    private final Map<String, Evaluator<?, ?>> evaluatorMap = new HashMap<>();
 
     @PostConstruct
     public void processEvaluators() {

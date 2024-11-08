@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class MockAutomationBus extends LocalEventBus {
-    private CopyOnWriteArrayList<Event> events = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Event> events = new CopyOnWriteArrayList<>();
     @Override
     public void publish(Event event, Object... arguments) {
         events.add(event);

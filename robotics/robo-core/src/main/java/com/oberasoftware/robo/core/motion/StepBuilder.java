@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class StepBuilder {
 
-    private long timeInMs;
-    private String frameId;
+    private final long timeInMs;
+    private final String frameId;
 
     private final List<JointTargetImpl> servoSteps = new ArrayList<>();
 

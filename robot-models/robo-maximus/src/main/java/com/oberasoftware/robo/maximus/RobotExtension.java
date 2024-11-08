@@ -5,6 +5,7 @@ import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
 import com.oberasoftware.iot.core.extensions.AutomationExtension;
 import com.oberasoftware.iot.core.extensions.DiscoveryListener;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.robo.maximus.handlers.RobotCommandHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class RobotExtension implements AutomationExtension {
     public static final String ROBOT_EXTENSION = "RobotExtension";
 
     @Autowired
-    private RobotInitializer robotInitializer;
+    private IotRobotInitializer robotInitializer;
 
     @Autowired
     private RobotCommandHandler commandHandler;

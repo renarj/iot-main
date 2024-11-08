@@ -41,7 +41,7 @@ public class JointControlImpl implements JointControl {
     private MotionStorage motionStorage;
     private Robot robot;
 
-    private Map<String, Joint> jointMap;
+    private final Map<String, Joint> jointMap;
 
     private TorgueManager torgueManager;
 

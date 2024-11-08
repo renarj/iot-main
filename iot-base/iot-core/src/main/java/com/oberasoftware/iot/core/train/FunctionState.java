@@ -5,7 +5,7 @@ public enum FunctionState {
     OFF(0x00),
     TOGGLE(0x10);
 
-    private int state;
+    private final int state;
 
     FunctionState(int state) {
         this.state = state;

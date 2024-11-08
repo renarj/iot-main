@@ -13,7 +13,7 @@ public enum DynamixelInstruction {
     REBOOT(0x08),
     SYNC_WRITE(0x83);
 
-    private int instruction;
+    private final int instruction;
 
     DynamixelInstruction(int instruction) {
         this.instruction = instruction;

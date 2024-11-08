@@ -36,7 +36,7 @@ public class AgentBootstrapImpl implements AgentBootstrap {
     @Autowired
     private AgentControllerInformationImpl agentConfiguration;
 
-    private AtomicBoolean started = new AtomicBoolean(false);
+    private final AtomicBoolean started = new AtomicBoolean(false);
 
     @Override
     public boolean startAgent() throws IOTException  {

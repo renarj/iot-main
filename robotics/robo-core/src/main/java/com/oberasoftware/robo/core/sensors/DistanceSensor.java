@@ -27,7 +27,7 @@ public class DistanceSensor extends AbstractSensor<DistanceValue> {
     private RobotHardware robot;
     private Port port;
 
-    private AtomicInteger lastDistance = new AtomicInteger(0);
+    private final AtomicInteger lastDistance = new AtomicInteger(0);
 
     public DistanceSensor(String name, String portName) {
         this.name = name;

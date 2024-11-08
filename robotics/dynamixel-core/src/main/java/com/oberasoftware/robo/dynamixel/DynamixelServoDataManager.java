@@ -38,7 +38,7 @@ import static java.util.Collections.emptyMap;
 public class DynamixelServoDataManager implements ServoDataManager, EventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelServoDataManager.class);
 
-    private ConcurrentMap<String, ServoDataHolder> servoDataMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, ServoDataHolder> servoDataMap = new ConcurrentHashMap<>();
 
     @Autowired
     private LocalEventBus eventBus;
@@ -118,11 +118,11 @@ public class DynamixelServoDataManager implements ServoDataManager, EventHandler
     }
 
     private class ServoDataHolder {
-        private ConcurrentMap<ServoProperty, Object> values = new ConcurrentHashMap<>();
-        private ConcurrentMap<ServoProperty, Long> updateTimes = new ConcurrentHashMap<>();
+        private final ConcurrentMap<ServoProperty, Object> values = new ConcurrentHashMap<>();
+        private final ConcurrentMap<ServoProperty, Long> updateTimes = new ConcurrentHashMap<>();
 
-        private Lock lock = new ReentrantLock();
-        private Condition condition = lock.newCondition();
+        private final Lock lock = new ReentrantLock();
+        private final Condition condition = lock.newCondition();
 
         private final String servoId;
 

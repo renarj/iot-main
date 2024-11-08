@@ -49,7 +49,7 @@ public class RabbitMQTopicListener extends AbstractRMQConnector implements Topic
             channel.queueBind(queueName, topic, "");
 
             channel.basicConsume(queueName, true, (consumerTag, message) -> {
-                var msg = new String(message.getBody(), 0, message.getBody().length, Charset.defaultCharset());
+                var msg = new String(message.getBody(), Charset.defaultCharset());
                 LOG.debug("Received RMQ message: {} from topic: {}", msg, rmqTopic);
                 notifyListeners(message.getEnvelope().getExchange(), msg);
             }, consumerTag -> {});

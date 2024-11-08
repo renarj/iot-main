@@ -11,7 +11,7 @@ import java.util.List;
  * @author renarj
  */
 public class SimpleDriveTrainImpl implements DriveTrain {
-    private List<Wheel> wheels;
+    private final List<Wheel> wheels;
 
     public SimpleDriveTrainImpl(List<Wheel> wheels) {
         this.wheels = wheels;

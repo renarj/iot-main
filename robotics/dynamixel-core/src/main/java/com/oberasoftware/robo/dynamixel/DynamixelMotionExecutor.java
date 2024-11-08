@@ -50,11 +50,11 @@ public class DynamixelMotionExecutor implements MotionExecutor {
     @Autowired
     private BulkWriteMovementHandler syncWriteMovementHandler;
 
-    private Queue<MotionTaskImpl> queue = new LinkedBlockingQueue<>();
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Queue<MotionTaskImpl> queue = new LinkedBlockingQueue<>();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private volatile boolean running;
 
-    private Map<String, BulkPositionSpeedCommand> cachedCommands = new HashMap<>();
+    private final Map<String, BulkPositionSpeedCommand> cachedCommands = new HashMap<>();
 
     @PostConstruct
     public void startListener() {

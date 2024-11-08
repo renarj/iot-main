@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentMap;
 @Component
 public class MotionManagerImpl implements MotionManager {
 
-    private ConcurrentMap<String, Motion> motions = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Motion> motions = new ConcurrentHashMap<>();
 
     @Override
     public void storeMotion(Motion motion) {

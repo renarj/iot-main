@@ -92,8 +92,8 @@ public class NavigationControlImpl implements NavigationControl {
 
     private abstract class WalkStep {
         private final String name;
-        private MotionTaskImpl motionTask;
-        private NavigationState state;
+        private final MotionTaskImpl motionTask;
+        private final NavigationState state;
 
         protected WalkStep(String name) {
             this.name = name;
@@ -148,7 +148,7 @@ public class NavigationControlImpl implements NavigationControl {
     }
 
     private class NavigationState implements MotionTask {
-        private STATE state = STATE.NOT_STARTED;
+        private final STATE state = STATE.NOT_STARTED;
         private WalkStep currentStep;
 
         public WalkStep getCurrentStep() {

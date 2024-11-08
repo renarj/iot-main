@@ -63,14 +63,12 @@ public class GroupCommandEventHandler implements EventHandler {
 
             CommandHandler commandHandler = extension.getCommandHandler();
 
-            if(commandHandler instanceof GroupCommandHandler) {
+            if(commandHandler instanceof GroupCommandHandler groupCommandHandler) {
                 LOG.debug("CommandHandler: {} supports group commands, sending group command: {}", commandHandler, groupCommand);
-                GroupCommandHandler groupCommandHandler = (GroupCommandHandler) commandHandler;
 
                 groupCommandHandler.receive(groupItem, pluginDevices.get(k), groupCommand.getCommand());
-            } else if(commandHandler instanceof ThingCommandHandler) {
+            } else if(commandHandler instanceof ThingCommandHandler thingCommandHandler) {
                 LOG.debug("CommandHandler not able to support group command, sending individual commands: {}", groupCommand);
-                ThingCommandHandler thingCommandHandler = (ThingCommandHandler) commandHandler;
 
                 pluginDevices.get(k).forEach(d -> thingCommandHandler.receive(d, groupCommand.getCommand()));
             }

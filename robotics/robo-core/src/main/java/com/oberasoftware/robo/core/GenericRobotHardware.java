@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class GenericRobotHardware implements RobotHardware {
     private static final Logger LOG = LoggerFactory.getLogger(GenericRobotHardware.class);
 
-    private EventBus eventBus;
+    private final EventBus eventBus;
 
     private final String robotName;
     private final boolean isRemote;

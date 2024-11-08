@@ -115,9 +115,9 @@ public class Z21ConnectorImpl implements Z21Connector {
     }
 
     private static class ConnectionListener implements Runnable {
-        private DatagramSocket socket;
+        private final DatagramSocket socket;
 
-        private LocalEventBus eventBus;
+        private final LocalEventBus eventBus;
 
         private boolean running = false;
 

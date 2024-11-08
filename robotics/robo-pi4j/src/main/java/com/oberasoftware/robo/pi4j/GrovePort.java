@@ -16,7 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class GrovePort {
     private static final Logger LOG = getLogger(GrovePort.class);
 
-    private I2CDevice device;
+    private final I2CDevice device;
 
     public GrovePort(I2CDevice device) {
         this.device = device;

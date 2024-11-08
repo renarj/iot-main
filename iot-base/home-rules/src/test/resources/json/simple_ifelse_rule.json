@@ -1,0 +1,212 @@
+{
+  "blocks": {
+    "languageVersion": 0,
+    "blocks": [
+      {
+        "type": "rule",
+        "id": "i{.T-R!t4j*^TSzSjP]f",
+        "x": 126,
+        "y": 0,
+        "fields": {
+          "rule_name": "switchPowerOnOff"
+        },
+        "inputs": {
+          "ruleTrigger": {
+            "block": {
+              "type": "thingTrigger",
+              "id": "dWGJ,Qi,Gy7~isRb}+L.",
+              "next": {
+                "block": {
+                  "type": "systemTrigger",
+                  "id": ")sTUa69K^qZBbwlCr`KQ"
+                }
+              }
+            }
+          },
+          "ruleStatement": {
+            "block": {
+              "type": "controls_if",
+              "id": "mr%Yh{%BHGM`i[yw8qn`",
+              "extraState": {
+                "elseIfCount": 1,
+                "hasElse": true
+              },
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "id": "}|vv:jXBi}dXzjD#ciGY",
+                    "fields": {
+                      "OP": "GT"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "getThingValue",
+                          "id": "qj-A%=J}ukuRp}f1[}s}",
+                          "inputs": {
+                            "item": {
+                              "block": {
+                                "type": "renze-homecontroller.hue",
+                                "id": "%oG8t5Nh)ZES[qTvrDJ,"
+                              }
+                            },
+                            "Attribute": {
+                              "block": {
+                                "type": "attribute",
+                                "id": "^kQEHUdo(f4(PQZL`hVY",
+                                "fields": {
+                                  "label": "power"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "B": {
+                        "block": {
+                          "type": "math_number",
+                          "id": "}Mpnyg{a7+N.C=w.lHaX",
+                          "fields": {
+                            "NUM": 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "switch_item",
+                    "id": "n5~u4pI4]|?coo]Aj.?*",
+                    "fields": {
+                      "state": "on"
+                    },
+                    "inputs": {
+                      "item": {
+                        "block": {
+                          "type": "renze-homecontroller.LeftKnee",
+                          "id": "O^MomLv%`f|N5d^c/seU"
+                        }
+                      },
+                      "Attribute": {
+                        "block": {
+                          "type": "attribute",
+                          "id": "FC)OATGqN#xaqw0-/07C",
+                          "fields": {
+                            "label": "torgue"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "IF1": {
+                  "block": {
+                    "type": "logic_compare",
+                    "id": "-T={Iz8eUBo%`A27zp+f",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "getThingValue",
+                          "id": "sz|^-DG{6EsAblPhGh?)",
+                          "inputs": {
+                            "item": {
+                              "block": {
+                                "type": "renze-homecontroller.hue",
+                                "id": "~T{$4SEI2U])7$S+RN3e"
+                              }
+                            },
+                            "Attribute": {
+                              "block": {
+                                "type": "attribute",
+                                "id": "fm53Y+.^Im5EqYY/2m;j",
+                                "fields": {
+                                  "label": "power"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "B": {
+                        "block": {
+                          "type": "math_number",
+                          "id": "icCPF?I|3KF2.L[4.Gci",
+                          "fields": {
+                            "NUM": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO1": {
+                  "block": {
+                    "type": "switch_item",
+                    "id": "^w?R8[9,vey=(c5:yBcS",
+                    "fields": {
+                      "state": "off"
+                    },
+                    "inputs": {
+                      "item": {
+                        "block": {
+                          "type": "renze-homecontroller.hue",
+                          "id": "s$JJrJWWCpLgKEkqiF$y"
+                        }
+                      },
+                      "Attribute": {
+                        "block": {
+                          "type": "attribute",
+                          "id": "FC)OATGqN#xaqw0-/07C",
+                          "fields": {
+                            "label": "torgue"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "ELSE": {
+                  "block": {
+                    "type": "setThingValue",
+                    "id": "-|M/thV.Os8EwclF6@qS",
+                    "inputs": {
+                      "item": {
+                        "block": {
+                          "type": "renze-homecontroller.hue",
+                          "id": "z`f/=?pjn^2nj9Y@yn0X"
+                        }
+                      },
+                      "Attribute": {
+                        "block": {
+                          "type": "attribute_text",
+                          "id": "ts5Hd]Z~}m-7@$k*v%62",
+                          "fields": {
+                            "attribute": "switch"
+                          }
+                        }
+                      },
+                      "value": {
+                        "block": {
+                          "type": "onoff",
+                          "id": "lcO-#2-%4:ilc-g;@mL8",
+                          "fields": {
+                            "state": "on"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

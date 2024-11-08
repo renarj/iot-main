@@ -18,7 +18,7 @@ public abstract class Z21Command {
     private static final Logger LOG = getLogger( Z21Command.class );
     private static final int FIXED_PARAM_LENGTH = 2;
 
-    private List<Byte> parameters = new ArrayList<>();
+    private final List<Byte> parameters = new ArrayList<>();
 
     private String host;
     private int port;

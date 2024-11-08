@@ -3,12 +3,11 @@ package com.oberasoftware.home.rules.triggers;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.rules.RuleEngine;
-import com.oberasoftware.home.rules.api.Block;
+import com.oberasoftware.home.rules.api.Statement;
 import com.oberasoftware.home.rules.api.general.Rule;
-import com.oberasoftware.home.rules.api.trigger.DeviceTrigger;
+import com.oberasoftware.home.rules.api.trigger.ThingTrigger;
 import com.oberasoftware.home.rules.api.trigger.Trigger;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
-import com.oberasoftware.home.rules.evaluators.blocks.BlockEvaluator;
 import com.oberasoftware.iot.core.events.ThingEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +34,13 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
     @Autowired
     private EvaluatorFactory evaluatorFactory;
 
-    private Map<String, List<Rule>> itemMappedRules = new ConcurrentHashMap<>();
+    private final Map<String, List<Rule>> itemMappedRules = new ConcurrentHashMap<>();
 
     @Override
     public void register(Trigger trigger, Rule rule) {
-        if(trigger instanceof DeviceTrigger) {
+        if(trigger instanceof ThingTrigger) {
             LOG.debug("Rule: {} has an item trigger, adding dependent items", rule);
-            Set<String> dependentItems = getDependentItems(rule.getBlock());
+            Set<String> dependentItems = getDependentItems(rule.getBlocks());
             LOG.debug("Adding dependent items: {} for rule: {}", dependentItems, rule);
             dependentItems.forEach(i -> addDependentItem(rule, i));
         }
@@ -49,8 +48,8 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
 
     @Override
     public void remove(Trigger trigger, Rule rule) {
-        if(trigger instanceof DeviceTrigger) {
-            Set<String> dependentItems = getDependentItems(rule.getBlock());
+        if(trigger instanceof ThingTrigger) {
+            Set<String> dependentItems = getDependentItems(rule.getBlocks());
             dependentItems.forEach(d -> {
                 List<Rule> deviceRules = itemMappedRules.get(d);
                 deviceRules.remove(rule);
@@ -58,10 +57,11 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
         }
     }
 
-    private Set<String> getDependentItems(Block block) {
-        BlockEvaluator<Block> blockEvaluate = evaluatorFactory.getEvaluator(block);
-
-        return blockEvaluate.getDependentItems(block);
+    private Set<String> getDependentItems(List<Statement> statements) {
+        return statements.stream()
+                .map(s -> evaluatorFactory.getEvaluator(s).getDependentItems(s))
+                .flatMap(Set::stream)
+                .collect(java.util.stream.Collectors.toSet());
     }
 
     private void addDependentItem(Rule rule, String itemId) {

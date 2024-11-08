@@ -16,7 +16,7 @@ import java.util.Optional;
 @Component
 public class MockStateManager implements StateManager {
 
-    private Map<String, State> stateMap = new HashMap<>();
+    private final Map<String, State> stateMap = new HashMap<>();
 
     @Override
     public State updateItemState(String controllerId, String thingId, String attribute, Value value) {

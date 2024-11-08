@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ADSAnalogPort implements AnalogPort {
     private static final Logger LOG = LoggerFactory.getLogger(ADSAnalogPort.class);
-    private List<PortListener<VoltageValue>> listeners = new CopyOnWriteArrayList<>();
+    private final List<PortListener<VoltageValue>> listeners = new CopyOnWriteArrayList<>();
 
     private final String axis;
     private final boolean reversed;
@@ -31,7 +31,7 @@ public class ADSAnalogPort implements AnalogPort {
             double voltage = provider.getProgrammableGainAmplifier(event.getPin()).getVoltage() * (percent/100);
 
             LOG.info("Received voltage: {} on input: {} sending to listeners: {}", voltage, input.getName(), listeners);
-            listeners.forEach(l -> l.receive((VoltageValue) () -> voltage));
+            listeners.forEach(l -> l.receive(() -> voltage));
         };
         LOG.info("Registering listener for port: {}", input);
         input.addListener(listener);

@@ -29,7 +29,7 @@ public class BasicCommandHandler implements EventHandler {
     @Autowired(required = false)
     private List<CommandConverter<BasicCommand, ? extends ThingCommand>> commandConverters;
 
-    private Map<String, CommandConverter<BasicCommand, ? extends ThingCommand>> commandConverterMap = new HashMap<>();
+    private final Map<String, CommandConverter<BasicCommand, ? extends ThingCommand>> commandConverterMap = new HashMap<>();
 
     @PostConstruct
     public void mapConverters() {

@@ -156,7 +156,7 @@ public class ValueCommandAction implements HueCommandAction<ThingValueCommand> {
                     return of(convert(doubleValue, correctScale));
                 case STRING:
                 default:
-                    LOG.warn("Could not get value, value not a valid Number: {}", value.toString());
+                    LOG.warn("Could not get value, value not a valid Number: {}", value);
             }
 
         }

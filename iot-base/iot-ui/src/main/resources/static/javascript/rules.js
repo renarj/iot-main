@@ -1,4 +1,8 @@
 $(document).ready(function() {
+    retrieveServiceUrls(pageInit);
+});
+
+function pageInit() {
     $(document).on("click", ".deleteRule", function(event) {
         event.preventDefault();
 
@@ -63,18 +67,17 @@ $(document).ready(function() {
     $(document).on("click", ".resetRule", function (event) {
         event.preventDefault();
 
-
-
         console.log("Clearing workspace")
         Blockly.mainWorkspace.clear();
     });
 
     loadBlockly();
-});
+}
 
 let workspace;
 
 function loadBlockly() {
+    initDefaultBlocks();
     Blockly.Theme.defineTheme('dark', {
         'base': Blockly.Themes.Classic,
         'componentStyles': {
@@ -105,10 +108,6 @@ function loadBlockly() {
         }
     );
 
-    // var itemToolbox = $("#ItemToolbox");
-    // var groupToolbox = $("#GroupToolbox");
-    // var virtualToolbox = $("#VirtualToolbox");
-
     const onresize = function() {
         // Compute the absolute coordinates and dimensions of blocklyArea.
         let element = blocklyArea;
@@ -134,21 +133,26 @@ function loadBlockly() {
 
 
 function loadBlocks(workspace) {
+
+
     let itemToolbox = $("#ItemToolbox");
     let controllerId = $("#editor").attr("controllerId");
-    $.get("/api/controllers(" + controllerId + ")/things", function (data) {
+    console.log("Loading things for controller: " + controllerId)
+    $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/things", function (data) {
         $.each(data, function (i, row) {
             console.log("Found a device: " + row.thingId)
             let pluginId = row.pluginId;
             let controllerId = row.controllerId;
             let thingId = row.thingId;
             let blockId = controllerId + "." + row.thingId;
-            let name = "Thing: " + thingId + " controller: " + controllerId + "(" + pluginId + ")";
+            let name = "Thing: " + thingId;
 
             createItemBlock(blockId, name);
 
             appendToToolbox(workspace, itemToolbox, blockId);
         });
+
+
     });
 }
     // $.get("/groups/", function(data) {
@@ -209,8 +213,3 @@ function createItemBlock(blockId, fieldName) {
     };
 }
 
-function appendToToolbox(workspace, categoryElement, blockId) {
-    categoryElement.append("<block type=\"" + blockId + "\"></block>");
-
-    workspace.updateToolbox(document.getElementById('toolbox'));
-}

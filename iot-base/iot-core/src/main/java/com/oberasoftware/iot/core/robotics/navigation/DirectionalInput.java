@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DirectionalInput {
-    private Map<String, Double> input;
+    private final Map<String, Double> input;
 
     public DirectionalInput(Map<String, Double> input) {
         this.input = input;

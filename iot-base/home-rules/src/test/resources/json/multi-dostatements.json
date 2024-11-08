@@ -1,0 +1,143 @@
+{
+  "blocks": {
+    "languageVersion": 0,
+    "blocks": [
+      {
+        "type": "rule",
+        "id": "f6ruiF]+-Tzg7kmoZ`aR",
+        "x": 367,
+        "y": 90,
+        "fields": {
+          "rule_name": "setDegrees"
+        },
+        "inputs": {
+          "ruleTrigger": {
+            "block": {
+              "type": "dayTimeTrigger",
+              "id": "(SYQ{E3eM6vGY:J^#]R[",
+              "fields": {
+                "hour": "23",
+                "minute": "30"
+              }
+            }
+          },
+          "ruleStatement": {
+            "block": {
+              "type": "controls_if",
+              "id": "RvEOhO=SwzIF8SrTP*Ah",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "id": "]M9t8wY/#J~]4SIs#$*T",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "getThingValue",
+                          "id": "getWM8vSbQqF4De1:p{7",
+                          "inputs": {
+                            "item": {
+                              "block": {
+                                "type": "renze-homecontroller.LeftKnee",
+                                "id": "!`LE28aw*qQ_3m{#-p[N"
+                              }
+                            },
+                            "Attribute": {
+                              "block": {
+                                "type": "attribute",
+                                "id": "-|N:y86/t:jJ5)KQ7LdE",
+                                "fields": {
+                                  "label": "torgue"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "B": {
+                        "block": {
+                          "type": "onoff",
+                          "id": "vQ|{e;O^10oe!bg}hGM3",
+                          "fields": {
+                            "state": "on"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "setThingValue",
+                    "id": "G4^%C(w.e:/dy=u~o^,s",
+                    "inputs": {
+                      "item": {
+                        "block": {
+                          "type": "renze-homecontroller.LeftKnee",
+                          "id": "_ZORAZ2gY=.f++`{-ITU"
+                        }
+                      },
+                      "Attribute": {
+                        "block": {
+                          "type": "attribute",
+                          "id": "z@z|c{EGlLDdVj`=`2#-",
+                          "fields": {
+                            "label": "speed"
+                          }
+                        }
+                      },
+                      "value": {
+                        "block": {
+                          "type": "math_number",
+                          "id": "Z.qgcjf%#7`;KGnvJJ=g",
+                          "fields": {
+                            "NUM": 10
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "setThingValue",
+                        "id": "Yn;oBCu8psBIA/g4p@wH",
+                        "inputs": {
+                          "item": {
+                            "block": {
+                              "type": "renze-homecontroller.LeftKnee",
+                              "id": "^#o@)28isiLWFiOf,gl$"
+                            }
+                          },
+                          "Attribute": {
+                            "block": {
+                              "type": "attribute",
+                              "id": "k8d0txFDv$`k|fk}vn+F",
+                              "fields": {
+                                "label": "degrees"
+                              }
+                            }
+                          },
+                          "value": {
+                            "block": {
+                              "type": "math_number",
+                              "id": "|NO=6vP)a[Zf#IP`K[4u",
+                              "fields": {
+                                "NUM": 180
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

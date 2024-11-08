@@ -47,7 +47,7 @@ public class ExtensionManagerImpl implements ExtensionManager {
     @Autowired
     private AgentControllerInformation controllerConfiguration;
 
-    private ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     @Override
     public List<AutomationExtension> getExtensions() {

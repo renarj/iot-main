@@ -41,7 +41,7 @@ public class CassandraStateDAO implements StateDAO {
 
     private PreparedStatement insertStatement;
 
-    private ConcurrentMap<String, PreparedStatement> statementMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, PreparedStatement> statementMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void connect() {
@@ -99,9 +99,9 @@ public class CassandraStateDAO implements StateDAO {
     private class QueryExecutor {
 
         private static final String BASE_SELECT = "select * from ";
-        private StringBuilder queryBuilder = new StringBuilder(BASE_SELECT);
+        private final StringBuilder queryBuilder = new StringBuilder(BASE_SELECT);
 
-        private Map<String, Object> params = new HashMap<>();
+        private final Map<String, Object> params = new HashMap<>();
 
         private QueryExecutor(String keyspace, String table) {
             queryBuilder.append(keyspace).append(".").append(table);

@@ -18,7 +18,7 @@ public class MQTTMessageBuilder {
     private String controllerId;
     private String label;
     private String channel;
-    private Value value;
+    private final Value value;
 
     public MQTTMessageBuilder(Value value) {
         this.value = value;

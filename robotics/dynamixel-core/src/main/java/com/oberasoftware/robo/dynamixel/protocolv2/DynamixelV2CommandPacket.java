@@ -22,9 +22,9 @@ public class DynamixelV2CommandPacket {
     public static final int FIXED_PARAM_LENGTH = 3;
     public static final int BROADCAST_ID = 0xFE;
 
-    private DynamixelInstruction dynamixelInstruction;
-    private int id;
-    private List<Byte> parameters = new ArrayList<>();
+    private final DynamixelInstruction dynamixelInstruction;
+    private final int id;
+    private final List<Byte> parameters = new ArrayList<>();
 
     public DynamixelV2CommandPacket(DynamixelInstruction dynamixelInstruction, int id) {
         this.dynamixelInstruction = dynamixelInstruction;
@@ -119,7 +119,7 @@ public class DynamixelV2CommandPacket {
     private int update_crc(int crc_accum, byte[] data_blk_ptr, int data_blk_size) {
 
         int i, j;
-        int crc_table[] = {
+        int[] crc_table = {
         0x0000, 0x8005, 0x800F, 0x000A, 0x801B, 0x001E, 0x0014, 0x8011,
 
                 0x8033, 0x0036, 0x003C, 0x8039, 0x0028, 0x802D, 0x8027, 0x0022,
@@ -188,7 +188,7 @@ public class DynamixelV2CommandPacket {
 
 
         for(j = 0; j < data_blk_size; j++) {
-            i = ((int)(crc_accum >> 8) ^ data_blk_ptr[j]) & 0xFF;
+            i = ((crc_accum >> 8) ^ data_blk_ptr[j]) & 0xFF;
             crc_accum = (crc_accum << 8) ^ crc_table[i];
         }
 

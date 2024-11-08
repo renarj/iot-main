@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ControlState {
 
-    private Map<String, Double> state = new HashMap<>();
+    private final Map<String, Double> state = new HashMap<>();
 
     private boolean cameraControlMode = false;
 

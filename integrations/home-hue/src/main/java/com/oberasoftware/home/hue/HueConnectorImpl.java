@@ -37,7 +37,7 @@ public class HueConnectorImpl implements EventHandler, HueConnector {
     private static final String BRIDGE = "bridge-";
     private static final int DEFAULT_PORT = 443;
 
-    private List<HueBridge> connectedBridges = new ArrayList<>();
+    private final List<HueBridge> connectedBridges = new ArrayList<>();
 
     @Autowired
     private AgentControllerInformation controllerInformation;

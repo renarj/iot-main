@@ -21,9 +21,9 @@ public class DynamixelV1CommandPacket implements DynamixelCommandPacket {
     public static final int FIXED_PARAM_LENGTH = 2;
     public static final int BROADCAST_ID = 0xFE;
 
-    private DynamixelInstruction dynamixelInstruction;
-    private int id;
-    private List<Byte> parameters = new ArrayList<>();
+    private final DynamixelInstruction dynamixelInstruction;
+    private final int id;
+    private final List<Byte> parameters = new ArrayList<>();
 
     public DynamixelV1CommandPacket(DynamixelInstruction dynamixelInstruction, int id) {
         this.dynamixelInstruction = dynamixelInstruction;

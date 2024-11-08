@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ServoPort implements DirectPort<PositionValue> {
     private static final Logger LOG = LoggerFactory.getLogger(ServoPort.class);
 
-    private List<PortListener<PositionValue>> listeners = new CopyOnWriteArrayList<>();
+    private final List<PortListener<PositionValue>> listeners = new CopyOnWriteArrayList<>();
 
     @Override
     public void listen(PortListener<PositionValue> portListener) {

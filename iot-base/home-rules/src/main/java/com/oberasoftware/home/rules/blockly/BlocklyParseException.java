@@ -1,11 +1,11 @@
 package com.oberasoftware.home.rules.blockly;
 
-import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 
 /**
  * @author Renze de Vries
  */
-public class BlocklyParseException extends IOTException {
+public class BlocklyParseException extends RuntimeIOTException {
     public BlocklyParseException(String message, Throwable e) {
         super(message, e);
     }

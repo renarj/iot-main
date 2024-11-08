@@ -107,16 +107,20 @@ function loadProperties(pluginId, thingData, data) {
 
     $.each(data.properties, function (key, val) {
         let defVal = val.defaultValue;
-        let field = $("#" + key);
 
         if(val.fieldType === "LINK") {
             renderAndAppend("propertyLinkTemplate", {"field": key, "schemaId": defVal}, "thingForm")
             loadLinkages(key, defVal);
+        } else if(val.fieldType === "ENUM") {
+            renderAndAppend("propertyEnumTemplate", {"field": key, "schemaId": defVal}, "thingForm")
+            loadEnums(key, defVal);
         } else {
             renderAndAppend("propertyTemplate", {"field": key}, "thingForm")
+            let field = $("#" + key);
             if(val.fieldType === "STATIC_DEFAULT") {
-                field.prop( "disabled", true);
+                console.log("Rendering default field: " + key + " with default value: " + defVal)
                 field.val(defVal);
+                field.prop( "disabled", "true");
             }
             if(val.fieldType === "TEXT") {
                 field.val(defVal);
@@ -139,6 +143,14 @@ function reloadLinkages() {
 
         console.log("Loading linkages for field: " + field + " and schema: " + schemaId);
         loadLinkages(field, schemaId);
+    })
+}
+
+function loadEnums(field, defVal) {
+    let enumList = $("#" + field);
+    let vals = defVal.split(",");
+    $.each(vals, function(i, item) {
+        enumList.append(new Option(item, item, false, false));
     })
 }
 

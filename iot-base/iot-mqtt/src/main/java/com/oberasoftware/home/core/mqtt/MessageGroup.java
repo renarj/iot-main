@@ -8,7 +8,7 @@ public enum MessageGroup {
     COMMANDS("commands"),
     ALL("all");
 
-    private String group;
+    private final String group;
 
     MessageGroup(String group) {
         this.group = group;

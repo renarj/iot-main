@@ -33,7 +33,7 @@ public class HueCommandHandler implements GroupCommandHandler {
     @Autowired
     private List<HueCommandAction> actions;
 
-    private ConcurrentMap<String, HueCommandAction<Command>> actionMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, HueCommandAction<Command>> actionMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void prepareActions() {

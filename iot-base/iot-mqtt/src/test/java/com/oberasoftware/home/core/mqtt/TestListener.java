@@ -17,7 +17,7 @@ public class TestListener implements EventHandler {
     private String lastTopic = null;
     private String lastMessage = null;
 
-    private CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch latch = new CountDownLatch(1);
 
     @EventSubscribe
     public void receive(MQTTMessage mqttMessage) {

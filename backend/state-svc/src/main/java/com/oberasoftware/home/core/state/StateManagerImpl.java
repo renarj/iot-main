@@ -29,7 +29,7 @@ public class StateManagerImpl implements StateManager {
     private static final Logger LOG = getLogger(StateManagerImpl.class);
     private static final String LAST_SEEN = "lastSeen";
 
-    private ConcurrentMap<String, StateImpl> itemStates = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, StateImpl> itemStates = new ConcurrentHashMap<>();
 
     @Autowired(required = false)
     private List<StateStore> stateStores;

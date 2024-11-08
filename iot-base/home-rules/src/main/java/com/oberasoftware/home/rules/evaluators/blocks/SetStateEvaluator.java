@@ -3,7 +3,7 @@ package com.oberasoftware.home.rules.evaluators.blocks;
 import com.google.common.collect.Sets;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.home.rules.api.general.SetState;
-import com.oberasoftware.home.rules.api.values.ItemValue;
+import com.oberasoftware.home.rules.api.values.ThingAttributeValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 import com.oberasoftware.home.rules.evaluators.EvaluatorFactory;
 import com.oberasoftware.home.rules.evaluators.values.ValueEvaluator;
@@ -33,11 +33,11 @@ public class SetStateEvaluator implements BlockEvaluator<SetState> {
 
     @Override
     public Boolean eval(SetState input) {
-        ItemValue targetItem = input.getItemValue();
+        ThingAttributeValue targetItem = input.getItemValue();
 
         ValueEvaluator<ResolvableValue> valueEvaluator = evaluatorFactory.getEvaluator(input.getResolvableValue());
         Map<String, Value> values = new HashMap<>();
-        values.put(targetItem.getLabel(), valueEvaluator.eval(input.getResolvableValue()));
+        values.put(targetItem.getAttribute(), valueEvaluator.eval(input.getResolvableValue()));
 
         ThingCommand thingCommand = new ValueCommandImpl(targetItem.getControllerId(), targetItem.getThingId(), values);
 

@@ -14,8 +14,8 @@ public enum ShellyDeviceComponents {
     PRO_3EM("Pro3EM", Lists.newArrayList("em:0", "emdata:0", "temperature:0")),
     UNKNOWN("UNKNOWN", Lists.newArrayList());
 
-    private String typeName;
-    private List<String> components;
+    private final String typeName;
+    private final List<String> components;
 
     ShellyDeviceComponents(String typeName, List<String> components) {
         this.typeName = typeName;

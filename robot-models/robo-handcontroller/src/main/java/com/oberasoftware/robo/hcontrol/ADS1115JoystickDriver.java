@@ -25,7 +25,7 @@ import java.util.Map;
 public class ADS1115JoystickDriver  {
     private static final Logger LOG = LoggerFactory.getLogger(ADS1115JoystickDriver.class);
 
-    private Map<String, ADSAnalogPort> inputs = new HashMap<>();
+    private final Map<String, ADSAnalogPort> inputs = new HashMap<>();
 
     private ADS1115GpioProvider gpioProvider;
 

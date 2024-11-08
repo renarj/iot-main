@@ -46,7 +46,7 @@ public class ESP32SensorDriver implements SensorDriver<TeensyPort> {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
-    private List<TeensyPort> ports = new ArrayList<>();
+    private final List<TeensyPort> ports = new ArrayList<>();
 
     @Override
     public List<TeensyPort> getPorts() {

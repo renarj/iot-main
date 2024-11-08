@@ -1,13 +1,13 @@
 package com.oberasoftware.home.rules.builder;
 
-import com.oberasoftware.home.rules.api.Block;
-import com.oberasoftware.home.rules.api.general.CompositeBlock;
+import com.google.common.collect.Lists;
+import com.oberasoftware.home.rules.api.Statement;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.api.trigger.DayTimeTrigger;
-import com.oberasoftware.home.rules.api.trigger.DeviceTrigger;
 import com.oberasoftware.home.rules.api.trigger.SystemTrigger;
+import com.oberasoftware.home.rules.api.trigger.ThingTrigger;
 import com.oberasoftware.home.rules.api.trigger.Trigger;
-import com.oberasoftware.home.rules.api.values.ItemValue;
+import com.oberasoftware.home.rules.api.values.ThingAttributeValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
  */
 public class RuleBuilder {
 
-    private Rule rule;
+    private final Rule rule;
 
-    private List<Trigger> triggers = new ArrayList<>();
+    private final List<Trigger> triggers = new ArrayList<>();
 
-    private List<BlockBuilder> blockBuilders = new ArrayList<>();
+    private final List<BlockBuilder> blockBuilders = new ArrayList<>();
 
     private RuleBuilder(String ruleName) {
-        this.rule = new Rule(null, ruleName, null, null);
+        this.rule = new Rule(null, ruleName, Lists.newArrayList(), null);
     }
 
     public static RuleBuilder create(String name) {
@@ -33,7 +33,7 @@ public class RuleBuilder {
     }
 
     public RuleBuilder triggerOnDeviceChange() {
-        this.triggers.add(new DeviceTrigger(DeviceTrigger.TRIGGER_TYPE.DEVICE_STATE_CHANGE));
+        this.triggers.add(new ThingTrigger(ThingTrigger.TRIGGER_TYPE.THING_STATE_CHANGE));
 
         return this;
     }
@@ -58,7 +58,7 @@ public class RuleBuilder {
     }
 
     public SetStateBlockBuilder setItemState(String controllerId, String itemId, String label) {
-        SetStateBlockBuilder setStateBlockBuilder = new SetStateBlockBuilder(this, new ItemValue(controllerId, itemId, label));
+        SetStateBlockBuilder setStateBlockBuilder = new SetStateBlockBuilder(this, new ThingAttributeValue(controllerId, itemId, label));
 
         blockBuilders.add(setStateBlockBuilder);
 
@@ -68,13 +68,8 @@ public class RuleBuilder {
     public Rule build() {
         rule.setTriggers(triggers);
 
-        List<Block> blocks = blockBuilders.stream().map(BlockBuilder::buildBlock).collect(Collectors.toList());
-
-        if(blocks.size() > 1) {
-            rule.setBlock(new CompositeBlock(blocks));
-        } else {
-            rule.setBlock(blocks.stream().findFirst().get());
-        }
+        List<Statement> statements = blockBuilders.stream().map(BlockBuilder::buildBlock).collect(Collectors.toList());
+        rule.setBlocks(statements.stream().toList());
 
         return rule;
     }

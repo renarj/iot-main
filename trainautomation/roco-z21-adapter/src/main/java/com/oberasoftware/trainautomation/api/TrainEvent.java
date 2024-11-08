@@ -4,9 +4,9 @@ import com.oberasoftware.iot.core.events.ValueEvent;
 import com.oberasoftware.iot.core.model.states.Value;
 
 public abstract class TrainEvent implements ValueEvent {
-    private int eventAddress;
-    private String attribute;
-    private Value value;
+    private final int eventAddress;
+    private final String attribute;
+    private final Value value;
 
     public TrainEvent(int eventAddress, String attribute, Value value) {
         this.eventAddress = eventAddress;

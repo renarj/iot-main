@@ -8,8 +8,8 @@ import static com.oberasoftware.robo.pi4j.GroveCodes.*;
 public class RGBLed {
 
     private static final int NR_LEDS = 1;
-    private GrovePort port;
-    private int pin;
+    private final GrovePort port;
+    private final int pin;
 
     public enum COLOR {
         OFF(0),

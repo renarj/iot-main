@@ -1,25 +1,25 @@
 package com.oberasoftware.home.web.manager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oberasoftware.home.rules.RuleEngine;
+import com.oberasoftware.home.rules.api.general.Rule;
+import com.oberasoftware.home.rules.blockly.BlocklyParseException;
+import com.oberasoftware.home.rules.blocklyv1.BlocklyXMLParser;
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.managers.RuleManager;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
+import com.oberasoftware.iot.core.model.storage.impl.RuleItemImpl;
 import com.oberasoftware.iot.core.storage.CentralDatastore;
 import com.oberasoftware.iot.core.storage.HomeDAO;
-import com.oberasoftware.iot.core.model.storage.impl.RuleItemImpl;
-import com.oberasoftware.home.rules.RuleEngine;
-import com.oberasoftware.home.rules.api.general.Rule;
-import com.oberasoftware.home.rules.blockly.BlocklyParseException;
-import com.oberasoftware.home.rules.blockly.BlocklyParser;
 import com.oberasoftware.jasdb.core.utils.StringUtils;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
@@ -48,7 +48,7 @@ public class RuleManagerImpl implements RuleManager {
     private CentralDatastore centralDatastore;
 
     @Autowired
-    private BlocklyParser blocklyParser;
+    private BlocklyXMLParser blocklyParser;
 
     @PostConstruct
     public void onStartup() {

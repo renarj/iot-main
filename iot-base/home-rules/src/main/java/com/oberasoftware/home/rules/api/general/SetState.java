@@ -1,31 +1,31 @@
 package com.oberasoftware.home.rules.api.general;
 
-import com.oberasoftware.home.rules.api.Block;
-import com.oberasoftware.home.rules.api.values.ItemValue;
+import com.oberasoftware.home.rules.api.Statement;
+import com.oberasoftware.home.rules.api.values.ThingAttributeValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 
 /**
  * @author Renze de Vries
  */
-public class SetState implements Block {
+public class SetState implements Statement {
 
-    private ItemValue itemValue;
+    private ThingAttributeValue thingAttributeValue;
     private ResolvableValue resolvableValue;
 
-    public SetState(ItemValue itemValue, ResolvableValue resolvableValue) {
-        this.itemValue = itemValue;
+    public SetState(ThingAttributeValue thingAttributeValue, ResolvableValue resolvableValue) {
+        this.thingAttributeValue = thingAttributeValue;
         this.resolvableValue = resolvableValue;
     }
 
     public SetState() {
     }
 
-    public ItemValue getItemValue() {
-        return itemValue;
+    public ThingAttributeValue getItemValue() {
+        return thingAttributeValue;
     }
 
-    public void setItemValue(ItemValue itemValue) {
-        this.itemValue = itemValue;
+    public void setItemValue(ThingAttributeValue thingAttributeValue) {
+        this.thingAttributeValue = thingAttributeValue;
     }
 
     public ResolvableValue getResolvableValue() {
@@ -43,14 +43,14 @@ public class SetState implements Block {
 
         SetState that = (SetState) o;
 
-        if (!itemValue.equals(that.itemValue)) return false;
+        if (!thingAttributeValue.equals(that.thingAttributeValue)) return false;
         return resolvableValue.equals(that.resolvableValue);
 
     }
 
     @Override
     public int hashCode() {
-        int result = itemValue.hashCode();
+        int result = thingAttributeValue.hashCode();
         result = 31 * result + resolvableValue.hashCode();
         return result;
     }
@@ -58,7 +58,7 @@ public class SetState implements Block {
     @Override
     public String toString() {
         return "SetStateAction{" +
-                "itemValue=" + itemValue +
+                "itemValue=" + thingAttributeValue +
                 ", resolvableValue=" + resolvableValue +
                 '}';
     }

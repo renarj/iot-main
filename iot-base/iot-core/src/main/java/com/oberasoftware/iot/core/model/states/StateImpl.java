@@ -13,7 +13,7 @@ public class StateImpl implements State {
 
     private String itemId;
     private String controllerId;
-    private Map<String, StateItemImpl> stateItems = new HashMap<>();
+    private final Map<String, StateItemImpl> stateItems = new HashMap<>();
 
     public StateImpl(String controllerId, String itemId) {
         this.controllerId = controllerId;

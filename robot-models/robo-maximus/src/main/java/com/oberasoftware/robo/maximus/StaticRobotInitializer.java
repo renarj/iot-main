@@ -159,8 +159,8 @@ public class StaticRobotInitializer {
                 .head("head",
                         create("141", PITCH_HEAD).min(-25).max(25),
                         create("140", ROLL_HEAD).min(-50).max(50))
-                .sensor(new Ina260CurrentSensor())
-                .sensor(new LSM9DS1GyroSensor())
+                .sensor(new Ina260CurrentSensor("test", "ina260"))
+                .sensor(new LSM9DS1GyroSensor("test", "lsm9ds1"))
                 .behaviourController(new CartesianControlImpl())
                 .behaviourController(new NavigationControlImpl())
                 .behaviourController(new CoordinatesMonitor())

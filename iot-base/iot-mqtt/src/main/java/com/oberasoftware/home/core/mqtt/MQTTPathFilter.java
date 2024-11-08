@@ -17,9 +17,8 @@ public class  MQTTPathFilter implements EventFilter {
 
     @Override
     public boolean isFiltered(Object o, HandlerEntry handlerEntry) {
-        if(o instanceof MQTTMessageImpl) {
+        if(o instanceof MQTTMessageImpl mqttMessage) {
             LOG.debug("Checking filter on message: {}", o);
-            MQTTMessageImpl mqttMessage = (MQTTMessageImpl) o;
             Method eventMethod = handlerEntry.getEventMethod();
             MQTTPath mqttPath = eventMethod.getAnnotation(MQTTPath.class);
             if(mqttPath != null) {

@@ -32,7 +32,7 @@ public enum DynamixelAddress {
     PRESENT_TEMPERATURE(0x2B);
 
 
-    private int address;
+    private final int address;
 
     DynamixelAddress(int address) {
         this.address = address;

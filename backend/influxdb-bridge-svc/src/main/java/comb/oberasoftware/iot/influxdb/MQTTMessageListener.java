@@ -23,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MQTTMessageListener implements EventHandler {
     private static final Logger LOG = getLogger( MQTTMessageListener.class );
 
-    private ConcurrentLinkedQueue<MQTTMessage> messages = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<MQTTMessage> messages = new ConcurrentLinkedQueue<>();
 
     @Value("${writerThreads:2}")
     private Integer nrThreads;

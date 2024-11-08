@@ -1,32 +1,32 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
-    <block type="rule" id="11" x="140" y="16">
+    <statement type="rule" id="11" x="140" y="16">
         <field name="rule_name">Set Power On Start</field>
         <statement name="ruleTrigger">
-            <block type="systemTrigger" id="29">
+            <statement type="systemTrigger" id="29">
                 <next>
-                    <block type="dayTimeTrigger" id="33">
+                    <statement type="dayTimeTrigger" id="33">
                         <field name="hour">0</field>
                         <field name="minute">0</field>
-                    </block>
+                    </statement>
                 </next>
-            </block>
+            </statement>
         </statement>
         <statement name="ruleStatement">
-            <block type="setItemValue" id="25">
+            <statement type="setItemValue" id="25">
                 <value name="item">
-                    <block type="Item.0000d220-b158-1a2e-0000-014efa7c9a11" id="35"></block>
+                    <statement type="Item.0000d220-b158-1a2e-0000-014efa7c9a11" id="35"></statement>
                 </value>
                 <value name="label">
-                    <block type="label_text" id="49">
+                    <statement type="label_text" id="49">
                         <field name="label">MyLabel</field>
-                    </block>
+                    </statement>
                 </value>
                 <value name="value">
-                    <block type="label" id="63">
+                    <statement type="label" id="63">
                         <field name="label">power</field>
-                    </block>
+                    </statement>
                 </value>
-            </block>
+            </statement>
         </statement>
-    </block>
+    </statement>
 </xml>

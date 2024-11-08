@@ -31,7 +31,7 @@ public class LegFactory {
     private static final BiFunction<Double, Double, Double> yFunction = (coxaLength, femurLength) -> Math.sin(60.0/180.0 * Math.PI) * (coxaLength + femurLength);
     private static final BiFunction<Double, Double, Double> yNegativeFunction = (coxaLength, femurLength) -> Math.sin(-60.0/180.0 * Math.PI) * (coxaLength + femurLength);
 
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
     private List<Leg> legs = new CopyOnWriteArrayList<>();
 

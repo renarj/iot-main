@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class BehaviouralRobotRegistryImpl implements BehaviouralRobotRegistry {
 
-    private List<Robot> robots = new CopyOnWriteArrayList<>();
+    private final List<Robot> robots = new CopyOnWriteArrayList<>();
 
 //    @Autowired(required = false)
 //    private RemoteCloudDriver remoteCloudDriver;

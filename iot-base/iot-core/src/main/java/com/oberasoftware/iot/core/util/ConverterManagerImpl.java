@@ -35,7 +35,7 @@ public class ConverterManagerImpl implements ConverterManager {
     @Autowired(required = false)
     private List<Converter> messageConverters;
 
-    private Map<String, ConverterPlaceHolder> mappedConverters = new HashMap<>();
+    private final Map<String, ConverterPlaceHolder> mappedConverters = new HashMap<>();
 
     @PostConstruct
     public void initialize() {

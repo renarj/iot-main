@@ -32,10 +32,10 @@ public class SerialDynamixelConnector implements DynamixelConnector {
 
     private String portName;
 
-    private List<Byte> buffer = new CopyOnWriteArrayList<>();
+    private final List<Byte> buffer = new CopyOnWriteArrayList<>();
     private int messageLength = 0;
 
-    private AtomicBoolean responseReceived = new AtomicBoolean(false);
+    private final AtomicBoolean responseReceived = new AtomicBoolean(false);
 
     @Value("${dynamixel.baudrate:57600}")
     protected int baudRate = 57600;

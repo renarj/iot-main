@@ -5,7 +5,7 @@ import com.oberasoftware.home.rules.api.Condition;
 import com.oberasoftware.home.rules.api.Operator;
 import com.oberasoftware.home.rules.api.logic.CompareCondition;
 import com.oberasoftware.home.rules.api.logic.LogicCondition;
-import com.oberasoftware.home.rules.api.values.ItemValue;
+import com.oberasoftware.home.rules.api.values.ThingAttributeValue;
 import com.oberasoftware.home.rules.api.values.ResolvableValue;
 import com.oberasoftware.home.rules.api.values.StaticValue;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
@@ -36,7 +36,7 @@ public class ConditionBuilder {
     }
 
     public ConditionBuilder itemValue(String controllerId, String itemId, String label) {
-        this.leftValue = new ItemValue(controllerId, itemId, label);
+        this.leftValue = new ThingAttributeValue(controllerId, itemId, label);
         return this;
     }
 

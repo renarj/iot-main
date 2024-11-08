@@ -38,7 +38,7 @@ public class MQTTTest {
     @Autowired
     private TestListener testListener;
 
-    private Server server = new Server();
+    private final Server server = new Server();
 
     @Before
     public void setUp() throws IOException {

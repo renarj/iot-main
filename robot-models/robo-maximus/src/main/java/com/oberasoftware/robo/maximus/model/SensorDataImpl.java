@@ -2,26 +2,28 @@ package com.oberasoftware.robo.maximus.model;
 
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Sets;
+import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.robotics.events.RobotValueEvent;
-import com.oberasoftware.iot.core.robotics.sensors.SensorValue;
 
 import java.util.Map;
 import java.util.Set;
 
 public class SensorDataImpl implements RobotValueEvent {
-    private final SensorValue value;
-    private final String sensorId;
+    private final Value value;
+    private final String controllerId;
+    private final String thingId;
     private final String attribute;
 
-    public SensorDataImpl(SensorValue value, String sensorId, String attribute) {
+    public SensorDataImpl(String controllerId, String thingId, String attribute, Value value) {
         this.value = value;
-        this.sensorId = sensorId;
+        this.controllerId = controllerId;
+        this.thingId = thingId;
         this.attribute = attribute;
     }
 
     @Override
     public String getSourcePath() {
-        return sensorId + "." + attribute;
+        return controllerId + "." + thingId + "." + attribute;
     }
 
     @Override
@@ -32,32 +34,42 @@ public class SensorDataImpl implements RobotValueEvent {
     @Override
     public Map<String, ?> getValues() {
         return ImmutableBiMap.<String, Object>builder()
-                .put(attribute, value.getRaw())
+                .put(attribute, value.getValue())
                 .build();
     }
 
     @Override
     public <T> T getValue(String attribute) {
         if(this.attribute.equalsIgnoreCase(attribute)) {
-            return (T) value.getRaw();
+            return value.getValue();
         } else {
             return null;
         }
     }
 
-    public SensorValue getValue() {
+    public Value getValue() {
         return value;
     }
 
-    public String getSensorId() {
-        return sensorId;
+    public String getControllerId() {
+        return controllerId;
+    }
+
+    public String getThingId() {
+        return thingId;
+    }
+
+    public String getAttribute() {
+        return attribute;
     }
 
     @Override
     public String toString() {
         return "SensorDataImpl{" +
                 "value=" + value +
-                ", sensorId='" + sensorId + '\'' +
+                ", controllerId='" + controllerId + '\'' +
+                ", thingId='" + thingId + '\'' +
+                ", attribute='" + attribute + '\'' +
                 '}';
     }
 }

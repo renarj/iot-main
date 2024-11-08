@@ -1,6 +1,8 @@
 package com.oberasoftware.robo.maximus.sensors;
 
 import com.google.common.collect.Sets;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.sensors.MultiValueSensor;
 import com.oberasoftware.robo.maximus.model.SensorDataImpl;
@@ -17,9 +19,17 @@ public class LSM9DS1GyroSensor implements MultiValueSensor<DoubleValue> {
     private double roll;
     private double pitch;
 
+    private final String controllerId;
+    private final String thingId;
+
+    public LSM9DS1GyroSensor(String controllerId, String thingId) {
+        this.controllerId = controllerId;
+        this.thingId = thingId;
+    }
+
     @Override
     public String getName() {
-        return "LSM9DS1";
+        return thingId;
     }
 
     @Override
@@ -57,15 +67,15 @@ public class LSM9DS1GyroSensor implements MultiValueSensor<DoubleValue> {
         if(sensorDriver != null) {
             sensorDriver.getPort(LSM_9_DS_1_HEADING).listen(e -> {
                 this.heading = e.getRaw();
-                robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM9DS1, LSM_9_DS_1_HEADING));
+                robot.publish(new SensorDataImpl(controllerId, thingId, LSM_9_DS_1_HEADING, new ValueImpl(VALUE_TYPE.NUMBER, e.getRaw())));
             });
             sensorDriver.getPort(LSM_9_DS_1_PITCH).listen(e -> {
                 this.pitch = e.getRaw();
-                robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM9DS1, LSM_9_DS_1_PITCH));
+                robot.publish(new SensorDataImpl(controllerId, thingId, LSM_9_DS_1_PITCH, new ValueImpl(VALUE_TYPE.NUMBER, e.getRaw())));
             });
             sensorDriver.getPort(LSM_9_DS_1_ROLL).listen(e -> {
                 this.roll = e.getRaw();
-                robot.publish(new SensorDataImpl(new DoubleValue(e.getRaw()), LSM9DS1, LSM_9_DS_1_ROLL));
+                robot.publish(new SensorDataImpl(controllerId, thingId, LSM_9_DS_1_ROLL, new ValueImpl(VALUE_TYPE.NUMBER, e.getRaw())));
             });
         }
     }

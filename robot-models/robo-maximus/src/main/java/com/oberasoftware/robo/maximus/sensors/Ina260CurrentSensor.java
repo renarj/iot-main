@@ -1,6 +1,8 @@
 package com.oberasoftware.robo.maximus.sensors;
 
 import com.google.common.collect.Sets;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
+import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.sensors.MultiValueSensor;
 import com.oberasoftware.robo.maximus.model.SensorDataImpl;
@@ -18,9 +20,17 @@ public class Ina260CurrentSensor implements MultiValueSensor<DoubleValue> {
     private Double current = 0.0;
     private Double power = 0.0;
 
+    private final String controllerId;
+    private final String thingId;
+
+    public Ina260CurrentSensor(String controllerId, String thingId) {
+        this.controllerId = controllerId;
+        this.thingId = thingId;
+    }
+
     @Override
     public String getName() {
-        return "ina260";
+        return thingId;
     }
 
     @Override
@@ -58,16 +68,16 @@ public class Ina260CurrentSensor implements MultiValueSensor<DoubleValue> {
         if(sensorDriver != null) {
             sensorDriver.getPort(INA_260_CURRENT).listen(e -> {
                 this.current = e.getRaw() / UNIT_DIVISION;
-                robot.publish(new SensorDataImpl(new DoubleValue(this.current), INA_260, INA_260_CURRENT));
+                robot.publish(new SensorDataImpl(controllerId, thingId, INA_260_CURRENT, new ValueImpl(VALUE_TYPE.NUMBER, this.current)));
             });
             sensorDriver.getPort(INA_260_VOLTAGE).listen(e -> {
                 this.voltage = e.getRaw() / UNIT_DIVISION;
 
-                robot.publish(new SensorDataImpl(new DoubleValue(this.voltage), INA_260, INA_260_VOLTAGE));
+                robot.publish(new SensorDataImpl(controllerId, thingId, INA_260_VOLTAGE, new ValueImpl(VALUE_TYPE.NUMBER, this.voltage)));
             });
             sensorDriver.getPort(INA_260_POWER).listen(e -> {
                 this.power = e.getRaw() / UNIT_DIVISION;
-                robot.publish(new SensorDataImpl(new DoubleValue(this.power), INA_260, INA_260_POWER));
+                robot.publish(new SensorDataImpl(controllerId, thingId, INA_260_POWER, new ValueImpl(VALUE_TYPE.NUMBER, this.power)));
             });
         }
     }

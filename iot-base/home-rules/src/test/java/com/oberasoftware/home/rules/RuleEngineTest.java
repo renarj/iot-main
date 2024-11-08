@@ -8,11 +8,11 @@ import com.oberasoftware.home.rules.api.Operator;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.api.general.SwitchItem;
 import com.oberasoftware.home.rules.api.logic.CompareCondition;
-import com.oberasoftware.home.rules.api.logic.IfBlock;
+import com.oberasoftware.home.rules.api.logic.IfStatement;
 import com.oberasoftware.home.rules.api.logic.IfBranch;
-import com.oberasoftware.home.rules.api.trigger.DeviceTrigger;
+import com.oberasoftware.home.rules.api.trigger.ThingTrigger;
 import com.oberasoftware.home.rules.api.trigger.Trigger;
-import com.oberasoftware.home.rules.api.values.ItemValue;
+import com.oberasoftware.home.rules.api.values.ThingAttributeValue;
 import com.oberasoftware.home.rules.api.values.StaticValue;
 import com.oberasoftware.home.rules.test.MockStateManager;
 import com.oberasoftware.iot.core.commands.SwitchCommand;
@@ -63,16 +63,16 @@ public class RuleEngineTest {
 
     @Test
     public void testSerialise() throws Exception {
-        Trigger trigger = new DeviceTrigger(DeviceTrigger.TRIGGER_TYPE.DEVICE_STATE_CHANGE);
+        Trigger trigger = new ThingTrigger(ThingTrigger.TRIGGER_TYPE.THING_STATE_CHANGE);
         Condition condition = new CompareCondition(
-                new ItemValue(CONTROLLER_ID, MY_ITEM_ID, LUMINANCE_LABEL),
+                new ThingAttributeValue(CONTROLLER_ID, MY_ITEM_ID, LUMINANCE_LABEL),
                 Operator.SMALLER_THAN_EQUALS,
-                new StaticValue(10l, VALUE_TYPE.NUMBER));
+                new StaticValue(10L, VALUE_TYPE.NUMBER));
 
-        IfBranch branch = new IfBranch(condition, newArrayList(new SwitchItem(SWITCHABLE_DEVICE_ID, SwitchCommand.STATE.ON)));
+        IfBranch branch = new IfBranch(condition, newArrayList(new SwitchItem("test", SWITCHABLE_DEVICE_ID, "switch", SwitchCommand.STATE.ON)));
 
         String ruleId = randomUUID().toString();
-        Rule rule = new Rule(ruleId, "Light after dark", new IfBlock(newArrayList(branch)), Lists.newArrayList(trigger));
+        Rule rule = new Rule(ruleId, "Light after dark", new IfStatement(newArrayList(branch)), Lists.newArrayList(trigger));
 
         StringWriter stringWriter = new StringWriter();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -92,20 +92,20 @@ public class RuleEngineTest {
 
     @Test
     public void testEvaluate() throws IOTException {
-        Trigger trigger = new DeviceTrigger(DeviceTrigger.TRIGGER_TYPE.DEVICE_STATE_CHANGE);
+        Trigger trigger = new ThingTrigger(ThingTrigger.TRIGGER_TYPE.THING_STATE_CHANGE);
 
         Condition condition = new CompareCondition(
-                new ItemValue(CONTROLLER_ID, MY_ITEM_ID, LUMINANCE_LABEL),
+                new ThingAttributeValue(CONTROLLER_ID, MY_ITEM_ID, LUMINANCE_LABEL),
                 Operator.SMALLER_THAN_EQUALS,
-                new StaticValue(10l, VALUE_TYPE.NUMBER));
+                new StaticValue(10L, VALUE_TYPE.NUMBER));
 
-        IfBranch branch = new IfBranch(condition, newArrayList(new SwitchItem(SWITCHABLE_DEVICE_ID, SwitchCommand.STATE.ON)));
+        IfBranch branch = new IfBranch(condition, newArrayList(new SwitchItem("test", SWITCHABLE_DEVICE_ID, "switch", SwitchCommand.STATE.ON)));
 
         String ruleId = randomUUID().toString();
-        Rule rule = new Rule(ruleId, "Light after dark", new IfBlock(newArrayList(branch)), Lists.newArrayList(trigger));
+        Rule rule = new Rule(ruleId, "Light after dark", new IfStatement(newArrayList(branch)), Lists.newArrayList(trigger));
 
         StateImpl itemState = new StateImpl(CONTROLLER_ID, MY_ITEM_ID);
-        itemState.updateIfChanged(LUMINANCE_LABEL, new StateItemImpl(LUMINANCE_LABEL, new ValueImpl(VALUE_TYPE.NUMBER, 1l)));
+        itemState.updateIfChanged(LUMINANCE_LABEL, new StateItemImpl(LUMINANCE_LABEL, new ValueImpl(VALUE_TYPE.NUMBER, 1L)));
         mockStateManager.addState(itemState);
 
         ruleEngine.register(rule);
@@ -125,16 +125,16 @@ public class RuleEngineTest {
 
     @Test
     public void testDeviceMovement() throws  Exception {
-        Trigger trigger = new DeviceTrigger(DeviceTrigger.TRIGGER_TYPE.DEVICE_STATE_CHANGE);
+        Trigger trigger = new ThingTrigger(ThingTrigger.TRIGGER_TYPE.THING_STATE_CHANGE);
 
         Condition condition = new CompareCondition(
-                new ItemValue(CONTROLLER_ID, MY_ITEM_ID, "on-off"),
+                new ThingAttributeValue(CONTROLLER_ID, MY_ITEM_ID, "on-off"),
                 Operator.EQUALS,
                 new StaticValue("on", VALUE_TYPE.STRING));
 
-        IfBranch branch = new IfBranch(condition, newArrayList(new SwitchItem("LightId", SwitchCommand.STATE.ON)));
+        IfBranch branch = new IfBranch(condition, newArrayList(new SwitchItem("test", "LightId", "switch", SwitchCommand.STATE.ON)));
         String ruleId = randomUUID().toString();
-        Rule rule = new Rule(ruleId, "Light on with movement", new IfBlock(newArrayList(branch)), Lists.newArrayList(trigger));
+        Rule rule = new Rule(ruleId, "Light on with movement", new IfStatement(newArrayList(branch)), Lists.newArrayList(trigger));
 
         StringWriter stringWriter = new StringWriter();
         ObjectMapper objectMapper = new ObjectMapper();

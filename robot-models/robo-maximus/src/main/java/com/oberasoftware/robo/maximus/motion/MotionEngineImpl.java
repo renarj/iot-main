@@ -49,9 +49,9 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
     private ServoDriver servoDriver;
 
-    private Queue<MotionTaskImpl> queue = new LinkedBlockingQueue<>();
-    private Map<String, MotionTaskImpl> motionTasks = new ConcurrentHashMap<>();
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Queue<MotionTaskImpl> queue = new LinkedBlockingQueue<>();
+    private final Map<String, MotionTaskImpl> motionTasks = new ConcurrentHashMap<>();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private volatile boolean running;
 

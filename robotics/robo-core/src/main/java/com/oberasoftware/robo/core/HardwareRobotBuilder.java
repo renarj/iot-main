@@ -27,8 +27,8 @@ public class HardwareRobotBuilder {
     private final ApplicationContext context;
     private final EventBus eventBus;
 
-    private List<SensorHolder> sensors = new ArrayList<>();
-    private List<CapabilityHolder> capabilities = new ArrayList<>();
+    private final List<SensorHolder> sensors = new ArrayList<>();
+    private final List<CapabilityHolder> capabilities = new ArrayList<>();
     private boolean isRemote = false;
 
     public HardwareRobotBuilder(String robotName, ApplicationContext context) {

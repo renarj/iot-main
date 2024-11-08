@@ -39,9 +39,9 @@ public class ActiveMQTopicListener implements TopicListener<String>, ExceptionLi
 
     private volatile boolean running;
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private List<TopicConsumer<String>> topicConsumers = new CopyOnWriteArrayList<>();
+    private final List<TopicConsumer<String>> topicConsumers = new CopyOnWriteArrayList<>();
 
     private MessageConsumer consumer;
     private Session session;
@@ -65,7 +65,7 @@ public class ActiveMQTopicListener implements TopicListener<String>, ExceptionLi
                 consumer = session.createConsumer(destination);
 
                 running = true;
-                executorService.submit((Runnable) this::runPoller);
+                executorService.submit(this::runPoller);
                 LOG.info("Finished connect to ActiveMQ host: {}", amqHost);
             } catch (JMSException e) {
                 LOG.error("", e);
@@ -106,8 +106,7 @@ public class ActiveMQTopicListener implements TopicListener<String>, ExceptionLi
             try {
                 Message message = consumer.receive(AMQ_READ_TIMEOUT);
                 if(message != null) {
-                    if (message instanceof TextMessage) {
-                        TextMessage textMessage = (TextMessage) message;
+                    if (message instanceof TextMessage textMessage) {
                         LOG.info("Received text message: {}", textMessage.getText());
                         notifyListeners(textMessage.getText());
                     } else {

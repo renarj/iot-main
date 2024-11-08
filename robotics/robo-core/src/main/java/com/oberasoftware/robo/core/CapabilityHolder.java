@@ -14,8 +14,8 @@ import java.util.Map;
 public class CapabilityHolder {
     private static final Logger LOG = LoggerFactory.getLogger(CapabilityHolder.class);
 
-    private Capability capability;
-    private Map<String, String> properties;
+    private final Capability capability;
+    private final Map<String, String> properties;
 
     public CapabilityHolder(Capability capability, Map<String, String> properties) {
         this.capability = capability;

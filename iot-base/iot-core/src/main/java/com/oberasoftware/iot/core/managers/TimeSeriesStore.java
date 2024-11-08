@@ -17,7 +17,7 @@ public interface TimeSeriesStore extends StateStore {
         HOUR("60m"),
         DAY("24h");
 
-        private String timeString;
+        private final String timeString;
 
         GROUPING(String timeString) {
             this.timeString = timeString;

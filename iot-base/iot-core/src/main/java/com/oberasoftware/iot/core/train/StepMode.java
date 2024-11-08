@@ -6,7 +6,7 @@ public enum StepMode {
     DCC_27(0x12),
     DCC_14(0x10);
 
-    private int railFormat;
+    private final int railFormat;
 
     StepMode(int railFormat) {
         this.railFormat = railFormat;

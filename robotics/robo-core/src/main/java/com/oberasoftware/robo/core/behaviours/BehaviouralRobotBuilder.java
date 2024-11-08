@@ -17,9 +17,9 @@ import java.util.List;
  * @author renarj
  */
 public class BehaviouralRobotBuilder {
-    private RobotHardware robot;
+    private final RobotHardware robot;
 
-    private List<Behaviour> behaviours;
+    private final List<Behaviour> behaviours;
 
     private BehaviouralRobotBuilder(RobotHardware robot) {
         this.robot = robot;

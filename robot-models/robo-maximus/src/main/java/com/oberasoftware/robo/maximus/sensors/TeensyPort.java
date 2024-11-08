@@ -14,7 +14,7 @@ public class TeensyPort implements DirectPort<DoubleValue> {
 
     private final String name;
 
-    private List<PortListener<DoubleValue>> listeners = new CopyOnWriteArrayList<>();
+    private final List<PortListener<DoubleValue>> listeners = new CopyOnWriteArrayList<>();
 
     public TeensyPort(String name) {
         this.name = name;

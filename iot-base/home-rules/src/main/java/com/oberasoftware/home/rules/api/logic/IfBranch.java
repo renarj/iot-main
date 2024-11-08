@@ -1,18 +1,19 @@
 package com.oberasoftware.home.rules.api.logic;
 
-import com.oberasoftware.home.rules.api.Block;
+import com.oberasoftware.home.rules.api.Statement;
 import com.oberasoftware.home.rules.api.Condition;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Renze de Vries
  */
-public class IfBranch implements Block {
+public class IfBranch implements Statement {
     private Condition condition;
-    private List<Block> statements;
+    private List<Statement> statements;
 
-    public IfBranch(Condition condition, List<Block> statements) {
+    public IfBranch(Condition condition, List<Statement> statements) {
         this.condition = condition;
         this.statements = statements;
     }
@@ -28,11 +29,11 @@ public class IfBranch implements Block {
         this.condition = condition;
     }
 
-    public List<Block> getStatements() {
+    public List<Statement> getStatements() {
         return statements;
     }
 
-    public void setStatements(List<Block> statements) {
+    public void setStatements(List<Statement> statements) {
         this.statements = statements;
     }
 
@@ -44,7 +45,7 @@ public class IfBranch implements Block {
 
         IfBranch branch = (IfBranch) o;
 
-        if (condition != null ? !condition.equals(branch.condition) : branch.condition != null) return false;
+        if (!Objects.equals(condition, branch.condition)) return false;
         return statements.equals(branch.statements);
 
     }

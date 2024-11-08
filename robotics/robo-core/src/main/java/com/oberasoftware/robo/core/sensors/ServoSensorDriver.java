@@ -34,7 +34,7 @@ public class ServoSensorDriver implements SensorDriver<DirectPort<PositionValue>
 
     private final LocalEventBus localEventBus;
 
-    private Map<String, ServoPort> ports = new ConcurrentHashMap<>();
+    private final Map<String, ServoPort> ports = new ConcurrentHashMap<>();
 
     private static final int SERVO_CHECK_INTERVAL = 250;
 

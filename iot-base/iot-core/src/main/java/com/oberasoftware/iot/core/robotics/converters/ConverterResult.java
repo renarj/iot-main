@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConverterResult<T> {
-    private List<T> results = new ArrayList<>();
+    private final List<T> results = new ArrayList<>();
 
     public ConverterResult(T result) {
         this.results.add(result);

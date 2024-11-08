@@ -18,7 +18,7 @@ public class SimpleServo {
     private final int torgue;
     private final int temperature;
     private final double voltage;
-    private int minPosition;
+    private final int minPosition;
     private final int maxPosition;
 
     public SimpleServo(String servoId, Integer speed, Integer position, Integer torgue, Integer temperature, Double voltage) {

@@ -8,6 +8,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 
@@ -18,11 +19,11 @@ public class BasicCryptoEngine implements CryptoEngine {
 	private static final String STANDARD_EMPTY_PASS = " ";
     public static final String BASIC_CRYPTO = "basic_128";
 
-    private static final Charset UTF8 = Charset.forName("UTF8");
+    private static final Charset UTF8 = StandardCharsets.UTF_8;
     private static final int IV_SIZE = 16;
     private static final int SALT_SIZE = 32;
 
-    private SecureRandom secureRandom;
+    private final SecureRandom secureRandom;
 
     public BasicCryptoEngine() {
         secureRandom = new SecureRandom();

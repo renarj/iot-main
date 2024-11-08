@@ -1,12 +1,9 @@
 package com.oberasoftware.home.rules.blockly;
 
-import org.w3c.dom.Element;
+import com.oberasoftware.home.rules.blockly.json.BlocklyObject;
 
-/**
- * @author Renze de Vries
- */
 public interface BlockParser<T> {
     boolean supportsType(String type);
 
-    T parse(Element node) throws BlocklyParseException;
+    T transform(BlockFactory factory, BlocklyObject block) throws BlocklyParseException;
 }

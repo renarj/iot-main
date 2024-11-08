@@ -25,7 +25,7 @@ public class JointBasedRobotBuilder implements RobotBuilder {
     private String name;
     private String controllerId;
 
-    private Map<String, JointChain> jointChains = new HashMap<>();
+    private final Map<String, JointChain> jointChains = new HashMap<>();
 
     private final List<Sensor> sensors = new ArrayList<>();
     private final List<Behaviour> behaviours = new ArrayList<>();

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +33,7 @@ public class JsonMotionLoader implements MotionConverter {
                 LOG.debug("Opening resource: {}", resource.toURI());
                 Path path = Paths.get(resource.toURI());
 
-                String json = new String(Files.readAllBytes(path), "utf-8");
+                String json = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
                 LOG.debug("Loaded json resource: {}", json);
 
                 return new ObjectMapper().readValue(json, MotionList.class).getMotions();

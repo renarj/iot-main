@@ -1,9 +1,9 @@
 package com.oberasoftware.robo.hexapod;
 
 public class PosData {
-    private double x;
-    private double y;
-    private double z;
+    private final double x;
+    private final double y;
+    private final double z;
 
     public PosData(double x, double y, double z) {
         this.x = x;

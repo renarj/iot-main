@@ -10,8 +10,8 @@ import com.oberasoftware.robo.core.behaviours.gripper.impl.RotatableGripperImpl;
  * @author renarj
  */
 public class GripperBuilder {
-    private ServoBehaviour leftGripper;
-    private ServoBehaviour rightGripper;
+    private final ServoBehaviour leftGripper;
+    private final ServoBehaviour rightGripper;
 
     private ServoBehaviour rotator;
     private ServoBehaviour elevator;

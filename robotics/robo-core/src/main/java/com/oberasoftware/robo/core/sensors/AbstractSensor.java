@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class AbstractSensor<T extends SensorValue> implements ListenableSensor<T> {
 
-    private List<SensorListener<T>> sensorListeners = new CopyOnWriteArrayList<>();
+    private final List<SensorListener<T>> sensorListeners = new CopyOnWriteArrayList<>();
 
     @Override
     public void listen(SensorListener<T> listener) {

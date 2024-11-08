@@ -6,9 +6,9 @@ import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
  * @author renarj
  */
 public class AngleLimitCommand implements ServoCommand {
-    private String servoId;
-    private int minLimit;
-    private int maxLimit;
+    private final String servoId;
+    private final int minLimit;
+    private final int maxLimit;
 
     public AngleLimitCommand(String servoId, int minLimit, int maxLimit) {
         this.servoId = servoId;

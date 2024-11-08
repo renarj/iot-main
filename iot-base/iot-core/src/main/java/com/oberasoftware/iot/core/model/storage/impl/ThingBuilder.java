@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class ThingBuilder {
 
-    private IotThingImpl thing;
+    private final IotThingImpl thing;
 
-    private Map<String, String> properties = new HashMap<>();
+    private final Map<String, String> properties = new HashMap<>();
 
     private ThingBuilder(String thingId, String controllerId) {
         this.thing = new IotThingImpl(thingId, controllerId);

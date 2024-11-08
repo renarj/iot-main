@@ -86,17 +86,19 @@
 </div>
 
 <xml id="toolbox" style="display: none">
-    <category name="Automation">
+    <category name="Automation" id="defaultToolbox">
         <block type="rule"></block>
-        <block type="getItemValue"></block>
-        <block type="setItemValue"></block>
+        <block type="getThingValue"></block>
+        <block type="setThingValue"></block>
         <block type="setThingValues"></block>
-        <block type="setLabelValue"></block>
+        <block type="setAttributeValue"></block>
 
-        <block type="label_text"></block>
-        <block type="label"></block>
+        <block type="attribute_text"></block>
+        <block type="attribute"></block>
 
+        <block type="math_number"></block>
         <block type="text_value"></block>
+
         <block type="onoff"></block>
         <block type="movement"></block>
         <block type="switch_item"></block>
@@ -108,17 +110,13 @@
         <block type="controls_if"></block>
         <block type="logic_compare"></block>
         <block type="logic_operation"></block>
-        <block type="math_number"></block>
+
         <block type="math_arithmetic"></block>
     </category>
-    <category name="Devices" id="ItemToolbox">
-    </category>
-    <category name="Groups" id="GroupToolbox">
-    </category>
-    <category name="Virtual Items" id="VirtualToolbox">
+    <category name="Things" id="ItemToolbox">
     </category>
     <category name="Triggers" id="Triggers">
-        <block type="deviceTrigger"></block>
+        <block type="thingTrigger"></block>
         <block type="systemTrigger"></block>
         <block type="dayTimeTrigger"></block>
     </category>

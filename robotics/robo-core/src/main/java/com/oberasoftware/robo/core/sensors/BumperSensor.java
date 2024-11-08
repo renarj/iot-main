@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 public class BumperSensor extends AbstractSensor<TriggerValue> {
     private static final Logger LOG = LoggerFactory.getLogger(BumperSensor.class);
 
-    private String name;
-    private String portName;
+    private final String name;
+    private final String portName;
 
     private RobotHardware robot;
 

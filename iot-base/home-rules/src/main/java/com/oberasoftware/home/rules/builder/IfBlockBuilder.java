@@ -1,8 +1,8 @@
 package com.oberasoftware.home.rules.builder;
 
-import com.oberasoftware.home.rules.api.Block;
+import com.oberasoftware.home.rules.api.Statement;
 import com.oberasoftware.home.rules.api.general.Rule;
-import com.oberasoftware.home.rules.api.logic.IfBlock;
+import com.oberasoftware.home.rules.api.logic.IfStatement;
 import com.oberasoftware.home.rules.api.logic.IfBranch;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class IfBlockBuilder implements BlockBuilder {
 
     private final RuleBuilder ruleBuilder;
 
-    private List<IfBranch> branches = new ArrayList<>();
+    private final List<IfBranch> branches = new ArrayList<>();
 
     private ConditionBuilder lastConditionBuilder;
 
@@ -26,7 +26,7 @@ public class IfBlockBuilder implements BlockBuilder {
         this.lastConditionBuilder = conditionBuilder;
     }
 
-    public IfBlockBuilder thenDo(Block... statements) {
+    public IfBlockBuilder thenDo(Statement... statements) {
         branches.add(new IfBranch(lastConditionBuilder.build(), asList(statements)));
         return this;
     }
@@ -36,14 +36,14 @@ public class IfBlockBuilder implements BlockBuilder {
         return this;
     }
 
-    public IfBlockBuilder orElseDo(Block... statements) {
+    public IfBlockBuilder orElseDo(Statement... statements) {
         branches.add(new IfBranch(null, asList(statements)));
         return this;
     }
 
     @Override
-    public Block buildBlock() {
-        return new IfBlock(branches);
+    public Statement buildBlock() {
+        return new IfStatement(branches);
     }
 
     public Rule build() {

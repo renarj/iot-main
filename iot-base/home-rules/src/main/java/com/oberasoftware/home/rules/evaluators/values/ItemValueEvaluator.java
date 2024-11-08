@@ -1,7 +1,7 @@
 package com.oberasoftware.home.rules.evaluators.values;
 
 import com.google.common.collect.Sets;
-import com.oberasoftware.home.rules.api.values.ItemValue;
+import com.oberasoftware.home.rules.api.values.ThingAttributeValue;
 import com.oberasoftware.home.rules.evaluators.EvalException;
 import com.oberasoftware.iot.core.client.StateClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
@@ -21,16 +21,16 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author Renze de Vries
  */
 @Component
-public class ItemValueEvaluator implements ValueEvaluator<ItemValue> {
+public class ItemValueEvaluator implements ValueEvaluator<ThingAttributeValue> {
     private static final Logger LOG = getLogger(ItemValueEvaluator.class);
 
     @Autowired
     private StateClient stateClient;
 
     @Override
-    public Value eval(ItemValue input) {
+    public Value eval(ThingAttributeValue input) {
         String thingId = input.getThingId();
-        String label = input.getLabel();
+        String label = input.getAttribute();
 
         LOG.debug("Retrieving item: {} state value for label: {}", thingId, label);
 
@@ -51,7 +51,7 @@ public class ItemValueEvaluator implements ValueEvaluator<ItemValue> {
     }
 
     @Override
-    public Set<String> getDependentItems(ItemValue input) {
+    public Set<String> getDependentItems(ThingAttributeValue input) {
         return Sets.newHashSet(input.getThingId());
     }
 }

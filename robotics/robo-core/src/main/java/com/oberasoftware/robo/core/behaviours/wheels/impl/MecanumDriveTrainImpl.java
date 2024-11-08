@@ -85,11 +85,11 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
         // Negate y for the joystick.
         yIn = -yIn;
         // Compensate for gyro angle.
-        double rotated[] = rotateVector(xIn, yIn, 0.0);
+        double[] rotated = rotateVector(xIn, yIn, 0.0);
         xIn = rotated[0];
         yIn = rotated[1];
 
-        double wheelSpeeds[] = new double[4];
+        double[] wheelSpeeds = new double[4];
         wheelSpeeds[LEFT_FRONT] = xIn + yIn + rotation;
         wheelSpeeds[RIGHT_FRONT] = -xIn + yIn - rotation;
         wheelSpeeds[LEFT_REAR] = -xIn + yIn + rotation;
@@ -135,7 +135,7 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
         double cosD = Math.cos(dirInRad);
         double sinD = Math.sin(dirInRad);
 
-        double wheelSpeeds[] = new double[4];
+        double[] wheelSpeeds = new double[4];
         wheelSpeeds[LEFT_FRONT] = (sinD * magnitude + rotation);
         wheelSpeeds[RIGHT_FRONT] = (cosD * magnitude - rotation);
         wheelSpeeds[LEFT_REAR] = (cosD * magnitude + rotation);
@@ -172,7 +172,7 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
         double angleInRadians = Math.toRadians(angle);
         double cosA = Math.cos(angleInRadians);
         double sinA = Math.sin(angleInRadians);
-        double out[] = new double[2];
+        double[] out = new double[2];
         out[0] = x * cosA - y * sinA;
         out[1] = x * sinA + y * cosA;
         return out;
@@ -182,7 +182,7 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
      * Normalize all wheel speeds if the magnitude of any wheel is greater than 1.0.
      * @param wheelSpeeds the speed of each motor
      */
-    protected static void normalize(double wheelSpeeds[]) {
+    protected static void normalize(double[] wheelSpeeds) {
         double maxMagnitude = Math.abs(wheelSpeeds[0]);
         for (int i = 1; i < 4; i++) {
             double temp = Math.abs(wheelSpeeds[i]);
@@ -200,7 +200,7 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
      * @param wheelSpeeds the speed of each motor
      * @param scaleFactor the scale factor to apply to the motor speeds
      */
-    protected static void scale(double wheelSpeeds[], double scaleFactor) {
+    protected static void scale(double[] wheelSpeeds, double scaleFactor) {
         for (int i = 0; i < 4; i++) {
             wheelSpeeds[i] = wheelSpeeds[i] * scaleFactor;
         }

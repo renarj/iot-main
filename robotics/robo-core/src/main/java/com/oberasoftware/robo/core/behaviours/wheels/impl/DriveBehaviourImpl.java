@@ -18,8 +18,8 @@ import static com.google.common.collect.Iterables.concat;
  */
 public class DriveBehaviourImpl implements DriveBehaviour {
 
-    private DriveTrain left;
-    private DriveTrain right;
+    private final DriveTrain left;
+    private final DriveTrain right;
 
     public DriveBehaviourImpl(DriveTrain left, DriveTrain right) {
         this.left = left;

@@ -40,7 +40,7 @@ public enum DynamixelV2Address {
     LIDAR(0x33);
 
 
-    private int address;
+    private final int address;
 
     DynamixelV2Address(int address) {
         this.address = address;

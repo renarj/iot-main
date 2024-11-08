@@ -35,12 +35,11 @@ public class CronTriggerProcessor implements TriggerProcessor {
     @Autowired
     private RuleEngine ruleEngine;
 
-    private Map<String, JobKey> scheduledRules = new ConcurrentHashMap<>();
+    private final Map<String, JobKey> scheduledRules = new ConcurrentHashMap<>();
 
     @Override
     public void register(Trigger trigger, Rule rule) {
-        if(trigger instanceof TimeTrigger) {
-            TimeTrigger timeTrigger = (TimeTrigger) trigger;
+        if(trigger instanceof TimeTrigger timeTrigger) {
             String cron = timeTrigger.getCron();
 
             LOG.debug("Scheduling rule: {} evaluation using cron expression: {}", rule, cron);

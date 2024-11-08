@@ -1,7 +1,8 @@
 package com.oberasoftware.home.rules.api.general;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.oberasoftware.home.rules.api.Block;
+import com.google.common.collect.Lists;
+import com.oberasoftware.home.rules.api.Statement;
 import com.oberasoftware.home.rules.api.trigger.Trigger;
 
 import java.util.List;
@@ -14,13 +15,21 @@ public class Rule {
 
     private String id;
     private String name;
-    private Block block;
+    private List<Statement> statements;
     private List<Trigger> triggers;
 
-    public Rule(String id, String name, Block block, List<Trigger> triggers) {
+    public Rule(String id, String name, Statement statement, List<Trigger> triggers) {
         this.id = id;
         this.name = name;
-        this.block = block;
+        this.statements = Lists.newArrayList(statement);
+        this.triggers = triggers;
+
+    }
+
+    public Rule(String id, String name, List<Statement> statements, List<Trigger> triggers) {
+        this.id = id;
+        this.name = name;
+        this.statements = statements;
         this.triggers = triggers;
     }
 
@@ -43,12 +52,12 @@ public class Rule {
         this.name = name;
     }
 
-    public Block getBlock() {
-        return block;
+    public List<Statement> getBlocks() {
+        return statements;
     }
 
-    public void setBlock(Block block) {
-        this.block = block;
+    public void setBlocks(List<Statement> statements) {
+        this.statements = statements;
     }
 
     public List<Trigger> getTriggers() {
@@ -60,34 +69,11 @@ public class Rule {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Rule rule = (Rule) o;
-
-        if (!id.equals(rule.id)) return false;
-        if (!name.equals(rule.name)) return false;
-        if (!block.equals(rule.block)) return false;
-        return triggers.equals(rule.triggers);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + block.hashCode();
-        result = 31 * result + triggers.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Rule{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", block=" + block +
+                ", block=" + statements +
                 ", triggers=" + triggers +
                 '}';
     }

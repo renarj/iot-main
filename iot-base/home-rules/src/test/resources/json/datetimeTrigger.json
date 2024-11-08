@@ -1,0 +1,98 @@
+{
+  "blocks": {
+    "languageVersion": 0,
+    "blocks": [
+      {
+        "type": "rule",
+        "id": "9wIO3x*X,s,NqgT}gXP-",
+        "x": 181,
+        "y": 75,
+        "fields": {
+          "rule_name": "resetKneeJoint"
+        },
+        "inputs": {
+          "ruleTrigger": {
+            "block": {
+              "type": "systemTrigger",
+              "id": "5M@.jMMEL4WtN,UTvatX",
+              "next": {
+                "block": {
+                  "type": "dayTimeTrigger",
+                  "id": "|~o8O[c~kpjNN^wOFD4C",
+                  "fields": {
+                    "hour": "23",
+                    "minute": "58"
+                  }
+                }
+              }
+            }
+          },
+          "ruleStatement": {
+            "block": {
+              "type": "setThingValue",
+              "id": "pe2W6U!4}V7Cv*6hNt5i",
+              "inputs": {
+                "item": {
+                  "block": {
+                    "type": "renze-homecontroller.LeftKnee",
+                    "id": "l~S,jI!hI)-;lc!.}p#y"
+                  }
+                },
+                "Attribute": {
+                  "block": {
+                    "type": "attribute",
+                    "id": "2tyv6UzeMFvuJswdUTmK",
+                    "fields": {
+                      "label": "torgue"
+                    }
+                  }
+                },
+                "value": {
+                  "block": {
+                    "type": "onoff",
+                    "id": "B`-DY[kR:8{xV=1W!KmU",
+                    "fields": {
+                      "state": "on"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "setThingValue",
+                  "id": "Et{{XN0YAp1jRU^V$9mk",
+                  "inputs": {
+                    "item": {
+                      "block": {
+                        "type": "renze-homecontroller.LeftKnee",
+                        "id": "_=AO.JM.Gi3TQKgVz?n7"
+                      }
+                    },
+                    "Attribute": {
+                      "block": {
+                        "type": "attribute",
+                        "id": "rAj{;eehCt?i=NuzY(G0",
+                        "fields": {
+                          "label": "degrees"
+                        }
+                      }
+                    },
+                    "value": {
+                      "block": {
+                        "type": "math_number",
+                        "id": "3BF7fsX$wIgPlyJR)b0+",
+                        "fields": {
+                          "NUM": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

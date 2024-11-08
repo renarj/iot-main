@@ -1,0 +1,92 @@
+{
+  "blocks": {
+    "languageVersion": 0,
+    "blocks": [
+      {
+        "type": "rule",
+        "id": "i{.T-R!t4j*^TSzSjP]f",
+        "x": 126,
+        "y": 83,
+        "fields": {
+          "rule_name": "switchOffPowerHigh"
+        },
+        "inputs": {
+          "ruleTrigger": {
+            "block": {
+              "type": "thingTrigger",
+              "id": "dWGJ,Qi,Gy7~isRb}+L."
+            }
+          },
+          "ruleStatement": {
+            "block": {
+              "type": "controls_if",
+              "id": "mr%Yh{%BHGM`i[yw8qn`",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "id": "}|vv:jXBi}dXzjD#ciGY",
+                    "fields": {
+                      "OP": "GT"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "getThingValue",
+                          "id": "qj-A%=J}ukuRp}f1[}s}",
+                          "inputs": {
+                            "item": {
+                              "block": {
+                                "type": "renze-homecontroller.hue",
+                                "id": "%oG8t5Nh)ZES[qTvrDJ,"
+                              }
+                            },
+                            "Attribute": {
+                              "block": {
+                                "type": "attribute",
+                                "id": "^kQEHUdo(f4(PQZL`hVY",
+                                "fields": {
+                                  "label": "power"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "B": {
+                        "block": {
+                          "type": "math_number",
+                          "id": "}Mpnyg{a7+N.C=w.lHaX",
+                          "fields": {
+                            "NUM": 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "switch_item",
+                    "id": "|w?V*omWzgNB/Z=H=]Zg",
+                    "fields": {
+                      "state": "on"
+                    },
+                    "inputs": {
+                      "item": {
+                        "block": {
+                          "type": "renze-homecontroller.hue",
+                          "id": "U_4zUk3@hdeYx6ON!f?W"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
