@@ -1,4 +1,4 @@
-package com.oberasoftware.home.web.rest;
+package com.oberasoftware.home.data;
 
 import com.oberasoftware.iot.core.managers.RuleManager;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
@@ -16,7 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author Renze de Vries
  */
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/api/rules")
 public class RulesRestController {
     private static final Logger LOG = getLogger(RulesRestController.class);
 
@@ -45,6 +45,5 @@ public class RulesRestController {
     public void deleteRule(@PathVariable String ruleId) {
         LOG.debug("Deleting Rule: {}", ruleId);
         ruleManager.delete(ruleId);
-        LOG.debug("Deleted Rule");
     }
 }

@@ -4,9 +4,9 @@
     "blocks": [
       {
         "type": "rule",
-        "id": "9wIO3x*X,s,NqgT}gXP-",
-        "x": 181,
-        "y": 75,
+        "id": "i,s7XzH?+CdkWvgyJ9_D",
+        "x": 358,
+        "y": 116,
         "fields": {
           "rule_name": "resetKneeJoint"
         },
@@ -14,14 +14,14 @@
           "ruleTrigger": {
             "block": {
               "type": "systemTrigger",
-              "id": "5M@.jMMEL4WtN,UTvatX",
+              "id": "mQI@:/D2w?`KmNVQlpsx",
               "next": {
                 "block": {
                   "type": "dayTimeTrigger",
-                  "id": "|~o8O[c~kpjNN^wOFD4C",
+                  "id": "|hUFRcf(@heXJ//7D/%3",
                   "fields": {
                     "hour": "23",
-                    "minute": "58"
+                    "minute": "59"
                   }
                 }
               }
@@ -30,18 +30,18 @@
           "ruleStatement": {
             "block": {
               "type": "setThingValue",
-              "id": "pe2W6U!4}V7Cv*6hNt5i",
+              "id": "[CI:F%H^#0C,^fc4G8t8",
               "inputs": {
                 "item": {
                   "block": {
                     "type": "renze-homecontroller.LeftKnee",
-                    "id": "l~S,jI!hI)-;lc!.}p#y"
+                    "id": "{AW|Nx*U|BtsI![eu#0i"
                   }
                 },
                 "Attribute": {
                   "block": {
                     "type": "attribute",
-                    "id": "2tyv6UzeMFvuJswdUTmK",
+                    "id": "9qH5=f^.iC)I`8D143#,",
                     "fields": {
                       "label": "torgue"
                     }
@@ -50,7 +50,7 @@
                 "value": {
                   "block": {
                     "type": "onoff",
-                    "id": "B`-DY[kR:8{xV=1W!KmU",
+                    "id": "|57{lZ]BD|~v:n8E|-wU",
                     "fields": {
                       "state": "on"
                     }
@@ -60,18 +60,18 @@
               "next": {
                 "block": {
                   "type": "setThingValue",
-                  "id": "Et{{XN0YAp1jRU^V$9mk",
+                  "id": "+ef{Icg$d#~LAUvq|}Ia",
                   "inputs": {
                     "item": {
                       "block": {
                         "type": "renze-homecontroller.LeftKnee",
-                        "id": "_=AO.JM.Gi3TQKgVz?n7"
+                        "id": "4K)/mtv[r9xNwLvrQY8I"
                       }
                     },
                     "Attribute": {
                       "block": {
                         "type": "attribute",
-                        "id": "rAj{;eehCt?i=NuzY(G0",
+                        "id": "ON045?K?h/LBy|4xys11",
                         "fields": {
                           "label": "degrees"
                         }
@@ -80,7 +80,7 @@
                     "value": {
                       "block": {
                         "type": "math_number",
-                        "id": "3BF7fsX$wIgPlyJR)b0+",
+                        "id": "6y]S5+r=,]IEDXv[[DgY",
                         "fields": {
                           "NUM": 0
                         }

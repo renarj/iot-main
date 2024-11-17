@@ -1,5 +1,8 @@
 package com.oberasoftware.home.rules.blockly;
 
+import com.oberasoftware.home.rules.api.Operator;
+import com.oberasoftware.home.rules.api.logic.CompareCondition;
+import com.oberasoftware.home.rules.api.logic.IfStatement;
 import com.oberasoftware.home.rules.blockly.blocks.IfBlockParser;
 import com.oberasoftware.home.rules.blockly.blocks.RuleBlockParser;
 import com.oberasoftware.home.rules.blockly.blocks.SetThingStateParser;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.oberasoftware.home.rules.blocklyv1.BlocklyHelper.parseJsonRule;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -63,6 +67,26 @@ public class BlocklyJsonParserTest {
         assertThat(parsedJson.getBlocks().size(), is(1));
         assertThat(parsedJson.getTriggers(), notNullValue());
         assertThat(parsedJson.getTriggers().size(), is(2));
+
+        IfStatement ifStatement = (IfStatement) parsedJson.getBlocks().get(0);
+        assertThat(ifStatement, notNullValue());
+        assertThat(ifStatement.getBranches().size(), is(3));
+
+        var firstBranch = ifStatement.getBranches().get(0);
+        var secondBranch = ifStatement.getBranches().get(1);
+        assertThat(firstBranch, notNullValue());
+        assertThat(secondBranch, notNullValue());
+
+
+        assertThat(firstBranch.getCondition(), notNullValue());
+        assertThat(firstBranch.getCondition(), instanceOf(CompareCondition.class));
+        var firstCompare = (CompareCondition) firstBranch.getCondition();
+        assertThat(firstCompare.getOperator(), is(Operator.LARGER_THAN));
+
+        assertThat(secondBranch.getCondition(), notNullValue());
+        assertThat(secondBranch.getCondition(), instanceOf(CompareCondition.class));
+        var secondCompare = (CompareCondition) secondBranch.getCondition();
+        assertThat(secondCompare.getOperator(), is(Operator.EQUALS));
     }
 
     @Test

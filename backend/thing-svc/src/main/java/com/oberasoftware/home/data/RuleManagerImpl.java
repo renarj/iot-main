@@ -1,10 +1,9 @@
-package com.oberasoftware.home.web.manager;
+package com.oberasoftware.home.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oberasoftware.home.rules.RuleEngine;
 import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.blockly.BlocklyParseException;
-import com.oberasoftware.home.rules.blocklyv1.BlocklyXMLParser;
+import com.oberasoftware.home.rules.blockly.BlocklyParser;
 import com.oberasoftware.iot.core.exceptions.DataStoreException;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
@@ -14,14 +13,10 @@ import com.oberasoftware.iot.core.model.storage.impl.RuleItemImpl;
 import com.oberasoftware.iot.core.storage.CentralDatastore;
 import com.oberasoftware.iot.core.storage.HomeDAO;
 import com.oberasoftware.jasdb.core.utils.StringUtils;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +33,6 @@ public class RuleManagerImpl implements RuleManager {
 
     private static final String BLOCKLY_PROPERTY = "Blockly";
 
-    @Autowired
-    private RuleEngine ruleEngine;
 
     @Autowired
     private HomeDAO homeDAO;
@@ -48,28 +41,7 @@ public class RuleManagerImpl implements RuleManager {
     private CentralDatastore centralDatastore;
 
     @Autowired
-    private BlocklyXMLParser blocklyParser;
-
-    @PostConstruct
-    public void onStartup() {
-        homeDAO.findRules().forEach(r -> {
-            try {
-                LOG.debug("Registering rule: {}", r);
-                ruleEngine.register(toRule(r));
-
-                LOG.debug("Triggered rule engine start event");
-                ruleEngine.onStarted();
-            } catch (IOTException e) {
-                LOG.error("Could not load rule: " + r, e);
-            }
-        });
-    }
-
-    @PreDestroy
-    public void onShutdown() {
-        LOG.debug("Triggered rule engine stopping event");
-        ruleEngine.onStopping();
-    }
+    private BlocklyParser blocklyParser;
 
     @Override
     public List<RuleItem> getRules() {
@@ -89,7 +61,6 @@ public class RuleManagerImpl implements RuleManager {
         try {
             RuleItem item = centralDatastore.store(storeItem);
             LOG.debug("Stored rule: {} triggering rule engine", item);
-            ruleEngine.register(toRule(item));
 
             return item;
         } catch (DataStoreException e) {
@@ -109,8 +80,6 @@ public class RuleManagerImpl implements RuleManager {
             throw new RuntimeIOTException("Unable to delete rule: " + ruleId);
         } finally {
             centralDatastore.commitTransaction();
-
-            ruleEngine.removeRule(ruleId);
         }
     }
 
@@ -122,39 +91,21 @@ public class RuleManagerImpl implements RuleManager {
     }
 
     private RuleItem preProcessRule(RuleItem ruleItem) throws BlocklyParseException {
-        String blocklyXML = ruleItem.getProperties().get(BLOCKLY_PROPERTY);
-        if(StringUtils.stringNotEmpty(blocklyXML)) {
-            Rule rule = blocklyParser.toRule(blocklyXML);
-            String json = toJson(rule);
+        if(homeDAO.findController(ruleItem.getControllerId()).isPresent()) {
+            String blocklyXML = ruleItem.getProperties().get(BLOCKLY_PROPERTY);
+            if(StringUtils.stringNotEmpty(blocklyXML)) {
+                Rule rule = blocklyParser.toRule(blocklyXML);
 
-            return new RuleItemImpl(ruleItem.getId(), rule.getName(), ruleItem.getControllerId(), json, ruleItem.getProperties());
-        }
+                return new RuleItemImpl(ruleItem.getId(), rule.getName(), ruleItem.getControllerId(), ruleItem.getBlocklyData(), ruleItem.getProperties());
+            }
 
-        LOG.debug("Could not register blockly xml data, ignoring");
-        return ruleItem;
-    }
+            LOG.debug("Could not register blockly xml data, ignoring");
+            return ruleItem;
 
-    private String toJson(Rule rule) {
-        StringWriter writer = new StringWriter();
-        try {
-            OBJECT_MAPPER.writeValue(writer, rule);
-
-            return writer.toString();
-        } catch (IOException e) {
-            LOG.error("Could not serialize rule to json", e);
-            return null;
+        } else {
+            throw new RuntimeIOTException("Unable to process rule, invalid controller specified");
         }
     }
 
-    private Rule toRule(RuleItem item) {
-        try {
-            Rule rule = OBJECT_MAPPER.readValue(item.getRule(), Rule.class);
-            rule.setId(item.getId());
 
-            return rule;
-        } catch (IOException e) {
-            LOG.error("Could not parse Rule: " + item.getRule());
-            return null;
-        }
-    }
 }

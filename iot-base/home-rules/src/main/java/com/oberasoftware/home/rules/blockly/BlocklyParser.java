@@ -6,5 +6,5 @@ import com.oberasoftware.home.rules.api.general.Rule;
  * @author Renze de Vries
  */
 public interface BlocklyParser {
-    Rule toRule(String blocklyXml) throws BlocklyParseException;
+    Rule toRule(String blocklyData) throws BlocklyParseException;
 }

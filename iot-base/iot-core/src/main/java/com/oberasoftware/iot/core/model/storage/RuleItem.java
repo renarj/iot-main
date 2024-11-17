@@ -8,5 +8,5 @@ public interface RuleItem extends PropertiesContainer {
 
     String getControllerId();
 
-    String getRule();
+    String getBlocklyData();
 }

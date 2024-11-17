@@ -5,14 +5,15 @@ import com.oberasoftware.home.rules.api.Statement;
 import com.oberasoftware.home.rules.api.logic.IfBranch;
 import com.oberasoftware.home.rules.api.logic.IfStatement;
 import com.oberasoftware.home.rules.blockly.BlockFactory;
-import com.oberasoftware.home.rules.blockly.BlockUtils;
 import com.oberasoftware.home.rules.blockly.BlockParser;
+import com.oberasoftware.home.rules.blockly.BlockUtils;
 import com.oberasoftware.home.rules.blockly.BlocklyParseException;
 import com.oberasoftware.home.rules.blockly.json.BlocklyObject;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class IfBlockParser implements BlockParser<IfStatement> {
@@ -33,23 +34,28 @@ public class IfBlockParser implements BlockParser<IfStatement> {
             String ifName = "IF" + i;
             String statementName = "DO" + i;
 
-            branches.add(getBranch(factory, block, ifName, statementName));
-
+            branches.add(getBranch(factory, block, Optional.of(ifName), statementName));
+        }
+        if(hasElse) {
+            branches.add(getBranch(factory, block, Optional.empty(), "ELSE"));
         }
 
         return new IfStatement(branches);
     }
 
-    private IfBranch getBranch(BlockFactory factory, BlocklyObject ifBlock, String ifBranchName, String statementName) throws BlocklyParseException {
-        var ifStatement = BlockUtils.safeGetInput(ifBlock, ifBranchName);
+    private IfBranch getBranch(BlockFactory factory, BlocklyObject ifBlock, Optional<String> ifBranchName, String statementName) throws BlocklyParseException {
         var doStatement = BlockUtils.safeGetInput(ifBlock, statementName);
 
-        BlockParser<Condition> ifVisitor = factory.getParser(ifStatement.getType());
-        Condition condition = ifVisitor.transform(factory, ifStatement);
+        Condition optionalCondition = null;
+        if(ifBranchName.isPresent()) {
+            var ifStatementBlock = BlockUtils.safeGetInput(ifBlock, ifBranchName.get());
+            BlockParser<Condition> ifVisitor = factory.getParser(ifStatementBlock.getType());
+            optionalCondition = ifVisitor.transform(factory, ifStatementBlock);
+        }
 
         var statementBlocks = BlockUtils.getChainAsList(doStatement);
         var statements = statementBlocks.stream().map(s -> (Statement) factory.getParser(s.getType()).transform(factory, s)).toList();
 
-        return new IfBranch(condition, statements);
+        return new IfBranch(optionalCondition, statements);
     }
 }

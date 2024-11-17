@@ -38,8 +38,7 @@ public class BlocklyJsonParser implements BlocklyParser {
             var b = blocklyObjects.get(0);
             LOG.info("Evaluated block: {} with id: {}", b.getType(), b.getId());
             try {
-                Rule rule = (Rule)blockFactory.getParser(b.getType()).transform(blockFactory, b);
-                return rule;
+                return (Rule)blockFactory.getParser(b.getType()).transform(blockFactory, b);
             } catch (BlocklyParseException e) {
                 LOG.error("Could not evaluate block: {}", b, e);
                 throw new BlocklyParseException("Could not evaluate block", e);

@@ -28,6 +28,7 @@ function pageInit() {
         console.log("XML: " + xml_text);
 
         const state = Blockly.serialization.workspaces.save(workspace);
+        let blocklyJson = JSON.stringify(state);
         console.log("JSON: " + JSON.stringify(state, null, 2));
 
         var rule = {
@@ -38,30 +39,26 @@ function pageInit() {
         if(ruleId) {
             rule["id"] = ruleId.attr("ruleId");
         }
-
-
-        rule["properties"] = {
-            "Blockly" : xml_text
-        };
-
+        rule["blocklyData"] = blocklyJson;
 
         var jsonData = JSON.stringify(rule);
+        console.log("Posting data: " + jsonData);
 
-        // $.ajax({url: "/rules/", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function(data) {
-        //     console.log("Posted Rule successfully");
-        //
-        //     location.reload(true);
-        // }, error: function(xhr, status, error) {
-        //     console.log("Request error: " + error + " reason: " + xhr.responseText);
-        //
-        //     var responseData = xhr.responseText;
-        //     var json = JSON.parse(responseData);
-        //
-        //     console.log("Error parsing: " + json.message);
-        //
-        //     $("#errorReason").text("Error processing blockly diagram: " + json.message);
-        //     $("#errorModal").modal('toggle');
-        // }})
+        $.ajax({url: thingSvcUrl + "/api/rules/", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function(data) {
+            console.log("Posted Rule successfully");
+
+            location.reload(true);
+        }, error: function(xhr, status, error) {
+            console.log("Request error: " + error + " reason: " + xhr.responseText);
+
+            var responseData = xhr.responseText;
+            var json = JSON.parse(responseData);
+
+            console.log("Error parsing: " + json.message);
+
+            $("#errorReason").text("Error processing blockly diagram: " + json.message);
+            $("#errorModal").modal('toggle');
+        }})
     });
 
     $(document).on("click", ".resetRule", function (event) {

@@ -4,9 +4,9 @@
     "blocks": [
       {
         "type": "rule",
-        "id": "i{.T-R!t4j*^TSzSjP]f",
-        "x": 126,
-        "y": 0,
+        "id": "R$Yg5fAE=S]yjEW`k;v5",
+        "x": 272,
+        "y": 112,
         "fields": {
           "rule_name": "switchPowerOnOff"
         },
@@ -14,11 +14,11 @@
           "ruleTrigger": {
             "block": {
               "type": "thingTrigger",
-              "id": "dWGJ,Qi,Gy7~isRb}+L.",
+              "id": "L0M4:Sx*AR73h_xDv{$y",
               "next": {
                 "block": {
                   "type": "systemTrigger",
-                  "id": ")sTUa69K^qZBbwlCr`KQ"
+                  "id": "D4+p-}RUkE,YAw:%G83#"
                 }
               }
             }
@@ -26,7 +26,7 @@
           "ruleStatement": {
             "block": {
               "type": "controls_if",
-              "id": "mr%Yh{%BHGM`i[yw8qn`",
+              "id": "N}=kb|n{/b0sCZsz!=H;",
               "extraState": {
                 "elseIfCount": 1,
                 "hasElse": true
@@ -35,7 +35,7 @@
                 "IF0": {
                   "block": {
                     "type": "logic_compare",
-                    "id": "}|vv:jXBi}dXzjD#ciGY",
+                    "id": "PqScJo9Vm7Am`U},$HB?",
                     "fields": {
                       "OP": "GT"
                     },
@@ -43,18 +43,18 @@
                       "A": {
                         "block": {
                           "type": "getThingValue",
-                          "id": "qj-A%=J}ukuRp}f1[}s}",
+                          "id": "leK)=cOt!aG/8EBRAVcC",
                           "inputs": {
                             "item": {
                               "block": {
                                 "type": "renze-homecontroller.hue",
-                                "id": "%oG8t5Nh)ZES[qTvrDJ,"
+                                "id": "gBrgFRmXO5X%{+:Zkq#6"
                               }
                             },
                             "Attribute": {
                               "block": {
                                 "type": "attribute",
-                                "id": "^kQEHUdo(f4(PQZL`hVY",
+                                "id": ")WB7V]Mn3fwO(UQx{g`j",
                                 "fields": {
                                   "label": "power"
                                 }
@@ -66,7 +66,7 @@
                       "B": {
                         "block": {
                           "type": "math_number",
-                          "id": "}Mpnyg{a7+N.C=w.lHaX",
+                          "id": "sJr+QG:Z!aO{^B}{as0z",
                           "fields": {
                             "NUM": 10
                           }
@@ -78,21 +78,21 @@
                 "DO0": {
                   "block": {
                     "type": "switch_item",
-                    "id": "n5~u4pI4]|?coo]Aj.?*",
+                    "id": "_JwM6PUH3PI.B=#HP4o-",
                     "fields": {
                       "state": "on"
                     },
                     "inputs": {
                       "item": {
                         "block": {
-                          "type": "renze-homecontroller.LeftKnee",
-                          "id": "O^MomLv%`f|N5d^c/seU"
+                          "type": "renze-homecontroller.hue",
+                          "id": "FIoB?},deh+to+R+;VOv"
                         }
                       },
                       "Attribute": {
                         "block": {
                           "type": "attribute",
-                          "id": "FC)OATGqN#xaqw0-/07C",
+                          "id": "(sh7wk$mK!3=9`N2y}1J",
                           "fields": {
                             "label": "torgue"
                           }
@@ -104,7 +104,7 @@
                 "IF1": {
                   "block": {
                     "type": "logic_compare",
-                    "id": "-T={Iz8eUBo%`A27zp+f",
+                    "id": "nIzZoQZ}l55Ye={Bb;om",
                     "fields": {
                       "OP": "EQ"
                     },
@@ -112,18 +112,18 @@
                       "A": {
                         "block": {
                           "type": "getThingValue",
-                          "id": "sz|^-DG{6EsAblPhGh?)",
+                          "id": "L3]J+uyvxm`K!=h{Pypw",
                           "inputs": {
                             "item": {
                               "block": {
                                 "type": "renze-homecontroller.hue",
-                                "id": "~T{$4SEI2U])7$S+RN3e"
+                                "id": "!JBs/w{7{=jP|~g%B[Eo"
                               }
                             },
                             "Attribute": {
                               "block": {
                                 "type": "attribute",
-                                "id": "fm53Y+.^Im5EqYY/2m;j",
+                                "id": "U%fDM8sUHXgPaLAs1lTX",
                                 "fields": {
                                   "label": "power"
                                 }
@@ -135,7 +135,7 @@
                       "B": {
                         "block": {
                           "type": "math_number",
-                          "id": "icCPF?I|3KF2.L[4.Gci",
+                          "id": "|~m,ag$#*{u+A()u$69Q",
                           "fields": {
                             "NUM": 0
                           }
@@ -147,7 +147,7 @@
                 "DO1": {
                   "block": {
                     "type": "switch_item",
-                    "id": "^w?R8[9,vey=(c5:yBcS",
+                    "id": "P,w{Ho0TW]r21zQ$tokb",
                     "fields": {
                       "state": "off"
                     },
@@ -155,13 +155,13 @@
                       "item": {
                         "block": {
                           "type": "renze-homecontroller.hue",
-                          "id": "s$JJrJWWCpLgKEkqiF$y"
+                          "id": "4;FR,+33TYFpR00$KDME"
                         }
                       },
                       "Attribute": {
                         "block": {
                           "type": "attribute",
-                          "id": "FC)OATGqN#xaqw0-/07C",
+                          "id": ".(VN4S5b7[Z7g3.?J,_[",
                           "fields": {
                             "label": "torgue"
                           }
@@ -173,18 +173,18 @@
                 "ELSE": {
                   "block": {
                     "type": "setThingValue",
-                    "id": "-|M/thV.Os8EwclF6@qS",
+                    "id": "]dDIOEH88Uqh?XSvLe2t",
                     "inputs": {
                       "item": {
                         "block": {
                           "type": "renze-homecontroller.hue",
-                          "id": "z`f/=?pjn^2nj9Y@yn0X"
+                          "id": "J:DJ:8##yfXvO]~4I]ho"
                         }
                       },
                       "Attribute": {
                         "block": {
                           "type": "attribute_text",
-                          "id": "ts5Hd]Z~}m-7@$k*v%62",
+                          "id": "ta+23|h4g49e5Gp)%`@E",
                           "fields": {
                             "attribute": "switch"
                           }
@@ -193,7 +193,7 @@
                       "value": {
                         "block": {
                           "type": "onoff",
-                          "id": "lcO-#2-%4:ilc-g;@mL8",
+                          "id": "8w.:zp3/tY`e2ij`{L^0",
                           "fields": {
                             "state": "on"
                           }

@@ -23,7 +23,12 @@ public class SetThingStateParser implements BlockParser<SetState> {
     public SetState transform(BlockFactory factory, BlocklyObject block) throws BlocklyParseException {
         var thingBlock = BlockUtils.safeGetInput(block, "item");
         var attributeBlock = BlockUtils.safeGetInput(block, "Attribute");
-        var attribute = BlockUtils.safeGetField(attributeBlock, "label");
+        var attribute = "";
+        if("attribute_text".equalsIgnoreCase(attributeBlock.getType())) {
+            attribute = BlockUtils.safeGetField(attributeBlock, "attribute");
+        } else {
+            attribute = BlockUtils.safeGetField(attributeBlock, "label");
+        }
 
         var valueBlock = BlockUtils.safeGetInput(block, "value");
 

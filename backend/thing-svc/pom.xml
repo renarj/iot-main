@@ -26,6 +26,11 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
+            <artifactId>home-rules</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oberasoftware</groupId>
             <artifactId>queue-connectors</artifactId>
             <version>${project.version}</version>
         </dependency>

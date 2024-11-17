@@ -15,18 +15,18 @@ public class RuleItemImpl implements RuleItem {
     private String id;
     private String name;
     private String controllerId;
-    private String rule;
+    private String blocklyData;
 
     private Map<String, String> properties;
 
     public RuleItemImpl() {
     }
 
-    public RuleItemImpl(String id, String name, String controllerId, String rule, Map<String, String> properties) {
+    public RuleItemImpl(String id, String name, String controllerId, String blocklyData, Map<String, String> properties) {
         this.id = id;
         this.name = name;
         this.controllerId = controllerId;
-        this.rule = rule;
+        this.blocklyData = blocklyData;
         this.properties = properties;
     }
 
@@ -63,13 +63,14 @@ public class RuleItemImpl implements RuleItem {
 
     @Override
     @JasDBProperty
-    public String getRule() {
-        return rule;
+    public String getBlocklyData() {
+        return blocklyData;
     }
 
-    public void setRule(String rule) {
-        this.rule = rule;
+    public void setBlocklyData(String blocklyData) {
+        this.blocklyData = blocklyData;
     }
+
 
     @Override
     @JasDBProperty
@@ -87,7 +88,7 @@ public class RuleItemImpl implements RuleItem {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", controllerId='" + controllerId + '\'' +
-                ", rule='" + rule + '\'' +
+                ", blocklyData='" + blocklyData + '\'' +
                 ", properties=" + properties +
                 '}';
     }
