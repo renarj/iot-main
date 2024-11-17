@@ -13,12 +13,7 @@
     <artifactId>robo-maximus</artifactId>
 
 
-    <repositories>
-        <repository>
-            <id>ros-java</id>
-            <url>https://github.com/rosjava/rosjava_mvn_repo/raw/master</url>
-        </repository>
-    </repositories>
+
 
     <dependencies>
         <dependency>
