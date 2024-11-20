@@ -8,11 +8,12 @@ import com.oberasoftware.home.rules.api.general.Rule;
 import com.oberasoftware.home.rules.blockly.json.BlocklyObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-//@Component
+@Component
 public class BlocklyJsonParser implements BlocklyParser {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyJsonParser.class);
 
@@ -37,12 +38,7 @@ public class BlocklyJsonParser implements BlocklyParser {
         } else {
             var b = blocklyObjects.get(0);
             LOG.info("Evaluated block: {} with id: {}", b.getType(), b.getId());
-            try {
-                return (Rule)blockFactory.getParser(b.getType()).transform(blockFactory, b);
-            } catch (BlocklyParseException e) {
-                LOG.error("Could not evaluate block: {}", b, e);
-                throw new BlocklyParseException("Could not evaluate block", e);
-            }
+            return (Rule)blockFactory.getParser(b.getType()).transform(blockFactory, b);
         }
     }
 }

@@ -92,9 +92,9 @@ public class RuleManagerImpl implements RuleManager {
 
     private RuleItem preProcessRule(RuleItem ruleItem) throws BlocklyParseException {
         if(homeDAO.findController(ruleItem.getControllerId()).isPresent()) {
-            String blocklyXML = ruleItem.getProperties().get(BLOCKLY_PROPERTY);
-            if(StringUtils.stringNotEmpty(blocklyXML)) {
-                Rule rule = blocklyParser.toRule(blocklyXML);
+            String blocklyData = ruleItem.getBlocklyData();
+            if(StringUtils.stringNotEmpty(blocklyData)) {
+                Rule rule = blocklyParser.toRule(blocklyData);
 
                 return new RuleItemImpl(ruleItem.getId(), rule.getName(), ruleItem.getControllerId(), ruleItem.getBlocklyData(), ruleItem.getProperties());
             }

@@ -2,19 +2,20 @@ package com.oberasoftware.home.rules.blockly;
 
 import com.google.common.collect.Lists;
 import com.oberasoftware.home.rules.blockly.json.BlocklyObject;
+import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 
 import java.util.List;
 
 public class BlockUtils {
     public static String safeGetField(BlocklyObject block, String field) throws BlocklyParseException{
-        if(!block.getFields().containsKey(field)) {
+        if(block.getFields() == null || !block.getFields().containsKey(field)) {
             throw new BlocklyParseException("Field: " + field + " not found in block: " + block);
         }
         return block.getFields().get(field);
     }
 
     public static BlocklyObject safeGetInput(BlocklyObject block, String input) throws BlocklyParseException{
-        if(!block.getInputs().containsKey(input)) {
+        if(block.getInputs() == null || !block.getInputs().containsKey(input)) {
             throw new BlocklyParseException("Input: " + input + " not found in block: " + block);
         }
         return block.getInputs().get(input).getBlock();
@@ -37,5 +38,15 @@ public class BlockUtils {
 
     public static String getThingId(String key) {
         return key.substring(key.indexOf(".") + 1);
+    }
+
+    public static void assertFieldPresent(BlocklyObject block, String input, String message) {
+        if(block.getInputs() == null || !block.getInputs().containsKey(input)) {
+            if(message != null) {
+                throw new RuntimeIOTException(message);
+            } else {
+                throw new RuntimeIOTException("Field: " + input + " not found in block: " + block);
+            }
+        }
     }
 }

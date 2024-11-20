@@ -3,11 +3,14 @@
 </head>
 <body style="height:100%;">
 <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+<script id="ruleTemplate" type="text/x-handlebars-template">
+    <a href="/web/admin/rules/{{controllerId}}/{{ruleId}}" ruleId="{{ruleId}}" class="list-group-item ruleButton">{{ruleId}}</a>
+</script>
 
 
 <script th:src="@{/javascript/blocks.js}" src="/static/javascript/blocks.js"></script>
 
-<div class="container-fluid" style="height:100%;">
+<div class="container-fluid" style="height:100%;" th:attr="controllerId=${controllerId},ruleId=${ruleId}" id="root">
     <div th:replace="~{includes/header :: navigation (selectTab='admin')}"></div>
 
     <div th:replace="~{includes/header :: adminTabs (selectTab='rules')}"></div>
@@ -54,9 +57,9 @@
                                 <a th:href="@{'/web/admin/rules/' + ${selectedController} + '/new'}" href="#" class="btn btn-default btn-sm" title="New Rule"><i class="bi bi-file-earmark-plus-fill"></i></a>
                             </div>
                         </div>
-                        <div class="card-body" id="rules">
-                            <div class="list-group" th:each="rule: ${rules}">
-                                <a href="#" th:href="@{'/web/admin/rules/'+${selectedController}}+'/'+${rule.id}" class="list-group-item" th:classappend="${selectedRule != null and selectedRule == rule.id} ? 'active'" th:text="${rule.name}">Text</a>
+                        <div class="card-body" >
+                            <div class="list-group" id="rules">
+
                             </div>
                         </div>
                     </div>
@@ -64,7 +67,7 @@
             </div>
         </div>
 
-        <div class="col-10" style="height:100%;" th:if="${selectedRule != null or newRule != null}">
+        <div class="col-10" style="height:100%;">
             <div class="row">
             <div class="text-right" style="height: 3%;">
                 <button type="button" class="btn btn-default deleteRule" id="deleteRule">Delete</button>
@@ -115,6 +118,8 @@
     </category>
     <category name="Things" id="ItemToolbox">
     </category>
+    <category name="Motions" id="MotionToolBox">
+    </category>
     <category name="Triggers" id="Triggers">
         <block type="thingTrigger"></block>
         <block type="systemTrigger"></block>
@@ -122,7 +127,7 @@
     </category>
 </xml>
 
-<div id="blocklyDiv" style="position: absolute" th:if="${selectedRule!=null or newRule!=null}"></div>
+<div id="blocklyDiv" style="position: absolute"></div>
 
 <script th:src="@{/javascript/rules.js}" src="/static/javascript/rules.js"></script>
 

@@ -44,7 +44,7 @@ function pageInit() {
         var jsonData = JSON.stringify(rule);
         console.log("Posting data: " + jsonData);
 
-        $.ajax({url: thingSvcUrl + "/api/rules/", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function(data) {
+        $.ajax({url: thingSvcUrl + "/api/rules", type: "POST", data: jsonData, dataType: "json", contentType: "application/json; charset=utf-8", success: function(data) {
             console.log("Posted Rule successfully");
 
             location.reload(true);
@@ -65,15 +65,17 @@ function pageInit() {
         event.preventDefault();
 
         console.log("Clearing workspace")
-        Blockly.mainWorkspace.clear();
+        workspace.clear();
     });
 
-    loadBlockly();
+    loadBlockly(function() {
+        loadRules();
+    });
 }
 
 let workspace;
 
-function loadBlockly() {
+function loadBlockly(callback) {
     initDefaultBlocks();
     Blockly.Theme.defineTheme('dark', {
         'base': Blockly.Themes.Classic,
@@ -125,76 +127,69 @@ function loadBlockly() {
     window.addEventListener('resize', onresize, false);
     onresize()
 
-    loadBlocks(workspace);
+    loadBlocks(callback);
 }
 
 
-function loadBlocks(workspace) {
-
-
-    let itemToolbox = $("#ItemToolbox");
+function loadBlocks(callback) {
     let controllerId = $("#editor").attr("controllerId");
-    console.log("Loading things for controller: " + controllerId)
-    $.get(thingSvcUrl + "/api/controllers(" + controllerId + ")/things", function (data) {
+
+
+    fetchBlocks($("#ItemToolbox"), thingSvcUrl + "/api/controllers(" + controllerId + ")/things", function() {
+        fetchBlocks($("#MotionToolBox"), thingSvcUrl + "/api/controllers(" + controllerId +" )/schemas(Motion)/things", function() {
+            callback();
+        })
+    });
+}
+
+function fetchBlocks(toolbox, url, callback) {
+    console.log("Loading things from URL: " + url);
+    $.get(url, function (data) {
         $.each(data, function (i, row) {
-            console.log("Found a device: " + row.thingId)
-            let pluginId = row.pluginId;
+            console.log("Found a Thing: " + row.thingId)
             let controllerId = row.controllerId;
             let thingId = row.thingId;
-            let blockId = controllerId + "." + row.thingId;
+            let blockId = row.controllerId + "." + row.thingId;
             let name = "Thing: " + thingId;
 
             createItemBlock(blockId, name);
 
-            appendToToolbox(workspace, itemToolbox, blockId);
+            appendToToolbox(workspace, toolbox, blockId);
         });
 
-
+        callback();
     });
 }
-    // $.get("/groups/", function(data) {
-    //     $.each(data, function(i, row) {
-    //         console.log("Found a group: " + row.id)
-    //         var groupId = row.id;
-    //         var name = row.name;
-    //         var blockId = "Group." + groupId;
-    //
-    //         createItemBlock(blockId, name);
-    //
-    //         appendToToolbox(groupToolbox, blockId);
-    //     })
-    // }),
-    // $.get("/virtualitems/", function(data) {
-    //     $.each(data, function(i, row) {
-    //         console.log("Found a item: " + row.id)
-    //         var groupId = row.id;
-    //         var name = row.name;
-    //         var blockId = "Item." + groupId;
-    //
-    //         createItemBlock(blockId, name);
-    //
-    //         appendToToolbox(virtualToolbox, blockId);
-    //     })
-    // })
-// ).then(function(resp1, resp2){
-//         console.log("Devices and Groups are loaded, checking if editing existing rule");
-//         loadEditRule();
-// });
 
-function loadEditRule() {
-    var editDiv = $("#editRule");
-    if (editDiv) {
-        console.log("Editing existing rule");
-
-        //var xml_text = $("#xmlSource").val();
-        var rule = editDiv.html();
-        console.log("Loading rule: " + rule);
-
-        var xml = Blockly.Xml.textToDom(rule);
-        Blockly.Xml.domToWorkspace(workspace, xml);
-    }
+function loadEditRule(blocklyData) {
+    console.log("Loading edit rule: " + blocklyData);
+    Blockly.serialization.workspaces.load(JSON.parse(blocklyData), workspace);
 }
 
+function loadRules() {
+    let controllerId = getControllerId();
+    $.get(thingSvcUrl + "/api/rules/controller(" + controllerId + ")", function(data) {
+        let ruleId = getRuleId();
+
+        $.each(data, function (i, rule) {
+            let data = {
+                "controllerId": rule.controllerId,
+                "ruleId": rule.name
+            };
+
+            renderAndAppend("ruleTemplate", data, "rules");
+
+            if(ruleId === rule.name) {
+                loadEditRule(rule.blocklyData);
+            }
+        })
+
+
+        if(ruleId !== undefined) {
+            $(".ruleButton[ruleId=" + ruleId + "]").addClass('active');
+        }
+    })
+}
 
 function createItemBlock(blockId, fieldName) {
     Blockly.Blocks[blockId] = {
@@ -209,4 +204,10 @@ function createItemBlock(blockId, fieldName) {
         }
     };
 }
+
+function getRuleId() {
+    let root = $("#root")
+    return root.attr("ruleId");
+}
+
 
