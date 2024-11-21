@@ -179,7 +179,19 @@ function initDefaultBlocks() {
             this.setTooltip('Sets the value of a Thing');
         }
     };
+    Blockly.Blocks['activateMotion'] = {
+        init: function() {
+            this.appendValueInput("motion")
+                .setCheck("String")
+                .appendField("Activate Motion:");
 
+            this.setInputsInline(true);
+            this.setPreviousStatement(true);
+            this.setNextStatement(true);
+            this.setColour(165);
+            this.setTooltip('Sets the value of a Thing');
+        }
+    };
     Blockly.Blocks['setThingValues'] = {
         init: function() {
             this.appendValueInput("thing")
