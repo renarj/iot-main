@@ -55,10 +55,12 @@ public class RuleManagerImpl implements RuleManager {
 
     @Override
     public RuleItem store(RuleItem ruleItem) throws IOTException {
-        RuleItem storeItem = preProcessRule(ruleItem);
+        RuleItemImpl storeItem = preProcessRule(ruleItem);
 
         centralDatastore.beginTransaction();
         try {
+            var oRule = homeDAO.findRule(storeItem.getControllerId(), storeItem.getName());
+            oRule.ifPresent(item -> storeItem.setId(item.getId()));
             RuleItem item = centralDatastore.store(storeItem);
             LOG.debug("Stored rule: {} triggering rule engine", item);
 
@@ -90,7 +92,7 @@ public class RuleManagerImpl implements RuleManager {
         return ruleItem.isPresent() ? Optional.of(ruleItem.get()) : Optional.empty();
     }
 
-    private RuleItem preProcessRule(RuleItem ruleItem) throws BlocklyParseException {
+    private RuleItemImpl preProcessRule(RuleItem ruleItem) throws BlocklyParseException {
         if(homeDAO.findController(ruleItem.getControllerId()).isPresent()) {
             String blocklyData = ruleItem.getBlocklyData();
             if(StringUtils.stringNotEmpty(blocklyData)) {
@@ -99,9 +101,8 @@ public class RuleManagerImpl implements RuleManager {
                 return new RuleItemImpl(ruleItem.getId(), rule.getName(), ruleItem.getControllerId(), ruleItem.getBlocklyData(), ruleItem.getProperties());
             }
 
-            LOG.debug("Could not register blockly xml data, ignoring");
-            return ruleItem;
-
+            LOG.debug("Could not register blockly data, no data specified");
+            throw new RuntimeIOTException("No blockly data was specified");
         } else {
             throw new RuntimeIOTException("Unable to process rule, invalid controller specified");
         }

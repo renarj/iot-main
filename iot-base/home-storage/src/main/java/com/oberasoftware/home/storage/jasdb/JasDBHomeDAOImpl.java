@@ -183,6 +183,14 @@ public class JasDBHomeDAOImpl extends BaseDAO implements HomeDAO {
         return newArrayList(findItems(RuleItemImpl.class, new HashMap<>()));
     }
 
+    @Override
+    public Optional<RuleItem> findRule(String controllerId, String ruleName) {
+        var foundRule = findItem(RuleItemImpl.class, new ImmutableMap.Builder<String, String>()
+                .put("controllerId", controllerId)
+                .put("name", ruleName)
+                .build());
+        return ofNullable(foundRule);
+    }
 
     @Override
     public List<ThingSchema> findSchemas() {

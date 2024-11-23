@@ -166,4 +166,9 @@ public class JPAHomeDAOImpl implements HomeDAO {
     public List<RuleItem> findRules(String controllerId) {
         return null;
     }
+
+    @Override
+    public Optional<RuleItem> findRule(String controllerId, String ruleName) {
+        return Optional.empty();
+    }
 }

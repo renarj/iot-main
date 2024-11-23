@@ -1,6 +1,8 @@
 package com.oberasoftware.home.rules.blockly.blocks;
 
 import com.oberasoftware.home.rules.api.general.SetState;
+import com.oberasoftware.home.rules.api.values.ResolvableValue;
+import com.oberasoftware.home.rules.api.values.ThingAttributeValue;
 import com.oberasoftware.home.rules.blockly.BlockFactory;
 import com.oberasoftware.home.rules.blockly.BlockUtils;
 import com.oberasoftware.home.rules.blockly.BlockParser;
@@ -22,6 +24,9 @@ public class SetThingStateParser implements BlockParser<SetState> {
     @Override
     public SetState transform(BlockFactory factory, BlocklyObject block) throws BlocklyParseException {
         var thingBlock = BlockUtils.safeGetInput(block, "item");
+        var controllerId = BlockUtils.getControllerId(thingBlock.getType());
+        var thingId = BlockUtils.getThingId(thingBlock.getType());
+
         var attributeBlock = BlockUtils.safeGetInput(block, "Attribute");
         var attribute = "";
         if("attribute_text".equalsIgnoreCase(attributeBlock.getType())) {
@@ -31,9 +36,9 @@ public class SetThingStateParser implements BlockParser<SetState> {
         }
 
         var valueBlock = BlockUtils.safeGetInput(block, "value");
+        ResolvableValue resolvableValue = (ResolvableValue) factory.getParser(valueBlock.getType()).transform(factory, valueBlock);
 
-        LOG.info("Thing: {} with attribute: {} and value: {}", thingBlock, attribute, valueBlock);
-
-        return null;
+        LOG.info("Thing/Controller: {}/{} with attribute: {} and value: {}", controllerId, thingId, attribute, resolvableValue);
+        return new SetState(new ThingAttributeValue(controllerId, thingId, attribute), resolvableValue);
     }
 }

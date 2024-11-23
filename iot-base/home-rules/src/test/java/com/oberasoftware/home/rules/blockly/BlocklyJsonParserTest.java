@@ -3,15 +3,13 @@ package com.oberasoftware.home.rules.blockly;
 import com.oberasoftware.home.rules.api.Operator;
 import com.oberasoftware.home.rules.api.logic.CompareCondition;
 import com.oberasoftware.home.rules.api.logic.IfStatement;
-import com.oberasoftware.home.rules.blockly.blocks.IfBlockParser;
-import com.oberasoftware.home.rules.blockly.blocks.RuleBlockParser;
-import com.oberasoftware.home.rules.blockly.blocks.SetThingStateParser;
-import com.oberasoftware.home.rules.blockly.blocks.SwitchItemParser;
+import com.oberasoftware.home.rules.blockly.blocks.*;
 import com.oberasoftware.home.rules.blockly.blocks.logic.LogicCompareParser;
 import com.oberasoftware.home.rules.blockly.blocks.triggers.DayTimeTriggerParser;
 import com.oberasoftware.home.rules.blockly.blocks.triggers.SystemTriggerParser;
 import com.oberasoftware.home.rules.blockly.blocks.triggers.ThingTriggerParser;
 import com.oberasoftware.home.rules.blockly.blocks.values.GetThingParser;
+import com.oberasoftware.home.rules.blockly.blocks.values.OnOffParser;
 import com.oberasoftware.home.rules.blockly.blocks.values.StaticNumberParser;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -42,6 +40,9 @@ public class BlocklyJsonParserTest {
         evaluators.add(new GetThingParser());
         evaluators.add(new StaticNumberParser());
         evaluators.add(new SwitchItemParser());
+        evaluators.add(new MotionParser());
+        evaluators.add(new SetThingStateParser());
+        evaluators.add(new OnOffParser());
     }
 
     @Test

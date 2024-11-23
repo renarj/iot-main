@@ -66,4 +66,6 @@ public interface HomeDAO {
     List<RuleItem> findRules();
 
     List<RuleItem> findRules(String controllerId);
+
+    Optional<RuleItem> findRule(String controllerId, String ruleName);
 }
