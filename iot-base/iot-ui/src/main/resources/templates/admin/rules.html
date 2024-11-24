@@ -11,9 +11,7 @@
 <script th:src="@{/javascript/blocks.js}" src="/static/javascript/blocks.js"></script>
 
 <div class="container-fluid" style="height:100%;" th:attr="controllerId=${controllerId},ruleId=${ruleId}" id="root">
-    <div th:replace="~{includes/header :: navigation (selectTab='admin')}"></div>
-
-    <div th:replace="~{includes/header :: adminTabs (selectTab='rules')}"></div>
+    <div th:replace="~{includes/header :: navigation (selectTab='blockly')}"></div>
 
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true">
         <div class="modal-dialog">

@@ -146,7 +146,7 @@ function fetchBlocks(toolbox, url, callback) {
     console.log("Loading things from URL: " + url);
     $.get(url, function (data) {
         $.each(data, function (i, row) {
-            console.log("Found a Thing: " + row.thingId)
+            console.debug("Found a Thing: " + row.thingId)
             let controllerId = row.controllerId;
             let thingId = row.thingId;
             let blockId = row.controllerId + "." + row.thingId;

@@ -34,6 +34,7 @@
                     <li class="nav-item"><a th:classappend="${selectTab == 'dashboard'} ? 'active'" class="nav-link" th:href="@{'/web'}">DashBoard</a></li>
                     <li class="nav-item"><a th:classappend="${selectTab == 'admin'} ? 'active'" class="nav-link" th:href="@{'/web/admin/things'}">Administration</a></li>
                     <li class="nav-item"><a th:classappend="${selectTab == 'trains'} ? 'active'" class="nav-link" th:href="@{'/web/trains'}">Model Trains</a></li>
+                    <li class="nav-item"><a th:classappend="${selectTab == 'blockly'} ? 'active'" class="nav-link" th:href="@{'/web/admin/rules'}">Blockly</a></li>
                     <li class="nav-item"><a th:classappend="${selectTab == 'robots'} ? 'active'" class="nav-link" th:href="@{'/web/robots'}">Robotics</a></li>
                 </ul>
                 <form class="d-flex" role="search">
@@ -50,7 +51,6 @@
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'sysconfig'} ? 'active'" href="#" th:href="@{'/web/admin/sysconfig'}">System Config</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'controllers'} ? 'active'" href="#" th:href="@{'/web/admin/controllers'}">Controllers</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'groups'} ? 'active'" href="#" th:href="@{'/web/admin/groups'}">Groups</a></li>
-        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'rules'} ? 'active'" href="#" th:href="@{'/web/admin/rules'}">Rules</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'virtualitems'} ? 'active'" href="#" th:href="@{'/web/admin/virtualitems'}">Virtual Items</a></li>
     </ul>
 
