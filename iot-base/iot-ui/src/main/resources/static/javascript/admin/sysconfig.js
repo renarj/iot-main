@@ -57,11 +57,7 @@ function initPage() {
             "uniqueId": Math.floor(Math.random() * Date.now())
         }, "attributeList");
 
-        $(".removeAttrRow").click(function() {
-            let rowId = $(this).attr("rowId");
-            console.log("Removing row: " + rowId + " from list");
-            $("#" + rowId).remove();
-        })
+        enableRemoveRowBtn();
     });
 
     $("#editSchemaButton").click(function() {
@@ -74,6 +70,7 @@ function initPage() {
             $("#schemaId").val(schemaId);
             $("#instructionText").val(sData.template);
             $("#schemaType").val(sData.type);
+            $("#parentType").val(sData.parentType);
 
             $("#propertyList").empty();
             $.each(sData.properties, function (key, val) {
@@ -88,6 +85,7 @@ function initPage() {
                 renderAndAppend("propertyTemplate", data, "propertyList");
                 $("#" + uniqueId + "-type").val(val.fieldType);
             })
+            enableRemoveRowBtn();
 
             $("#attributeList").empty();
             $.each(sData.attributes, function (key, val) {
@@ -100,7 +98,6 @@ function initPage() {
                 renderAndAppend("attributeTemplate", data, "attributeList");
                 $("#" + uniqueId + "-type").val(val);
             })
-
         })
     });
 
@@ -160,6 +157,14 @@ function initPage() {
                 $("#detailPanel").addClass("fade");
                 $("#root").removeAttr("schemaId")
             }});
+    })
+}
+
+function enableRemoveRowBtn() {
+    $(".removeRow").click(function() {
+        let rowId = $(this).attr("rowId");
+        console.log("Removing row: " + rowId + " from list");
+        $("#" + rowId).remove();
     })
 }
 

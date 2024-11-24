@@ -110,7 +110,7 @@ function loadProperties(pluginId, thingData, data) {
 
         if(val.fieldType === "LINK") {
             renderAndAppend("propertyLinkTemplate", {"field": key, "schemaId": defVal}, "thingForm")
-            loadLinkages(key, defVal);
+            loadLinkages(key, defVal, thingData);
         } else if(val.fieldType === "ENUM") {
             renderAndAppend("propertyEnumTemplate", {"field": key, "schemaId": defVal}, "thingForm")
             loadEnums(key, defVal);
@@ -154,7 +154,7 @@ function loadEnums(field, defVal) {
     })
 }
 
-function loadLinkages(field, pluginId) {
+function loadLinkages(field, pluginId, existingData) {
     let controllerId = getSelectedController();
     console.debug("Loading linkages for field: " + field + " and plugin: " + pluginId + " on controller: " + controllerId);
     $.get(thingSvcUrl + "/api/controllers("+controllerId+")/schemas(" + pluginId + ")/things", function(data) {
@@ -163,8 +163,19 @@ function loadLinkages(field, pluginId) {
 
         $.each(data, function (i, linkItem) {
             console.log("Adding list option: " + linkItem.thingId)
-            linkList.append(new Option(linkItem.thingId, linkItem.thingId, false, false));
+
+            let selected = false;
+            if(existingData !== undefined) {
+                let existingValue = existingData.properties[field];
+                if(existingValue === linkItem.thingId) {
+                    selected = true;
+                }
+            }
+
+            linkList.append(new Option(linkItem.thingId, linkItem.thingId, selected, selected));
         })
+
+
     }).fail(function(jqXHR) {
         console.log("Linked Items: " + pluginId + " not found on controller: " + controllerId);
     });
@@ -178,6 +189,8 @@ function loadParentList() {
     let controllerId = getSelectedController();
     let schemaId = getSchemaId();
     let pluginId = getPluginId();
+    let parentList = $("#parentList");
+
     console.log("Loading Parents according to schema: " + schemaId)
     $.get(thingSvcUrl + "/api/system/plugins("+pluginId+")/schemas(" + schemaId + ")", function(data) {
         let parentDataType = data.parentType;
@@ -205,21 +218,6 @@ function loadParentList() {
             })
         }
     });
-
-    console.log("Loading parents")
-    let parentList = $("#parentList");
-    $.get(thingSvcUrl + "/api/controllers("+controllerId+")/schemas(" + schemaId + ")/things", function(data) {
-        // if(data.thingId === pluginId && data.type === "plugin") {
-        //     if(selectedParent && selectedParent === data.thingId) {
-        //         parentList.append(new Option(data.thingId, data.thingId, true, true));
-        //     } else {
-        //         parentList.append(new Option(data.thingId, data.thingId, false, false));
-        //     }
-        // }
-    }).fail(function(jqXHR) {
-        console.log("No parents found for type: " + schemaId + " on controller: " + controllerId);
-    });
-    // parentList.append(new Option(controllerId, controllerId, false, false));
 }
 
 function loadExistingData(data) {
@@ -227,12 +225,14 @@ function loadExistingData(data) {
     $("#friendlyName").val(data.friendlyName);
     $("#controllerList").val(data.controllerId);
     $("#pluginid").val(data.pluginId);
-    loadControllers(data.pluginId, data.controllerId);
-    loadParentList(data.controllerId, data.pluginId, data.parentId);
+    loadControllers(data.pluginId, data.controllerId, function() {
+        loadParentList();
+        $("#parentList").val(data.parentId);
 
-    $.each(data.properties, function (key, val) {
-        console.log("Rendering property: " + key + " with value: " + val);
-        $("#" + key).val(val);
+        $.each(data.properties, function (key, val) {
+            console.log("Rendering property: " + key + " with value: " + val);
+            $("#" + key).val(val);
+        });
     });
 }
 
@@ -260,8 +260,6 @@ function loadControllers(pluginId, selectedController, callback) {
                     list.append(new Option(ci.controllerId, ci.controllerId, false, false));
                 }
             })
-
-            loadParentList(getSelectedController(), pluginId);
 
             callback();
         }

@@ -242,7 +242,7 @@ public class ThingManagerImpl implements ThingManager {
         try {
             Optional<IotThing> thing = homeDAO.findThing(controllerId, thingId);
             if(thing.isPresent()) {
-                if(!homeDAO.findChildren(controllerId, thingId).isEmpty()) {
+                if(homeDAO.findChildren(controllerId, thingId).isEmpty()) {
                     LOG.debug("Deleted thing: {} on controller: {}", thingId, controllerId);
                     centralDatastore.delete(IotThingImpl.class, thing.get().getId());
                     return true;

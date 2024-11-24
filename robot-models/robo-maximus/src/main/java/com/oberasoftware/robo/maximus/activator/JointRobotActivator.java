@@ -26,7 +26,7 @@ public class JointRobotActivator implements Activator {
 
     @Override
     public String getSchemaId() {
-        return "HumanoidRobot";
+        return "JointBasedRobot";
     }
 
     @Override
