@@ -2,7 +2,6 @@ package com.oberasoftware.robot.nao;
 
 import com.aldebaran.qi.Application;
 import com.aldebaran.qi.Tuple4;
-import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.aldebaran.qi.helper.proxies.ALAudioRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +14,10 @@ public class SimpleTest {
         Application application = new Application(args, robotUrl);
         application.start();
         try {
-            ALTextToSpeech tts = new ALTextToSpeech(application.session());
-            tts.say("Hello World");
-
-            listen(application);
+//            ALTextToSpeech tts = new ALTextToSpeech(application.session());
+//            tts.say("Hello World");
+//
+//            listen(application);
 
             application.stop();
         } catch (Exception e) {

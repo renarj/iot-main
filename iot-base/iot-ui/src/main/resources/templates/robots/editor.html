@@ -30,7 +30,7 @@
 </script>
 
 <script id="jointsTemplate" type="text/x-handlebars-template">
-     <a href="#" class="list-group-item list-group-item-action" id="{{id}}" jointId="{{jointId}}" friendlyName="{{name}}" jointType="{{jointType}}">
+     <a href="#" class="list-group-item list-group-item-action joint" id="{{id}}" jointId="{{jointId}}" friendlyName="{{name}}" jointType="{{jointType}}">
         <div class="checkbox" style="display:inline">
             <input  type="checkbox" value="" groupId="{{jointChainId}}" jointId="{{jointId}}" class="jointCheckBox">
         </div>
@@ -71,6 +71,7 @@
         <td class="action">
             <button type="button" class="btn btn-sm btn-secondary" id="medit-{{id}}">Edit</button>
             <button type="button" class="btn btn-sm btn-secondary" id="mdelete-{{id}}">Delete</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="mRun-{{id}}">Run</button>
         </td>
     </tr>
 </script>

@@ -64,7 +64,7 @@ public class ServoListener implements EventHandler {
                 LOG.debug("Have no data for servo");
             }
         } else {
-            LOG.error("Received a servo update for: {} but not mapped to Joint", stateUpdateEvent.getServoId());
+            LOG.debug("Received a servo update for: {} but not mapped to Joint", stateUpdateEvent.getServoId());
         }
         return null;
     }

@@ -262,21 +262,9 @@ function addListeners() {
         }
     });
 
-    $("#runMotion").click(function (e) {
-        e.preventDefault();
-
+    $("#runMotion").click(function () {
         let motionId = $("#motionName").val();
-        console.log("Running motion: " + motionId);
-
-        let data = {
-            "controllerId" : getControllerId(),
-            "thingId" : getRobotId(),
-            "commandType" : "VALUE",
-            "attributes" : {
-                "motion" : motionId
-            }
-        };
-        sendCommand(data);
+        runMotion(motionId);
     });
 
     $("#newMotion").click(function (e) {
@@ -304,6 +292,20 @@ function addListeners() {
         });
     });
 }
+function runMotion(motionId) {
+    console.log("Running motion: " + motionId);
+
+    let data = {
+        "controllerId" : getControllerId(),
+        "thingId" : getRobotId(),
+        "commandType" : "VALUE",
+        "attributes" : {
+            "motion" : motionId
+        }
+    };
+    sendCommand(data);
+}
+
 function setTorgueAll(targetState) {
     let data = {
         "controllerId" : getControllerId(),
@@ -698,6 +700,10 @@ function loadMotions() {
 
                 let motionId = $(this).closest("tr").attr("motionId");
                 loadMotionInEditor(motionId);
+            });
+            $("#mRun-" + motion.thingId).click(function (e) {
+                let motionId = $(this).closest("tr").attr("motionId");
+                runMotion(motionId);
             });
 
             $("#mdelete-" + motion.name).click(function (e) {
