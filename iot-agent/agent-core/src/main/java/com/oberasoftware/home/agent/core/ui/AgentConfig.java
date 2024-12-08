@@ -4,6 +4,7 @@ public class AgentConfig {
     private String mqttHost;
     private Integer mqttPort;
     private String thingService;
+    private String stateService;
     private String apiToken;
     private String controllerId;
 
@@ -47,12 +48,21 @@ public class AgentConfig {
         this.controllerId = controllerId;
     }
 
+    public String getStateService() {
+        return stateService;
+    }
+
+    public void setStateService(String stateService) {
+        this.stateService = stateService;
+    }
+
     @Override
     public String toString() {
         return "AgentConfig{" +
                 "mqttHost='" + mqttHost + '\'' +
                 ", mqttPort=" + mqttPort +
                 ", thingService='" + thingService + '\'' +
+                ", stateService='" + stateService + '\'' +
                 ", apiToken='" + apiToken + '\'' +
                 ", controllerId='" + controllerId + '\'' +
                 '}';

@@ -3,7 +3,7 @@ package com.oberasoftware.robo.hexapod;
 import com.google.common.collect.ImmutableMap;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
@@ -32,7 +32,7 @@ public class RobotInitializer {
     private Walker walker;
 
     @Autowired
-    private BehaviouralRobotRegistry behaviouralRobotRegistry;
+    private JointBasedRobotRegistery jointBasedRobotRegistery;
 
     @Value("${dynamixelPort:}")
     private String dynamixelPort;

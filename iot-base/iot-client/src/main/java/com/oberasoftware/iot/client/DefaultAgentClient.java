@@ -2,30 +2,33 @@ package com.oberasoftware.iot.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.RuleItem;
 import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
 import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
+import com.oberasoftware.iot.core.model.storage.impl.RuleItemImpl;
 import com.oberasoftware.iot.core.util.HttpUtils;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
-public class DefaultThingClient implements ThingClient {
-    private static final Logger LOG = getLogger( DefaultThingClient.class );
+public class DefaultAgentClient implements AgentClient {
+    private static final Logger LOG = getLogger( DefaultAgentClient.class );
 
 
     private HttpClient client;
@@ -198,7 +201,7 @@ public class DefaultThingClient implements ThingClient {
                 .uri(UriBuilder.create(baseUrl).resource("controllers", controllerId).resource("things").build())
                 .build();
         LOG.info("Doing HTTP Request to retrieve things for controller: {} request: {}", controllerId, request);
-        return doListRequest(request);
+        return doThingListRequest(request);
     }
 
     @Override
@@ -212,7 +215,7 @@ public class DefaultThingClient implements ThingClient {
                 .build();
         LOG.info("Doing HTTP Request to retrieve things for controller: {} and plugin: {} request: {}", controllerId, pluginId, request);
 
-        return doListRequest(request);
+        return doThingListRequest(request);
     }
 
     @Override
@@ -226,7 +229,7 @@ public class DefaultThingClient implements ThingClient {
                 .build();
         LOG.info("Doing HTTP Request to retrieve children for controller: {} and thing: {} request: {}", controllerId, thingId, request);
 
-        return doListRequest(request);
+        return doThingListRequest(request);
     }
 
     @Override
@@ -241,7 +244,7 @@ public class DefaultThingClient implements ThingClient {
                 .build();
         LOG.info("Doing HTTP Request to retrieve children for controller: {} and thing: {} request: {} of type: {}", controllerId, thingId, request, type);
 
-        return doListRequest(request);    }
+        return doThingListRequest(request);    }
 
     @Override
     public List<IotThing> getThings(String controllerId, String pluginId, String type) throws IOTException {
@@ -255,10 +258,36 @@ public class DefaultThingClient implements ThingClient {
                 .build();
         LOG.info("Doing HTTP Request to retrieve things for controller: {} and plugin: {} request: {}", controllerId, pluginId, request);
 
-        return doListRequest(request);
+        return doThingListRequest(request);
     }
 
-    private List<IotThing> doListRequest(HttpRequest request) throws IOTException {
+    @Override
+    public List<RuleItem> getRules(String controllerId) throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl)
+                        .resource("rules")
+                        .resource("controller", controllerId)
+                        .build())
+                .build();
+        LOG.info("Doing HTTP Request to retrieve Rules for controller: {} request: {}", controllerId, request);
+
+        return doRuleListRequest(request);
+    }
+
+    private List<RuleItem> doRuleListRequest(HttpRequest request) throws IOTException {
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            var body = response.body();
+            ObjectMapper mapper = new ObjectMapper();
+            RuleItemImpl[] things = mapper.readValue(body, RuleItemImpl[].class);
+
+            return Lists.newArrayList(things);
+        } catch (IOException | InterruptedException e) {
+            throw new IOTException("Unable to request rules from service", e);
+        }
+    }
+
+    private List<IotThing> doThingListRequest(HttpRequest request) throws IOTException {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             var body = response.body();
@@ -270,5 +299,4 @@ public class DefaultThingClient implements ThingClient {
             throw new IOTException("Unable to request things from service", e);
         }
     }
-
 }

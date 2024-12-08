@@ -1,8 +1,8 @@
 package com.oberasoftware.robo.maximus.rest;
 
 import com.google.common.collect.Lists;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
+import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
 import com.oberasoftware.iot.core.robotics.humanoid.NavigationControl;
@@ -29,18 +29,18 @@ public class MotionRestController {
 
     private final MotionStorage motionStorage;
 
-    private final BehaviouralRobotRegistry behaviouralRobotRegistry;
+    private final JointBasedRobotRegistery jointBasedRobotRegistery;
 
     @Autowired
-    public MotionRestController(MotionStorage motionStorage, BehaviouralRobotRegistry behaviouralRobotRegistry) {
+    public MotionRestController(MotionStorage motionStorage, JointBasedRobotRegistery jointBasedRobotRegistery) {
         this.motionStorage = motionStorage;
-        this.behaviouralRobotRegistry = behaviouralRobotRegistry;
+        this.jointBasedRobotRegistery = jointBasedRobotRegistery;
     }
 
     @RequestMapping(value = "/motion/navigate/{robotId}")
     public ResponseEntity<String> navigate(@PathVariable String robotId, @RequestBody CartesianMoveInput moveInput) {
         LOG.info("Doing Navigational move: {} on robot: {}", moveInput, robotId);
-        Optional<Robot> br = behaviouralRobotRegistry.getRobot(robotId);
+        Optional<JointBasedRobot> br = jointBasedRobotRegistery.getRobot(robotId);
 
         if(br.isPresent()) {
             NavigationControl navigationControl = br.map(behaviouralRobot -> behaviouralRobot.getBehaviour(NavigationControl.class)).orElseThrow();
@@ -55,7 +55,7 @@ public class MotionRestController {
     @RequestMapping(value = "/motion/cartesian/{robotId}")
     public ResponseEntity<String> move(@PathVariable String robotId, @RequestBody CartesianMoveInput moveInput) {
         LOG.info("Doing cartesian move: {} on robot: {}", moveInput, robotId);
-        Optional<Robot> br = behaviouralRobotRegistry.getRobot(robotId);
+        Optional<JointBasedRobot> br = jointBasedRobotRegistery.getRobot(robotId);
 
         if(br.isPresent()) {
             CartesianControl cartesianControl = br.map(behaviouralRobot -> behaviouralRobot.getBehaviour(CartesianControl.class)).orElseThrow();
@@ -73,7 +73,7 @@ public class MotionRestController {
     public ResponseEntity<String> runMotion(@PathVariable String robotId, @PathVariable String motionId) {
         LOG.info("Requesting motion: {} to be run on robot: {}", motionId, robotId);
 
-        Optional<Robot> br = behaviouralRobotRegistry.getRobot(robotId);
+        Optional<JointBasedRobot> br = jointBasedRobotRegistery.getRobot(robotId);
         br.ifPresent(behaviouralRobot -> behaviouralRobot.getBehaviour(JointControl.class).runMotion(robotId, motionId));
 
         if(br.isPresent()) {
@@ -88,7 +88,7 @@ public class MotionRestController {
         LOG.info("Requesting keyframe: {} to be run on robot: {}", keyFrame, robotId);
 
         Motion motion = new MotionImpl("tempMotion", Lists.newArrayList(keyFrame));
-        Optional<Robot> br = behaviouralRobotRegistry.getRobot(robotId);
+        Optional<JointBasedRobot> br = jointBasedRobotRegistery.getRobot(robotId);
         br.ifPresent(behaviouralRobot -> behaviouralRobot.getBehaviour(MotionEngine.class).post(motion));
 
         if(br.isPresent()) {

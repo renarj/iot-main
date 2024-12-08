@@ -2,7 +2,7 @@ package com.oberasoftware.home.agent.core.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.events.ThingUpdateEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ public class ThingUpdateHandler implements EventHandler {
     private static final Logger LOG = getLogger(ThingUpdateHandler.class);
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @EventSubscribe
     public void receive(ThingUpdateEvent event) throws Exception {
         LOG.debug("Received a Thing update for plugin: {} and device: {}", event.getPluginId(), event.getThing());
-        thingClient.createOrUpdate(event.getThing());
+        agentClient.createOrUpdate(event.getThing());
     }
 }

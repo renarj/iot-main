@@ -13,6 +13,7 @@ function getThingId() {
 }
 
 function sendCommand(data, successCallback) {
+    console.log("Sending command: " + JSON.stringify(data));
     $.ajax({
         url: commandSvcUrl + "/api/command/",
         data: JSON.stringify(data),

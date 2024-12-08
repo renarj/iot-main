@@ -44,7 +44,7 @@ public class ESP32SerialConnector extends SerialDynamixelConnector {
     }
 
     @Override
-    public synchronized byte[] sendAndReceive(byte[] bytes) {
+    public byte[] sendAndReceive(byte[] bytes) {
         return send(bytes, true);
     }
 

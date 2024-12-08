@@ -4,7 +4,7 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.AgentControllerInformation;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.events.impl.ThingMultiValueEventImpl;
 import com.oberasoftware.iot.core.events.impl.ThingValueEventImpl;
 import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
@@ -12,9 +12,9 @@ import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.Robot;
+import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
+import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
 import com.oberasoftware.iot.core.robotics.servo.ServoData;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
@@ -37,13 +37,13 @@ import java.util.Map;
 public class IotRobotInitializer {
     private static final Logger LOG = LoggerFactory.getLogger(IotRobotInitializer.class);
 
-    private final ThingClient thingClient;
+    private final AgentClient agentClient;
 
     private final ApplicationContext applicationContext;
 
     private final RobotRegistry robotRegistry;
 
-    private final BehaviouralRobotRegistry behaviouralRobotRegistry;
+    private final JointBasedRobotRegistery jointBasedRobotRegistery;
 
     private final LocalEventBus eventBus;
 
@@ -53,11 +53,11 @@ public class IotRobotInitializer {
 
     private final AgentControllerInformation controllerInformation;
 
-    public IotRobotInitializer(ThingClient thingClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, BehaviouralRobotRegistry behaviouralRobotRegistry, AgentControllerInformation controllerInformation, LocalEventBus eventBus, ServoRegistry servoRegistry, ActivatorFactory activatorFactory) {
-        this.thingClient = thingClient;
+    public IotRobotInitializer(AgentClient agentClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, JointBasedRobotRegistery jointBasedRobotRegistery, AgentControllerInformation controllerInformation, LocalEventBus eventBus, ServoRegistry servoRegistry, ActivatorFactory activatorFactory) {
+        this.agentClient = agentClient;
         this.applicationContext = applicationContext;
         this.robotRegistry = robotRegistry;
-        this.behaviouralRobotRegistry = behaviouralRobotRegistry;
+        this.jointBasedRobotRegistery = jointBasedRobotRegistery;
         this.controllerInformation = controllerInformation;
         this.servoRegistry = servoRegistry;
         this.eventBus = eventBus;
@@ -67,7 +67,7 @@ public class IotRobotInitializer {
     public void initialize() {
         try {
             LOG.info("Retrieving all configured robots for controller: {}", controllerInformation.getControllerId());
-            var robots = thingClient.getThings(controllerInformation.getControllerId(), RobotExtension.ROBOT_EXTENSION, "robot");
+            var robots = agentClient.getThings(controllerInformation.getControllerId(), RobotExtension.ROBOT_EXTENSION, "robot");
             LOG.info("Robots found: {}", robots);
 
             robots.forEach(r -> {
@@ -80,8 +80,8 @@ public class IotRobotInitializer {
 
                 var hardwareRobot = hardwareRobotBuilder.build();
                 LOG.info("All dependencies for robot: {} are configured, building robot construct", r.getThingId());
-                Robot robot = robotBuilder.build(hardwareRobot);
-                behaviouralRobotRegistry.register(robot);
+                JointBasedRobot robot = robotBuilder.build(hardwareRobot);
+                jointBasedRobotRegistery.register(robot);
 
                 hardwareRobot.listen(new RobotEventListener());
                 robotRegistry.register(hardwareRobot);

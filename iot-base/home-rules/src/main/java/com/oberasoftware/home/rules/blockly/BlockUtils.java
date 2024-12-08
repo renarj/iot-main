@@ -41,7 +41,7 @@ public class BlockUtils {
     }
 
     public static void assertFieldPresent(BlocklyObject block, String input, String message) {
-        if(block.getInputs() == null || !block.getInputs().containsKey(input)) {
+        if(block.getFields() == null || !block.getFields().containsKey(input)) {
             if(message != null) {
                 throw new RuntimeIOTException(message);
             } else {
@@ -49,4 +49,15 @@ public class BlockUtils {
             }
         }
     }
+
+    public static void assertInputPresent(BlocklyObject block, String input, String message) {
+        if(block.getInputs() == null || !block.getInputs().containsKey(input)) {
+            if(message != null) {
+                throw new RuntimeIOTException(message);
+            } else {
+                throw new RuntimeIOTException("Input: " + input + " not found in block: " + block);
+            }
+        }
+    }
+
 }

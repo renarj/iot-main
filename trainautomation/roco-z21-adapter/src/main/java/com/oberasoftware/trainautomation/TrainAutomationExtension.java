@@ -2,7 +2,7 @@ package com.oberasoftware.trainautomation;
 
 import com.google.common.collect.Maps;
 import com.oberasoftware.iot.core.AgentControllerInformation;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.extensions.AutomationExtension;
@@ -22,7 +22,7 @@ public class TrainAutomationExtension implements AutomationExtension {
 
     public static final String COMMAND_CENTER_TYPE = "commandCenterType";
 
-    private final ThingClient thingClient;
+    private final AgentClient agentClient;
 
     private final AgentControllerInformation agentControllerInformation;
 
@@ -32,8 +32,8 @@ public class TrainAutomationExtension implements AutomationExtension {
 
     private final LocThingRepository locRepository;
 
-    public TrainAutomationExtension(ThingClient thingClient, AgentControllerInformation agentControllerInformation, CommandCenterFactory commandCenterFactory, TrainCommandHandler commandHandler, LocThingRepository locRepository) {
-        this.thingClient = thingClient;
+    public TrainAutomationExtension(AgentClient agentClient, AgentControllerInformation agentControllerInformation, CommandCenterFactory commandCenterFactory, TrainCommandHandler commandHandler, LocThingRepository locRepository) {
+        this.agentClient = agentClient;
         this.agentControllerInformation = agentControllerInformation;
         this.commandCenterFactory = commandCenterFactory;
         this.commandHandler = commandHandler;
@@ -68,7 +68,7 @@ public class TrainAutomationExtension implements AutomationExtension {
     @Override
     public void activate(IotThing pluginThing) {
         try {
-            List<IotThing> commandCenters = thingClient.getThings(agentControllerInformation.getControllerId(),
+            List<IotThing> commandCenters = agentClient.getThings(agentControllerInformation.getControllerId(),
                     TrainConstants.EXTENSION_ID, "commandstation");
 
             LOG.info("Activating command centers: {}", commandCenters);

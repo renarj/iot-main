@@ -1,6 +1,6 @@
 package com.oberasoftware.robo.maximus.activator;
 
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.robo.maximus.JointBasedRobotBuilder;
@@ -19,7 +19,7 @@ public class JointRobotActivator implements Activator {
     private static final Logger LOG = LoggerFactory.getLogger(JointRobotActivator.class);
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Autowired
     private ServoRegistry servoRegistry;
@@ -34,7 +34,7 @@ public class JointRobotActivator implements Activator {
         LOG.info("Activating robot: {}", activatable.getThingId());
 
         try {
-            List<IotThing> joints = thingClient.getChildren(activatable.getControllerId(), activatable.getThingId(), "Joint");
+            List<IotThing> joints = agentClient.getChildren(activatable.getControllerId(), activatable.getThingId(), "Joint");
             LOG.info("Discovered joints: {} for robot: {}", joints, activatable.getThingId());
 
             var jbs = joints.stream().map(j -> {
@@ -57,10 +57,10 @@ public class JointRobotActivator implements Activator {
         if (servoDriver != null && !servoDriver.isEmpty()) {
             LOG.info("Found servo driver for activation");
             try {
-                var oDriver = thingClient.getThing(activatable.getControllerId(), servoDriver);
+                var oDriver = agentClient.getThing(activatable.getControllerId(), servoDriver);
                 oDriver.ifPresent(thingsToActivate::add);
 
-                var sensors = thingClient.getChildren(activatable.getControllerId(), activatable.getThingId(), "sensor");
+                var sensors = agentClient.getChildren(activatable.getControllerId(), activatable.getThingId(), "sensor");
                 thingsToActivate.addAll(sensors);
             } catch (IOTException e) {
                 LOG.error("Could not retrieve remote servo driver information", e);

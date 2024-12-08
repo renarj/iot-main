@@ -1,7 +1,7 @@
 package com.oberasoftware.home.agent.core.extension;
 
 import com.oberasoftware.iot.core.AgentControllerInformation;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.extensions.AutomationExtension;
@@ -36,7 +36,7 @@ public class ExtensionManagerImpl implements ExtensionManager {
 //    private DeviceManager deviceManager;
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
 //    @Autowired
 //    private HomeDAO homeDAO;
@@ -66,7 +66,7 @@ public class ExtensionManagerImpl implements ExtensionManager {
 
     @Override
     public void activateController(String controllerId) throws IOTException {
-        thingClient.createOrUpdate(new ControllerImpl(controllerId, null, new HashMap<>()));
+        agentClient.createOrUpdate(new ControllerImpl(controllerId, null, new HashMap<>()));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ExtensionManagerImpl implements ExtensionManager {
                 var pThing = new IotThingImpl(controllerId, extension.getId(),
                         extension.getName(), extension.getId(), controllerId, extension.getProperties());
                 pThing.setType("plugin");
-                var pluginThing = thingClient.createOrUpdate(pThing);
+                var pluginThing = agentClient.createOrUpdate(pThing);
 
                 LOG.info("Activating plugin: {}", pluginThing);
                 extension.activate(pluginThing);
@@ -98,7 +98,7 @@ public class ExtensionManagerImpl implements ExtensionManager {
 
                 extension.discoverThings(thing -> {
                     try {
-                        thingClient.createOrUpdate(thing);
+                        agentClient.createOrUpdate(thing);
                     } catch (IOTException e) {
                         throw new RuntimeIOTException("Unable to store Thing: " + thing, e);
                     }

@@ -40,7 +40,7 @@ public class ThingAttributeValue implements ResolvableValue {
 
     @Override
     public String toString() {
-        return "ItemValue{" +
+        return "ThingAttributeValue{" +
                 "thingId='" + thingId + '\'' +
                 ", controllerId='" + controllerId + '\'' +
                 ", attribute='" + attribute + '\'' +

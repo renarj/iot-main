@@ -2,7 +2,7 @@ package com.oberasoftware.home.agent.core.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.commands.GroupCommand;
 import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
 import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
@@ -36,7 +36,7 @@ public class GroupCommandEventHandler implements EventHandler {
 
 //    @Autowired
 //    private DeviceManager deviceManager;
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @EventSubscribe
     public void receive(GroupCommand groupCommand) {
@@ -49,7 +49,7 @@ public class GroupCommandEventHandler implements EventHandler {
         Map<String, List<IotThing>> pluginDevices = deviceIds.stream()
                 .map(d -> {
                     try {
-                        return thingClient.getThing(controllerId, d);
+                        return agentClient.getThing(controllerId, d);
                     } catch (IOTException e) {
                         throw new RuntimeIOTException("Unable to retrieve group item", e);
                     }

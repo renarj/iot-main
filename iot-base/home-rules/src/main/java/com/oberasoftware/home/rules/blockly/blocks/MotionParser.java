@@ -17,7 +17,7 @@ public class MotionParser implements BlockParser<ActivateMotion> {
 
     @Override
     public ActivateMotion transform(BlockFactory factory, BlocklyObject block) throws BlocklyParseException {
-        BlockUtils.assertFieldPresent(block, "motion", "No Motion was specified in block");
+        BlockUtils.assertInputPresent(block, "motion", "No Motion was specified in block");
         var motionBlock = BlockUtils.safeGetInput(block, "motion");
         var controllerId = BlockUtils.getControllerId(motionBlock.getType());
         var motionId = BlockUtils.getThingId(motionBlock.getType());

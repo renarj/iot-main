@@ -43,4 +43,8 @@ public interface ServoDriver extends ActivatableCapability {
     List<Servo> getServos();
 
     Servo getServo(String servoId);
+
+    boolean lock();
+
+    void unlock();
 }

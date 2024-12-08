@@ -2,7 +2,7 @@ package com.oberasoftware.iot.integrations.shelly;
 
 import com.google.common.base.Joiner;
 import com.oberasoftware.iot.core.AgentControllerInformation;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.commands.handlers.CommandHandler;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.extensions.AutomationExtension;
@@ -43,7 +43,7 @@ public class ShellyExtension implements AutomationExtension {
     private ShellyV1ConnectorImpl v1Connector;
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Autowired
     private ShellyStatusSync shellyStatusSync;
@@ -58,7 +58,7 @@ public class ShellyExtension implements AutomationExtension {
         LOG.debug("Activating Shelly extension");
 
         try {
-            var shellyDevices = thingClient.getChildren(controllerInformation.getControllerId(), pluginThing.getThingId());
+            var shellyDevices = agentClient.getChildren(controllerInformation.getControllerId(), pluginThing.getThingId());
             shellyDevices.forEach(this::activateShellyDevice);
         } catch (IOTException e) {
             LOG.error("Could not activate existing children for Shelly plugin", e);
@@ -103,7 +103,7 @@ public class ShellyExtension implements AutomationExtension {
             LOG.info("Shelly components not stored, storing for shelly: {} thing: {} on controller: {}",
                     shellyIp, thing.getThingId(), thing.getControllerId());
 
-            thingClient.createOrUpdate(ThingBuilder.create(thing.getThingId(), thing.getControllerId())
+            agentClient.createOrUpdate(ThingBuilder.create(thing.getThingId(), thing.getControllerId())
                     .plugin(getId()).parent(getId())
                     .type(metadata.getShellyType())
                     .addProperty(SHELLY_NAME, metadata.getShellyName())

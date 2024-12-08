@@ -4,7 +4,7 @@ import com.oberasoftware.base.event.Event;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.commands.ThingCommand;
 import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
 import com.oberasoftware.iot.core.events.impl.ItemCommandEvent;
@@ -30,7 +30,7 @@ public class ItemCommandEventHandler implements EventHandler {
     private ExtensionManager extensionManager;
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Autowired
     private LocalEventBus automationBus;
@@ -42,7 +42,7 @@ public class ItemCommandEventHandler implements EventHandler {
         ThingCommand command = event.getCommand();
         LOG.debug("Looking up device details for command: {} and itemId: {}",command, command.getThingId());
 
-        Optional<IotThing> deviceData = thingClient.getThing(command.getControllerId(), command.getThingId());
+        Optional<IotThing> deviceData = agentClient.getThing(command.getControllerId(), command.getThingId());
         if(deviceData.isPresent()) {
             IotThing deviceItem = deviceData.get();
             String pluginId = deviceItem.getPluginId();

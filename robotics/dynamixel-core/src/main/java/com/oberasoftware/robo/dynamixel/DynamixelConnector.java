@@ -11,4 +11,8 @@ public interface DynamixelConnector {
     byte[] sendAndReceive(byte[] bytes);
 
     void sendNoReceive(byte[] bytes);
+
+    boolean lock();
+
+    void unlock();
 }

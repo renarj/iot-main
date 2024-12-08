@@ -32,7 +32,7 @@ public class ItemValueEvaluator implements ValueEvaluator<ThingAttributeValue> {
         String thingId = input.getThingId();
         String label = input.getAttribute();
 
-        LOG.debug("Retrieving item: {} state value for label: {}", thingId, label);
+        LOG.info("Retrieving item: {} state value for label: {}", thingId, label);
 
         try {
             Optional<State> state = stateClient.getState(input.getControllerId(), thingId);
@@ -40,6 +40,7 @@ public class ItemValueEvaluator implements ValueEvaluator<ThingAttributeValue> {
                 StateItem stateItem = state.get().getStateItem(label);
 
                 if (stateItem != null) {
+                    LOG.info("State value: {} for thing: {}", stateItem, thingId);
                     return stateItem.getValue();
                 }
             }

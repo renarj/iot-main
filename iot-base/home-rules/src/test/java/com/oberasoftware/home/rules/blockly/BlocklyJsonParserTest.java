@@ -50,7 +50,7 @@ public class BlocklyJsonParserTest {
         var parsedJson = parseJsonRule(createParser(), "/json/simple.json");
         assertThat(parsedJson, notNullValue());
         LOG.info("Loaded json rule: {}", parsedJson);
-        assertThat(parsedJson.getName(), is("switchOffPowerHigh"));
+        assertThat(parsedJson.getName(), is("testRule"));
         assertThat(parsedJson.getBlocks(), notNullValue());
         assertThat(parsedJson.getTriggers(), notNullValue());
         assertThat(parsedJson.getTriggers().size(), is(1));
@@ -109,6 +109,16 @@ public class BlocklyJsonParserTest {
         assertThat(parsedJson.getName(), is("resetKneeJoint"));
         assertThat(parsedJson.getTriggers(), notNullValue());
         assertThat(parsedJson.getTriggers().size(), is(2));
+    }
+
+    @Test
+    public void testParseMotionActivate() throws BlocklyParseException, IOException {
+        var parsedJson = parseJsonRule(createParser(), "/json/motion-activate.json");
+        assertThat(parsedJson, notNullValue());
+        LOG.info("Loaded json rule: {}", parsedJson);
+        assertThat(parsedJson.getName(), is("armUpWhenGripperClosed"));
+        assertThat(parsedJson.getTriggers(), notNullValue());
+        assertThat(parsedJson.getTriggers().size(), is(1));
     }
 
     private BlocklyJsonParser createParser() {

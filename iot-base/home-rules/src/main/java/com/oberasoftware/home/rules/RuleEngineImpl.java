@@ -97,15 +97,15 @@ public class RuleEngineImpl implements RuleEngine {
     }
 
     private void eval(Rule rule) {
-        LOG.debug("Evaluating rule: {}", rule);
+        LOG.info("Evaluating rule: {}", rule);
         rule.getBlocks().forEach(b -> {
             BlockEvaluator<Statement> e = evaluatorFactory.getEvaluator(b);
             try {
                 boolean eval = e.eval(b);
 
-                LOG.debug("Rule: {} was evaluated: {}", rule, eval);
+                LOG.info("Rule: {} was evaluated: {}", rule, eval);
             } catch(EvalException ex) {
-                LOG.debug("Rule could not be evaluated: {}", ex.getMessage());
+                LOG.warn("Rule could not be evaluated: {}", ex.getMessage());
             }
         });
 

@@ -48,7 +48,7 @@ public class DefaultStateClient implements StateClient {
         var request = HttpRequest.newBuilder()
                 .uri(UriBuilder.create(baseUrl).resource("state").resource("controllers", controllerId).resource("things", thingId).build())
                 .build();
-        LOG.info("Doing HTTP Request: {}", request);
+        LOG.debug("Doing HTTP Request: {}", request);
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if(response.statusCode() == HttpStatus.OK.value()) {
@@ -57,10 +57,10 @@ public class DefaultStateClient implements StateClient {
                     ObjectMapper mapper = new ObjectMapper();
                     StateImpl state = mapper.readValue(body, StateImpl.class);
 
-                    LOG.info("Found State: {}", state);
+                    LOG.debug("Found State: {}", state);
                     return Optional.of(state);
                 } else {
-                    LOG.info("No state was found for controller: {} thing: {}", controllerId, thingId);
+                    LOG.debug("No state was found for controller: {} thing: {}", controllerId, thingId);
                     return Optional.empty();
                 }
             } else {

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
@@ -42,7 +42,7 @@ public class RobotInitializer {
     private RobotRegistry robotRegistry;
 
     @Autowired
-    private BehaviouralRobotRegistry behaviouralRobotRegistry;
+    private JointBasedRobotRegistery jointBasedRobotRegistery;
 
     @Value("${dynamixelPort:}")
     private String dynamixelPort;
@@ -106,7 +106,7 @@ public class RobotInitializer {
                 .wheels(mecanumDriveTrain)
                 .navigation(new WheelBasedWithCameraNavigationControllerImpl())
                 .build("test");
-        behaviouralRobotRegistry.register(robotCar);
+        jointBasedRobotRegistery.register(robotCar);
         LOG.info("Robot: {} was registered", robotCar);
 //
 //        LOG.info("Starting wheels forward");

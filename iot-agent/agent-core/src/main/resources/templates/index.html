@@ -48,6 +48,10 @@
                                 <label for="thingService" class="form-label">Thing Webservice Host</label>
                                 <input type="text" class="form-control" id="thingService" value="http://localhost:9010/api/" th:value="${baseUrl}">
                             </div>
+                            <div class="row mb-3">
+                                <label for="thingService" class="form-label">State Webservice Host</label>
+                                <input type="text" class="form-control" id="stateService" value="http://localhost:9006/api/" th:value="${stateBaseUrl}">
+                            </div>
                             <button type="submit" class="btn btn-primary" id="storeConfig">Store and Restart</button>
                         </form>
                     </div>

@@ -1,9 +1,12 @@
 package com.oberasoftware.home.agent.core;
 
+import com.oberasoftware.home.agent.core.rules.RuleRunner;
 import com.oberasoftware.home.agent.core.storage.AgentStorage;
 import com.oberasoftware.home.agent.core.ui.AgentConfig;
 import com.oberasoftware.home.core.mqtt.MQTTTopicEventBus;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
+import com.oberasoftware.iot.core.client.ClientBase;
+import com.oberasoftware.iot.core.client.StateClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.extensions.ExtensionManager;
 import com.oberasoftware.iot.core.util.IntUtils;
@@ -22,10 +25,16 @@ public class AgentBootstrapImpl implements AgentBootstrap {
     private static final Logger LOG = getLogger( AgentBootstrapImpl.class );
 
     @Autowired
-    private ThingClient client;
+    private AgentClient client;
+
+    @Autowired
+    private StateClient stateClient;
 
     @Autowired
     private AgentStorage storage;
+
+    @Autowired
+    private RuleRunner ruleRunner;
 
     @Autowired
     private MQTTTopicEventBus mqttTopicEventBus;
@@ -57,7 +66,8 @@ public class AgentBootstrapImpl implements AgentBootstrap {
             String controllerId = agentConfiguration.getControllerId();
 
             LOG.info("Configuring http and mqtt clients for controller: {}", controllerId);
-            configureHttpClient();
+            configureHttpClient(client, "thing-svc.baseUrl", "thing-svc.apiToken");
+            configureHttpClient(stateClient, "state-svc.baseUrl", "thing-svc.apiToken");
             configureMqttConnectivity();
 
             LOG.info("Activating controller and extensions");
@@ -67,6 +77,9 @@ public class AgentBootstrapImpl implements AgentBootstrap {
 
             LOG.info("IoT Agent Started and ready for duty");
             started.set(true);
+
+            LOG.info("Started rules runner");
+            ruleRunner.initializeRules(controllerId);
         } catch(IOTException e) {
             LOG.error("Could not start the Agent, disabling integrations, please check configuration", e);
             started.set(false);
@@ -88,6 +101,7 @@ public class AgentBootstrapImpl implements AgentBootstrap {
     @Override
     public boolean configure(AgentConfig agentConfig) throws IOTException {
         storage.putValue("thing-svc.baseUrl", agentConfig.getThingService());
+        storage.putValue("state-svc.baseUrl", agentConfig.getStateService());
         storage.putValue("thing-svc.apiToken", agentConfig.getApiToken());
         storage.putValue("mqtt.host", agentConfig.getMqttHost());
         storage.putValue("mqtt.port", Integer.toString(agentConfig.getMqttPort()));
@@ -101,6 +115,7 @@ public class AgentBootstrapImpl implements AgentBootstrap {
 
         checkKey(storage, "thing-svc.baseUrl", missingKeys);
         checkKey(storage, "thing-svc.apiToken", missingKeys);
+        checkKey(storage, "state-svc.baseUrl", missingKeys);
         checkKey(storage, "mqtt.host", missingKeys);
         checkKey(storage, "mqtt.port", missingKeys);
 
@@ -113,12 +128,12 @@ public class AgentBootstrapImpl implements AgentBootstrap {
         }
     }
 
-    private void configureHttpClient() {
-        var baseUrl = storage.getValue("thing-svc.baseUrl");
-        var token = storage.getValue("thing-svc.apiToken");
+    private void configureHttpClient(ClientBase clientBase, String svcKey, String tokenKey) {
+        var baseUrl = storage.getValue(svcKey);
+        var token = storage.getValue(tokenKey);
 
-        LOG.info("Configured Thing Client with baseUrl: {}", baseUrl);
-        client.configure(baseUrl, token);
+        LOG.info("Configured Client with baseUrl: {}", baseUrl);
+        clientBase.configure(baseUrl, token);
     }
 
     private void configureMqttConnectivity() {

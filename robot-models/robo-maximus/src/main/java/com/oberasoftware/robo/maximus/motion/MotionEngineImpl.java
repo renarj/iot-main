@@ -140,23 +140,29 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         task.setState(MotionTask.STATE.RUNNING);
         servoDriver.setTorgueAll(true);
 
-        int counter = 0;
-        for (IntervalTarget interval : intervalList) {
-            List<JointTarget> targets = interval.getTargets();
+        LOG.info("Requesting lock on thread: {}", Thread.currentThread().getName());
+        servoDriver.lock();
+        try {
+            int counter = 0;
+            for (IntervalTarget interval : intervalList) {
+                List<JointTarget> targets = interval.getTargets();
 
-            Stopwatch is = Stopwatch.createStarted();
-            Map<String, PositionAndSpeedCommand> m = targets.stream()
-                    .map(jt -> {
-                        String sId = jointMap.get(jt.getJointId()).getServoId();
-                        return new PositionAndSpeedCommand(sId, jt.getTargetAngle(), RADIAL_SCALE, jt.getTargetVelocity(), new Scale(0, 100));
-                    })
-                    .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, jtm -> jtm));
+                Stopwatch is = Stopwatch.createStarted();
+                Map<String, PositionAndSpeedCommand> m = targets.stream()
+                        .map(jt -> {
+                            String sId = jointMap.get(jt.getJointId()).getServoId();
+                            return new PositionAndSpeedCommand(sId, jt.getTargetAngle(), RADIAL_SCALE, jt.getTargetVelocity(), new Scale(0, 100));
+                        })
+                        .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, jtm -> jtm));
 
-            servoDriver.bulkSetPositionAndSpeed(m, BulkPositionSpeedCommand.WRITE_MODE.SYNC);
-            LOG.info("Completed interval: {} in: {} for frame: {} motorData: {}", counter, is.elapsed(MILLISECONDS), interval.getFrameId(), m);
+                servoDriver.bulkSetPositionAndSpeed(m, BulkPositionSpeedCommand.WRITE_MODE.SYNC);
+                LOG.info("Completed interval: {} in: {} for frame: {} motorData: {}", counter, is.elapsed(MILLISECONDS), interval.getFrameId(), m);
 
-            counter++;
-            sleepUninterruptibly(FREQUENCY, MILLISECONDS);
+                counter++;
+                sleepUninterruptibly(FREQUENCY, MILLISECONDS);
+            }
+        } finally {
+            servoDriver.unlock();
         }
     }
 

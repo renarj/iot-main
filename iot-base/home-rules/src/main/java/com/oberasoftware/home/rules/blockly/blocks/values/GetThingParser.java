@@ -28,7 +28,8 @@ public class GetThingParser implements BlockParser<ResolvableValue> {
         String itemDescriptor = thingBlock.getType();
         String controllerId = itemDescriptor.substring(0, itemDescriptor.indexOf("."));
         String thingId = BlockUtils.getThingId(itemDescriptor);
-        String attribute = BlockUtils.getControllerId(itemDescriptor);
+        BlockUtils.assertFieldPresent(attributeBlock, "label", "Missing attribute");
+        String attribute = BlockUtils.safeGetField(attributeBlock, "label");
 
         LOG.info("Found a Thing block with Controller/Thing/Attribute: {}/{}/{}", controllerId, thingId, attribute);
 

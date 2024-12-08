@@ -7,6 +7,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class Scale {
     private static final Logger LOG = getLogger(Scale.class);
 
+    public static Scale DEGREES_SCALE = new Scale(-180, 180);
+
     private final int min;
     private final int max;
 

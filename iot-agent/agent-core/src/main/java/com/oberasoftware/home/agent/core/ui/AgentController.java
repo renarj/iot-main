@@ -31,6 +31,7 @@ public class AgentController {
         getAndStoreKey(model, "mqttHost", "mqtt.host");
         getAndStoreKey(model, "mqttPort", "mqtt.port");
         getAndStoreKey(model, "baseUrl", "thing-svc.baseUrl");
+        getAndStoreKey(model, "stateBaseUrl", "state-svc.baseUrl");
         getAndStoreKey(model, "apiToken", "thing-svc.apiToken");
 
         return "index";

@@ -108,7 +108,9 @@ public class JointBasedRobotImpl implements JointBasedRobot {
 
     @Override
     public List<Joint> getJoints() {
-        return Lists.newArrayList();
+        var b = ImmutableList.<Joint>builder();
+        jointSets.forEach(j -> b.addAll(j.getJoints(true)));
+        return b.build();
     }
 
     @Override

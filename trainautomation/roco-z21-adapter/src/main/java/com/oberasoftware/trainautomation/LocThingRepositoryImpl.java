@@ -4,7 +4,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.util.concurrent.Uninterruptibles;
 import com.oberasoftware.iot.core.AgentControllerInformation;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.train.TrainConstants;
@@ -31,7 +31,7 @@ public class LocThingRepositoryImpl implements LocThingRepository {
     private static final int SYNC_INTERVAL = 60000;
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Autowired
     private AgentControllerInformation controllerInformation;
@@ -75,7 +75,7 @@ public class LocThingRepositoryImpl implements LocThingRepository {
             LOG.info("Started locomotive sync service");
             while(!Thread.interrupted()) {
                 try {
-                    var things = thingClient.getThings(controllerInformation.getControllerId(), TrainConstants.EXTENSION_ID);
+                    var things = agentClient.getThings(controllerInformation.getControllerId(), TrainConstants.EXTENSION_ID);
                     LOG.info("Syncing: {} things from remote", things);
                     lock.lock();
                     try {

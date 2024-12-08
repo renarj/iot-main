@@ -4,7 +4,7 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.AgentControllerInformation;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.events.ThingUpdateEvent;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
@@ -46,7 +46,7 @@ public class HueConnectorImpl implements EventHandler, HueConnector {
     private HueBridgeDiscoveryService hueBridgeDiscoveryService;
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Autowired
     private LocalEventBus automationBus;
@@ -57,7 +57,7 @@ public class HueConnectorImpl implements EventHandler, HueConnector {
         startSearchBridge();
 
         try {
-            var hueBridges = thingClient.getChildren(controllerInformation.getControllerId(), pluginData.getThingId());
+            var hueBridges = agentClient.getChildren(controllerInformation.getControllerId(), pluginData.getThingId());
 
             LOG.info("We have {} previously configured Hue Bridges", hueBridges.size());
             hueBridges.forEach(b -> {

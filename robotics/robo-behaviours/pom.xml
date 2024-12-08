@@ -34,10 +34,5 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-cloud</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 </project>

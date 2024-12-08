@@ -2,7 +2,7 @@ package com.oberasoftware.robo.maximus.storage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.exceptions.RuntimeIOTException;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
@@ -23,7 +23,7 @@ public class ThingBasedMotionStorageImpl implements MotionStorage {
     private static final Logger LOG = getLogger(ThingBasedMotionStorageImpl.class);
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Override
     public List<Motion> findAllMotions(String controllerId, String robotId) {
@@ -33,7 +33,7 @@ public class ThingBasedMotionStorageImpl implements MotionStorage {
     @Override
     public Motion findMotion(String controllerId, String motionId) {
         try {
-            var oThing = thingClient.getThing(controllerId, motionId);
+            var oThing = agentClient.getThing(controllerId, motionId);
             return oThing.map(t -> {
                 MotionImpl m = new MotionImpl();
                 m.setName(motionId);

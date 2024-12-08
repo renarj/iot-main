@@ -1,6 +1,6 @@
 package com.oberasoftware.home.web;
 
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +18,11 @@ import java.util.List;
 public class RulesAdminController {
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @RequestMapping
     public String getRules(Model model) throws IOTException {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = agentClient.getControllers();
         model.addAttribute("controllers", controllers);
 
         return "admin/rules";
@@ -30,7 +30,7 @@ public class RulesAdminController {
 
     @RequestMapping("/{controllerId}")
     public String getRules(@PathVariable String controllerId, Model model) throws IOTException {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = agentClient.getControllers();
 
         model.addAttribute("controllers", controllers);
         model.addAttribute("selectedController", controllerId);
@@ -40,7 +40,7 @@ public class RulesAdminController {
 
     @RequestMapping("/{controllerId}/{ruleId}")
     public String editRule(@PathVariable String controllerId, @PathVariable String ruleId, Model model) throws IOTException {
-        List<com.oberasoftware.iot.core.model.Controller> controllers = thingClient.getControllers();
+        List<com.oberasoftware.iot.core.model.Controller> controllers = agentClient.getControllers();
 
         model.addAttribute("controllers", controllers);
         model.addAttribute("selectedController", controllerId);

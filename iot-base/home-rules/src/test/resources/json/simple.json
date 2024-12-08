@@ -4,28 +4,28 @@
     "blocks": [
       {
         "type": "rule",
-        "id": "i{.T-R!t4j*^TSzSjP]f",
-        "x": 126,
-        "y": 83,
+        "id": "^Q[[w%rV4}b@6JQ?hjD4",
+        "x": 225,
+        "y": 78,
         "fields": {
-          "rule_name": "switchOffPowerHigh"
+          "rule_name": "testRule"
         },
         "inputs": {
           "ruleTrigger": {
             "block": {
               "type": "thingTrigger",
-              "id": "dWGJ,Qi,Gy7~isRb}+L."
+              "id": "KBtt`OU#|k3(aj@84Pnk"
             }
           },
           "ruleStatement": {
             "block": {
               "type": "controls_if",
-              "id": "mr%Yh{%BHGM`i[yw8qn`",
+              "id": "pJ!lq,*xMZ1pL%k#gffZ",
               "inputs": {
                 "IF0": {
                   "block": {
                     "type": "logic_compare",
-                    "id": "}|vv:jXBi}dXzjD#ciGY",
+                    "id": "m}#rHE}#)u2Ndw`?-+CP",
                     "fields": {
                       "OP": "GT"
                     },
@@ -33,18 +33,18 @@
                       "A": {
                         "block": {
                           "type": "getThingValue",
-                          "id": "qj-A%=J}ukuRp}f1[}s}",
+                          "id": "$vHa/escGDdDe)DWLdug",
                           "inputs": {
                             "item": {
                               "block": {
-                                "type": "renze-homecontroller.hue",
-                                "id": "%oG8t5Nh)ZES[qTvrDJ,"
+                                "type": "pizero-robot.hue",
+                                "id": "thm}|j]if7.fSaW^|V/}"
                               }
                             },
                             "Attribute": {
                               "block": {
                                 "type": "attribute",
-                                "id": "^kQEHUdo(f4(PQZL`hVY",
+                                "id": "j|A^IF805(FYmKwiz9/L",
                                 "fields": {
                                   "label": "power"
                                 }
@@ -56,7 +56,7 @@
                       "B": {
                         "block": {
                           "type": "math_number",
-                          "id": "}Mpnyg{a7+N.C=w.lHaX",
+                          "id": "}.]z32ohx||RU7p4$EIT",
                           "fields": {
                             "NUM": 10
                           }
@@ -68,15 +68,24 @@
                 "DO0": {
                   "block": {
                     "type": "switch_item",
-                    "id": "|w?V*omWzgNB/Z=H=]Zg",
+                    "id": "jD;EV?Z!:oMk11m+n~lb",
                     "fields": {
-                      "state": "on"
+                      "state": "off"
                     },
                     "inputs": {
                       "item": {
                         "block": {
-                          "type": "renze-homecontroller.hue",
-                          "id": "U_4zUk3@hdeYx6ON!f?W"
+                          "type": "pizero-robot.hue",
+                          "id": ".`JbXGc~8=5@dV@;k$z6"
+                        }
+                      },
+                      "Attribute": {
+                        "block": {
+                          "type": "attribute",
+                          "id": "-/dx/oUQ^-^{qGW1G^MH",
+                          "fields": {
+                            "label": "power"
+                          }
                         }
                       }
                     }

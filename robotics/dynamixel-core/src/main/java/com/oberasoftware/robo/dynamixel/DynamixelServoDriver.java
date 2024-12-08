@@ -281,4 +281,15 @@ public class DynamixelServoDriver implements ServoDriver {
     public Servo getServo(String s) {
         return servos.get(s);
     }
+
+    @Override
+    public boolean lock() {
+        LOG.info("Trying to lock on Thread: {}", Thread.currentThread().getName());
+        return connector.lock();
+    }
+
+    @Override
+    public void unlock() {
+        connector.unlock();
+    }
 }

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
@@ -40,7 +39,7 @@ public class SerialDynamixelConnector implements DynamixelConnector {
     @Value("${dynamixel.baudrate:57600}")
     protected int baudRate = 57600;
 
-    private final Lock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     /*
      * Response delay time in ms. before reading buffer for a serial response
@@ -83,18 +82,30 @@ public class SerialDynamixelConnector implements DynamixelConnector {
     }
 
     @Override
-    public synchronized byte[] sendAndReceive(byte[] bytes) {
+    public boolean lock() {
+        lock.lock();
+        return true;
+    }
+
+    @Override
+    public void unlock() {
+        lock.unlock();
+    }
+
+    @Override
+    public byte[] sendAndReceive(byte[] bytes) {
         return send(bytes, true);
     }
 
     @Override
-    public synchronized void sendNoReceive(byte[] bytes) {
+    public void sendNoReceive(byte[] bytes) {
         send(bytes, false);
     }
 
-    protected synchronized byte[] send(byte[] bytes, boolean wait) {
+    protected byte[] send(byte[] bytes, boolean wait) {
         LOG.debug("Sending message: {} waiting for response: {}", bb2hex(bytes), wait);
 
+        LOG.debug("Locking on thread: {} held by current thread: {}", Thread.currentThread().getName(), lock.isHeldByCurrentThread());
         lock.lock();
         try {
             resetBuffer();

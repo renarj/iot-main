@@ -5,8 +5,6 @@ import com.oberasoftware.iot.core.model.states.State;
 
 import java.util.Optional;
 
-public interface StateClient {
-    void configure(String baseUrl, String apiToken);
-
+public interface StateClient extends ClientBase {
     Optional<State> getState(String controllerId, String thingId) throws IOTException;
 }

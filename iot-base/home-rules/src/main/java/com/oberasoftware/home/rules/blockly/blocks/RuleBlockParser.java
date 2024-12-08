@@ -29,8 +29,8 @@ public class RuleBlockParser implements BlockParser<Rule> {
         LOG.info("Evaluating Rule block: {}", block);
         String ruleName = block.getFields().get("rule_name");
         if(ruleName != null) {
-            BlockUtils.assertFieldPresent(block, "ruleStatement", "No statements specified for rule");
-            BlockUtils.assertFieldPresent(block, "ruleTrigger", "No triggers specified for rule");
+            BlockUtils.assertInputPresent(block, "ruleStatement", "No statements specified for rule");
+            BlockUtils.assertInputPresent(block, "ruleTrigger", "No triggers specified for rule");
             var triggers = getTriggers(blockFactory, block);
             var statements = getStatements(blockFactory, block);
 

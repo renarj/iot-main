@@ -3,13 +3,12 @@ package com.oberasoftware.iot.core.client;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.storage.RuleItem;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ThingClient {
-    void configure(String baseUrl, String apiToken);
-
+public interface AgentClient extends ClientBase {
     IotThing createOrUpdate(IotThing thing) throws IOTException;
 
     Controller createOrUpdate(Controller controller) throws IOTException;
@@ -31,4 +30,6 @@ public interface ThingClient {
     List<IotThing> getChildren(String controllerId, String thingId, String type) throws IOTException;
 
     List<IotThing> getThings(String controllerId, String pluginId, String type) throws IOTException;
+
+    List<RuleItem> getRules(String controllerId) throws IOTException;
 }

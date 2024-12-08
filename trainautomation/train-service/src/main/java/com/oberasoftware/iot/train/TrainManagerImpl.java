@@ -1,6 +1,6 @@
 package com.oberasoftware.iot.train;
 
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.storage.impl.ThingBuilder;
 import com.oberasoftware.iot.core.storage.CentralDatastore;
@@ -20,7 +20,7 @@ public class TrainManagerImpl implements TrainManager {
     private static final Logger LOG = LoggerFactory.getLogger(TrainManagerImpl.class);
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Autowired
     private TrainDAO trainDAO;
@@ -31,11 +31,11 @@ public class TrainManagerImpl implements TrainManager {
     @Override
     public void store(Locomotive loc) {
         try {
-            var oController = thingClient.getController(loc.getControllerId());
+            var oController = agentClient.getController(loc.getControllerId());
             if(oController.isPresent()) {
 
                 LOG.info("Ensuring an IotThing is created for locomotive: {}", loc);
-                var optionalThing = thingClient.getThing(loc.getControllerId(), loc.getThingId());
+                var optionalThing = agentClient.getThing(loc.getControllerId(), loc.getThingId());
                 if (optionalThing.isEmpty()) {
                     var thing = ThingBuilder.create(loc.getThingId(), loc.getControllerId())
                             .friendlyName(loc.getName())
@@ -46,7 +46,7 @@ public class TrainManagerImpl implements TrainManager {
                             .addProperty(Locomotive.LOC_ADDRESS, Integer.toString(loc.getLocAddress()))
                             .addProperty(Locomotive.DCC_MODE, loc.getStepMode().name())
                             .build();
-                    thingClient.createOrUpdate(thing);
+                    agentClient.createOrUpdate(thing);
                 }
 
 
@@ -71,7 +71,7 @@ public class TrainManagerImpl implements TrainManager {
         var oLoc = findLoc(controllerId, thingId);
         oLoc.ifPresent(l -> {
             try {
-                boolean result = thingClient.remove(controllerId, thingId);
+                boolean result = agentClient.remove(controllerId, thingId);
                 if(result) {
                     centralDatastore.delete(Locomotive.class, l.getId());
                     LOG.info("Removed thing and locomotive: {} on controller: {}", thingId, controllerId);

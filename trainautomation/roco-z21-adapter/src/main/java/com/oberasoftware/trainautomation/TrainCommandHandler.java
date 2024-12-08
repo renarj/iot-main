@@ -1,6 +1,6 @@
 package com.oberasoftware.trainautomation;
 
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.commands.Command;
 import com.oberasoftware.iot.core.commands.ThingValueCommand;
 import com.oberasoftware.iot.core.commands.handlers.ThingCommandHandler;
@@ -22,7 +22,7 @@ public class TrainCommandHandler implements ThingCommandHandler {
     private CommandCenterFactory commandCenterFactory;
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Override
     public void receive(IotThing item, Command command) {
@@ -30,7 +30,7 @@ public class TrainCommandHandler implements ThingCommandHandler {
         var commandCenterId = item.getParentId();
 
         try {
-            var oCommandCenter = thingClient.getThing(item.getControllerId(), commandCenterId);
+            var oCommandCenter = agentClient.getThing(item.getControllerId(), commandCenterId);
 
             oCommandCenter.ifPresentOrElse(ct -> {
                 var commandCenterType = ct.getProperty(TrainAutomationExtension.COMMAND_CENTER_TYPE);

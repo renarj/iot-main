@@ -1,7 +1,7 @@
 package com.oberasoftware.robo.maximus.activator;
 
 import com.google.common.collect.ImmutableMap;
-import com.oberasoftware.iot.core.client.ThingClient;
+import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
@@ -23,7 +23,7 @@ public class DynamixelActivator implements Activator {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelActivator.class);
 
     @Autowired
-    private ThingClient thingClient;
+    private AgentClient agentClient;
 
     @Autowired
     private ServoRegistry servoRegistry;
@@ -43,7 +43,7 @@ public class DynamixelActivator implements Activator {
         LOG.info("Configuring dynamixel servo driver: {}", driver.getThingId());
         try {
             String port = driver.getProperty("DXL_PORT");
-            List<IotThing> servos = thingClient.getChildren(driver.getControllerId(), driver.getThingId(), "servo");
+            List<IotThing> servos = agentClient.getChildren(driver.getControllerId(), driver.getThingId(), "servo");
             if (servos.isEmpty()) {
                 LOG.info("Servo driver configured, but no servo's specified, trigger Servo Scan");
                 context.getHardwareBuilder()

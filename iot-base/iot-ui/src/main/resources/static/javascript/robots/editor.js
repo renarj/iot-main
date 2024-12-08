@@ -100,7 +100,7 @@ function renderSelectedRobot() {
 }
 
 function addListeners() {
-    $("#positionSlider").on("slideStop", handleSlideStop);
+    $("#positionSlider").on("change", handleSlideStop);
 
     $("#tEnable").click(function (e) {
         e.preventDefault();
@@ -206,11 +206,6 @@ function addListeners() {
         sendCommand(data, function() {
             console.log("Executed keyframe");
         })
-        // $.ajax({url: "/editor/motion/run/" + robotId + "/keyFrame", data: JSON.stringify((data)), type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-        //         console.log("Executed keyframe");
-        //     }, error: function(data) {
-        //         showModal("KeyFrame error", "Could not run frame: " + JSON.stringify(data));
-        //     }});
     });
 
     $("#newFrame").click(function (e) {
@@ -452,14 +447,9 @@ function findNextFrameId() {
 }
 
 function addLivePosition(jointId) {
-    let robotId = $("#joints").attr("robotId");
-    let url = "/humanoid/robot/" + robotId + "/joints/" + jointId;
-    console.log("Requesting joint information: " + url);
-
-    $.get(url, function(data) {
-        console.log("Received joint data: " + JSON.stringify(data));
+    getJointState(getControllerId(), jointId, function(map) {
         $("#jointPosition-" + jointId).remove();
-        renderJointPosition(jointId, data.values.position, data.values.degrees);
+        renderJointPosition(jointId, map["position"].value, map["degrees"].value);
     });
 }
 
@@ -598,25 +588,41 @@ function renderJoint(groupId, joint) {
         $(this).addClass("active");
 
         console.log("Selected joint: " + jointId + " on controller: " + controllerId);
-        $.get(stateSvcUrl + "/api/state/controllers(" + controllerId + ")/things(" + jointId + ")", function(data) {
-            let map = [];
-            $.each(data.stateItems, function(i, si) {
-                map[si.attribute] = si.value;
-            });
-            console.log("Received joint data: " + JSON.stringify(data));
-            $("#editor").attr("currentJoint", data.itemId);
+        getJointState(controllerId, jointId, function(jointState) {
+            $("#editor").attr("currentJoint", jointId);
 
-            $("#servoTitle").text(data.itemId);
-            $("#position").val(map["position"].value);
-            $("#degrees").val(map["degrees"].value);
-            $("#positionSlider").val(map["degrees"].value);
+            $("#servoTitle").text(jointId);
+            $("#position").val(jointState["position"].value);
+            $("#degrees").val(jointState["degrees"].value);
+            $("#positionSlider").val(jointState["degrees"].value);
         })
+        // $.get(stateSvcUrl + "/api/state/controllers(" + controllerId + ")/things(" + jointId + ")", function(data) {
+        //     let map = [];
+        //     $.each(data.stateItems, function(i, si) {
+        //         map[si.attribute] = si.value;
+        //     });
+        //     console.log("Received joint data: " + JSON.stringify(data));
+        //
+        // })
     });
 }
 
+function getJointState(controllerId, jointId, callback) {
+    $.get(stateSvcUrl + "/api/state/controllers(" + controllerId + ")/things(" + jointId + ")", function(data) {
+        console.log("Received joint data: " + JSON.stringify(data));
+        let map = [];
+        $.each(data.stateItems, function(i, si) {
+            map[si.attribute] = si.value;
+        });
+
+        callback(map);
+    })
+}
+
 function handleSlideStop(slideEvt) {
-    let val = slideEvt.value;
+    let val = $("#positionSlider").val();
     let jointId = $("#editor").attr("currentJoint");
+    console.log("Setting position of joint: " + jointId + " to degrees: " + val);
 
     if(isSyncMode()) {
         console.log("Sync moving mode");
@@ -666,17 +672,17 @@ function isSyncMode() {
 }
 
 function setServoProperty(jointId, degrees) {
-    let json = {
-        id: jointId,
-        degrees: degrees,
-        position: 0
+    let data = {
+        "controllerId" : getControllerId(),
+        "thingId" : jointId,
+        "commandType" : "VALUE",
+        "attributes" : {
+            "degrees" : degrees
+        }
     };
-
-    console.log("Posting: " + JSON.stringify(json));
-
-    $.ajax({url: "/humanoid/robot/maximus/joint", data: JSON.stringify((json)), type: "POST", contentType: "application/json; charset=utf-8", success: function(data) {
-            console.log("Set joint succesfully");
-        }});
+    sendCommand(data, function () {
+        console.log("Set joint succesfully");
+    })
 }
 
 function loadMotions() {

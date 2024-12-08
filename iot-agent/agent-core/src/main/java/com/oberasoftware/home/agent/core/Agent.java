@@ -3,6 +3,7 @@ package com.oberasoftware.home.agent.core;
 import com.oberasoftware.base.BaseConfiguration;
 import com.oberasoftware.home.agent.core.extension.ExtensionServiceLoaderUtil;
 import com.oberasoftware.home.core.mqtt.MQTTConfiguration;
+import com.oberasoftware.home.rules.RuleConfiguration;
 import com.oberasoftware.iot.client.ClientConfiguration;
 import com.oberasoftware.iot.core.CoreConfiguation;
 import com.oberasoftware.iot.core.exceptions.IOTException;
@@ -26,7 +27,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, SpringApplicationAdminJmxAutoConfiguration.class, DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class})
-@Import({CoreConfiguation.class, ClientConfiguration.class, BaseConfiguration.class, AgentWebConfiguration.class, MQTTConfiguration.class})
+@Import({CoreConfiguation.class, ClientConfiguration.class, BaseConfiguration.class, AgentWebConfiguration.class, MQTTConfiguration.class, RuleConfiguration.class})
 public class Agent {
     private static final Logger LOG = getLogger( Agent.class );
 

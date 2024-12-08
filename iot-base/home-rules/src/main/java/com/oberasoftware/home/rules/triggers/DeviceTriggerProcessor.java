@@ -41,7 +41,7 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
         if(trigger instanceof ThingTrigger) {
             LOG.debug("Rule: {} has an item trigger, adding dependent items", rule);
             Set<String> dependentItems = getDependentItems(rule.getBlocks());
-            LOG.debug("Adding dependent items: {} for rule: {}", dependentItems, rule);
+            LOG.info("Adding dependent items: {} for rule: {}", dependentItems, rule);
             dependentItems.forEach(i -> addDependentItem(rule, i));
         }
     }
@@ -85,8 +85,7 @@ public class DeviceTriggerProcessor implements TriggerProcessor, EventHandler {
     @EventSubscribe
     public void receive(ThingEvent event) throws Exception {
         LOG.debug("Received a device event: {}", event);
-//        Optional<IotThing> deviceItem = deviceManager.findThing(event.getControllerId(), event.getDeviceId());
-//        deviceItem.ifPresent(iotThing -> evaluateRules(iotThing.getId()));
+        evaluateRules(event.getThingId());
     }
 
 }

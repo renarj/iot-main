@@ -161,4 +161,14 @@ public class MockServoDriver implements ServoDriver {
             return 0;
         }
     }
+
+    @Override
+    public boolean lock() {
+        return false;
+    }
+
+    @Override
+    public void unlock() {
+
+    }
 }

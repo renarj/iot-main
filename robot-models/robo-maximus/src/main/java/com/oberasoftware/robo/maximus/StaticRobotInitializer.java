@@ -7,7 +7,7 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.BehaviouralRobotRegistry;
+import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
 import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
 import com.oberasoftware.iot.core.robotics.servo.DynamixelDevice;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
@@ -59,7 +59,7 @@ public class StaticRobotInitializer {
     private RobotRegistry robotRegistry;
 
     @Autowired
-    private BehaviouralRobotRegistry behaviouralRobotRegistry;
+    private JointBasedRobotRegistery jointBasedRobotRegistery;
 
     @Value("${robot.port:}")
     private String dynamixelPort;
@@ -165,7 +165,7 @@ public class StaticRobotInitializer {
                 .behaviourController(new NavigationControlImpl())
                 .behaviourController(new CoordinatesMonitor())
                 .build(robot);
-        behaviouralRobotRegistry.register(maximus);
+        jointBasedRobotRegistery.register(maximus);
 
         robot.listen(new LowVoltageMonitor());
 
