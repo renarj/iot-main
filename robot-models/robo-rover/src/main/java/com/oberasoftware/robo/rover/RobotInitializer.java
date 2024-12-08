@@ -80,8 +80,8 @@ public class RobotInitializer {
                 .wheels(mecanumDriveTrain)
                 .navigation(new WheelBasedWithCameraNavigationControllerImpl())
                 .build("test");
-        jointBasedRobotRegistery.register(robotCar);
-        LOG.info("Robot: {} was registered", robotCar);
+//        jointBasedRobotRegistery.register(robotCar);
+//        LOG.info("Robot: {} was registered", robotCar);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOG.info("Killing the robot gracefully on shutdown");

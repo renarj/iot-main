@@ -106,8 +106,8 @@ public class RobotInitializer {
                 .wheels(mecanumDriveTrain)
                 .navigation(new WheelBasedWithCameraNavigationControllerImpl())
                 .build("test");
-        jointBasedRobotRegistery.register(robotCar);
-        LOG.info("Robot: {} was registered", robotCar);
+//        jointBasedRobotRegistery.register(robotCar);
+//        LOG.info("Robot: {} was registered", robotCar);
 //
 //        LOG.info("Starting wheels forward");
 //        robotCar.getWheels().ifPresent(w -> w.forward(10, DEFAULT_SCALE));
