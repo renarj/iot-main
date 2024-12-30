@@ -3,6 +3,8 @@ package com.oberasoftware.iot.core.client;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.Plugin;
+import com.oberasoftware.iot.core.model.ThingSchema;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
 
 import java.util.List;
@@ -12,6 +14,10 @@ public interface AgentClient extends ClientBase {
     IotThing createOrUpdate(IotThing thing) throws IOTException;
 
     Controller createOrUpdate(Controller controller) throws IOTException;
+
+    Plugin createOrUpdatePlugin(Plugin plugin) throws IOTException;
+
+    ThingSchema createOrUpdateThingSchema(ThingSchema schema) throws IOTException;
 
     boolean remove(String controllerId, String thingId) throws IOTException;
 
@@ -32,4 +38,8 @@ public interface AgentClient extends ClientBase {
     List<IotThing> getThings(String controllerId, String pluginId, String type) throws IOTException;
 
     List<RuleItem> getRules(String controllerId) throws IOTException;
+
+    List<ThingSchema> getSchemas(String pluginId) throws IOTException;
+
+    List<Plugin> getPlugins() throws IOTException;
 }

@@ -5,6 +5,7 @@
 #include <SPI.h>
 #include <SparkFunLSM9DS1.h>
 #include <Adafruit_INA260.h>
+#include "Adafruit_MCP9808.h"
 
 
 #define LSM9DS1_M 0x1E // Would be 0x1C if SDO_M is LOW
@@ -32,6 +33,8 @@ class ControllerSensors {
   float voltage = 0.0;
   float current = 0.0;
   float power = 0.0;
+
+  float tempC = 0.0;
   
   void calcAttitude();
 

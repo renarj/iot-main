@@ -47,6 +47,7 @@
         <module>iot-base/iot-ui</module>
         <module>iot-base/home-storage</module>
         <module>iot-base/iot-client</module>
+        <module>iot-base/iot-tools</module>
         <module>iot-agent/agent-core</module>
         <module>integrations/home-hue</module>
         <module>integrations/home-youless</module>

@@ -78,6 +78,10 @@ public class SystemDataManagerImpl implements SystemDataManager {
                 throw new RuntimeIOTException("Schema has invalid parent Schema or Type: " + parentType);
             }
         }
+
+        if(homeDAO.findPlugin(schema.getPluginId()).isEmpty()) {
+            throw new RuntimeIOTException("Schema has invalid plugin Id: " + schema.getPluginId());
+        }
     }
 
     private void throwIfNull(String property) {

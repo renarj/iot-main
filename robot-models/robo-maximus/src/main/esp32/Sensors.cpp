@@ -1,5 +1,7 @@
 #include "Sensors.h"
 
+Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
+
 void ControllerSensors::setup() 
 {  
   Wire.begin(23, 22);
@@ -23,6 +25,14 @@ void ControllerSensors::setup()
       delay(100);
     }
   }
+
+  if (!tempsensor.begin(0x18)) {
+    while (1) {
+      Serial.println("Couldn't find MCP9808! Check your connections and verify the address is correct.");
+      delay(1000);
+    }   
+  }
+  tempsensor.setResolution(3);
 }
 
 void ControllerSensors::readSensors() {
@@ -42,6 +52,8 @@ void ControllerSensors::readSensors() {
   calcAttitude();
 
   readINA260();
+
+  tempC = tempsensor.readTempC();
 }
 
 void ControllerSensors::readINA260() {
@@ -174,6 +186,8 @@ String ControllerSensors::getJson() {
   json.concat(getPitch());
   json.concat(",\"heading\":");
   json.concat(getHeading());
+  json.concat("},\"MCP9808\":{\"temp\":");
+  json.concat(tempC);
   json.concat("}}");
 
   return json;

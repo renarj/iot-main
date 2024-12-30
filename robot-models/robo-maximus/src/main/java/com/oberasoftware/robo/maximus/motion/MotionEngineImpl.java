@@ -128,6 +128,10 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
             lastServoPositions.put(s.getId(), currentAngle);
         });
+        if(validateAlreadyAtTarget(lastServoPositions, unit)) {
+            LOG.info("Motion: {} aborted, joints already at target position", unit);
+            return;
+        }
 
         LOG.info("Calculating {} frames for unit: {}", unit.getFrames().size(), unit);
         Stopwatch w = Stopwatch.createStarted();
@@ -164,6 +168,23 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
         } finally {
             servoDriver.unlock();
         }
+    }
+
+    private boolean validateAlreadyAtTarget(Map<String, Integer> initialPositions, MotionUnit motion) {
+        var lastFrame = motion.getFrames().getLast();
+        var jts = lastFrame.getJointTargets();
+        Set<String> jtsOffPosition = initialPositions.keySet();
+        jts.forEach(jt -> {
+            var jointId = jt.getJointId();
+            var angle = jt.getTargetAngle();
+            String servoId = jointMap.get(jointId).getServoId();
+
+            if(initialPositions.get(servoId) == angle) {
+                jtsOffPosition.remove(servoId);
+            }
+        });
+
+        return jtsOffPosition.isEmpty();
     }
 
     private List<IntervalTarget> calculateFrame(Map<String, Integer> positions, KeyFrame frame) {

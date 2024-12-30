@@ -1,15 +1,16 @@
 package com.oberasoftware.iot.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.Controller;
 import com.oberasoftware.iot.core.model.IotThing;
+import com.oberasoftware.iot.core.model.Plugin;
+import com.oberasoftware.iot.core.model.ThingSchema;
 import com.oberasoftware.iot.core.model.storage.RuleItem;
-import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
-import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
-import com.oberasoftware.iot.core.model.storage.impl.RuleItemImpl;
+import com.oberasoftware.iot.core.model.storage.impl.*;
 import com.oberasoftware.iot.core.util.HttpUtils;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -53,25 +55,8 @@ public class DefaultAgentClient implements AgentClient {
     @Override
     public IotThing createOrUpdate(IotThing thing) throws IOTException {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(thing);
-            LOG.info("Creating Thing: {}", json);
-
-            var request = HttpRequest.newBuilder()
-                    .uri(UriBuilder.create(baseUrl).resource("controllers", thing.getControllerId()).resource("things").build())
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
-                    .headers("Content-Type", "application/json")
-                    .build();
-            LOG.info("Doing HTTP Request: {}", request);
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if(response.statusCode() == HttpStatus.CREATED.value()) {
-                var t = mapper.readValue(response.body(), IotThingImpl.class);
-                LOG.info("Thing was created: {}", t);
-                return t;
-            } else {
-                throw new IOTException("Unable to create Thing: " + thing.getThingId() + ", error code: " + response.statusCode() + " and reason: " + response.body());
-            }
+            var response = post(UriBuilder.create(baseUrl).resource("controllers", thing.getControllerId()).resource("things"), thing);
+            return handlePostResponse(response, IotThingImpl.class);
         } catch (IOException | InterruptedException e) {
             throw new IOTException("Unable to create Thing", e);
         }
@@ -80,28 +65,56 @@ public class DefaultAgentClient implements AgentClient {
     @Override
     public Controller createOrUpdate(Controller controller) throws IOTException {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(controller);
-            LOG.info("Creating controller: {}", json);
-
-            var request = HttpRequest.newBuilder()
-                    .uri(UriBuilder.create(baseUrl).resource("controllers", controller.getControllerId()).build())
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
-                    .headers("Content-Type", "application/json")
-                    .build();
-            LOG.info("Doing HTTP Request: {}", request);
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if(response.statusCode() == HttpStatus.CREATED.value()) {
-                var c = mapper.readValue(response.body(), ControllerImpl.class);
-                LOG.info("Controller was created: {}", c);
-                return c;
-            } else {
-                throw new IOTException("Unable to create controller, error code: " + response.statusCode());
-            }
+            var response = post(UriBuilder.create(baseUrl).resource("controllers", controller.getControllerId()), controller);
+            return handlePostResponse(response, ControllerImpl.class);
         } catch (IOException | InterruptedException e) {
             throw new IOTException("Unable to create controller", e);
         }
+    }
+
+    @Override
+    public Plugin createOrUpdatePlugin(Plugin plugin) throws IOTException {
+        try {
+            var response = post(UriBuilder.create(baseUrl).resource("system").resource("plugins"), plugin);
+            return handlePostResponse(response, PluginImpl.class);
+        } catch (IOException | InterruptedException e) {
+            throw new IOTException("Unable to create Plugin", e);
+        }
+    }
+
+    @Override
+    public ThingSchema createOrUpdateThingSchema(ThingSchema schema) throws IOTException {
+        try {
+            var response = post(UriBuilder.create(baseUrl).resource("system").resource("schemas"), schema);
+            return handlePostResponse(response, ThingSchemaImpl.class);
+        } catch (IOException | InterruptedException e) {
+            throw new IOTException("Unable to create Schema", e);
+        }
+    }
+
+    private <T> T handlePostResponse(HttpResponse<String> postResponse, Class<T> type) throws IOException, IOTException {
+        if(postResponse.statusCode() == HttpStatus.CREATED.value()) {
+            ObjectMapper mapper = new ObjectMapper();
+            var c = mapper.readValue(postResponse.body(), type);
+            LOG.info("{} was created: {}", type.getName(), c);
+            return c;
+        } else {
+            throw new IOTException("Unable to create " + type.getName() + ", error code: " + postResponse.statusCode());
+        }
+    }
+
+    private HttpResponse<String> post(UriBuilder uriBuilder, Object postObject) throws IOException, InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(postObject);
+        LOG.debug("Creating: {}", json);
+
+        var request = HttpRequest.newBuilder()
+                .uri(uriBuilder.build())
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .headers("Content-Type", "application/json")
+                .build();
+        LOG.info("Doing HTTP Request: {}", request);
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     @Override
@@ -271,32 +284,79 @@ public class DefaultAgentClient implements AgentClient {
                 .build();
         LOG.info("Doing HTTP Request to retrieve Rules for controller: {} request: {}", controllerId, request);
 
-        return doRuleListRequest(request);
+        return internalRequest(request, (Function<String, List<RuleItem>>) s -> {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                RuleItemImpl[] things = mapper.readValue(s, RuleItemImpl[].class);
+                return Lists.newArrayList(things);
+            } catch (JsonProcessingException e) {
+                return Lists.newArrayList();
+            }
+        });
     }
 
-    private List<RuleItem> doRuleListRequest(HttpRequest request) throws IOTException {
+    @Override
+    public List<Plugin> getPlugins() throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl)
+                        .resource("system")
+                        .resource("plugins")
+                        .build())
+                .build();
+        LOG.info("Doing HTTP Request to retrieve Plugins request: {}", request);
+
+        return internalRequest(request, (Function<String, List<Plugin>>) s -> {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                PluginImpl[] things = mapper.readValue(s, PluginImpl[].class);
+                return Lists.newArrayList(things);
+            } catch (JsonProcessingException e) {
+                return Lists.newArrayList();
+            }
+        });
+    }
+
+    @Override
+    public List<ThingSchema> getSchemas(String pluginId) throws IOTException {
+        var request = HttpRequest.newBuilder()
+                .uri(UriBuilder.create(baseUrl)
+                        .resource("system")
+                        .resource("plugins", pluginId)
+                        .resource("schemas")
+                        .build())
+                .build();
+        LOG.info("Doing HTTP Request to retrieve Schemas for Plugin: {} request: {}", pluginId, request);
+
+        return internalRequest(request, (Function<String, List<ThingSchema>>) s -> {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                ThingSchemaImpl[] things = mapper.readValue(s, ThingSchemaImpl[].class);
+                return Lists.newArrayList(things);
+            } catch (JsonProcessingException e) {
+                return Lists.newArrayList();
+            }
+        });
+    }
+
+    private <R> R internalRequest(HttpRequest request, Function<String, R> f) throws IOTException {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             var body = response.body();
-            ObjectMapper mapper = new ObjectMapper();
-            RuleItemImpl[] things = mapper.readValue(body, RuleItemImpl[].class);
-
-            return Lists.newArrayList(things);
+            return f.apply(body);
         } catch (IOException | InterruptedException e) {
             throw new IOTException("Unable to request rules from service", e);
         }
     }
 
     private List<IotThing> doThingListRequest(HttpRequest request) throws IOTException {
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            var body = response.body();
+        return internalRequest(request, (Function<String, List<IotThing>>) s -> {
             ObjectMapper mapper = new ObjectMapper();
-            IotThingImpl[] things = mapper.readValue(body, IotThingImpl[].class);
-
-            return Lists.newArrayList(things);
-        } catch (IOException | InterruptedException e) {
-            throw new IOTException("Unable to request things from service", e);
-        }
+            try {
+                IotThingImpl[] things = mapper.readValue(s, IotThingImpl[].class);
+                return Lists.newArrayList(things);
+            } catch (JsonProcessingException e) {
+                return Lists.newArrayList();
+            }
+        });
     }
 }
