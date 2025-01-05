@@ -6,7 +6,7 @@ import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoDataReceivedEvent;
 import com.oberasoftware.robo.core.ServoDataImpl;
-import com.oberasoftware.robo.core.commands.ReadPositionAndSpeedCommand;
+import com.oberasoftware.iot.core.robotics.commands.ReadPositionAndSpeedCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2Address;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2CommandPacket;

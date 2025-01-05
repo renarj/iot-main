@@ -6,7 +6,7 @@ import com.oberasoftware.iot.core.exceptions.IOTException;
 import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
-import com.oberasoftware.robo.dynamixel.DynamixelTorgueManager;
+import com.oberasoftware.robo.dynamixel.DynamixelStateManager;
 import com.oberasoftware.robo.maximus.ServoRegistry;
 import com.oberasoftware.robo.maximus.sensors.ESP32SensorDriver;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ public class DynamixelActivator implements Activator {
                                         .put(DynamixelServoDriver.PORT, port)
                                         .build())
                         .capability(ServoSensorDriver.class)
-                        .capability(DynamixelTorgueManager.class);
+                        .capability(DynamixelStateManager.class);
             } else {
                 servos.forEach(s -> servoRegistry.addServo(s.getControllerId(), s.getThingId(), s.getProperty("servo_id"), context.getHardwareBuilder().getName()));
                 String motorString = servos.stream().map(s -> s.getProperty("servo_id")).collect(Collectors.joining(","));
@@ -65,7 +65,7 @@ public class DynamixelActivator implements Activator {
                                         .put("motors", motorString)
                                         .build())
                         .capability(ServoSensorDriver.class)
-                        .capability(DynamixelTorgueManager.class);
+                        .capability(DynamixelStateManager.class);
             }
 
             if (driver.hasProperty("sensors") && "true".equalsIgnoreCase(driver.getProperty("sensors"))) {

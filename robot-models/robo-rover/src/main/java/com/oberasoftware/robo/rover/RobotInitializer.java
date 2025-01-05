@@ -4,17 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
-import com.oberasoftware.iot.core.robotics.behavioural.Robot;
-import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
+import com.oberasoftware.iot.core.robotics.behavioural.ConfiguredRobotRegistery;
+import com.oberasoftware.iot.core.robotics.commands.OperationModeCommand;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
+import com.oberasoftware.iot.core.robotics.servo.StateManager;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
-import com.oberasoftware.robo.core.behaviours.BehaviouralRobotBuilder;
-import com.oberasoftware.robo.core.behaviours.WheelBasedWithCameraNavigationControllerImpl;
-import com.oberasoftware.robo.core.behaviours.servos.impl.SingleServoBehaviour;
-import com.oberasoftware.robo.core.behaviours.wheels.impl.MecanumDriveTrainImpl;
-import com.oberasoftware.robo.core.behaviours.wheels.impl.WheelImpl;
-import com.oberasoftware.robo.core.commands.OperationModeCommand;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import org.slf4j.Logger;
@@ -39,7 +33,7 @@ public class RobotInitializer {
     private RobotRegistry robotRegistry;
 
     @Autowired
-    private JointBasedRobotRegistery jointBasedRobotRegistery;
+    private ConfiguredRobotRegistery configuredRobotRegistery;
 
     @Value("${dynamixelPort:}")
     private String dynamixelPort;
@@ -62,24 +56,24 @@ public class RobotInitializer {
 
         ServoDriver servoDriver = robot.getServoDriver();
         servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), false));
-        Sets.newHashSet("19", "20", "21", "22").forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s, OperationModeCommand.MODE.VELOCITY_MODE)));
-        Sets.newHashSet("23", "24").forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s, OperationModeCommand.MODE.POSITION_CONTROL)));
+        Sets.newHashSet("19", "20", "21", "22").forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s, StateManager.ServoMode.VELOCITY_CONTROL)));
+        Sets.newHashSet("23", "24").forEach(s -> servoDriver.sendCommand(new OperationModeCommand(s, StateManager.ServoMode.VELOCITY_CONTROL)));
         servoDriver.getServos().forEach(s -> servoDriver.setTorgue(s.getId(), true));
 
-        Wheel frontLeft = new WheelImpl("22", false);
-        Wheel frontRight = new WheelImpl("21", true);
-        Wheel rearLeft = new WheelImpl("19", false);
-        Wheel rearRight = new WheelImpl("20", true);
+//        Wheel frontLeft = new WheelImpl("22", false);
+//        Wheel frontRight = new WheelImpl("21", true);
+//        Wheel rearLeft = new WheelImpl("19", false);
+//        Wheel rearRight = new WheelImpl("20", true);
 
-        SingleServoBehaviour camerRotate = new SingleServoBehaviour("23", 1350, 650, 1000);
-        SingleServoBehaviour cameraTilt = new SingleServoBehaviour("24", 1266, 600, 1000);
-        MecanumDriveTrainImpl mecanumDriveTrain = new MecanumDriveTrainImpl(frontLeft, frontRight, rearLeft, rearRight);
+//        SingleServoBehaviour camerRotate = new SingleServoBehaviour("23", 1350, 650, 1000);
+//        SingleServoBehaviour cameraTilt = new SingleServoBehaviour("24", 1266, 600, 1000);
+//        MecanumDriveTrainImpl mecanumDriveTrain = new MecanumDriveTrainImpl(frontLeft, frontRight, rearLeft, rearRight);
 
-        Robot robotCar = BehaviouralRobotBuilder.create(robot)
-                .camera(cameraTilt, camerRotate)
-                .wheels(mecanumDriveTrain)
-                .navigation(new WheelBasedWithCameraNavigationControllerImpl())
-                .build("test");
+//        Robot robotCar = ConfigurableRobotBuilder.create(robot)
+//                .camera(cameraTilt, camerRotate)
+//                .wheels(mecanumDriveTrain)
+//                .navigation(new WheelBasedWithCameraNavigationControllerImpl())
+//                .build("test");
 //        jointBasedRobotRegistery.register(robotCar);
 //        LOG.info("Robot: {} was registered", robotCar);
 

@@ -1,81 +1,83 @@
 package com.oberasoftware.iot.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
-import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
-import com.oberasoftware.iot.core.model.Plugin;
-import com.oberasoftware.iot.core.model.ThingSchema;
+import com.oberasoftware.iot.core.model.storage.impl.ControllerImpl;
+import com.oberasoftware.iot.core.model.storage.impl.IotThingImpl;
 import com.oberasoftware.iot.core.model.storage.impl.PluginImpl;
 import com.oberasoftware.iot.core.model.storage.impl.ThingSchemaImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
-import static com.oberasoftware.iot.tools.ConfigBackupRunner.URL_FORMAT;
-
 @Component
-public class ConfigRestoreRunner {
+public class ConfigRestoreRunner extends BaseRunner {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigRestoreRunner.class);
 
-    @Autowired
-    private AgentClient client;
-
     public boolean restorePlugins(RemoteConfig remoteConfig) {
-        client.configure(String.format(URL_FORMAT, remoteConfig.getTargetHost(), remoteConfig.getTargetPort()), remoteConfig.getTargetLocation());
+        configure(remoteConfig);
 
-        var loadedPlugins = loadPlugins(remoteConfig.getTargetLocation());
+        var loadedPlugins = loadGeneric(remoteConfig.getTargetLocation(), PluginImpl.class);
         LOG.info("Loaded plugins from disk: {}", loadedPlugins);
-        loadedPlugins.forEach(p -> {
-            LOG.info("Posting Plugin: {} to server: {}", p, remoteConfig.getTargetHost());
-            try {
-                client.createOrUpdatePlugin(p);
-            } catch (IOTException e) {
-                LOG.error("Could not restore Plugin to remote server", e);
-            }
-        });
+        genericPost(loadedPlugins, i -> client.createOrUpdatePlugin(i));
         return true;
     }
 
     public boolean restoreSchemas(RemoteConfig remoteConfig) {
-        client.configure(String.format(URL_FORMAT, remoteConfig.getTargetHost(), remoteConfig.getTargetPort()), remoteConfig.getTargetLocation());
+        configure(remoteConfig);
 
-        var loadedSchemas = loadSchemas(remoteConfig.getTargetLocation());
+        var loadedSchemas = loadGeneric(remoteConfig.getTargetLocation(), ThingSchemaImpl.class);
         LOG.info("Loaded Schemas from disk: {}", loadedSchemas);
-
-        loadedSchemas.forEach(s -> {
-            LOG.info("Posting schema: {} to server: {}", s, remoteConfig.getTargetHost());
-            try {
-                client.createOrUpdateThingSchema(s);
-            } catch (IOTException e) {
-                LOG.error("Could not restore schema to remote server", e);
-            }
-        });
+        genericPost(loadedSchemas, i -> client.createOrUpdateThingSchema(i));
 
         return true;
     }
 
-    private List<Plugin> loadPlugins(String storageLocation) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            var plugins = mapper.readValue(new File(storageLocation), PluginImpl[].class);
-            return Lists.newArrayList(plugins);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean restoreControllers(RemoteConfig remoteConfig) {
+        configure(remoteConfig);
+
+        List<ControllerImpl> controllers = loadGeneric(remoteConfig.getTargetLocation(), ControllerImpl.class);
+        LOG.info("Loaded controllers from disk: {}", controllers);
+        genericPost(controllers, i -> client.createOrUpdate(i));
+        return true;
     }
 
-    private List<ThingSchema> loadSchemas(String storageLocation) {
+    public boolean restoreThings(RemoteConfig remoteConfig) {
+        configure(remoteConfig);
+
+        List<IotThingImpl> things = loadGeneric(remoteConfig.getTargetLocation(), IotThingImpl.class);
+        LOG.info("Loaded Things from disk: {}", things);
+        genericPost(things, i -> client.createOrUpdate(i));
+        return true;
+    }
+
+    private <T> void genericPost(List<T> items, Action<T> action) {
+        items.forEach(i -> {
+            LOG.info("Posting {}", i);
+            try {
+                action.accept(i);
+            } catch (IOTException e) {
+                LOG.error("Could not restore " + i.getClass() + " to remote server", e);
+            }
+        });
+    }
+
+    private interface Action<T> {
+        void accept(T i) throws IOTException;
+    }
+
+    private <T> List<T> loadGeneric(String storageLocation, Class<T> arrayType) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            var schemas = mapper.readValue(new File(storageLocation), ThingSchemaImpl[].class);
-            return Lists.newArrayList(schemas);
-        } catch (IOException e) {
+            Class<T[]> arrayClass = (Class<T[]>) Class.forName("[L" + arrayType.getName() + ";");
+            T[] objectArray = mapper.readValue(new File(storageLocation), arrayClass);
+            return Arrays.asList(objectArray);
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

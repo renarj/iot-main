@@ -43,7 +43,7 @@ public class JointControlImpl implements JointControl {
 
     private final Map<String, Joint> jointMap;
 
-    private TorgueManager torgueManager;
+    private StateManager stateManager;
 
     public JointControlImpl(List<Joint> joints) {
         jointMap = joints.stream().collect(Collectors.toMap(Joint::getJointId, jv -> jv));
@@ -55,7 +55,7 @@ public class JointControlImpl implements JointControl {
         this.servoDriver = robotCore.getServoDriver();
         this.motionEngine = behaviouralRobot.getBehaviour(MotionEngine.class);
         this.motionStorage = robotCore.getCapability(MotionStorage.class);
-        this.torgueManager = robotCore.getCapability(TorgueManager.class);
+        this.stateManager = robotCore.getCapability(StateManager.class);
     }
 
     @Override
@@ -75,8 +75,8 @@ public class JointControlImpl implements JointControl {
         Integer converted = scale.convertToScale(position, RADIAL_SCALE);
 
         Integer tState = 0;
-        if(torgueManager != null) {
-            tState = torgueManager.getState(jointId).toInt();
+        if(stateManager != null) {
+            tState = stateManager.getTorgue(jointId).toInt();
         } else {
             LOG.debug("No torgue manager installed cannot track torgue state");
         }

@@ -4,8 +4,9 @@ import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
-import com.oberasoftware.robo.core.commands.AngleLimitCommand;
-import com.oberasoftware.robo.core.commands.OperationModeCommand;
+import com.oberasoftware.iot.core.robotics.commands.AngleLimitCommand;
+import com.oberasoftware.iot.core.robotics.commands.OperationModeCommand;
+import com.oberasoftware.iot.core.robotics.servo.StateManager;
 import com.oberasoftware.robo.dynamixel.web.commands.TorgueCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,7 @@ public class ServoController {
             consumes = "application/json", produces = "application/json")
     public SimpleServo setOperatingMode(@PathVariable  String servoId, @PathVariable String mode) {
         LOG.info("Setting servo: {} operating mode: {}", servoId, mode);
-        OperationModeCommand.MODE m = OperationModeCommand.MODE.valueOf(mode);
+        StateManager.ServoMode m = StateManager.ServoMode.valueOf(mode);
 
         getServoDriver().sendCommand(new OperationModeCommand(servoId, m));
 

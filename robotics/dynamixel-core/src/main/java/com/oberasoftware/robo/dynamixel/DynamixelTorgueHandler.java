@@ -1,11 +1,11 @@
-package com.oberasoftware.robo.dynamixel.protocolv2.handlers;
+package com.oberasoftware.robo.dynamixel;
 
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.robotics.commands.BulkTorgueCommand;
 import com.oberasoftware.iot.core.robotics.commands.TorgueCommand;
 import com.oberasoftware.iot.core.robotics.commands.TorgueLimitCommand;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoDataReceivedEvent;
-import com.oberasoftware.robo.core.commands.ReadTorgueCommand;
+import com.oberasoftware.iot.core.robotics.commands.ReadTorgueCommand;
 
 public interface DynamixelTorgueHandler {
     @EventSubscribe

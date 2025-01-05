@@ -3,7 +3,7 @@ package com.oberasoftware.robo.maximus.handlers;
 import com.oberasoftware.iot.core.commands.ThingValueCommand;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
+import com.oberasoftware.iot.core.robotics.behavioural.ConfiguredRobotRegistery;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class DegreesHandler implements RobotAttributeHandler {
     private static final Scale REMOTE_SCALE_POSITION = new Scale(0, 4095);
 
     @Autowired
-    private JointBasedRobotRegistery robotRegistery;
+    private ConfiguredRobotRegistery robotRegistery;
 
     @Autowired
     private RobotRegistry hardwareRobotRegistry;

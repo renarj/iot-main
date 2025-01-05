@@ -12,9 +12,9 @@ import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.model.states.ValueImpl;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
+import com.oberasoftware.iot.core.robotics.behavioural.ConfiguredRobotRegistery;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
-import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.ConfigurableRobot;
 import com.oberasoftware.iot.core.robotics.servo.ServoData;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
@@ -43,7 +43,7 @@ public class IotRobotInitializer {
 
     private final RobotRegistry robotRegistry;
 
-    private final JointBasedRobotRegistery jointBasedRobotRegistery;
+    private final ConfiguredRobotRegistery configuredRobotRegistery;
 
     private final LocalEventBus eventBus;
 
@@ -53,11 +53,11 @@ public class IotRobotInitializer {
 
     private final AgentControllerInformation controllerInformation;
 
-    public IotRobotInitializer(AgentClient agentClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, JointBasedRobotRegistery jointBasedRobotRegistery, AgentControllerInformation controllerInformation, LocalEventBus eventBus, ServoRegistry servoRegistry, ActivatorFactory activatorFactory) {
+    public IotRobotInitializer(AgentClient agentClient, ApplicationContext applicationContext, RobotRegistry robotRegistry, ConfiguredRobotRegistery configuredRobotRegistery, AgentControllerInformation controllerInformation, LocalEventBus eventBus, ServoRegistry servoRegistry, ActivatorFactory activatorFactory) {
         this.agentClient = agentClient;
         this.applicationContext = applicationContext;
         this.robotRegistry = robotRegistry;
-        this.jointBasedRobotRegistery = jointBasedRobotRegistery;
+        this.configuredRobotRegistery = configuredRobotRegistery;
         this.controllerInformation = controllerInformation;
         this.servoRegistry = servoRegistry;
         this.eventBus = eventBus;
@@ -74,14 +74,14 @@ public class IotRobotInitializer {
                 LOG.info("Configuring robot: {} on controller: {}", r.getThingId(), r.getControllerId());
                 HardwareRobotBuilder hardwareRobotBuilder = new HardwareRobotBuilder(r.getThingId(), applicationContext);
                 hardwareRobotBuilder.capability(MotionStorage.class);
-                JointBasedRobotBuilder robotBuilder = new JointBasedRobotBuilder(r.getControllerId(), r.getThingId());
+                ConfigurableRobotBuilder robotBuilder = new ConfigurableRobotBuilder(r.getControllerId(), r.getThingId());
                 var context = new RobotContext(hardwareRobotBuilder, robotBuilder);
                 activatorFactory.getActivator(r).ifPresent(a -> initRobot(a, context, r));
 
                 var hardwareRobot = hardwareRobotBuilder.build();
                 LOG.info("All dependencies for robot: {} are configured, building robot construct", r.getThingId());
-                JointBasedRobot robot = robotBuilder.build(hardwareRobot);
-                jointBasedRobotRegistery.register(robot);
+                ConfigurableRobot robot = robotBuilder.build(hardwareRobot);
+                configuredRobotRegistery.register(robot);
 
                 hardwareRobot.listen(new RobotEventListener());
                 robotRegistry.register(hardwareRobot);

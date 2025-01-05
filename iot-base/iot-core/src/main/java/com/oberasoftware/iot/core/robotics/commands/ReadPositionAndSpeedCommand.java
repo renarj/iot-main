@@ -1,14 +1,14 @@
-package com.oberasoftware.robo.core.commands;
+package com.oberasoftware.iot.core.robotics.commands;
 
 import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
 
 /**
  * @author Renze de Vries
  */
-public class ReadAlarmCommand implements ServoCommand {
+public class ReadPositionAndSpeedCommand implements ServoCommand {
     private final String servoId;
 
-    public ReadAlarmCommand(String servoId) {
+    public ReadPositionAndSpeedCommand(String servoId) {
         this.servoId = servoId;
     }
 
@@ -19,7 +19,7 @@ public class ReadAlarmCommand implements ServoCommand {
 
     @Override
     public String toString() {
-        return "ReadAlarmCommand{" +
+        return "ReadPositionAndSpeedCommand{" +
                 "servoId='" + servoId + '\'' +
                 '}';
     }

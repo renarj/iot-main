@@ -6,7 +6,8 @@ import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
-import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
+import com.oberasoftware.iot.core.robotics.humanoid.ConfigurableRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.JointChain;
@@ -21,13 +22,14 @@ import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class JointBasedRobotImpl implements JointBasedRobot {
-    private static final Logger LOG = getLogger( JointBasedRobotImpl.class );
+public class ConfigurableRobotImpl implements ConfigurableRobot {
+    private static final Logger LOG = getLogger( ConfigurableRobotImpl.class );
 
     private final String name;
     private final String controllerId;
 
     private final List<JointChain> jointSets;
+    private final List<Wheel> wheels;
 
     private final RobotHardware robot;
     private final List<Sensor> sensors;
@@ -35,13 +37,14 @@ public class JointBasedRobotImpl implements JointBasedRobot {
     private final List<Behaviour> behaviours = new ArrayList<>();
     private final List<Behaviour> registeredBehaviours = new ArrayList<>();
 
-    public JointBasedRobotImpl(String controllerId, RobotHardware robot, String name, List<JointChain> jointChains, List<Sensor> sensors, List<Behaviour> behaviours) {
+    public ConfigurableRobotImpl(String controllerId, RobotHardware robot, String name, List<JointChain> jointChains, List<Sensor> sensors, List<Behaviour> behaviours, List<Wheel> wheels) {
         this.controllerId = controllerId;
         this.robot = robot;
         this.name = name;
         this.registeredBehaviours.addAll(behaviours);
 
         jointSets = Lists.newArrayList(jointChains);
+        this.wheels = wheels;
         this.sensors = sensors;
     }
 
@@ -111,6 +114,11 @@ public class JointBasedRobotImpl implements JointBasedRobot {
         var b = ImmutableList.<Joint>builder();
         jointSets.forEach(j -> b.addAll(j.getJoints(true)));
         return b.build();
+    }
+
+    @Override
+    public List<Wheel> getWheels() {
+        return wheels;
     }
 
     @Override

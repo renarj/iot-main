@@ -2,7 +2,7 @@ package com.oberasoftware.robo.dynamixel.protocolv2.handlers;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.robo.core.commands.GoalCurrentCommand;
+import com.oberasoftware.iot.core.robotics.commands.GoalCurrentCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelConnector;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2Address;

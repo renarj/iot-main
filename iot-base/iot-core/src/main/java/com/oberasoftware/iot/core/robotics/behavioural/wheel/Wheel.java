@@ -9,15 +9,9 @@ import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
 public interface Wheel extends Behaviour {
     String getName();
 
-    void forward(int speed);
+    String getControllerId();
 
-    void backward(int speed);
+    String getThingId();
 
-    /**
-     * Move the wheel in any direction, negative speed is backward, positive speed is forward drive
-     * @param speed Positive input means forward, negative means backward
-     */
-    void move(int speed);
-
-    void stop();
+    String getServoId();
 }

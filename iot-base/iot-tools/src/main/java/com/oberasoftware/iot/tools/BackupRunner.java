@@ -2,13 +2,12 @@ package com.oberasoftware.iot.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.oberasoftware.iot.core.client.AgentClient;
 import com.oberasoftware.iot.core.exceptions.IOTException;
+import com.oberasoftware.iot.core.model.IotThing;
 import com.oberasoftware.iot.core.model.Plugin;
 import com.oberasoftware.iot.core.model.ThingSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,16 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ConfigBackupRunner {
-    private static final Logger LOG = LoggerFactory.getLogger(ConfigBackupRunner.class);
-
-    @Autowired
-    private AgentClient client;
-
-    public static final String URL_FORMAT = "http://%s:%s";
+public class BackupRunner extends BaseRunner {
+    private static final Logger LOG = LoggerFactory.getLogger(BackupRunner.class);
 
     public boolean backupPlugins(RemoteConfig config) {
-        client.configure(String.format(URL_FORMAT, config.getTargetHost(), config.getTargetPort()), config.getTargetLocation());
+        configure(config);
 
         try {
             List<Plugin> pluginList = client.getPlugins();
@@ -42,7 +36,7 @@ public class ConfigBackupRunner {
     }
 
     public boolean backupSchemas(RemoteConfig config) {
-        client.configure(String.format(URL_FORMAT, config.getTargetHost(), config.getTargetPort()), config.getTargetLocation());
+        configure(config);
 
         try {
             List<Plugin> pluginList = client.getPlugins();
@@ -67,6 +61,39 @@ public class ConfigBackupRunner {
         return true;
     }
 
+    public boolean backupControllers(RemoteConfig config) {
+        configure(config);
+        try {
+            doBackup(config.getTargetLocation(), client.getControllers());
+            return true;
+        } catch (IOException | IOTException e) {
+            LOG.error("Could not create backup", e);
+            return false;
+        }
+    }
+
+    public boolean backupThings(RemoteConfig config) {
+        configure(config);
+        try {
+            var controllers = client.getControllers();
+            List<IotThing> things = new ArrayList<>();
+            controllers.forEach(controller -> {
+                try {
+                    things.addAll(client.getThings(controller.getControllerId()));
+                } catch (IOTException e) {
+                    LOG.error("Could not create backup, unable to retrieve things for controller: " + controller.getControllerId(), e);
+                }
+            });
+
+            doBackup(config.getTargetLocation(), things);
+
+            return true;
+        } catch (IOException | IOTException e) {
+            LOG.error("Could not create backup", e);
+            return false;
+        }
+    }
+
     private void doBackup(String targetFile, Object value) throws IOException {
         SimpleWriter writer = new SimpleWriter(targetFile);
         try {
@@ -82,4 +109,5 @@ public class ConfigBackupRunner {
         }
 
     }
+
 }

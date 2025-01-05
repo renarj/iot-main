@@ -3,20 +3,28 @@ package com.oberasoftware.robo.maximus;
 import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Behaviour;
+import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
-import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
-import com.oberasoftware.iot.core.robotics.humanoid.components.*;
+import com.oberasoftware.iot.core.robotics.humanoid.ConfigurableRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.components.Arm;
+import com.oberasoftware.iot.core.robotics.humanoid.components.Leg;
+import com.oberasoftware.iot.core.robotics.humanoid.components.Shoulder;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.JointChain;
 import com.oberasoftware.iot.core.robotics.sensors.Sensor;
+import com.oberasoftware.robo.core.behaviours.wheels.impl.WheelImpl;
 import com.oberasoftware.robo.maximus.model.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.*;
+import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.ELBOW;
+import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.HAND;
 
-public class JointBasedRobotBuilder implements RobotBuilder {
+public class ConfigurableRobotBuilder implements RobotBuilder {
 
     private static final String PITCH = "pitch";
     private static final String YAW = "yaw";
@@ -29,6 +37,7 @@ public class JointBasedRobotBuilder implements RobotBuilder {
 
     private final List<Sensor> sensors = new ArrayList<>();
     private final List<Behaviour> behaviours = new ArrayList<>();
+    private final List<Wheel> wheels = new ArrayList<>();
 
     private LegBuilder leftLeg;
     private LegBuilder rightLeg;
@@ -39,37 +48,37 @@ public class JointBasedRobotBuilder implements RobotBuilder {
     private JointBuilder headPitch;
     private JointBuilder headRoll;
 
-    public JointBasedRobotBuilder(String controllerId, String name) {
+    public ConfigurableRobotBuilder(String controllerId, String name) {
         this.name = name;
         this.controllerId = controllerId;
     }
 
-    public JointBasedRobotBuilder() {
+    public ConfigurableRobotBuilder() {
     }
 
-    public JointBasedRobotBuilder name(String controllerId, String name) {
+    public ConfigurableRobotBuilder name(String controllerId, String name) {
         this.name = name;
         this.controllerId = controllerId;
         return this;
     }
 
-    public static JointBasedRobotBuilder create(String controllerId, String name) {
-        return new JointBasedRobotBuilder(controllerId, name);
+    public static ConfigurableRobotBuilder create(String controllerId, String name) {
+        return new ConfigurableRobotBuilder(controllerId, name);
     }
 
-    public JointBasedRobotBuilder legs(LegBuilder leftLeg, LegBuilder rightLeg) {
+    public ConfigurableRobotBuilder legs(LegBuilder leftLeg, LegBuilder rightLeg) {
         this.leftLeg = leftLeg;
         this.rightLeg = rightLeg;
         return this;
     }
 
-    public JointBasedRobotBuilder torso(ArmBuilder leftArm, ArmBuilder rightArm) {
+    public ConfigurableRobotBuilder torso(ArmBuilder leftArm, ArmBuilder rightArm) {
         this.leftArm = leftArm;
         this.rightArm = rightArm;
         return this;
     }
 
-    public JointBasedRobotBuilder head(String name, JointBuilder pitchBuilder, JointBuilder rollBuilder) {
+    public ConfigurableRobotBuilder head(String name, JointBuilder pitchBuilder, JointBuilder rollBuilder) {
         this.headName = name;
         this.headPitch = pitchBuilder;
         this.headRoll = rollBuilder;
@@ -77,7 +86,7 @@ public class JointBasedRobotBuilder implements RobotBuilder {
         return this;
     }
 
-    public JointBasedRobotBuilder joints(String setName, List<JointBuilder> jbs) {
+    public ConfigurableRobotBuilder joints(String setName, List<JointBuilder> jbs) {
         var chain = new JointChain() {
             @Override
             public List<Joint> getJoints(boolean includeChildren) {
@@ -93,17 +102,24 @@ public class JointBasedRobotBuilder implements RobotBuilder {
         return this;
     }
 
-    public JointBasedRobotBuilder sensor(Sensor sensor) {
+    public ConfigurableRobotBuilder wheel(String controllerId, String thingId, String servoId, boolean directionReversed) {
+        var wheel = new WheelImpl(controllerId, thingId, servoId, directionReversed);
+        this.wheels.add(wheel);
+        this.behaviours.add(wheel);
+        return this;
+    }
+
+    public ConfigurableRobotBuilder sensor(Sensor sensor) {
         this.sensors.add(sensor);
         return this;
     }
 
-    public JointBasedRobotBuilder behaviourController(Behaviour behaviour) {
+    public ConfigurableRobotBuilder behaviourController(Behaviour behaviour) {
         behaviours.add(behaviour);
         return this;
     }
 
-    public JointBasedRobot build(RobotHardware hardware) {
+    public ConfigurableRobot build(RobotHardware hardware) {
         var combinedJoints = Lists.newArrayList(jointChains.values());
         if(leftLeg != null && rightLeg != null) {
             var legs = new LegsImpl(leftLeg.build(name, controllerId), rightLeg.build(name, controllerId));
@@ -117,10 +133,10 @@ public class JointBasedRobotBuilder implements RobotBuilder {
             var head = new HeadImpl(name, headPitch.build(name, controllerId), headRoll.build(name, controllerId));
             combinedJoints.add(head);
         }
-        JointBasedRobot jointBasedRobot = new JointBasedRobotImpl(controllerId, hardware, name, combinedJoints, sensors, behaviours);
-        jointBasedRobot.initialize(jointBasedRobot, hardware);
+        ConfigurableRobot configurableRobot = new ConfigurableRobotImpl(controllerId, hardware, name, combinedJoints, sensors, behaviours, wheels);
+        configurableRobot.initialize(configurableRobot, hardware);
 
-        return jointBasedRobot;
+        return configurableRobot;
     }
 
     public static class LegBuilder {

@@ -99,6 +99,7 @@ public class DefaultAgentClient implements AgentClient {
             LOG.info("{} was created: {}", type.getName(), c);
             return c;
         } else {
+            LOG.warn("Post error, Post response: {}", postResponse.body());
             throw new IOTException("Unable to create " + type.getName() + ", error code: " + postResponse.statusCode());
         }
     }

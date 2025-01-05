@@ -78,8 +78,20 @@ public class AgentBootstrapImpl implements AgentBootstrap {
             LOG.info("IoT Agent Started and ready for duty");
             started.set(true);
 
-            LOG.info("Started rules runner");
-            ruleRunner.initializeRules(controllerId);
+            var controllerInfo = client.getController(agentConfiguration.getControllerId());
+            if(controllerInfo.isPresent()) {
+                var properties = controllerInfo.get().getProperties();
+                if(!properties.containsKey("rulesEnabled") || properties.containsKey("rulesEnabled") && properties.get("rulesEnabled").equalsIgnoreCase("true")) {
+                    LOG.info("Started rules runner");
+                    ruleRunner.initializeRules(controllerId);
+                } else {
+                    LOG.info("Rules runner is disabled for this controller");
+                }
+            } else {
+                LOG.error("Controller does not exist on remote IoT environment");
+                System.exit(-1);
+            }
+
         } catch(IOTException e) {
             LOG.error("Could not start the Agent, disabling integrations, please check configuration", e);
             started.set(false);

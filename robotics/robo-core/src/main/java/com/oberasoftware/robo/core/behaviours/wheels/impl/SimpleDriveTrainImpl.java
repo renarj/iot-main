@@ -24,17 +24,17 @@ public class SimpleDriveTrainImpl implements DriveTrain {
 
     @Override
     public void forward(int speed) {
-        wheels.forEach(w -> w.forward(speed));
+//        wheels.forEach(w -> w.forward(speed));
     }
 
     @Override
     public void backward(int speed) {
-        wheels.forEach(w -> w.backward(speed));
+//        wheels.forEach(w -> w.backward(speed));
     }
 
     @Override
     public void stop() {
-        wheels.forEach(Wheel::stop);
+//        wheels.forEach(Wheel::stop);
     }
 
     @Override

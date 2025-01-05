@@ -6,6 +6,7 @@ package com.oberasoftware.iot.core.robotics.servo;
 public enum ServoProperty {
     POSITION,
     POSITION_SCALE,
+    MODE,
     TORGUE,
     SPEED,
     SPEED_SCALE,

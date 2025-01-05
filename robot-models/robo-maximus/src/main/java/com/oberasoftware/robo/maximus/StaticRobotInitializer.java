@@ -7,13 +7,13 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
-import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.ConfiguredRobotRegistery;
+import com.oberasoftware.iot.core.robotics.humanoid.ConfigurableRobot;
 import com.oberasoftware.iot.core.robotics.servo.DynamixelDevice;
 import com.oberasoftware.robo.core.HardwareRobotBuilder;
 import com.oberasoftware.robo.core.sensors.ServoSensorDriver;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
-import com.oberasoftware.robo.dynamixel.DynamixelTorgueManager;
+import com.oberasoftware.robo.dynamixel.DynamixelStateManager;
 import com.oberasoftware.robo.maximus.model.SensorDataImpl;
 import com.oberasoftware.robo.maximus.motion.NavigationControlImpl;
 import com.oberasoftware.robo.maximus.motion.cartesian.CartesianControlImpl;
@@ -36,9 +36,9 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames.*;
-import static com.oberasoftware.robo.maximus.JointBasedRobotBuilder.ArmBuilder.createArm;
-import static com.oberasoftware.robo.maximus.JointBasedRobotBuilder.JointBuilder.create;
-import static com.oberasoftware.robo.maximus.JointBasedRobotBuilder.LegBuilder.createLeg;
+import static com.oberasoftware.robo.maximus.ConfigurableRobotBuilder.ArmBuilder.createArm;
+import static com.oberasoftware.robo.maximus.ConfigurableRobotBuilder.JointBuilder.create;
+import static com.oberasoftware.robo.maximus.ConfigurableRobotBuilder.LegBuilder.createLeg;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -59,7 +59,7 @@ public class StaticRobotInitializer {
     private RobotRegistry robotRegistry;
 
     @Autowired
-    private JointBasedRobotRegistery jointBasedRobotRegistery;
+    private ConfiguredRobotRegistery configuredRobotRegistery;
 
     @Value("${robot.port:}")
     private String dynamixelPort;
@@ -68,12 +68,12 @@ public class StaticRobotInitializer {
         initialize(new ArrayList<>(), false);
     }
 
-    public void initialize(BiConsumer<RobotHardware, JointBasedRobot> action, boolean terminateAfterAction) {
+    public void initialize(BiConsumer<RobotHardware, ConfigurableRobot> action, boolean terminateAfterAction) {
         initialize(Lists.newArrayList(action), terminateAfterAction);
 
     }
 
-    public void initialize(List<BiConsumer<RobotHardware, JointBasedRobot>> actions, boolean terminateAfterAction) {
+    public void initialize(List<BiConsumer<RobotHardware, ConfigurableRobot>> actions, boolean terminateAfterAction) {
         LOG.info("Connecting to Dynamixel servo port: {}", dynamixelPort);
         RobotHardware robot = new HardwareRobotBuilder("maximus-core", applicationContext)
                 .servoDriver(DynamixelServoDriver.class,
@@ -85,7 +85,7 @@ public class StaticRobotInitializer {
                 .capability(MotionStorage.class)
 //                .capability(TeensySensorDriver.class)
 //                .capability(InfluxDBMetricsCapability.class)
-                .capability(DynamixelTorgueManager.class)
+                .capability(DynamixelStateManager.class)
 //                .remote(RemoteCloudDriver.class, true)
                 .build();
 
@@ -99,9 +99,9 @@ public class StaticRobotInitializer {
         undetectedServos.removeAll(detectedServos);
         undetectedServos.forEach(s -> LOG.info("Did not detect servo: {}", s));
 
-        JointBasedRobot jointBasedRobot = constructHumanoid(robot);
+        ConfigurableRobot configurableRobot = constructHumanoid(robot);
         actions.forEach(a -> {
-            a.accept(robot, jointBasedRobot);
+            a.accept(robot, configurableRobot);
         });
 
         if(terminateAfterAction) {
@@ -117,8 +117,8 @@ public class StaticRobotInitializer {
         }
     }
 
-    private JointBasedRobot constructHumanoid(RobotHardware robot) {
-        JointBasedRobot maximus = JointBasedRobotBuilder.create("test", "maximus")
+    private ConfigurableRobot constructHumanoid(RobotHardware robot) {
+        ConfigurableRobot maximus = ConfigurableRobotBuilder.create("test", "maximus")
                 .legs(
                         createLeg(RIGHT_LEG)
                                 .ankle(RIGHT_ANKLE,
@@ -165,7 +165,7 @@ public class StaticRobotInitializer {
                 .behaviourController(new NavigationControlImpl())
                 .behaviourController(new CoordinatesMonitor())
                 .build(robot);
-        jointBasedRobotRegistery.register(maximus);
+        configuredRobotRegistery.register(maximus);
 
         robot.listen(new LowVoltageMonitor());
 

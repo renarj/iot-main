@@ -1,19 +1,13 @@
-package com.oberasoftware.robo.core.commands;
+package com.oberasoftware.iot.core.robotics.commands;
 
 import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
+import com.oberasoftware.iot.core.robotics.servo.StateManager;
 
 public class OperationModeCommand implements ServoCommand {
-    public enum MODE {
-        VELOCITY_MODE,
-        POSITION_CONTROL,
-        EXTENDED_POSITION_CONTROL,
-        CURRENT_CONTROL_MODE
-    }
-
     private final String servoId;
-    private final MODE operationMode;
+    private final StateManager.ServoMode operationMode;
 
-    public OperationModeCommand(String servoId, MODE operationMode) {
+    public OperationModeCommand(String servoId, StateManager.ServoMode operationMode) {
         this.servoId = servoId;
         this.operationMode = operationMode;
     }
@@ -23,7 +17,7 @@ public class OperationModeCommand implements ServoCommand {
         return servoId;
     }
 
-    public MODE getOperationMode() {
+    public StateManager.ServoMode getOperationMode() {
         return operationMode;
     }
 

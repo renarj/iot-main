@@ -8,7 +8,7 @@ import com.oberasoftware.iot.core.robotics.servo.Servo;
 import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import com.oberasoftware.robo.core.ConverterUtil;
-import com.oberasoftware.robo.core.commands.RebootCommand;
+import com.oberasoftware.iot.core.robotics.commands.RebootCommand;
 import com.oberasoftware.robo.dynamixel.protocolv1.DynamixelV1CommandPacket;
 import com.oberasoftware.robo.dynamixel.protocolv1.DynamixelV1ReturnPacket;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2CommandPacket;
@@ -62,7 +62,7 @@ public class DynamixelServoDriver implements ServoDriver {
     private boolean v2Enabled;
 
     @Autowired
-    private DynamixelTorgueManager torgueManager;
+    private DynamixelStateManager torgueManager;
 
     @Autowired
     private LocalEventBus eventBus;

@@ -1,11 +1,11 @@
-package com.oberasoftware.robo.core.commands;
+package com.oberasoftware.iot.core.robotics.commands;
 
 import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
 
-public class RebootCommand implements ServoCommand {
+public class ReadTorgueCommand implements ServoCommand {
     private final String servoId;
 
-    public RebootCommand(String servoId) {
+    public ReadTorgueCommand(String servoId) {
         this.servoId = servoId;
     }
 
@@ -16,7 +16,7 @@ public class RebootCommand implements ServoCommand {
 
     @Override
     public String toString() {
-        return "RebootCommand{" +
+        return "ReadTorgueCommand{" +
                 "servoId='" + servoId + '\'' +
                 '}';
     }

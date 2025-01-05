@@ -3,7 +3,7 @@ package com.oberasoftware.robo.maximus.motion.cartesian;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
-import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
+import com.oberasoftware.iot.core.robotics.humanoid.ConfigurableRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
 import com.oberasoftware.iot.core.robotics.humanoid.cartesian.CartesianControl;
@@ -52,7 +52,7 @@ public class CartesianControlImpl implements CartesianControl {
         this.motionEngine = behaviouralRobot.getBehaviour(MotionEngine.class);
         this.motionControl = behaviouralRobot.getBehaviour(JointControl.class);
 
-        JointBasedRobot r = (JointBasedRobot) behaviouralRobot;
+        ConfigurableRobot r = (ConfigurableRobot) behaviouralRobot;
         jointMap = r.getJoints(true).stream().collect(Collectors.toMap(Joint::getName, k -> k));
 
         r.getJoints(true).forEach(j -> {

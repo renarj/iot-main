@@ -6,16 +6,12 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.impl.LocalEventBus;
 import com.oberasoftware.iot.core.robotics.ActivatableCapability;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
-import com.oberasoftware.iot.core.robotics.commands.BulkTorgueCommand;
-import com.oberasoftware.iot.core.robotics.commands.TorgueCommand;
-import com.oberasoftware.iot.core.robotics.commands.TorgueLimitCommand;
+import com.oberasoftware.iot.core.robotics.commands.*;
 import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
-import com.oberasoftware.iot.core.robotics.servo.TorgueManager;
+import com.oberasoftware.iot.core.robotics.servo.StateManager;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoDataReceivedEvent;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoUpdateEvent;
 import com.oberasoftware.robo.core.ServoDataImpl;
-import com.oberasoftware.robo.core.commands.ReadTorgueCommand;
-import com.oberasoftware.robo.dynamixel.protocolv2.handlers.DynamixelTorgueHandler;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,30 +20,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.oberasoftware.iot.core.robotics.servo.TorgueManager.ServoState.OFF;
-import static com.oberasoftware.iot.core.robotics.servo.TorgueManager.ServoState.ON;
+import static com.oberasoftware.iot.core.robotics.servo.StateManager.TorgueState.OFF;
+import static com.oberasoftware.iot.core.robotics.servo.StateManager.TorgueState.ON;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
-public class DynamixelTorgueManager implements ActivatableCapability, TorgueManager, EventHandler {
-    private static final Logger LOG = getLogger( DynamixelTorgueManager.class );
+public class DynamixelStateManager implements ActivatableCapability, StateManager, EventHandler {
+    private static final Logger LOG = getLogger( DynamixelStateManager.class );
 
-    private final Map<String, ServoState> servoStates = new ConcurrentHashMap<>();
+    private final Map<String, TorgueState> servoStates = new ConcurrentHashMap<>();
+    private final Map<String, StateManager.ServoMode> servoModes = new ConcurrentHashMap<>();
 
     @Autowired
     private DynamixelTorgueHandler torgueHandler;
+
+    @Autowired
+    private OpsModeHandler opsModeHandler;
 
     @Autowired
     private LocalEventBus localEventBus;
 
     @Override
     public void activate(RobotHardware robot, Map<String, String> properties) {
-        LOG.info("Reading initial Torgue states");
+        LOG.info("Reading initial Servo states");
         robot.getServoDriver().getServos().forEach(s -> {
             ServoDataReceivedEvent rcvd = torgueHandler.receive(new ReadTorgueCommand(s.getId()));
 
             int tState = rcvd.getServoData().getValue(ServoProperty.TORGUE);
             servoStates.put(s.getId(), tState > 0 ? ON : OFF);
+
+            var opsModeData = opsModeHandler.receive(new ReadOperationMode(s.getId()));
+            if(opsModeData != null) {
+                servoModes.put(s.getId(), StateManager.ServoMode.valueOf(opsModeData.getServoData().getValue(ServoProperty.MODE)));
+            }
         });
     }
 
@@ -58,18 +63,21 @@ public class DynamixelTorgueManager implements ActivatableCapability, TorgueMana
         torgueHandler.receive(new TorgueLimitCommand(s, limit));
     }
 
+    @Override
     public void setTorgue(String s, boolean b) {
         setState(s, b);
 
         torgueHandler.receive(new TorgueCommand(s, b));
     }
 
+    @Override
     public void setTorgueAll(boolean state) {
         servoStates.keySet().forEach(s -> setState(s, state));
 
         torgueHandler.receive(new BulkTorgueCommand(state));
     }
 
+    @Override
     public void setTorgueAll(boolean state, List<String> servos) {
         servos.forEach(s -> setState(s, state));
 
@@ -80,7 +88,7 @@ public class DynamixelTorgueManager implements ActivatableCapability, TorgueMana
         setState(servoId, state ? ON : OFF);
     }
 
-    private void setState(String servoId, ServoState state) {
+    private void setState(String servoId, TorgueState state) {
         servoStates.put(servoId, state);
 
         Map<ServoProperty, Object> map = new ImmutableMap.Builder<ServoProperty, Object>()
@@ -91,13 +99,35 @@ public class DynamixelTorgueManager implements ActivatableCapability, TorgueMana
     }
 
     @Override
-    public ServoState getState(String servoId) {
+    public TorgueState getTorgue(String servoId) {
         return servoStates.get(servoId);
     }
 
     @Override
-    public Map<String, ServoState> getStates() {
+    public Map<String, TorgueState> getTorgues() {
         return Maps.newHashMap(servoStates);
+    }
+
+    @Override
+    public void setServoMode(String servoId, ServoMode mode) {
+        if(servoModes.containsKey(servoId) && servoModes.get(servoId) != mode) {
+            servoModes.put(servoId, mode);
+
+            LOG.info("Setting servo mode {} to state: {}", servoId, mode);
+            opsModeHandler.receive(new OperationModeCommand(servoId, mode));
+        } else {
+            LOG.warn("Servo: {} mode is already on target mode state: {}", servoId, mode);
+        }
+    }
+
+    @Override
+    public ServoMode getServoMode(String servoId) {
+        return servoModes.get(servoId);
+    }
+
+    @Override
+    public Map<String, ServoMode> getServoModes() {
+        return servoModes;
     }
 
     @Override

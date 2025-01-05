@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.oberasoftware.iot.core.commands.ThingValueCommand;
-import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
-import com.oberasoftware.iot.core.robotics.humanoid.JointBasedRobot;
+import com.oberasoftware.iot.core.robotics.behavioural.ConfiguredRobotRegistery;
+import com.oberasoftware.iot.core.robotics.humanoid.ConfigurableRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.MotionEngine;
 import com.oberasoftware.iot.core.robotics.motion.Motion;
@@ -25,7 +25,7 @@ public class MotionHandler implements RobotAttributeHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MotionHandler.class);
 
     @Autowired
-    private JointBasedRobotRegistery robotRegistry;
+    private ConfiguredRobotRegistery robotRegistry;
 
 
     @Override
@@ -61,7 +61,7 @@ public class MotionHandler implements RobotAttributeHandler {
             LOG.info("Parsed frames: {}", parsedFrame);
 
             Motion motion = new MotionImpl("tempMotion", Lists.newArrayList(parsedFrame));
-            Optional<JointBasedRobot> br = robotRegistry.getRobot(command.getThingId());
+            Optional<ConfigurableRobot> br = robotRegistry.getRobot(command.getThingId());
             br.ifPresent(behaviouralRobot -> behaviouralRobot.getBehaviour(MotionEngine.class).post(motion));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

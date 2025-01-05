@@ -6,7 +6,7 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
 import com.oberasoftware.iot.core.robotics.servo.events.ServoDataReceivedEvent;
 import com.oberasoftware.robo.core.ServoDataImpl;
-import com.oberasoftware.robo.core.commands.ReadTemperatureCommand;
+import com.oberasoftware.iot.core.robotics.commands.ReadTemperatureCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelConnector;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;
 import com.oberasoftware.robo.dynamixel.protocolv2.DynamixelV2Address;

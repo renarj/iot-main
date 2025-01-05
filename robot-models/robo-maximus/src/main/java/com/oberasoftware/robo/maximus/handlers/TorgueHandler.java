@@ -6,7 +6,7 @@ import com.oberasoftware.iot.core.commands.ThingValueCommand;
 import com.oberasoftware.iot.core.model.states.Value;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
-import com.oberasoftware.iot.core.robotics.behavioural.JointBasedRobotRegistery;
+import com.oberasoftware.iot.core.robotics.behavioural.ConfiguredRobotRegistery;
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
 import com.oberasoftware.iot.core.robotics.humanoid.JointControl;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
@@ -28,7 +28,7 @@ public class TorgueHandler implements RobotAttributeHandler {
     private RobotRegistry robotRegistry;
 
     @Autowired
-    private JointBasedRobotRegistery jointBasedRobotRegistery;
+    private ConfiguredRobotRegistery configuredRobotRegistery;
 
     @Autowired
     private ServoRegistry servoRegistry;
@@ -65,7 +65,7 @@ public class TorgueHandler implements RobotAttributeHandler {
     }
 
     private Joint findJoint(String thingId) {
-        var robots = jointBasedRobotRegistery.getRobots();
+        var robots = configuredRobotRegistery.getRobots();
 
         for (Robot r : robots) {
             LOG.info("Checking robot: {}", r);

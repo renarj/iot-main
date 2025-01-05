@@ -6,7 +6,6 @@ import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.Servo;
 import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
-import com.oberasoftware.robo.core.commands.OperationModeCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +65,9 @@ public class LegFactory {
         RobotHardware robot = robotRegistry.getRobots().get(0);
 
         ServoDriver servoDriver = robot.getServoDriver();
-        servoDriver.getServos().forEach(s -> {
-            servoDriver.sendCommand(new OperationModeCommand(s.getId(), OperationModeCommand.MODE.POSITION_CONTROL));
-        });
+//        servoDriver.getServos().forEach(s -> {
+//            servoDriver.sendCommand(new OperationModeCommand(s.getId(), OperationModeCommand.MODE.POSITION_CONTROL));
+//        });
         servoDriver.getServos().forEach(s -> s.setSpeed(50, new Scale(-100, 100)));
         servoDriver.getServos().forEach(Servo::enableTorgue);
 

@@ -28,15 +28,13 @@ public class ESP32SensorDriver implements SensorDriver<TeensyPort> {
 
     private static final int CHECK_INTERVAL = 5000;
 
-    static final String INA_260 = "ina260";
-    static final String LSM9DS1 = "LSM9DS1";
-
     static final String INA_260_CURRENT = "current";
     static final String INA_260_VOLTAGE = "voltage";
     static final String INA_260_POWER = "power";
     static final String LSM_9_DS_1_ROLL = "roll";
     static final String LSM_9_DS_1_PITCH = "pitch";
     static final String LSM_9_DS_1_HEADING = "heading";
+    private static final String TEMP = "temp";
 
     @Autowired
     private ESP32SerialConnector proxySerialConnector;
@@ -68,6 +66,7 @@ public class ESP32SensorDriver implements SensorDriver<TeensyPort> {
         ports.add(new TeensyPort(INA_260_CURRENT));
         ports.add(new TeensyPort(INA_260_VOLTAGE));
         ports.add(new TeensyPort(INA_260_POWER));
+        ports.add(new TeensyPort(TEMP));
 
         executorService.submit(() -> {
             while(!Thread.currentThread().isInterrupted()) {

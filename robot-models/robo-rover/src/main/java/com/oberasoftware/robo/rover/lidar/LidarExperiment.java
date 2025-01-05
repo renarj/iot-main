@@ -3,7 +3,6 @@ package com.oberasoftware.robo.rover.lidar;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.servo.Servo;
 import com.oberasoftware.iot.core.robotics.servo.ServoProperty;
-import com.oberasoftware.robo.core.commands.OperationModeCommand;
 import com.oberasoftware.robo.dynamixel.DynamixelInstruction;
 import com.oberasoftware.robo.dynamixel.DynamixelServoDriver;
 import com.oberasoftware.robo.dynamixel.SerialDynamixelConnector;
@@ -49,7 +48,7 @@ public class LidarExperiment {
 
         connector.sendAndReceive(new DynamixelV2CommandPacket(DynamixelInstruction.WRITE_DATA, 200).add8BitParam(RETURN_DELAY_TIME, 0x0).build());
         connector.sendAndReceive(new DynamixelV2CommandPacket(DynamixelInstruction.WRITE_DATA, 50).add8BitParam(RETURN_DELAY_TIME, 0x0).build());
-        servoDriver.sendCommand(new OperationModeCommand("50", OperationModeCommand.MODE.EXTENDED_POSITION_CONTROL));
+//        servoDriver.sendCommand(new OperationModeCommand("50", OperationModeCommand.MODE.EXTENDED_POSITION_CONTROL));
 
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -60,7 +59,7 @@ public class LidarExperiment {
         ros.connect();
 
         servoDriver.setTorgue("50", false);
-        servoDriver.sendCommand(new OperationModeCommand("50", OperationModeCommand.MODE.VELOCITY_MODE));
+//        servoDriver.sendCommand(new OperationModeCommand("50", OperationModeCommand.MODE.VELOCITY_MODE));
 
 
         servoDriver.setTorgue("50", true);

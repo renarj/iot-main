@@ -107,11 +107,11 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
             int speed = (int) wheelSpeeds[i];
             Wheel wheel = wheels.get(i);
 
-            if(speed < 0) {
-                wheel.backward(speed);
-            } else {
-                wheel.forward(speed);
-            }
+//            if(speed < 0) {
+//                wheel.backward(speed);
+//            } else {
+//                wheel.forward(speed);
+//            }
         }
     }
 
@@ -222,7 +222,7 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
 
     @Override
     public void stop() {
-        wheels.forEach(Wheel::stop);
+//        wheels.forEach(Wheel::stop);
     }
 
     @Override

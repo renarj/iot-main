@@ -1,14 +1,11 @@
-package com.oberasoftware.robo.core.commands;
+package com.oberasoftware.iot.core.robotics.commands;
 
 import com.oberasoftware.iot.core.robotics.servo.ServoCommand;
 
-/**
- * @author Renze de Vries
- */
-public class ReadTemperatureCommand implements ServoCommand {
+public class ReadOperationMode implements ServoCommand {
     private final String servoId;
 
-    public ReadTemperatureCommand(String servoId) {
+    public ReadOperationMode(String servoId) {
         this.servoId = servoId;
     }
 
@@ -19,7 +16,7 @@ public class ReadTemperatureCommand implements ServoCommand {
 
     @Override
     public String toString() {
-        return "ReadTemperatureCommand{" +
+        return "ReadOperationMode{" +
                 "servoId='" + servoId + '\'' +
                 '}';
     }

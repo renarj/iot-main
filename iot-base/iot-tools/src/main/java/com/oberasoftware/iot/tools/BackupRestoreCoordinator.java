@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
 public class BackupRestoreCoordinator {
@@ -13,31 +16,62 @@ public class BackupRestoreCoordinator {
     private static final String PLUGIN_BACKUP_JSON = "plugin-backup.json";
 
     @Autowired
-    private ConfigBackupRunner configBackupRunner;
+    private BackupRunner backupRunner;
 
     @Autowired
     private ConfigRestoreRunner configRestoreRunner;
+
+    private Map<String, Action> backupActions = new HashMap<>();
+    private Map<String, Action> restoreActions = new HashMap<>();
 
     private File targetDirectory;
     private String targetHost;
     private String targetPort;
 
-    public void runRestore(String targetDir, String targetHost, String targetPort) {
-        checkDirectory(targetDir);
-        this.targetHost = targetHost;
-        this.targetPort = targetPort;
+    public BackupRestoreCoordinator() {
+        backupActions.put("plugin-backup.json", config -> backupRunner.backupPlugins(config));
+        backupActions.put("schema-backup.json", config -> backupRunner.backupSchemas(config));
+        backupActions.put("things-backup.json", config -> backupRunner.backupThings(config));
+        backupActions.put("controllers-backup.json", config -> backupRunner.backupControllers(config));
 
-        runPluginRestore();
-        runSchemaRestore();
+        restoreActions.put("plugin-backup.json", config -> configRestoreRunner.restorePlugins(config));
+        restoreActions.put("schema-backup.json", config -> configRestoreRunner.restoreSchemas(config));
+        restoreActions.put("controllers-backup.json", config -> configRestoreRunner.restoreControllers(config));
+        restoreActions.put("things-backup.json", config -> configRestoreRunner.restoreThings(config));
     }
 
-    public void runBackup(String targetDir, String targetHost, String targetPort) {
+    public boolean runRestore(String targetDir, String targetHost, String targetPort) {
         checkDirectory(targetDir);
         this.targetHost = targetHost;
         this.targetPort = targetPort;
 
-        runPluginBackup();
-        runSchemaBackup();
+        var r = runActions("Restore", restoreActions);
+        LOG.info("Restore process completed: {}", r);
+        return r;
+    }
+
+    public boolean runBackup(String targetDir, String targetHost, String targetPort) {
+        checkDirectory(targetDir);
+        this.targetHost = targetHost;
+        this.targetPort = targetPort;
+
+        var r = runActions("Backup", backupActions);
+        LOG.info("Backup process completed: {}", r);
+        return r;
+    }
+
+    private boolean runActions(String processType, Map<String, Action> actions) {
+        AtomicBoolean failure = new AtomicBoolean(true);
+        actions.forEach((k, v) -> {
+            if(failure.get()) {
+                LOG.info("Starting {} for file: {}", processType, k);
+                var c = new RemoteConfig(targetHost, targetPort, new File(targetDirectory, k).toString());
+                if(!v.run(c)) {
+                    failure.set(false);
+                }
+            }
+        });
+        return failure.get();
     }
 
     private void checkDirectory(String targetDir) {
@@ -53,26 +87,7 @@ public class BackupRestoreCoordinator {
         }
     }
 
-    private void runPluginRestore() {
-        File pluginBackup = new File(targetDirectory, PLUGIN_BACKUP_JSON);
-        configRestoreRunner.restorePlugins(new RemoteConfig(targetHost, targetPort, pluginBackup.toString()));
-    }
-
-    private void runSchemaRestore() {
-        File schemaBackup = new File(targetDirectory, "schema-backup.json");
-        configRestoreRunner.restoreSchemas(new RemoteConfig(targetHost, targetPort, schemaBackup.toString()));
-    }
-
-    private void runPluginBackup() {
-        File pluginBackup = new File(targetDirectory, PLUGIN_BACKUP_JSON);
-        LOG.info("Running Plugin backup on target: {}:{} and storing in file: {}", targetHost, targetPort, pluginBackup);
-        configBackupRunner.backupPlugins(new RemoteConfig(targetHost, targetPort, pluginBackup.toString()));
-    }
-
-    private void runSchemaBackup() {
-        File schemaBackup = new File(targetDirectory, "schema-backup.json");
-        LOG.info("Running Schemas backup on target: {}:{} and storing in file: {}", targetHost, targetPort, schemaBackup);
-        configBackupRunner.backupSchemas(new RemoteConfig(targetHost, targetPort, schemaBackup.toString()));
-
+    private interface Action {
+        boolean run(RemoteConfig config);
     }
 }
