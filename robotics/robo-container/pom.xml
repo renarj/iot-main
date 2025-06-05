@@ -30,11 +30,6 @@
         </dependency>
         <dependency>
             <groupId>com.oberasoftware</groupId>
-            <artifactId>robo-web</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oberasoftware</groupId>
             <artifactId>robo-hexapod</artifactId>
             <version>${project.version}</version>
         </dependency>

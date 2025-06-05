@@ -67,8 +67,4 @@ public class DriveBehaviourImpl implements DriveBehaviour {
         right.stop();
     }
 
-    @Override
-    public List<Wheel> getWheels() {
-        return newArrayList(concat(left.getWheels(), right.getWheels()));
-    }
 }

@@ -39,8 +39,8 @@ public class ValueCommandConverter implements CommandConverter<BasicCommand, Thi
             Optional<Long> number = getNumber(v);
             Optional<Double> decimal = getDecimal(v);
 
-            VALUE_TYPE type = number.isPresent() ? VALUE_TYPE.NUMBER : decimal.isPresent() ? VALUE_TYPE.DECIMAL : VALUE_TYPE.STRING;
-            Object decodedValue = number.isPresent() ? number.get() : decimal.isPresent() ? decimal.get() : v;
+            VALUE_TYPE type = decimal.isPresent() ? VALUE_TYPE.DECIMAL : number.isPresent() ? VALUE_TYPE.NUMBER : VALUE_TYPE.STRING;
+            Object decodedValue = decimal.isPresent() ? decimal.get() : number.isPresent() ? number.get() : v;
 
             values.put(k, new ValueImpl(type, decodedValue));
         });

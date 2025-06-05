@@ -21,6 +21,4 @@ public interface DriveBehaviour extends Behaviour {
     void right(int speed, Scale scale);
 
     void stop();
-
-    List<Wheel> getWheels();
 }

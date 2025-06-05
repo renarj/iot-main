@@ -30,11 +30,12 @@ public class WheelImpl implements Wheel {
     public void initialize(Robot behaviouralRobot, RobotHardware robotCore) {
         var stateManager = robotCore.getCapability(StateManager.class);
         stateManager.setServoMode(servoId, StateManager.ServoMode.VELOCITY_CONTROL);
+        stateManager.setTorgue(servoId, true);
     }
 
     @Override
     public String getName() {
-        return servoId;
+        return thingId;
     }
 
     @Override
@@ -50,5 +51,10 @@ public class WheelImpl implements Wheel {
     @Override
     public String getServoId() {
         return servoId;
+    }
+
+    @Override
+    public boolean isReversed() {
+        return reversed;
     }
 }

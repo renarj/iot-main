@@ -14,4 +14,6 @@ public interface Wheel extends Behaviour {
     String getThingId();
 
     String getServoId();
+
+    boolean isReversed();
 }

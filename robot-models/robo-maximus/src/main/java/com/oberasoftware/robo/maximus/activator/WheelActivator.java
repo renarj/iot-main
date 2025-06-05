@@ -32,8 +32,10 @@ public class WheelActivator implements Activator {
 
         String servoThingId = activatable.getProperty("servo");
         String servoId = servoRegistry.getThing(activatable.getControllerId(), servoThingId).getServoId();
+        String reverseDirection = activatable.getProperty("reverseDirection");
+        boolean directionReverse = reverseDirection != null && reverseDirection.equalsIgnoreCase("true");
 
         LOG.info("Found wheel: {} based on servo: {}", activatable, servoId);
-        context.getRobotBuilder().wheel(activatable.getControllerId(), activatable.getThingId(), servoId, false);
+        context.getRobotBuilder().wheel(activatable.getControllerId(), activatable.getThingId(), servoId, directionReverse);
     }
 }

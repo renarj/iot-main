@@ -1,4 +1,4 @@
-package com.oberasoftware.robo.core.behaviours.wheels.impl;
+package com.oberasoftware.robo.maximus.drive;
 
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.behavioural.Robot;
@@ -6,11 +6,12 @@ import com.oberasoftware.iot.core.robotics.behavioural.wheel.DriveBehaviour;
 import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
 import com.oberasoftware.iot.core.robotics.commands.Scale;
 import com.oberasoftware.iot.core.robotics.navigation.DirectionalInput;
+import com.oberasoftware.iot.core.robotics.servo.ServoDriver;
 import org.slf4j.Logger;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -19,22 +20,38 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MecanumDriveTrainImpl implements DriveBehaviour {
     private static final Logger LOG = getLogger(MecanumDriveTrainImpl.class);
 
-    private final List<Wheel> wheels;
+    private final String frontLeft;
+    private final String frontRight;
+    private final String rearLeft;
+    private final String rearRight;
+
+    private ServoDriver servoDriver;
+
+    private Map<Integer, Wheel> wheels = new HashMap<>();
 
     private static final int LEFT_FRONT = 0;
     private static final int RIGHT_FRONT = 1;
     private static final int LEFT_REAR = 2;
     private static final int RIGHT_REAR = 3;
 
-    private static final double SQRT_OF_TWO = Math.sqrt(2.0);
-    private static final double OUTPUT_SCALE_FACTOR = 100;
-    public static final double DEFAULT_MINIMUM_SPEED = 0.02;
-    public static final double DEFAULT_MAXIMUM_SPEED = 1.0;
+    private static final double OUTPUT_SCALE_FACTOR = 100.0;
 
-
-    public MecanumDriveTrainImpl(Wheel leftFront, Wheel rightFront, Wheel leftBack, Wheel rightBack) {
-        wheels = newArrayList(leftFront, rightFront, leftBack, rightBack);
+    public MecanumDriveTrainImpl(String frontLeft, String frontRight, String rearLeft, String rearRight) {
+        this.frontLeft = frontLeft;
+        this.frontRight = frontRight;
+        this.rearLeft = rearLeft;
+        this.rearRight = rearRight;
     }
+
+    @Override
+    public void initialize(Robot behaviouralRobot, RobotHardware robot) {
+        this.servoDriver = robot.getServoDriver();
+        wheels.put(LEFT_FRONT, behaviouralRobot.getWheels(frontLeft));
+        wheels.put(LEFT_REAR, behaviouralRobot.getWheels(rearLeft));
+        wheels.put(RIGHT_FRONT, behaviouralRobot.getWheels(frontRight));
+        wheels.put(RIGHT_REAR, behaviouralRobot.getWheels(rearRight));
+    }
+
 
     @Override
     public void forward(int speed, Scale scale) {
@@ -53,13 +70,13 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
     @Override
     public void drive(DirectionalInput input, Scale scale) {
         try {
-            Double x = input.hasInputAxis("x") ? input.getAxis("x") : 0.0;
-            Double y = input.hasInputAxis("y") ? input.getAxis("y") : 0.0;
-            Double z = input.hasInputAxis("rotate") ? input.getAxis("rotate") : 0.0;
+            double x = input.hasInputAxis("x") ? input.getAxis("x") : 0.0;
+            double y = input.hasInputAxis("y") ? input.getAxis("y") : 0.0;
+            double z = input.hasInputAxis("z") ? input.getAxis("z") : 0.0;
 
-            double cX = convert(1.0, x.intValue(), scale);
-            double cY = convert(1.0, y.intValue(), scale);
-            double cZ = convert(1.0, z.intValue(), scale);
+            double cX = convert(1.0, x, scale);
+            double cY = convert(1.0, y, scale);
+            double cZ = convert(1.0, z, scale);
 
             cartesian(cX, cY, cZ);
         } catch(Exception e) {
@@ -80,23 +97,25 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
      * @param rotation The rate of rotation for the robot that is completely independent of the translation. [-1.0..1.0]
      */
     public void cartesian(double x, double y, double rotation) {
+        LOG.info("Setting cartesian drive x: {} y: {} rotation: {}", x, y, rotation);
         double xIn = x;
         double yIn = y;
-        // Negate y for the joystick.
-        yIn = -yIn;
+
         // Compensate for gyro angle.
-        double[] rotated = rotateVector(xIn, yIn, 0.0);
-        xIn = rotated[0];
-        yIn = rotated[1];
+//        double[] rotated = rotateVector(xIn, yIn, 0.0);
+//        xIn = rotated[0];
+//        yIn = rotated[1];
 
         double[] wheelSpeeds = new double[4];
         wheelSpeeds[LEFT_FRONT] = xIn + yIn + rotation;
         wheelSpeeds[RIGHT_FRONT] = -xIn + yIn - rotation;
         wheelSpeeds[LEFT_REAR] = -xIn + yIn + rotation;
         wheelSpeeds[RIGHT_REAR] = xIn + yIn - rotation;
+        LOG.info("Wheel speeds: {}", wheelSpeeds);
 
         normalize(wheelSpeeds);
         scale(wheelSpeeds, OUTPUT_SCALE_FACTOR);
+        LOG.info("Scaled and normalized wheel speeds: {}", wheelSpeeds);
 
         LOG.info("Front Left {} Front Right {} Rear Left {} Rear Right {}", wheelSpeeds[LEFT_FRONT], wheelSpeeds[RIGHT_FRONT], wheelSpeeds[LEFT_REAR], wheelSpeeds[RIGHT_REAR]);
         setWheelSpeeds(wheelSpeeds);
@@ -107,58 +126,16 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
             int speed = (int) wheelSpeeds[i];
             Wheel wheel = wheels.get(i);
 
+            if(wheel.isReversed()) {
+                speed = -speed;
+            }
+            servoDriver.setServoSpeed(wheel.getServoId(), speed, new Scale(-100, 100));
 //            if(speed < 0) {
 //                wheel.backward(speed);
 //            } else {
 //                wheel.forward(speed);
 //            }
         }
-    }
-
-    /**
-     * Polar drive method that specifies speeds in terms of magnitude and direction. This method does not use the drive's angle
-     * sensor.
-     *
-     * @param magnitude The speed that the robot should drive in a given direction.
-     * @param direction The direction the robot should drive in degrees. The direction and magnitude are independent of the
-     *        rotation rate.
-     * @param rotation The rate of rotation for the robot that is completely independent of the magnitude or direction.
-     *        [-1.0..1.0]
-     */
-    public void polar(double magnitude, double direction, double rotation) {
-        // Normalized for full power along the Cartesian axes.
-//        magnitude = speedLimiter.applyAsDouble(magnitude) * SQRT_OF_TWO;
-        magnitude = symmetricLimit(DEFAULT_MINIMUM_SPEED, magnitude, DEFAULT_MAXIMUM_SPEED) * SQRT_OF_TWO;
-
-        // The rollers are at 45 degree angles.
-        double dirInRad = (direction + 45.0) * Math.PI / 180.0;
-        double cosD = Math.cos(dirInRad);
-        double sinD = Math.sin(dirInRad);
-
-        double[] wheelSpeeds = new double[4];
-        wheelSpeeds[LEFT_FRONT] = (sinD * magnitude + rotation);
-        wheelSpeeds[RIGHT_FRONT] = (cosD * magnitude - rotation);
-        wheelSpeeds[LEFT_REAR] = (cosD * magnitude + rotation);
-        wheelSpeeds[RIGHT_REAR] = (sinD * magnitude - rotation);
-
-        normalize(wheelSpeeds);
-        scale(wheelSpeeds, OUTPUT_SCALE_FACTOR);
-
-        setWheelSpeeds(wheelSpeeds);
-    }
-
-    public static double symmetricLimit(double minimum, double num, double maximum) {
-        if ( minimum < 0 ) throw new IllegalArgumentException("The minimum value may not be negative");
-        if ( maximum < 0 ) throw new IllegalArgumentException("The maximum value may not be negative");
-        if ( maximum < minimum ) throw new IllegalArgumentException("The minimum value must be less than or equal to the maximum value");
-        if (num > maximum) {
-            return maximum;
-        }
-        double positiveNum = Math.abs(num);
-        if (positiveNum > maximum) {
-            return -maximum;
-        }
-        return positiveNum > minimum ? num : 0.0;
     }
 
     /**
@@ -225,19 +202,9 @@ public class MecanumDriveTrainImpl implements DriveBehaviour {
 //        wheels.forEach(Wheel::stop);
     }
 
-    @Override
-    public List<Wheel> getWheels() {
-        return null;
-    }
-
-    @Override
-    public void initialize(Robot behaviouralRobot, RobotHardware robot) {
-        wheels.forEach(w -> w.initialize(behaviouralRobot, robot));
-    }
-
-    private double convert(double max, int speed, Scale scale) {
+    private double convert(double max, double speed, Scale scale) {
         double factor = max / (double) scale.getMax();
 
-        return (double) speed * factor;
+        return speed * factor;
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,40 +57,37 @@ public class ConfigurableRobotActivator implements Activator {
     @Override
     public List<IotThing> getDependents(RobotContext context, IotThing activatable) {
         List<IotThing> thingsToActivate = new ArrayList<>();
-        thingsToActivate.addAll(getServoDependencies(activatable));
-        thingsToActivate.addAll(getWheels(activatable));
+        getServoDriver(activatable).ifPresent(thingsToActivate::add);
+        thingsToActivate.addAll(getItemsOfType(activatable, "wheel"));
+        thingsToActivate.addAll(getItemsOfType(activatable, "sensor"));
+        thingsToActivate.addAll(getItemsOfType(activatable, "drive"));
 
+        LOG.info("Things to activate for robot: {}", thingsToActivate);
         return thingsToActivate;
     }
 
-    private List<IotThing> getWheels(IotThing activatable) {
+    private List<IotThing> getItemsOfType(IotThing activatable, String type) {
         try {
-            return agentClient.getChildren(activatable.getControllerId(), activatable.getThingId(), "wheel");
+            return agentClient.getChildren(activatable.getControllerId(), activatable.getThingId(), type);
         } catch (IOTException e) {
-            LOG.error("Could not retrieve remote Wheel information", e);
+            LOG.error("Could not retrieve remote " + type + " information", e);
         }
         return Lists.newArrayList();
     }
 
-    private List<IotThing> getServoDependencies(IotThing activatable) {
-        List<IotThing> thingsToActivate = new ArrayList<>();
-
+    private Optional<IotThing> getServoDriver(IotThing activatable) {
         String servoDriver = activatable.getProperty("servoDriver");
         if (servoDriver != null && !servoDriver.isEmpty()) {
             LOG.info("Found servo driver for activation");
             try {
-                var oDriver = agentClient.getThing(activatable.getControllerId(), servoDriver);
-                oDriver.ifPresent(thingsToActivate::add);
-
-                var sensors = agentClient.getChildren(activatable.getControllerId(), activatable.getThingId(), "sensor");
-                thingsToActivate.addAll(sensors);
+                return agentClient.getThing(activatable.getControllerId(), servoDriver);
             } catch (IOTException e) {
                 LOG.error("Could not retrieve remote servo driver information", e);
             }
         } else {
             LOG.warn("No servo driver found to configure");
         }
-        return thingsToActivate;
+        return Optional.empty();
     }
 }
 

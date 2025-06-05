@@ -122,6 +122,11 @@ public class ConfigurableRobotImpl implements ConfigurableRobot {
     }
 
     @Override
+    public Wheel getWheels(String name) {
+        return wheels.stream().filter(wheel -> wheel.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
     public List<Sensor> getSensors() {
         return sensors;
     }
