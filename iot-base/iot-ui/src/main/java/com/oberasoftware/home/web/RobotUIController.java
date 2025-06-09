@@ -43,4 +43,28 @@ public class RobotUIController {
 
         return "robots/editor";
     }
+
+    @RequestMapping("/jointcontrol")
+    public String getJointControl() throws IOTException {
+        LOG.debug("Showing Robot Joint Control screen - controllers");
+
+        return "robots/jointcontrol";
+    }
+
+    @RequestMapping("/jointcontrol/controllers({controllerId})")
+    public String getJointControl(@PathVariable String controllerId, Model model) throws IOTException {
+        LOG.debug("Showing Robot Joint Control screen - controller selected: {}", controllerId);
+        model.addAttribute("controllerId", controllerId);
+
+        return "robots/jointcontrol";
+    }
+
+    @RequestMapping("/jointcontrol/controllers({controllerId})/robots({robotId})")
+    public String getJointControl(@PathVariable String controllerId, @PathVariable String robotId, Model model) throws IOTException {
+        LOG.debug("Showing Robot Joint Control screen - controller selected: {} and robot: {}", controllerId, robotId);
+        model.addAttribute("controllerId", controllerId);
+        model.addAttribute("robotId", robotId);
+
+        return "robots/jointcontrol";
+    }
 }

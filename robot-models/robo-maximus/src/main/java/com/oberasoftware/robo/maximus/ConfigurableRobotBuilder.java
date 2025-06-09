@@ -7,6 +7,7 @@ import com.oberasoftware.iot.core.robotics.behavioural.wheel.Wheel;
 import com.oberasoftware.iot.core.robotics.exceptions.RoboException;
 import com.oberasoftware.iot.core.robotics.humanoid.ConfigurableRobot;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Arm;
+import com.oberasoftware.iot.core.robotics.humanoid.components.ComponentNames;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Leg;
 import com.oberasoftware.iot.core.robotics.humanoid.components.Shoulder;
 import com.oberasoftware.iot.core.robotics.humanoid.joints.Joint;
@@ -164,20 +165,26 @@ public class ConfigurableRobotBuilder implements RobotBuilder {
         public LegBuilder ankle(String ankleName, JointBuilder x, JointBuilder y) {
             this.ankleName = ankleName;
             this.ankleXBuilder = x;
+            this.ankleXBuilder.type(ComponentNames.ANKLE_ROLL);
             this.ankleYBuilder = y;
+            this.ankleYBuilder.type(ComponentNames.ANKLE_PITCH);
             return this;
         }
 
         public LegBuilder knee(JointBuilder jointBuilder) {
             this.kneeBuilder = jointBuilder;
+            this.kneeBuilder.type(ComponentNames.KNEE);
             return this;
         }
 
         public LegBuilder hip(String hipName, JointBuilder x, JointBuilder y, JointBuilder z) {
             this.hipName = hipName;
             this.hipXBuilder = x;
+            this.hipXBuilder.type(ComponentNames.HIP_ROLL);
             this.hipYBuilder = y;
+            this.hipYBuilder.type(ComponentNames.HIP_PITCH);
             this.hipZBuilder = z;
+            this.hipZBuilder.type(ComponentNames.HIP_YAW);
             return this;
         }
 
@@ -212,7 +219,9 @@ public class ConfigurableRobotBuilder implements RobotBuilder {
         public ArmBuilder shoulder(String name, JointBuilder x, JointBuilder y) {
             this.shoulderName = name;
             this.shoulderX = x;
+            this.shoulderX.type(ComponentNames.SHOULDER_ROLL);
             this.shoulderY = y;
+            this.shoulderY.type(ComponentNames.SHOULDER_PITCH);
             return this;
         }
 

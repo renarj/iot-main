@@ -20,7 +20,6 @@ import com.oberasoftware.robo.maximus.motion.cartesian.CartesianControlImpl;
 import com.oberasoftware.robo.maximus.motion.cartesian.CoordinatesMonitor;
 import com.oberasoftware.robo.maximus.sensors.Ina260CurrentSensor;
 import com.oberasoftware.robo.maximus.sensors.LSM9DS1GyroSensor;
-import com.oberasoftware.robo.maximus.storage.MotionStorage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,7 +81,7 @@ public class StaticRobotInitializer {
                                 .put("motors", MOTOR_ID_STRING)
                                 .build())
                 .capability(ServoSensorDriver.class)
-                .capability(MotionStorage.class)
+//                .capability(MotionStorage.class)
 //                .capability(TeensySensorDriver.class)
 //                .capability(InfluxDBMetricsCapability.class)
                 .capability(DynamixelStateManager.class)
@@ -122,43 +121,43 @@ public class StaticRobotInitializer {
                 .legs(
                         createLeg(RIGHT_LEG)
                                 .ankle(RIGHT_ANKLE,
-                                        create("110", RIGHT_ANKLE_PITCH),
-                                        create("111", RIGHT_ANKLE_ROLL))
-                                .knee(create("109", RIGHT_KNEE))
+                                        create("105", RIGHT_ANKLE_ROLL),
+                                        create("102", RIGHT_ANKLE_PITCH, true))
+                                .knee(create("103", RIGHT_KNEE, true))
                                 .hip(RIGHT_HIP,
-                                        create("100", RIGHT_HIP_ROLL),
-                                        create("102", RIGHT_HIP_PITCH),
-                                        create("101", RIGHT_HIP_YAW)),
+                                        create("108", RIGHT_HIP_ROLL),
+                                        create("104", RIGHT_HIP_PITCH),
+                                        create("107", RIGHT_HIP_YAW)),
                         createLeg(LEFT_LEG)
                                 .ankle(LEFT_ANKLE,
-                                        create("104", LEFT_ANKLE_PITCH),
-                                        create("105", LEFT_ANKLE_ROLL))
-                                .knee(create("103", LEFT_KNEE, true ))
+                                        create("111", LEFT_ANKLE_ROLL),
+                                        create("110", LEFT_ANKLE_PITCH))
+                                .knee(create("109", LEFT_KNEE, false ))
                                 .hip(LEFT_HIP,
                                         create("106", LEFT_HIP_ROLL),
-                                        create("108", LEFT_HIP_PITCH),
-                                        create("107", LEFT_HIP_YAW)))
+                                        create("100", LEFT_HIP_PITCH, true),
+                                        create("132", LEFT_HIP_YAW)))
                 .torso(
                         createArm(LEFT_ARM)
                                 .shoulder(LEFT_SHOULDER,
                                         create("131", LEFT_SHOULDER_ROLL, true),
-                                        create("130", LEFT_SHOULDER_PITCH))
+                                        create("120", LEFT_SHOULDER_PITCH))
                                 .elbow(
-                                        create("133", LEFT_ELBOW, true  ).max(110).min(-110)
+                                        create("123", LEFT_ELBOW, true  ).max(110).min(-110)
                                         )
-                                .hand(create("134", LEFT_HAND).min(-5).max(20)), //"LeftHand", "134"
+                                .hand(create("134", LEFT_HAND).min(-5).max(20)),
                         createArm(RIGHT_ARM)
                                 .shoulder(RIGHT_SHOULDER,
                                         create("121", RIGHT_SHOULDER_ROLL, true),
-                                        create("120", RIGHT_SHOULDER_PITCH, true)
+                                        create("130", RIGHT_SHOULDER_PITCH, true)
                                         )
                                 .elbow(
-                                        create("123", RIGHT_ELBOW, true).max(110).min(-110)
+                                        create("133", RIGHT_ELBOW, true).max(110).min(-110)
                                 )
-                                .hand(create("124", RIGHT_HAND, true).min(-5).max(20)))  //"RightHand", "124"
-                .head("head",
-                        create("141", PITCH_HEAD).min(-25).max(25),
-                        create("140", ROLL_HEAD).min(-50).max(50))
+                                .hand(create("124", RIGHT_HAND, true).min(-5).max(20)))
+//                .head("head",
+//                        create("140", PITCH_HEAD).min(-25).max(25),
+//                        create("140", ROLL_HEAD).min(-50).max(50))
                 .sensor(new Ina260CurrentSensor("test", "ina260"))
                 .sensor(new LSM9DS1GyroSensor("test", "lsm9ds1"))
                 .behaviourController(new CartesianControlImpl())

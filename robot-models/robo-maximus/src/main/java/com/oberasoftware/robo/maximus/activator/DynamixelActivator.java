@@ -12,6 +12,7 @@ import com.oberasoftware.robo.maximus.sensors.ESP32SensorDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@ConditionalOnBean(AgentClient.class)
 public class DynamixelActivator implements Activator {
     private static final Logger LOG = LoggerFactory.getLogger(DynamixelActivator.class);
 

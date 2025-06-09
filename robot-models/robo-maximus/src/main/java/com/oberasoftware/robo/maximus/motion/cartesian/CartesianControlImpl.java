@@ -37,7 +37,7 @@ public class CartesianControlImpl implements CartesianControl {
     private static final double DEGREES_90 = 90.0;
     private static final int DEGREES_180 = 180;
 
-    private static final int MAX_FRAME_TIME_MS = 400;
+    private static final int MAX_FRAME_TIME_MS = 500;
     private static final int MAGIC_NUMBER_LEAN_CORRECTION = 2;
     private static final int MAGIC_NUMBER_ANKLE_CORRECTION = 2;
 
@@ -148,11 +148,13 @@ public class CartesianControlImpl implements CartesianControl {
             if(jd.isPresent()) {
                 Double degrees = (double) jd.get().getDegrees();
                 if (angles.contains(jointType)) {
+                    LOG.debug("Already registered Angle for similar Joint type: {} ID: {} name: {} has angle: {}", j.getJointType(), j.getJointId(), j.getName(), degrees);
                     var drift = abs(angles.getDrift(jointType, degrees));
                     if (drift > 0.02) {
                         LOG.warn("Joint Type: {} with joint: {} is drifting: {} % from its peer", jointType, jk, (drift * 100));
                     }
                 } else {
+                    LOG.debug("Joint: {} type: {} name: {} has angle: {}", j.getJointId(), j.getJointType(), j.getName(), degrees);
                     angles.addAngleByType(jointType, degrees);
                 }
             }
@@ -256,8 +258,8 @@ public class CartesianControlImpl implements CartesianControl {
             angles.addAngleByType(ANKLE_PITCH, anklePitch);
             angles.addAngleByType(KNEE, kneePitch);
             angles.addAngleByType(HIP_PITCH, hipPitchCorrection);
-            angles.addAngleByType(HIP_ROLL, 0.0);
-            angles.addAngleByType(ANKLE_ROLL, 0.0);
+//            angles.addAngleByType(HIP_ROLL, 0.0);
+//            angles.addAngleByType(ANKLE_ROLL, 0.0);
 
             return Optional.of(angles);
         }

@@ -64,10 +64,11 @@
     <ul class="nav nav-tabs" th:fragment="robotTabs (selectTab)">
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'joints'} ? 'active'" href="#" th:href="@{'/web/robots'}">Joints</a></li>
         <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'editor'} ? 'active'" href="#" th:href="@{'/web/robots/editor'}">Editors</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${selectTab == 'jointcontrol'} ? 'active'" href="#" th:href="@{'/web/robots/jointcontrol'}">Joint Control</a></li>
     </ul>
 
 <div id="version" th:fragment="footer">
-    <p class="text-center">&#169; Copyright 2024 Oberasoftware, version: <span>2.0</span></p>
+    <p class="text-center">&#169; Copyright 2025 Oberasoftware, version: <span>2.0</span></p>
 
 
 </div>

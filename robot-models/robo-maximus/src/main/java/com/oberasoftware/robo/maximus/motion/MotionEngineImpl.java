@@ -128,6 +128,8 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
 
             lastServoPositions.put(s.getId(), currentAngle);
         });
+        LOG.info("Initial positions: {}", lastServoPositions);
+
         if(validateAlreadyAtTarget(lastServoPositions, unit)) {
             LOG.info("Motion: {} aborted, joints already at target position", unit);
             return;
@@ -160,7 +162,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
                         .collect(Collectors.toMap(PositionAndSpeedCommand::getServoId, jtm -> jtm));
 
                 servoDriver.bulkSetPositionAndSpeed(m, BulkPositionSpeedCommand.WRITE_MODE.SYNC);
-                LOG.info("Completed interval: {} in: {} for frame: {} motorData: {}", counter, is.elapsed(MILLISECONDS), interval.getFrameId(), m);
+                LOG.debug("Completed interval: {} in: {} for frame: {} motorData: {}", counter, is.elapsed(MILLISECONDS), interval.getFrameId(), m);
 
                 counter++;
                 sleepUninterruptibly(FREQUENCY, MILLISECONDS);
@@ -173,7 +175,7 @@ public class MotionEngineImpl implements MotionEngine, Behaviour {
     private boolean validateAlreadyAtTarget(Map<String, Integer> initialPositions, MotionUnit motion) {
         var lastFrame = motion.getFrames().getLast();
         var jts = lastFrame.getJointTargets();
-        Set<String> jtsOffPosition = initialPositions.keySet();
+        Set<String> jtsOffPosition = new HashSet<>(initialPositions.keySet());
         jts.forEach(jt -> {
             var jointId = jt.getJointId();
             var angle = jt.getTargetAngle();

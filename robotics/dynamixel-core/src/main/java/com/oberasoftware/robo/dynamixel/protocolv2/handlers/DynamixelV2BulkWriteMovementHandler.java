@@ -65,7 +65,7 @@ public class DynamixelV2BulkWriteMovementHandler extends AbstractV2MovementHandl
         });
 
         byte[] dataToSend = pkt.build();
-        LOG.info("Sending Sync write movement command: {}", bb2hex(dataToSend));
+        LOG.debug("Sending Sync write movement command: {}", bb2hex(dataToSend));
 
         //sync write is send and forget
         connector.sendNoReceive(dataToSend);

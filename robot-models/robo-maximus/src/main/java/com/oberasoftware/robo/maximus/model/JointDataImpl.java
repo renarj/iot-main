@@ -60,7 +60,7 @@ public class JointDataImpl implements JointData {
 
     @Override
     public <T> T getValue(String attribute) {
-        return (T) jointValues.get(attribute);
+        return (T) jointValues.get(attribute).getValue();
     }
 
     public void setId(String id) {

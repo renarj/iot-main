@@ -26,6 +26,7 @@ import com.oberasoftware.robo.maximus.model.SensorDataImpl;
 import com.oberasoftware.robo.maximus.storage.MotionStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@ConditionalOnBean(AgentClient.class)
 public class IotRobotInitializer {
     private static final Logger LOG = LoggerFactory.getLogger(IotRobotInitializer.class);
 

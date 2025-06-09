@@ -1,6 +1,7 @@
 package com.oberasoftware.robo.maximus.handlers;
 
 import com.oberasoftware.iot.core.commands.ThingValueCommand;
+import com.oberasoftware.iot.core.legacymodel.VALUE_TYPE;
 import com.oberasoftware.iot.core.robotics.RobotHardware;
 import com.oberasoftware.iot.core.robotics.RobotRegistry;
 import com.oberasoftware.iot.core.robotics.behavioural.ConfiguredRobotRegistery;
@@ -38,7 +39,13 @@ public class DegreesHandler implements RobotAttributeHandler {
 
             var oJoint = oRobot.get().getJoint(command.getThingId());
             if(oJoint.isPresent()) {
-                Long degrees = command.getAttribute("degrees").getValue();
+                var degreeAttribute = command.getAttribute("degrees");
+                Long degrees;
+                if(degreeAttribute.getType() == VALUE_TYPE.DECIMAL) {
+                    degrees = ((Double)degreeAttribute.getValue()).longValue();
+                } else {
+                    degrees = degreeAttribute.getValue();
+                }
                 int targetPosition = Scale.DEGREES_SCALE.convertToScale(degrees.intValue(), REMOTE_SCALE_POSITION);
 
                 LOG.info("Setting joint: {} to degrees/position: {}/{}", command.getThingId(), degrees, targetPosition);

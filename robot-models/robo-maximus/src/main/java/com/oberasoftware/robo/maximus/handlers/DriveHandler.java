@@ -12,11 +12,13 @@ import com.oberasoftware.iot.core.robotics.navigation.DirectionalInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
 @Component
+@ConditionalOnBean(AgentClient.class)
 public class DriveHandler implements RobotAttributeHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DriveHandler.class);
 

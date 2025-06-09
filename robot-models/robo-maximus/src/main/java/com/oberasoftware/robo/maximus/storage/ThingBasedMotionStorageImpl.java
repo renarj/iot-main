@@ -11,6 +11,7 @@ import com.oberasoftware.robo.core.motion.KeyFrameImpl;
 import com.oberasoftware.robo.core.motion.MotionImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
+@ConditionalOnBean(AgentClient.class)
 public class ThingBasedMotionStorageImpl implements MotionStorage {
     private static final Logger LOG = getLogger(ThingBasedMotionStorageImpl.class);
 

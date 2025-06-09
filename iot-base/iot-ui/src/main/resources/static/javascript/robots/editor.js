@@ -596,14 +596,6 @@ function renderJoint(groupId, joint) {
             $("#degrees").val(jointState["degrees"].value);
             $("#positionSlider").val(jointState["degrees"].value);
         })
-        // $.get(stateSvcUrl + "/api/state/controllers(" + controllerId + ")/things(" + jointId + ")", function(data) {
-        //     let map = [];
-        //     $.each(data.stateItems, function(i, si) {
-        //         map[si.attribute] = si.value;
-        //     });
-        //     console.log("Received joint data: " + JSON.stringify(data));
-        //
-        // })
     });
 }
 
