@@ -35,6 +35,7 @@
         <module>robotics/robo-behaviours</module>
         <module>robotics/robo-pi4j</module>
         <module>robot-models/robo-hexapod</module>
+        <module>robot-models/robot-dog</module>
         <module>robot-models/robo-handcontroller</module>
         <module>robot-models/robo-maximus</module>
         <module>robot-models/robo-rover</module>

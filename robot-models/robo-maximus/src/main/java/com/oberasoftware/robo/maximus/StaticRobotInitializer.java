@@ -47,7 +47,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class StaticRobotInitializer {
     private static final Logger LOG = getLogger(StaticRobotInitializer.class);
 
-    public static final List<String> SERVO_IDS = Lists.newArrayList("100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "122", "123", "124", "130", "131", "132", "133", "134", "141", "140");
+    public static final List<String> SERVO_IDS = Lists.newArrayList("100", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "120", "121", "123", "124", "130", "131", "132", "133", "134", "141", "140");
     private static final String MOTOR_ID_STRING = String.join(",", SERVO_IDS);
 
 
