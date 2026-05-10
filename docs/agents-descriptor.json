@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0",
+  "name": "iot-backend-services",
+  "purpose": "Pointers and guidance for LLM agents extending IoT backend services, dynamic device configuration, robots, integrations, commands, and state handling.",
+  "entrypoints": {
+    "overview": "docs/index.md",
+    "llmIntegrationGuide": "docs/llm-integration-guide.md",
+    "apiReference": "docs/api/backend-services-api.md",
+    "openApi": "docs/api/backend-services-openapi.yaml"
+  },
+  "services": [
+    {
+      "name": "thing-svc",
+      "role": "Source of truth for controllers, plugins, schemas, things, groups, and rules.",
+      "docs": "docs/services/thing-svc.md",
+      "module": "backend/thing-svc",
+      "mainClass": "com.oberasoftware.home.data.DataServiceContainer",
+      "keySources": [
+        "backend/thing-svc/src/main/java/com/oberasoftware/home/data/ThingRestSvc.java",
+        "backend/thing-svc/src/main/java/com/oberasoftware/home/data/ThingManagerImpl.java",
+        "backend/thing-svc/src/main/java/com/oberasoftware/home/data/SystemDataRestService.java",
+        "backend/thing-svc/src/main/java/com/oberasoftware/home/data/SystemDataManagerImpl.java",
+        "backend/thing-svc/src/main/java/com/oberasoftware/home/data/GroupRestSvc.java",
+        "backend/thing-svc/src/main/java/com/oberasoftware/home/data/RulesRestController.java"
+      ],
+      "defaultPort": 9010
+    },
+    {
+      "name": "command-svc",
+      "role": "REST command ingress and RabbitMQ command-topic publisher.",
+      "docs": "docs/services/command-svc.md",
+      "module": "backend/command-svc",
+      "mainClass": "com.oberasoftware.iot.command.CommandContainer",
+      "keySources": [
+        "backend/command-svc/src/main/java/com/oberasoftware/iot/command/CommandRestSvc.java",
+        "backend/command-svc/src/main/java/com/oberasoftware/iot/command/BasicCommandHandler.java",
+        "backend/command-svc/src/main/java/com/oberasoftware/iot/command/CommandContainer.java"
+      ],
+      "defaultPort": 9004
+    },
+    {
+      "name": "state-svc",
+      "role": "State-topic consumer, latest-state REST API, optional InfluxDB writer, and STOMP state publisher.",
+      "docs": "docs/services/state-svc.md",
+      "module": "backend/state-svc",
+      "mainClass": "com.oberasoftware.home.core.state.StateContainer",
+      "keySources": [
+        "backend/state-svc/src/main/java/com/oberasoftware/home/core/state/StateRestSvc.java",
+        "backend/state-svc/src/main/java/com/oberasoftware/home/core/state/StateManagerImpl.java",
+        "backend/state-svc/src/main/java/com/oberasoftware/home/core/state/StateContainer.java",
+        "backend/state-svc/src/main/java/com/oberasoftware/home/core/state/WebsocketController.java",
+        "backend/state-svc/src/main/java/com/oberasoftware/home/core/state/StateConfiguration.java",
+        "backend/state-svc/src/main/java/com/oberasoftware/home/core/state/InfluxDBStateStore.java"
+      ],
+      "defaultPort": 9006
+    }
+  ],
+  "sharedSources": {
+    "models": [
+      "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/model",
+      "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/model/storage/impl",
+      "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/model/states"
+    ],
+    "commands": [
+      "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/commands",
+      "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/commands/impl"
+    ],
+    "storage": [
+      "iot-base/home-storage",
+      "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/storage"
+    ],
+    "queue": [
+      "backend/queue-connectors"
+    ]
+  },
+  "agentRules": [
+    "Read docs/llm-integration-guide.md before designing a new robot or device capability.",
+    "Update docs/api/backend-services-api.md and docs/api/backend-services-openapi.yaml when controller mappings or payloads change.",
+    "Keep thing-svc as the configuration source of truth.",
+    "Preserve CONFIG_UPDATE command publication on thing create or update unless replacing it with a documented migration path.",
+    "Prefer existing enum values before adding new command, field, value, or attribute types.",
+    "When adding schema-driven relationships, document parentType and LINK property semantics."
+  ],
+  "generatedApiDocs": {
+    "javadocCommand": "mvn -pl backend/thing-svc,backend/command-svc,backend/state-svc -am javadoc:javadoc",
+    "javadocOutputs": [
+      "backend/thing-svc/target/apidocs/index.html",
+      "backend/command-svc/target/apidocs/index.html",
+      "backend/state-svc/target/apidocs/index.html"
+    ]
+  }
+}
+
