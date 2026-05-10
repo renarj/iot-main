@@ -5,6 +5,7 @@
   "entrypoints": {
     "overview": "docs/index.md",
     "llmIntegrationGuide": "docs/llm-integration-guide.md",
+    "robotModelIntegrationGuide": "docs/robot-model-integration-guide.md",
     "apiReference": "docs/api/backend-services-api.md",
     "openApi": "docs/api/backend-services-openapi.yaml"
   },
@@ -56,6 +57,16 @@
     }
   ],
   "sharedSources": {
+    "robotModelExample": [
+      "robot-models/robo-maximus/src/main/java/com/oberasoftware/robo/maximus",
+      "robot-models/robo-maximus/src/main/resources/META-INF/services/com.oberasoftware.iot.core.extensions.SpringExtension"
+    ],
+    "iotAgent": [
+      "iot-agent/agent-core/src/main/java/com/oberasoftware/home/agent/core/Agent.java",
+      "iot-agent/agent-core/src/main/java/com/oberasoftware/home/agent/core/AgentBootstrapImpl.java",
+      "iot-agent/agent-core/src/main/java/com/oberasoftware/home/agent/core/extension/ExtensionManagerImpl.java",
+      "iot-agent/agent-core/src/main/java/com/oberasoftware/home/agent/core/handlers"
+    ],
     "models": [
       "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/model",
       "iot-base/iot-core/src/main/java/com/oberasoftware/iot/core/model/storage/impl",
@@ -75,6 +86,7 @@
   },
   "agentRules": [
     "Read docs/llm-integration-guide.md before designing a new robot or device capability.",
+    "Read docs/robot-model-integration-guide.md before creating or changing robot model integrations.",
     "Update docs/api/backend-services-api.md and docs/api/backend-services-openapi.yaml when controller mappings or payloads change.",
     "Keep thing-svc as the configuration source of truth.",
     "Preserve CONFIG_UPDATE command publication on thing create or update unless replacing it with a documented migration path.",
@@ -90,4 +102,3 @@
     ]
   }
 }
-

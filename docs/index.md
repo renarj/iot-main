@@ -19,6 +19,7 @@ The docs are written for two consumers:
 - [Thing service](services/thing-svc.md): metadata model and dynamic configuration flow.
 - [Command service](services/command-svc.md): command API and message flow.
 - [State service](services/state-svc.md): state ingestion, lookup, storage, and WebSocket publishing.
+- [Robot model integration guide](robot-model-integration-guide.md): how robots use `iot-agent`, `thing-svc`, commands, and events, based on `robo-maximus`.
 - [API reference](api/backend-services-api.md): endpoint-by-endpoint REST and STOMP reference.
 - [OpenAPI descriptor](api/backend-services-openapi.yaml): machine-readable API contract for REST endpoints.
 - [Agent descriptor](agents-descriptor.json): machine-readable pointers to these docs and relevant source files.
@@ -45,4 +46,3 @@ Regenerate these with:
 ```bash
 mvn -pl backend/thing-svc,backend/command-svc,backend/state-svc -am javadoc:javadoc
 ```
-
