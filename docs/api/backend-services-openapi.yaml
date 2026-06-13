@@ -1,0 +1,817 @@
+openapi: 3.0.3
+info:
+  title: IoT Backend Services API
+  version: 1.0-SNAPSHOT
+  description: REST contract generated from command-svc, state-svc, and thing-svc Spring controller mappings. Read-only @RequestMapping methods without explicit HTTP methods are represented as GET.
+servers:
+  - url: http://localhost:9004
+    description: command-svc
+  - url: http://localhost:9006
+    description: state-svc
+  - url: http://localhost:9010
+    description: thing-svc
+tags:
+  - name: command-svc
+  - name: state-svc
+  - name: thing-svc
+  - name: system-metadata
+  - name: groups
+  - name: rules
+paths:
+  /api/command/:
+    post:
+      tags: [command-svc]
+      summary: Publish a command
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicCommand'
+      responses:
+        '200':
+          description: Submitted command
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicCommand'
+
+  /api/state/controllers({controllerId})/things({thingId}):
+    get:
+      tags: [state-svc]
+      summary: Get latest state for one thing
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+        - $ref: '#/components/parameters/thingId'
+      responses:
+        '200':
+          description: State found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/State'
+        '404':
+          description: State not found
+
+  /api/state/controllers({controllerId}):
+    get:
+      tags: [state-svc]
+      summary: Get latest states for one controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '200':
+          description: Map keyed by controllerId-thingId
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/State'
+
+  /api/controllers:
+    get:
+      tags: [thing-svc]
+      summary: List controllers
+      responses:
+        '200':
+          description: Controllers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Controller'
+
+  /api/controllers({controllerId}):
+    get:
+      tags: [thing-svc]
+      summary: Get controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '200':
+          description: Controller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controller'
+        '404':
+          description: Controller not found
+    post:
+      tags: [thing-svc]
+      summary: Create or update controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Controller'
+      responses:
+        '201':
+          description: Created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controller'
+        '400':
+          description: Invalid or mismatched controllerId
+    delete:
+      tags: [thing-svc]
+      summary: Delete controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '202':
+          description: Deleted
+        '404':
+          description: Not found
+
+  /api/controllers({controllerId})/things:
+    get:
+      tags: [thing-svc]
+      summary: List things for a controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+    post:
+      tags: [thing-svc]
+      summary: Create or update thing
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IotThing'
+      responses:
+        '201':
+          description: Created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IotThing'
+        '400':
+          description: Invalid thing
+
+  /api/controllers({controllerId})/things({thingId}):
+    get:
+      tags: [thing-svc]
+      summary: Get thing
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+        - $ref: '#/components/parameters/thingId'
+      responses:
+        '200':
+          description: Thing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IotThing'
+        '404':
+          description: Thing not found
+    delete:
+      tags: [thing-svc]
+      summary: Delete thing
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+        - $ref: '#/components/parameters/thingId'
+      responses:
+        '202':
+          description: Deleted
+        '404':
+          description: Not found or dependent children exist
+
+  /api/controllers({controllerId})/plugins:
+    get:
+      tags: [thing-svc]
+      summary: List installed plugin things for controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '200':
+          description: Plugin things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+    post:
+      tags: [thing-svc]
+      summary: Install plugin on controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plugin'
+      responses:
+        '201':
+          description: Installed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IotThing'
+        '400':
+          description: Missing controllerId or pluginId
+
+  /api/controllers({controllerId})/plugins({pluginId})/things:
+    get:
+      tags: [thing-svc]
+      summary: List things by controller and plugin
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+        - $ref: '#/components/parameters/pluginId'
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+
+  /api/controllers({controllerId})/schemas({schemaId})/things:
+    get:
+      tags: [thing-svc]
+      summary: List controller things by schema
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+        - $ref: '#/components/parameters/schemaId'
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+
+  /api/schemas({schemaId})/things:
+    get:
+      tags: [thing-svc]
+      summary: List all things by schema
+      parameters:
+        - $ref: '#/components/parameters/schemaId'
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+
+  /api/controllers({controllerId})/things({thingId})/children:
+    get:
+      tags: [thing-svc]
+      summary: List children of a thing
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+        - $ref: '#/components/parameters/thingId'
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+
+  /api/controllers({controllerId})/things({thingId})/linked:
+    get:
+      tags: [thing-svc]
+      summary: List linked things
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+        - $ref: '#/components/parameters/thingId'
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+
+  /api/controllers({controllerId})/children:
+    get:
+      tags: [thing-svc]
+      summary: List direct children of a controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+
+  /api/system/plugins:
+    get:
+      tags: [system-metadata]
+      summary: List plugins
+      responses:
+        '200':
+          description: Plugins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Plugin'
+    post:
+      tags: [system-metadata]
+      summary: Create or update plugin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plugin'
+      responses:
+        '201':
+          description: Created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plugin'
+        '400':
+          description: Missing pluginId or friendlyName
+
+  /api/system/plugins({pluginId}):
+    delete:
+      tags: [system-metadata]
+      summary: Delete plugin and schemas
+      parameters:
+        - $ref: '#/components/parameters/pluginId'
+      responses:
+        '202':
+          description: Deleted
+        '404':
+          description: Not found
+        '400':
+          description: Missing pluginId
+
+  /api/system/plugins({pluginId})/schemas:
+    get:
+      tags: [system-metadata]
+      summary: List schemas for plugin
+      parameters:
+        - $ref: '#/components/parameters/pluginId'
+      responses:
+        '200':
+          description: Schemas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ThingSchema'
+
+  /api/system/plugins({pluginId})/schemas({schemaId}):
+    get:
+      tags: [system-metadata]
+      summary: Get schema
+      parameters:
+        - $ref: '#/components/parameters/pluginId'
+        - $ref: '#/components/parameters/schemaId'
+      responses:
+        '200':
+          description: Schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThingSchema'
+        '404':
+          description: Not found
+    delete:
+      tags: [system-metadata]
+      summary: Delete schema
+      parameters:
+        - $ref: '#/components/parameters/pluginId'
+        - $ref: '#/components/parameters/schemaId'
+      responses:
+        '202':
+          description: Deleted
+        '404':
+          description: Not found
+        '400':
+          description: Missing pluginId or schemaId
+
+  /api/system/schemas:
+    post:
+      tags: [system-metadata]
+      summary: Create or update schema
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThingSchema'
+      responses:
+        '201':
+          description: Created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThingSchema'
+        '400':
+          description: Missing pluginId or schemaId
+
+  /api/groups:
+    get:
+      tags: [groups]
+      summary: List groups
+      responses:
+        '200':
+          description: Groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupItem'
+    post:
+      tags: [groups]
+      summary: Create or update group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupItem'
+      responses:
+        '200':
+          description: Stored group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupItem'
+
+  /api/groups({groupId}):
+    get:
+      tags: [groups]
+      summary: Get group
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      responses:
+        '200':
+          description: Group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupItem'
+    delete:
+      tags: [groups]
+      summary: Delete group
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      responses:
+        '200':
+          description: Deleted
+
+  /api/groups/controller({controllerId}):
+    get:
+      tags: [groups]
+      summary: List groups by controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '200':
+          description: Groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupItem'
+
+  /api/groups({groupId})/things:
+    get:
+      tags: [groups]
+      summary: List things in group
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      responses:
+        '200':
+          description: Things
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IotThing'
+
+  /api/rules:
+    get:
+      tags: [rules]
+      summary: List rules
+      responses:
+        '200':
+          description: Rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleItem'
+    post:
+      tags: [rules]
+      summary: Create or update rule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleItem'
+      responses:
+        '200':
+          description: Stored rule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleItem'
+        '400':
+          description: Rule validation failed
+
+  /api/rules/controller({controllerId}):
+    get:
+      tags: [rules]
+      summary: List rules by controller
+      parameters:
+        - $ref: '#/components/parameters/controllerId'
+      responses:
+        '200':
+          description: Rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleItem'
+
+  /api/rules({ruleId}):
+    delete:
+      tags: [rules]
+      summary: Delete rule
+      parameters:
+        - $ref: '#/components/parameters/ruleId'
+      responses:
+        '200':
+          description: Deleted
+
+components:
+  parameters:
+    controllerId:
+      name: controllerId
+      in: path
+      required: true
+      schema:
+        type: string
+    thingId:
+      name: thingId
+      in: path
+      required: true
+      schema:
+        type: string
+    pluginId:
+      name: pluginId
+      in: path
+      required: true
+      schema:
+        type: string
+    schemaId:
+      name: schemaId
+      in: path
+      required: true
+      schema:
+        type: string
+    groupId:
+      name: groupId
+      in: path
+      required: true
+      schema:
+        type: string
+    ruleId:
+      name: ruleId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    BasicCommand:
+      type: object
+      properties:
+        controllerId:
+          type: string
+        thingId:
+          type: string
+        commandType:
+          $ref: '#/components/schemas/CommandType'
+        attributes:
+          type: object
+          additionalProperties:
+            type: string
+    CommandType:
+      type: string
+      enum: [SWITCH, VALUE, CONFIG_UPDATE, SET_STATE]
+    Controller:
+      type: object
+      properties:
+        id:
+          type: string
+        controllerId:
+          type: string
+        orgId:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+    Plugin:
+      type: object
+      properties:
+        id:
+          type: string
+        pluginId:
+          type: string
+        friendlyName:
+          type: string
+    IotThing:
+      type: object
+      properties:
+        id:
+          type: string
+        thingId:
+          type: string
+        controllerId:
+          type: string
+        friendlyName:
+          type: string
+        type:
+          type: string
+          default: default
+        schemaId:
+          type: string
+        pluginId:
+          type: string
+        parentId:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AttributeType'
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+    ThingSchema:
+      type: object
+      properties:
+        id:
+          type: string
+        schemaId:
+          type: string
+        pluginId:
+          type: string
+        template:
+          type: string
+        parentType:
+          type: string
+          description: Controller, Plugin, or another schema id in the same plugin.
+        type:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SchemaFieldDescriptor'
+        attributes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AttributeType'
+    SchemaFieldDescriptor:
+      type: object
+      properties:
+        fieldType:
+          $ref: '#/components/schemas/TemplateFieldType'
+        defaultValue:
+          type: string
+    TemplateFieldType:
+      type: string
+      enum: [TEXT, LINK, STATIC_DEFAULT, ENUM, DYNAMIC]
+    AttributeType:
+      type: string
+      enum: [SWITCH, POWER, TEMPERATURE, LABEL, DEGREES, ABS_POSITION, VELOCITY, VOLTAGE]
+    Value:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ValueType'
+        value:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+          nullable: true
+    ValueType:
+      type: string
+      enum: [BOOLEAN, NUMBER, DECIMAL, STRING]
+    StateItem:
+      type: object
+      properties:
+        attribute:
+          type: string
+        value:
+          $ref: '#/components/schemas/Value'
+    State:
+      type: object
+      properties:
+        itemId:
+          type: string
+        controllerId:
+          type: string
+        stateItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateItem'
+    ValueTransportMessage:
+      type: object
+      properties:
+        controllerId:
+          type: string
+        thingId:
+          type: string
+        values:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Value'
+    GroupItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        controllerId:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        deviceIds:
+          type: array
+          items:
+            type: string
+    RuleItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        controllerId:
+          type: string
+        blocklyData:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
